@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>아버지의 하나님을 떠난 자녀들</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700&family=Noto+Sans+KR:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+    /* 공통 */
+    --radius: 4px;
+    --shadow: 0 2px 20px rgba(0,0,0,0.08);
+
+    /* 파트 1 — 성경 사례 (네이비) */
+    --p1-bg:      #f0f4fa;
+    --p1-card:    #ffffff;
+    --p1-accent:  #2c4a7c;
+    --p1-soft:    #e4ecf7;
+    --p1-text:    #1a2f50;
+    --p1-border:  #b8cae8;
+    --p1-verse:   #3a5a8a;
+
+    /* 파트 2 — 경고 (앰버) */
+    --p2-bg:      #fdf6ec;
+    --p2-card:    #ffffff;
+    --p2-accent:  #b85c00;
+    --p2-soft:    #fdebd0;
+    --p2-text:    #6b3000;
+    --p2-border:  #f0c080;
+    --p2-verse:   #c06800;
+
+    /* 파트 3 — 원칙 (포레스트) */
+    --p3-bg:      #f0f7f2;
+    --p3-card:    #ffffff;
+    --p3-accent:  #2e6b46;
+    --p3-soft:    #d8f0e2;
+    --p3-text:    #1a3d28;
+    --p3-border:  #90c8a8;
+    --p3-verse:   #3a7a52;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+    background: #f5f5f7;
+    color: #1a1a2e;
+    line-height: 1.8;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━
+   히어로
+━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.hero {
+    background: linear-gradient(160deg, #1a2f50 0%, #0f1e36 60%, #1a3d28 100%);
+    padding: 72px 24px 56px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+.hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Ccircle cx='30' cy='30' r='1' fill='rgba(255,255,255,0.04)'/%3E%3C/svg%3E") repeat;
+    pointer-events: none;
+}
+.hero-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 20px;
+}
+.hero h1 {
+    font-family: 'Noto Serif KR', serif;
+    font-size: clamp(28px, 6vw, 48px);
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.25;
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+}
+.hero-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    font-style: italic;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 36px;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━
+   탭 내비게이션
+━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.tabs {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+}
+.tab-btn {
+    padding: 10px 22px;
+    border-radius: 100px;
+    border: 1px solid rgba(255,255,255,0.18);
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.7);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s;
+    backdrop-filter: blur(4px);
+}
+.tab-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
+.tab-btn.active { background: #fff; color: #1a2f50; border-color: #fff; font-weight: 700; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━
+   파트 컨테이너
+━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.part { display: none; padding: 40px 20px 64px; }
+.part.active { display: block; }
+.part-inner { max-width: 800px; margin: 0 auto; }
+
+/* 파트 배경 */
+#part1 { background: var(--p1-bg); }
+#part2 { background: var(--p2-bg); }
+#part3 { background: var(--p3-bg); }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━
+   파트 헤더
+━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.part-header {
+    text-align: center;
+    margin-bottom: 36px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid;
+}
+#part1 .part-header { border-color: var(--p1-border); }
+#part2 .part-header { border-color: var(--p2-border); }
+#part3 .part-header { border-color: var(--p3-border); }
+
+.part-label {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 100px;
+    margin-bottom: 14px;
+    font-weight: 500;
+}
+#part1 .part-label { background: var(--p1-soft); color: var(--p1-accent); }
+#part2 .part-label { background: var(--p2-soft); color: var(--p2-accent); }
+#part3 .part-label { background: var(--p3-soft); color: var(--p3-accent); }
+
+.part-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: clamp(20px, 4vw, 28px);
+    font-weight: 700;
+    line-height: 1.3;
+}
+#part1 .part-title { color: var(--p1-text); }
+#part2 .part-title { color: var(--p2-text); }
+#part3 .part-title { color: var(--p3-text); }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━
+   아코디언
+━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.accordion { display: flex; flex-direction: column; gap: 10px; }
+
+.acc-item {
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid;
+    background: var(--p-card);
+    transition: box-shadow 0.25s;
+}
+#part1 .acc-item { border-color: var(--p1-border); background: var(--p1-card); }
+#part2 .acc-item { border-color: var(--p2-border); background: var(--p2-card); }
+#part3 .acc-item { border-color: var(--p3-border); background: var(--p3-card); }
+.acc-item:hover { box-shadow: var(--shadow); }
+
+.acc-trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 22px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.2s;
+}
+#part1 .acc-trigger:hover { background: var(--p1-soft); }
+#part2 .acc-trigger:hover { background: var(--p2-soft); }
+#part3 .acc-trigger:hover { background: var(--p3-soft); }
+
+.acc-num {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+    font-family: 'Noto Serif KR', serif;
+}
+#part1 .acc-num { background: var(--p1-soft); color: var(--p1-accent); }
+#part2 .acc-num { background: var(--p2-soft); color: var(--p2-accent); }
+#part3 .acc-num { background: var(--p3-soft); color: var(--p3-accent); }
+
+.acc-label {
+    flex: 1;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+#part1 .acc-label { color: var(--p1-text); }
+#part2 .acc-label { color: var(--p2-text); }
+#part3 .acc-label { color: var(--p3-text); }
+
+.acc-arrow {
+    font-size: 18px;
+    transition: transform 0.3s;
+    flex-shrink: 0;
+}
+#part1 .acc-arrow { color: var(--p1-accent); }
+#part2 .acc-arrow { color: var(--p2-accent); }
+#part3 .acc-arrow { color: var(--p3-accent); }
+
+.acc-item.open .acc-arrow { transform: rotate(180deg); }
+
+.acc-body {
+    display: none;
+    padding: 4px 22px 24px 70px;
+}
+.acc-item.open .acc-body { display: block; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━
+   본문 요소
+━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.acc-body p {
+    font-size: 14.5px;
+    color: #3a3a4a;
+    margin-bottom: 12px;
+    line-height: 1.85;
+}
+
+.acc-body ul {
+    padding-left: 18px;
+    margin-bottom: 12px;
+}
+.acc-body ul li {
+    font-size: 14.5px;
+    color: #3a3a4a;
+    margin-bottom: 6px;
+    line-height: 1.7;
+}
+
+.section-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin: 18px 0 8px;
+}
+#part1 .section-label { color: var(--p1-accent); }
+#part2 .section-label { color: var(--p2-accent); }
+#part3 .section-label { color: var(--p3-accent); }
+
+/* 성경 말씀 블록 */
+.verse-block {
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    margin: 12px 0;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 14px;
+    line-height: 1.85;
+    font-style: italic;
+    border-left: 3px solid;
+}
+#part1 .verse-block { background: var(--p1-soft); color: var(--p1-verse); border-left-color: var(--p1-accent); }
+#part2 .verse-block { background: var(--p2-soft); color: var(--p2-verse); border-left-color: var(--p2-accent); }
+#part3 .verse-block { background: var(--p3-soft); color: var(--p3-verse); border-left-color: var(--p3-accent); }
+
+/* 경고 배너 */
+.alert-banner {
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    margin-top: 16px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.7;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+}
+#part2 .alert-banner { background: #fff3e0; color: #b85c00; border: 1px solid #f0c080; }
+#part3 .alert-banner { background: #e8f5e9; color: #2e6b46; border: 1px solid #90c8a8; }
+#part1 .alert-banner { background: #e8edf8; color: #2c4a7c; border: 1px solid #b8cae8; }
+.alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 2px; }
+
+/* 강조 텍스트 */
+.emph { font-weight: 700; }
+#part1 .emph { color: var(--p1-accent); }
+#part2 .emph { color: var(--p2-accent); }
+#part3 .emph { color: var(--p3-accent); }
+
+/* 인물 소제목 */
+.char-head {
+    font-weight: 700;
+    font-size: 14px;
+    margin: 16px 0 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+#part1 .char-head { color: var(--p1-text); }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━
+   결론 배너
+━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.conclusion-box {
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    margin-top: 32px;
+    text-align: center;
+}
+#part1 .conclusion-box { background: var(--p1-soft); border: 1px solid var(--p1-border); }
+#part2 .conclusion-box { background: var(--p2-soft); border: 1px solid var(--p2-border); }
+#part3 .conclusion-box { background: var(--p3-soft); border: 1px solid var(--p3-border); }
+
+.conclusion-box .con-label {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 10px;
+    display: block;
+}
+#part1 .con-label { color: var(--p1-accent); }
+#part2 .con-label { color: var(--p2-accent); }
+#part3 .con-label { color: var(--p3-accent); }
+
+.conclusion-box p {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.7;
+}
+#part1 .conclusion-box p { color: var(--p1-text); }
+#part2 .conclusion-box p { color: var(--p2-text); }
+#part3 .conclusion-box p { color: var(--p3-text); }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━
+   실제 적용 박스 (원칙 파트)
+━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.apply-box {
+    background: #f8fdf9;
+    border: 1px solid var(--p3-border);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    margin-top: 10px;
+}
+.apply-box ul { list-style: none; padding: 0; }
+.apply-box ul li { font-size: 14px; padding: 4px 0; color: #2e4a38; }
+.apply-box ul li::before { content: '✓  '; color: var(--p3-accent); font-weight: 700; }
+.apply-box .quote {
+    font-family: 'Noto Serif KR', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--p3-verse);
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--p3-border);
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━
+   푸터
+━━━━━━━━━━━━━━━━━━━━━━━━━ */
+footer {
+    text-align: center;
+    padding: 32px 20px 40px;
+    background: #f5f5f7;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    color: #999;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━
+   반응형
+━━━━━━━━━━━━━━━━━━━━━━━━━ */
+@media (max-width: 520px) {
+    .acc-body { padding-left: 22px; }
+    .acc-num { width: 26px; height: 26px; font-size: 12px; }
+    .hero { padding: 56px 20px 40px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── 히어로 ── -->
+<header class="hero">
+    <p class="hero-eyebrow">말씀 개요 · 부산교회 2구역</p>
+    <h1>아버지의 하나님을<br>떠난 자녀들</h1>
+    <p class="hero-sub">"위대한 신앙인은 될 수 있어도, 믿음은 자동으로 전수되지 않는다"</p>
+    <nav class="tabs">
+        <button class="tab-btn active" onclick="switchTab(1)">📜 성경 사례</button>
+        <button class="tab-btn" onclick="switchTab(2)">⚠️ 양육의 죄 7가지</button>
+        <button class="tab-btn" onclick="switchTab(3)">🌱 살리는 양육 7원칙</button>
+    </nav>
+</header>
+
+<!-- ══════════════════════════════════
+     파트 1 : 성경 사례
+══════════════════════════════════ -->
+<div class="part active" id="part1">
+<div class="part-inner">
+    <div class="part-header">
+        <span class="part-label">Part 1 · 성경 사례</span>
+        <h2 class="part-title">경건한 아버지, 그러나 떠난 자녀들<br>— 4개의 가정 이야기</h2>
+    </div>
+
+    <div class="accordion">
+
+        <!-- 1. 엘리 -->
+        <div class="acc-item">
+            <button class="acc-trigger" onclick="toggle(this)">
+                <span class="acc-num">1</span>
+                <span class="acc-label">엘리 제사장과 두 아들</span>
+                <span class="acc-arrow">▾</span>
+            </button>
+            <div class="acc-body">
+                <span class="section-label">📖 사무엘상 1–4장</span>
+
+                <span class="section-label">① 엘리의 직분과 위치</span>
+                <p>엘리는 단순한 신앙인이 아니었습니다.</p>
+                <ul>
+                    <li>이스라엘의 <span class="emph">대제사장</span></li>
+                    <li>동시에 <span class="emph">사사(재판관)</span></li>
+                    <li>하나님의 율법과 제사를 관리하는 <span class="emph">영적 최고 책임자였습니다.</span></li>
+                </ul>
+                <p>즉, 하나님과 백성 사이에서 거룩을 지켜야 할 최종 책임자였습니다. 엘리는 하나님을 몰랐던 사람이 아닙니다. 하나님의 음성, 규례, 두려움을 지적으로는 알고 있었습니다.</p>
+
+                <span class="section-label">② 두 아들, 홉니와 비느하스의 태도와 성품</span>
+                <div class="verse-block">📖 "엘리의 아들들은 불량배였다. 그들은 여호와를 알지 못하였고" (삼상 2:12)</div>
+                <p>이 말은 무지가 아니라 <span class="emph">거부</span>를 뜻합니다. 그들의 특징은</p>
+                <ul>
+                    <li>직분은 세습하고 제사장 역할은 수행했으나 하나님을 두려워하지 않음</li>
+                    <li>하나님의 제사를 멸시하고 그 질서를 무너뜨리고</li>
+                    <li>제사의 기름을 강탈하며 하나님께 드릴 것으로 자기 배를 채우는 데 사용</li>
+                    <li>부끄러움의 상실</li>
+                    <li>회막에서 음행함으로 하나님의 임재의 장소에서 자신의 욕망을 채움</li>
+                    <li>하나님 임재의 자리에서 죄를 거리낌 없이 행함으로 하나님을 의식하지 않았다.</li>
+                </ul>
+                <p>➡️ <span class="emph">하나님을 섬기는 자리에 있었지만 하나님을 경외하는 마음은 없었습니다.</span></p>
+
+                <span class="section-label">③ 엘리의 치명적 문제</span>
+                <p>엘리는 아들들의 죄를 알고 있었습니다.</p>
+                <div class="verse-block">📖 "너희들이 어쩌자고 그런 일을 하였느냐?" 사무엘기상 2장 23절</div>
+                <p>그러나: <span class="emph">말로만 책망하고 직분을 박탈하지 않았으며 죄를 멈추게 하지 않았다는 것입니다.</span></p>
+                <div class="verse-block">📖 "그런데 너희는 어찌하여 내가 내 처소에서 명령한 내 희생 제물과 내 예물을 걷어차고, 내 백성 이스라엘의 모든 예물 가운데서 가장 좋은 것으로 너희 자신을 살찌게 하여 나보다 네 아들들을 더 존중하느냐?" 사무엘기상 2장 29절</div>
+                <p>➡️ <span class="emph">엘리는 아들을 사랑했지만, 하나님의 거룩을 지키지는 않았습니다.</span></p>
+
+                <span class="section-label">④ 하나님의 심판과 결말</span>
+                <p>하나님은 분명히 선언하셨습니다.</p>
+                <div class="verse-block">📖 "너의 두 아들 홉니와 비느하스가 한날에 모두 죽을 것이니" 사무엘기상 2장 34절</div>
+                <ul>
+                    <li>블레셋 전쟁에서 홉니와 비느하스 전사</li>
+                    <li>언약궤 빼앗김</li>
+                    <li>엘리는 소식을 듣고 넘어져 사망</li>
+                    <li>제사장 가문 완전히 폐절</li>
+                </ul>
+                <div class="verse-block">📖 "영광이 이스라엘에서 떠났다 (이가봇 אִי־כָבוֹד, Ichabod)"</div>
+                <div class="alert-banner"><span class="alert-icon">⚠️</span><span><strong>경고</strong> — 거룩을 아는 자가 거룩을 훼손하면 하나님은 반드시 다루신다.</span></div>
+            </div>
+        </div>
+
+        <!-- 2. 사무엘 -->
+        <div class="acc-item">
+            <button class="acc-trigger" onclick="toggle(this)">
+                <span class="acc-num">2</span>
+                <span class="acc-label">사무엘과 그의 아들들</span>
+                <span class="acc-arrow">▾</span>
+            </button>
+            <div class="acc-body">
+                <span class="section-label">📖 사무엘상 8장</span>
+
+                <span class="section-label">① 사무엘은 어떤 사람이었는가</span>
+                <ul>
+                    <li>어린 시절부터 하나님 앞에 섬</li>
+                    <li>하나님의 음성을 듣는 선지자</li>
+                    <li>개인의 삶에서 흠이 거의 없음</li>
+                </ul>
+                <div class="verse-block">📖 "사무엘이 자라는 동안 여호와께서 그와 함께하셨고, 그의 말이 하나도 땅에 떨어지지 않게 하셨다." 사무엘기상 3장 19절</div>
+                <p>➡️ <span class="emph">개인 신앙으로는 완성도 높은 인물</span></p>
+
+                <span class="section-label">② 그러나 사무엘의 아들들의 행위는 아버지와 같지 않았다</span>
+                <div class="verse-block">📖 "그런데 사무엘의 아들들은 사무엘의 길을 따르지 않았다. 그들은 부당한 이득을 얻으려고 바른길에서 벗어났으며 뇌물을 받고 정의를 왜곡하였다." 사무엘기상 8장 3절</div>
+                <ul>
+                    <li>뇌물을 받고 바른길에서 벗어났으며 부당한 이득을 취하였다.</li>
+                </ul>
+
+                <span class="section-label">③ 왜 사무엘의 아들들은 하나님의 길에서 벗어났는가</span>
+                <p>엘리와 달리, 사무엘의 문제는 <span class="emph">방임이 아니라 부재에 가깝습니다.</span></p>
+                <ul>
+                    <li>사역은 충성스러웠으나 가정에 함께한 시간은 제한적 (삼상 7:15–17, 8:1–2)</li>
+                    <li>신앙을 보여주었지만 함께 살아내는 과정은 부족 (삼상 12:23)</li>
+                    <li>아들들에게 하나님은 <span class="emph">"아버지의 하나님"이었지 "나의 하나님"은 아니었음</span> (삼상 8:3)</li>
+                </ul>
+
+                <span class="section-label">④ 결말과 하나님의 판단</span>
+                <ul>
+                    <li>사사직에서 제거</li>
+                    <li>하나님의 역사에서 침묵 속에 사라짐</li>
+                    <li>그들의 죄로 인해 백성은 왕을 요구함</li>
+                </ul>
+                <p>➡️ <span class="emph">성경에서 이름이 사라진다는 것 자체가 심판</span></p>
+                <div class="alert-banner"><span class="alert-icon">⚠️</span><span><strong>경고</strong> — 위대한 신앙인은 될 수 있어도 믿음은 자동으로 전수되지는 않는다.</span></div>
+            </div>
+        </div>
+
+        <!-- 3. 다윗 -->
+        <div class="acc-item">
+            <button class="acc-trigger" onclick="toggle(this)">
+                <span class="acc-num">3</span>
+                <span class="acc-label">다윗과 그의 아들들</span>
+                <span class="acc-arrow">▾</span>
+            </button>
+            <div class="acc-body">
+                <span class="section-label">📖 사무엘기하, 열왕기상</span>
+
+                <span class="section-label">① 다윗은 어떤 사람이었는가</span>
+                <ul>
+                    <li>하나님의 기름 부음</li>
+                    <li>수많은 위기 속에서 하나님께 묻는 사람</li>
+                    <li>회개할 줄 아는 왕</li>
+                </ul>
+                <div class="verse-block">📖 "내 마음에 합한 자" 사도행전 13장 22절</div>
+
+                <span class="section-label">② 그러나 다윗의 치명적 약점</span>
+                <ul>
+                    <li>밧세바 사건</li>
+                    <li>죄 이후의 <span class="emph">침묵과 소극적 태도</span> – 부하 우리야를 살인하고 숨기고 은폐하려 하였다. ➡️ 이 침묵이 가정 전체에 영향을 미침</li>
+                </ul>
+
+                <span class="section-label">③ 아들들의 타락 원인과 결말</span>
+                <p class="char-head">🔹 암논</p>
+                <ul>
+                    <li>욕망 절제 실패 → 아버지의 침묵을 보고 죄를 가볍게 여김</li>
+                    <li>압살롬에게 살해</li>
+                </ul>
+                <p class="char-head">🔹 압살롬</p>
+                <ul>
+                    <li>정의가 바로 서지 않는 가정에서 분노 축적</li>
+                    <li>스스로 왕이 되려 함 → 반역 후 비참한 죽음, 무덤도 없이 돌무더기 아래 묻힘</li>
+                </ul>
+                <p class="char-head">🔹 학깃의 아들 아도니야</p>
+                <div class="verse-block">📖 "아도니야의 아버지는 한 번도 '네가 어째서 이렇게 하였느냐?'라고 말하며 그를 언짢게 한 적이 없었다." 열왕기상 1장 6절</div>
+                <ul>
+                    <li><span class="emph">책망 없는 사랑과 훈련 없는 자유</span>가 결국 왕권 야욕을 가져왔고</li>
+                    <li>솔로몬에 의해 처형 당하였다.</li>
+                </ul>
+                <div class="alert-banner"><span class="alert-icon">⚠️</span><span><strong>경고</strong> — 부모의 죄보다 더 위험한 것은 죄에 대한 침묵이다.</span></div>
+            </div>
+        </div>
+
+        <!-- 4. 히스기야 -->
+        <div class="acc-item">
+            <button class="acc-trigger" onclick="toggle(this)">
+                <span class="acc-num">4</span>
+                <span class="acc-label">히스기야와 므낫세</span>
+                <span class="acc-arrow">▾</span>
+            </button>
+            <div class="acc-body">
+                <span class="section-label">📖 열왕기하 18–21장, 역대하 33장</span>
+
+                <span class="section-label">① 히스기야의 행적과 성품</span>
+                <ul>
+                    <li>우상을 제거하고 성전을 회복하였으며 하나님만 의지한 왕이었습니다.</li>
+                </ul>
+                <div class="verse-block">📖 "그 이후로 유다의 모든 왕 가운데 히스기야와 같은 이가 없었고, 그 이전에도 없었다." 열왕기하 18장 5절</div>
+
+                <span class="section-label">② 므낫세의 하락 원인 (열왕기하 21:1–3)</span>
+                <ul>
+                    <li>신앙의 <span class="emph">제도</span>는 되었으나 마음의 선택은 되지 않음</li>
+                    <li>히스기야 말년의 교만 – 역대하 32장 25절</li>
+                    <li>신앙이 <span class="emph">'전통'으로만</span> 전달됨</li>
+                </ul>
+
+                <span class="section-label">③ 므낫세의 결말 (역대하 33:11–12)</span>
+                <ul>
+                    <li>앗수르에 의해 포로</li>
+                    <li>쇠사슬에 묶임</li>
+                    <li>고난 중 회개 → 하나님이 회복시키심</li>
+                    <li>그러나 그의 죄의 영향은 유다 멸망의 씨앗이 됨</li>
+                </ul>
+                <div class="verse-block">📖 "그렇지만 여호와는 유다에게 내리신 그분의 타오르는 큰 진노를 거두지 않으셨는데, 이것은 그분의 진노를 산 므낫세의 모든 행위 때문이었다." 열왕기하 23장 26절</div>
+            </div>
+        </div>
+    </div><!-- /accordion -->
+
+</div><!-- /part-inner -->
+</div><!-- /part1 -->
+
+<!-- ══════════════════════════════════
+     파트 2 : 양육의 죄 7가지
+══════════════════════════════════ -->
+<div class="part" id="part2">
+<div class="part-inner">
+    <div class="part-header">
+        <span class="part-label">Part 2 · 경고</span>
+        <h2 class="part-title">⚠️ 부모가 반드시 경계해야 할<br>양육의 죄 7가지</h2>
+    </div>
+
+    <div class="accordion">
+
+        <!-- 죄 1 -->
+        <div class="acc-item">
+            <button class="acc-trigger" onclick="toggle(this)">
+                <span class="acc-num">1</span>
+                <span class="acc-label">책망하지 않는 사랑 — 사랑을 핑계로 한 방임</span>
+                <span class="acc-arrow">▾</span>
+            </button>
+            <div class="acc-body">
+                <span class="section-label">▣ 정의</span>
+                <p>자녀의 죄를 보면서도</p>
+                <ul>
+                    <li>마음 상할까 봐,</li>
+                    <li>관계 깨질까 봐,</li>
+                    <li>지금은 때가 아니라며</li>
+                </ul>
+                <p>의도적으로 눈을 감는 태도</p>
+                <span class="section-label">▣ 성경 사례</span>
+                <ul>
+                    <li><span class="emph">엘리:</span> 아들들의 죄를 알고도 제사장에서 내치지 않음</li>
+                    <li><span class="emph">다윗:</span> 암논의 죄에 분노했으나 행동하지 않음</li>
+                    <li><span class="emph">아도니야:</span> "한 번도 섭섭하게 하지 않음"</li>
+                </ul>
+                <span class="section-label">▣ 왜 위험한가</span>
+                <ul>
+                    <li>자녀는 "죄도 괜찮다"는 신호를 받음</li>
+                    <li>사랑이 아니라 방치가 됨</li>
+                </ul>
+                <div class="verse-block">📖 "왜냐하면 주님은 사랑하시는 사람을 징계하시고" 히브리서 12장 6절</div>
+                <div class="alert-banner"><span class="alert-icon">🔔</span><span><strong>경고</strong> — 사랑은 덮는 것이 아니라 돌이키게 하는 책임이다.</span></div>
+            </div>
+        </div>
+
+        <!-- 죄 2 -->
+        <div class="acc-item">
+            <button class="acc-trigger" onclick="toggle(this)">
+                <span class="acc-num">2</span>
+                <span class="acc-label">신앙을 '보여주기만' 하고 '함께 살지 않음'</span>
+                <span class="acc-arrow">▾</span>
+            </button>
+            <div class="acc-body">
+                <span class="section-label">▣ 정의</span>
+                <ul>
+                    <li>예배는 드리지만</li>
+                    <li>신앙의 고민과 질문은 나누지 않는 상태</li>
+                </ul>
+                <span class="section-label">▣ 성경 사례</span>
+                <ul>
+                    <li><span class="emph">사무엘:</span> 위대한 신앙인이었으나 아들들은 "아버지의 하나님"만 보았지 자신의 하나님을 경험하지 못함</li>
+                </ul>
+                <span class="section-label">▣ 왜 위험한가</span>
+                <ul>
+                    <li>신앙이 구경거리가 됨</li>
+                    <li>자녀에게 하나님은 '존경 대상'이지 '인격적 주님'이 아님</li>
+                </ul>
+                <div class="verse-block">📖 "네가 집에 앉았을 때든지 길을 갈 때든지" (신 6:7)</div>
+                <div class="alert-banner"><span class="alert-icon">🔔</span><span><strong>경고</strong> — 자녀는 신앙교육에 따라가지 않고 부모의 삶에 동행한다.</span></div>
+            </div>
+        </div>
+
+        <!-- 죄 3 -->
+        <div class="acc-item">
+            <button class="acc-trigger" onclick="toggle(this)">
+                <span class="acc-num">3</span>
+                <span class="acc-label">부모의 죄에 대한 침묵 — 회개하지 않는 본</span>
+                <span class="acc-arrow">▾</span>
+            </button>
+            <div class="acc-body">
+                <span class="section-label">▣ 정의</span>
+                <p>부모의 실패, 죄, 잘못을</p>
+                <ul><li>숨기고 설명하지 않고 회개하지 않는 태도</li></ul>
+                <span class="section-label">▣ 성경 사례</span>
+                <ul><li><span class="emph">다윗:</span> 밧세바 사건 이후 가정 안에서의 침묵</li></ul>
+                <span class="section-label">▣ 왜 위험한가</span>
+                <ul>
+                    <li>자녀는 "죄보다 중요한 건 결과"라고 배움</li>
+                    <li>은혜가 아니라 위선을 전수받음</li>
+                </ul>
+                <div class="verse-block">📖 "그렇다면 다른 사람은 가르치는 그대가 어째서 그대 자신은 가르치지 않습니까?" 로마서 2장 21절</div>
+                <div class="alert-banner"><span class="alert-icon">🔔</span><span><strong>경고</strong> — 회개하지 않는 신앙은 자녀에게 가장 큰 혼란이다.</span></div>
+            </div>
+        </div>
+
+        <!-- 죄 4 -->
+        <div class="acc-item">
+            <button class="acc-trigger" onclick="toggle(this)">
+                <span class="acc-num">4</span>
+                <span class="acc-label">거룩보다 체면을 중시함</span>
+                <span class="acc-arrow">▾</span>
+            </button>
+            <div class="acc-body">
+                <span class="section-label">▣ 정의</span>
+                <p>가정의 평화, 외부의 시선, 부모의 체면을</p>
+                <ul><li>하나님의 거룩보다 앞세움</li></ul>
+                <span class="section-label">▣ 성경 사례</span>
+                <ul>
+                    <li><span class="emph">엘리:</span> 아들보다 하나님을 중히 여기지 않음</li>
+                    <li><span class="emph">히스기야 말년:</span> 바벨론 사신 앞에서 교만</li>
+                </ul>
+                <span class="section-label">▣ 왜 위험한가</span>
+                <ul><li>자녀는 하나님보다 사람의 평가를 우선하게 됨</li></ul>
+                <div class="verse-block">📖 "사람을 두려워하면 올무에 걸리게 되나" 잠언 29장 25절</div>
+                <div class="alert-banner"><span class="alert-icon">🔔</span><span><strong>경고</strong> — 체면을 지키려다 자녀의 영혼을 잃을 수 있다.</span></div>
+            </div>
+        </div>
+
+        <!-- 죄 5 -->
+        <div class="acc-item">
+            <button class="acc-trigger" onclick="toggle(this)">
+                <span class="acc-num">5</span>
+                <span class="acc-label">신앙을 제도와 전통으로만 남김</span>
+                <span class="acc-arrow">▾</span>
+            </button>
+            <div class="acc-body">
+                <span class="section-label">▣ 정의</span>
+                <ul>
+                    <li>"우리 집은 원래 믿는 집"</li>
+                    <li>규칙은 있지만 생명의 감각과 이상은 없음</li>
+                </ul>
+                <span class="section-label">▣ 성경 사례</span>
+                <ul>
+                    <li><span class="emph">히스기야 → 므낫세</span></li>
+                    <li>개혁은 있었으나 신앙의 내면화는 부족</li>
+                </ul>
+                <span class="section-label">▣ 왜 위험한가</span>
+                <ul>
+                    <li>신앙이 '선택'이 아니라 '의무'가 됨</li>
+                    <li>반작용으로 극단적 타락 발생</li>
+                </ul>
+                <div class="verse-block">📖 "이 백성이 입술로는 나를 공경하지만, 마음은 나에게서 멀리 떠나 있다" 마태복음 15장 8절</div>
+                <div class="alert-banner"><span class="alert-icon">🔔</span><span><strong>경고</strong> — 전통은 남길 수 있지만 믿음은 반드시 선택되어야 한다.</span></div>
+            </div>
+        </div>
+
+        <!-- 죄 6 -->
+        <div class="acc-item">
+            <button class="acc-trigger" onclick="toggle(this)">
+                <span class="acc-num">6</span>
+                <span class="acc-label">훈련 없는 자유, 책임 없는 기대</span>
+                <span class="acc-arrow">▾</span>
+            </button>
+            <div class="acc-body">
+                <span class="section-label">▣ 정의</span>
+                <ul>
+                    <li>자유는 주지만</li>
+                    <li>기준과 책임은 가르치지 않음</li>
+                </ul>
+                <span class="section-label">▣ 성경 사례</span>
+                <ul>
+                    <li><span class="emph">아도니야</span></li>
+                    <li>훈계 없음 → 왕이 될 자격도 없음</li>
+                </ul>
+                <span class="section-label">▣ 왜 위험한가</span>
+                <ul><li>자녀는 권리는 배우되 질서 속에 합당한 삶은 배우지 못함</li></ul>
+                <div class="verse-block">📖 "자기 영을 다스리는 이는 성을 점령하는 이보다 낫다." 잠언 16장 32절</div>
+                <div class="alert-banner"><span class="alert-icon">🔔</span><span><strong>경고</strong> — 훈련 없는 자유는 방종으로 자란다.</span></div>
+            </div>
+        </div>
+
+        <!-- 죄 7 -->
+        <div class="acc-item">
+            <button class="acc-trigger" onclick="toggle(this)">
+                <span class="acc-num">7</span>
+                <span class="acc-label">결과를 두려워하지 않는 신앙</span>
+                <span class="acc-arrow">▾</span>
+            </button>
+            <div class="acc-body">
+                <span class="section-label">▣ 정의</span>
+                <ul><li>하나님은 사랑이시니까 설마 이렇게까지 하시겠어? 라는 안일함</li></ul>
+                <span class="section-label">▣ 성경 사례</span>
+                <ul>
+                    <li><span class="emph">홉니와 비느하스:</span> 한 날에 죽음</li>
+                    <li><span class="emph">다윗의 아들들:</span> 모두 비참한 결말</li>
+                    <li><span class="emph">므낫세:</span> 포로와 쇠사슬</li>
+                </ul>
+                <span class="section-label">▣ 왜 위험한가</span>
+                <ul>
+                    <li>하나님을 가볍게 여김</li>
+                    <li>하나님의 거룩이 사라짐</li>
+                </ul>
+                <div class="verse-block">📖 "왜냐하면 우리 하나님은 태워 버리는 불이시기 때문입니다." 히브리서 12장 29절</div>
+                <div class="alert-banner"><span class="alert-icon">🔔</span><span><strong>경고</strong> — 하나님의 오래 참으심은 심판이 없다는 뜻이 아니라 불순한 것을 정결케하는 불로서 표현된다.</span></div>
+            </div>
+        </div>
+
+    </div><!-- /accordion -->
+
+    <div class="conclusion-box">
+        <span class="con-label">⭐ 최종 요약 한 문장</span>
+        <p>경건한 가정이 무너질 때, 원인은 대개 '큰 악'이 아니라 작게 용납된 양육의 죄들이다.</p>
+    </div>
+
+</div>
+</div><!-- /part2 -->
+
+<!-- ══════════════════════════════════
+     파트 3 : 살리는 양육 7원칙
+══════════════════════════════════ -->
+<div class="part" id="part3">
+<div class="part-inner">
+    <div class="part-header">
+        <span class="part-label">Part 3 · 처방</span>
+        <h2 class="part-title">🌱 성경이 말하는<br>자녀를 살리는 양육 7원칙</h2>
+    </div>
+
+    <div class="accordion">
+
+        <!-- 원칙 1 -->
+        <div class="acc-item">
+            <button class="acc-trigger" onclick="toggle(this)">
+                <span class="acc-num">1</span>
+                <span class="acc-label">사랑으로 반드시 책망하고, 회복으로 끝내라</span>
+                <span class="acc-arrow">▾</span>
+            </button>
+            <div class="acc-body">
+                <span class="section-label">▣ 성경 원칙</span>
+                <div class="verse-block">📖 "왜냐하면 주님은 사랑하시는 사람을 징계하시고, 받아들이시는 아들마다 채찍질하시기 때문이다." 히브리서 12장 6절</div>
+                <span class="section-label">▣ 쉬운 설명</span>
+                <p>성경적 사랑은</p>
+                <ul>
+                    <li>화내지 않는 사랑 ❌</li>
+                    <li>무조건 덮는 사랑 ❌</li>
+                    <li>→ <span class="emph">돌이키게 하는 사랑입니다. ⭕</span></li>
+                </ul>
+                <p>책망의 목적은 상처가 아니라 <span class="emph">방향 전환입니다.</span></p>
+                <span class="section-label">▣ 실제 적용</span>
+                <div class="apply-box">
+                    <ul>
+                        <li>죄를 보았을 때 바로 말한다</li>
+                        <li>인격이 아니라 행동을 지적</li>
+                        <li>벌보다 회복의 길을 제시</li>
+                    </ul>
+                    <p class="quote">"너를 포기하지 않기 때문에 권면하는 것이야"</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 원칙 2 -->
+        <div class="acc-item">
+            <button class="acc-trigger" onclick="toggle(this)">
+                <span class="acc-num">2</span>
+                <span class="acc-label">신앙을 가르치기보다 함께 살아라</span>
+                <span class="acc-arrow">▾</span>
+            </button>
+            <div class="acc-body">
+                <span class="section-label">▣ 성경 원칙</span>
+                <div class="verse-block">📖 "그대는 자녀에게 이 말씀을 부지런히 가르치고, 그대가 집에 앉아 있을 때나 길을 갈 때나 누울 때나 일어날 때나 이 말씀을 그들에게 말해 주어야 합니다." 신명기 6장 7절</div>
+                <span class="section-label">▣ 쉬운 설명</span>
+                <p>자녀는 신앙의 형식을 배우기 전에 하나님을 대하고 경험하는 부모의 태도를 배웁니다.</p>
+                <p>신앙은 전달이 아니라 <span class="emph">동행입니다.</span></p>
+                <span class="section-label">▣ 실제 적용</span>
+                <div class="apply-box">
+                    <ul>
+                        <li>기도 제목을 함께 나눈다</li>
+                        <li>부모도 고민을 하나님께 맡기는 모습을 보여준다</li>
+                    </ul>
+                    <p class="quote">"아빠/엄마도 하나님께 의뢰하고 기다리고 있어"</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 원칙 3 -->
+        <div class="acc-item">
+            <button class="acc-trigger" onclick="toggle(this)">
+                <span class="acc-num">3</span>
+                <span class="acc-label">부모의 실패를 숨기지 말고 회개로 가르쳐라</span>
+                <span class="acc-arrow">▾</span>
+            </button>
+            <div class="acc-body">
+                <span class="section-label">▣ 성경 원칙</span>
+                <div class="verse-block">📖 "우리가 우리의 죄들을 자백하면" 요한일서 1장 9절</div>
+                <span class="section-label">▣ 쉬운 설명</span>
+                <p>완벽한 부모보다 <span class="emph">회개하는 부모가 자녀를 살립니다.</span></p>
+                <p>자녀는 "죄를 지을 수 있다"가 아니라 <span class="emph">"죄를 어떻게 처리하는가"</span>를 배웁니다.</p>
+                <span class="section-label">▣ 실제 적용</span>
+                <div class="apply-box">
+                    <ul>
+                        <li>부모의 잘못을 인정한다</li>
+                        <li>자녀 앞에서 사과한다</li>
+                        <li>회개의 언어를 실제로 사용한다</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 원칙 4 -->
+        <div class="acc-item">
+            <button class="acc-trigger" onclick="toggle(this)">
+                <span class="acc-num">4</span>
+                <span class="acc-label">체면보다 거룩을, 평안보다 진리를 택하라</span>
+                <span class="acc-arrow">▾</span>
+            </button>
+            <div class="acc-body">
+                <span class="section-label">▣ 성경 원칙</span>
+                <div class="verse-block">📖 "사람에게 순종하는 것보다 하나님께 순종하는 것이 마땅합니다." 사도행전 5장 29절</div>
+                <span class="section-label">▣ 쉬운 설명</span>
+                <p>가정의 평화가 깨질까 두려워 진리를 미루면 영적 질서는 무너집니다.</p>
+                <span class="section-label">▣ 실제 적용</span>
+                <div class="apply-box">
+                    <ul>
+                        <li>불편해도 말해야 할 것은 말한다</li>
+                        <li>사람 앞과 하나님 앞에서 같은 기준 유지</li>
+                        <li>자녀에게 기준의 이유를 설명</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 원칙 5 -->
+        <div class="acc-item">
+            <button class="acc-trigger" onclick="toggle(this)">
+                <span class="acc-num">5</span>
+                <span class="acc-label">신앙을 전통이 아니라 선택으로 이끌어라</span>
+                <span class="acc-arrow">▾</span>
+            </button>
+            <div class="acc-body">
+                <span class="section-label">▣ 성경 원칙</span>
+                <div class="verse-block">📖 "오늘 여러분은 여러분의 조상들이 강 건너편에서 섬기던 신들을 섬길 것인지 아니면 여러분이 거주하는 땅에 있는 아모리 족속의 신들을 섬길 것인지를 선택하십시오." 여호수아기 24장 15절</div>
+                <span class="section-label">▣ 쉬운 설명</span>
+                <p>부모는 길을 보여줄 수는 있지만 대신 선택해 줄 수는 없습니다.</p>
+                <p>그래서 강요보다 <span class="emph">깨닫게 하는 대화가 필요합니다.</span></p>
+                <span class="section-label">▣ 실제 적용</span>
+                <div class="apply-box">
+                    <ul>
+                        <li>"왜 믿어야 할까?"를 함께 고민</li>
+                        <li>질문을 금지하지 않는다</li>
+                        <li>믿음의 이유를 설명할 기회를 준다</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 원칙 6 -->
+        <div class="acc-item">
+            <button class="acc-trigger" onclick="toggle(this)">
+                <span class="acc-num">6</span>
+                <span class="acc-label">자유에는 반드시 훈련과 책임을 연결하라</span>
+                <span class="acc-arrow">▾</span>
+            </button>
+            <div class="acc-body">
+                <span class="section-label">▣ 성경 원칙</span>
+                <div class="verse-block">📖 "사람이 젊을 때에 멍에를 메는 것은 좋은 것이라." 예레미아애가 3장 27절</div>
+                <span class="section-label">▣ 쉬운 설명</span>
+                <p>성경은 자유를 주지만 <span class="emph">방종을 허락하지 않습니다.</span></p>
+                <p>훈련은 통제가 아니라 <span class="emph">자유를 감당할 힘을 길러줍니다.</span></p>
+                <span class="section-label">▣ 실제 적용</span>
+                <div class="apply-box">
+                    <ul>
+                        <li>선택의 결과를 스스로 책임지게 한다</li>
+                        <li>기준 없는 허용을 피한다</li>
+                        <li>작은 약속부터 지키게 한다</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 원칙 7 -->
+        <div class="acc-item">
+            <button class="acc-trigger" onclick="toggle(this)">
+                <span class="acc-num">7</span>
+                <span class="acc-label">하나님의 사랑과 심판을 함께 가르쳐라</span>
+                <span class="acc-arrow">▾</span>
+            </button>
+            <div class="acc-body">
+                <span class="section-label">▣ 성경 원칙</span>
+                <div class="verse-block">📖 "우리 하나님은 소멸하는 불이시니라" 히브리서 12장 29절</div>
+                <span class="section-label">▣ 쉬운 설명</span>
+                <p>하나님은 무서운 분만도 아니고 좋은 분만도 아닙니다.</p>
+                <p>👉 <span class="emph">거룩하신 사랑의 하나님입니다.</span></p>
+                <span class="section-label">▣ 실제 적용</span>
+                <div class="apply-box">
+                    <ul>
+                        <li>죄의 결과를 솔직하게 가르친다</li>
+                        <li>하나님의 오래 참으심을 오해하지 않게 한다</li>
+                        <li>은혜와 책임을 함께 설명</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /accordion -->
+
+    <div class="conclusion-box">
+        <span class="con-label">🤝 전체를 묶는 한 문장</span>
+        <p>자녀를 살리는 양육은 완벽함이 아니라 진리 안에서 끝까지 책임지는 사랑이다.</p>
+    </div>
+
+</div>
+</div><!-- /part3 -->
+
+<footer>부산교회 2구역</footer>
+
+<script>
+function switchTab(n) {
+    document.querySelectorAll('.part').forEach((p,i) => {
+        p.classList.toggle('active', i+1 === n);
+    });
+    document.querySelectorAll('.tab-btn').forEach((b,i) => {
+        b.classList.toggle('active', i+1 === n);
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function toggle(btn) {
+    const item = btn.closest('.acc-item');
+    const wasOpen = item.classList.contains('open');
+    btn.closest('.accordion').querySelectorAll('.acc-item').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) {
+        item.classList.add('open');
+        setTimeout(() => {
+            const top = item.getBoundingClientRect().top + window.scrollY - 16;
+            window.scrollTo({ top, behavior: 'smooth' });
+        }, 30);
+    }
+}
+</script>
+</body>
+</html>

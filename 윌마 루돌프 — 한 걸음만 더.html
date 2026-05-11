@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>윌마 루돌프: 한 걸음만 더 - 고품격 아티클</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Serif+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #07080e;
+            --card-bg: #12141d;
+            --accent-gold: #c4942a;
+            --accent-red: #c0292b;
+            --accent-teal: #1a8c7a;
+            --text-main: #f5f1ea;
+            --text-dim: #a0a0a0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Noto Serif KR', serif;
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        /* 배경 캔버스 파티클 효과용 */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        /* 사이드 네비게이션 (데스크톱) */
+        nav {
+            position: fixed;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        nav a {
+            color: var(--accent-gold);
+            text-decoration: none;
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.2rem;
+            writing-mode: vertical-rl;
+            letter-spacing: 2px;
+            opacity: 0.5;
+            transition: 0.3s;
+        }
+
+        nav a:hover { opacity: 1; transform: scale(1.1); }
+
+        /* 레이아웃 구조 */
+        .wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 100px 20px;
+        }
+
+        /* 서사적 도입 섹션 */
+        header {
+            text-align: center;
+            margin-bottom: 150px;
+            position: relative;
+        }
+
+        .hero-num {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 15rem;
+            line-height: 1;
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: -1;
+            background: linear-gradient(to bottom, #1a1c25, transparent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0.3;
+        }
+
+        h1 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 4rem;
+            color: var(--accent-gold);
+            letter-spacing: 5px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(196, 148, 42, 0.3);
+        }
+
+        .intro-text {
+            font-size: 1.4rem;
+            color: var(--accent-teal);
+            font-weight: bold;
+            font-style: italic;
+        }
+
+        /* 섹션 공통 스타일 */
+        section {
+            margin-bottom: 120px;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s ease-out;
+            position: relative;
+        }
+
+        section.reveal {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            color: var(--accent-gold);
+            border-bottom: 1px solid var(--accent-gold);
+            display: inline-block;
+            margin-bottom: 30px;
+            padding-right: 50px;
+        }
+
+        .content-box {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 5px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border-left: 4px solid var(--accent-red);
+        }
+
+        /* 리스트 스타일 */
+        ul { list-style: none; margin-top: 20px; }
+        ul li {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 15px;
+        }
+        ul li::before {
+            content: '◆';
+            position: absolute;
+            left: 0;
+            color: var(--accent-red);
+            font-size: 0.8rem;
+        }
+
+        /* 강조 텍스트 */
+        strong { color: var(--accent-gold); font-weight: 700; }
+
+        /* 성경 구절 스타일 */
+        .scripture {
+            margin-top: 50px;
+            padding: 30px;
+            background: rgba(26, 140, 122, 0.1);
+            border: 1px solid var(--accent-teal);
+            border-radius: 10px;
+            text-align: center;
+            font-style: italic;
+        }
+
+        /* 그리드 레이아웃 (결론 요약용) */
+        .grid-summary {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .grid-item {
+            background: #1a1c25;
+            padding: 20px;
+            border: 1px solid #333;
+            text-align: center;
+        }
+
+        /* 푸터 */
+        footer {
+            text-align: center;
+            padding: 50px;
+            border-top: 1px solid #333;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        /* Glow 효과 */
+        .glow {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(192, 41, 43, 0.1) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        @media (max-width: 768px) {
+            nav { display: none; }
+            h1 { font-size: 2.5rem; }
+            .grid-summary { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="particle-canvas"></canvas>
+
+    <nav>
+        <a href="#intro">INTRO</a>
+        <a href="#childhood">CHILDHOOD</a>
+        <a href="#commitment">COMMITMENT</a>
+        <a href="#miracle">MIRACLE</a>
+        <a href="#glory">GLORY</a>
+    </nav>
+
+    <div class="wrapper">
+        <header id="intro">
+            <div class="hero-num">1960</div>
+            <h1>WILMA RUDOLPH</h1>
+            <p class="intro-text">"옛날 옛적, 세상에서 가장 빠른 발을 가졌으나<br>가장 늦게 걷기 시작한 한 소녀의 기적이 있었습니다."</p>
+        </header>
+
+        <section id="childhood">
+            <div class="glow" style="top: -50px; right: -50px;"></div>
+            <h2>01. 절망 속의 시작</h2>
+            <div class="content-box">
+                <p>1940년, 미국 테네시주 클락스빌에서 윌마 루돌프가 태어났습니다. 네 살 때, 폐렴과 소아마비로 다리가 마비되어 걸을 수 없게 되었습니다.</p>
+                <p>어린 윌마는 친구들과 뛰어놀지 못하는 현실을 슬퍼했지만, 영영 걸을 수 없을 거란 생각은 하지 않았습니다. 그 마음 속에는 항상 어머니의 기도와 사랑이 함께 있었습니다.</p>
+            </div>
+        </section>
+
+        <section id="commitment">
+            <h2>02. 헌신과 재활</h2>
+            <div class="content-box" style="border-left-color: var(--accent-teal);">
+                <p>윌마의 어머니는 매일 새벽 4시면 일어나, 이웃 농장에서 일을 하며 병원비와 치료비를 마련했습니다. 윌마는 어머니와 함께 하루도 빠지지 않고 걷기 연습을 시작했습니다.</p>
+                <p>매일 반복되는 연습 속에서 어머니는 윌마에게 속삭였습니다. <strong>“한 걸음만 더!”</strong> 그 한마디가 어린 윌마의 마음 속 희망과 용기가 되었습니다.</p>
+            </div>
+        </section>
+
+        <section id="miracle">
+            <div class="glow" style="bottom: -50px; left: -50px;"></div>
+            <h2>03. 작은 걸음에서 큰 기적으로</h2>
+            <div class="content-box">
+                <ul>
+                    <li><strong>8세:</strong> 목발과 뒷굽 높은 구두를 사용해 학교 출석</li>
+                    <li><strong>11세:</strong> 목발 없이 걸음 가능</li>
+                    <li><strong>고등학교 시절:</strong> 농구부 활동 참여</li>
+                    <li><strong>이후:</strong> 육상에 집중하며 각종 대회에서 뛰어난 성과</li>
+                </ul>
+                <p style="margin-top:20px;">어린 시절 60cm도 힘겹게 걷던 거리를 지나, 마침내 올림픽 트랙 위에서 세상과 맞서는 순간까지, 윌마는 매일 한 걸음씩 믿음으로 나아갔습니다.</p>
+            </div>
+        </section>
+
+        <section id="glory">
+            <h2>04. 올림픽과 영광</h2>
+            <div class="content-box" style="border-left-color: var(--accent-gold);">
+                <p>1960년 로마 올림픽에서 윌마 루돌프는 다음을 기록했습니다.</p>
+                <ul>
+                    <li>여자 100m 금메달 (<strong>11초, 세계 기록</strong>)</li>
+                    <li>여자 200m 금메달 (<strong>22.9초, 세계 기록</strong>)</li>
+                    <li>400m 계주 금메달 (<strong>미국 여자 육상 최초 3관왕</strong>)</li>
+                </ul>
+                <p style="margin-top:20px;">올림픽 기자회견에서, 윌마는 어머니를 언급하며 이렇게 말했습니다. <br>“어머니가 늘 ‘한 걸음만 더!’라고 격려해주셨어요. 그 말이 오늘의 저를 만들었습니다.”</p>
+            </div>
+        </section>
+
+        <section id="conclusion">
+            <h2>05. 믿음과 인내</h2>
+            <div class="content-box">
+                <p>윌마 루돌프의 이야기는, 절망 속에서도 포기하지 않고 한 걸음씩 믿음으로 나아가는 삶이 어떻게 기적을 이루는지를 보여줍니다.</p>
+                <p>우리 각자의 삶에서도, 때로는 작은 한 걸음이 모든 것을 바꿀 수 있습니다. 주님의 사랑과 인도하심 속에서, 포기하지 않고 앞으로 나아가는 용기를 가지시길 바랍니다.</p>
+                
+                <div class="grid-summary">
+                    <div class="grid-item">환난은<br><strong>인내</strong>를</div>
+                    <div class="grid-item">인내는<br><strong>단련</strong>을</div>
+                    <div class="grid-item">단련은<br><strong>소망</strong>을</div>
+                    <div class="grid-item">소망은<br><strong>기적</strong>을</div>
+                </div>
+
+                <div class="scripture">
+                    "그럴 뿐만 아니라 우리는 환난 중에도 자랑합니다. 그것은 우리가 <strong>환난은 인내를 낳고, 인내는 단련을, 단련은 소망을 낳는다</strong>는 것을 알기 때문입니다." <br>– 로마서 5장 3~4절
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            부산교회 2구역 | Wilma Rudolph Story
+        </footer>
+    </div>
+
+    <script>
+        // 1. Reveal Animation (Intersection Observer)
+        const observerOptions = { threshold: 0.1 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('reveal');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // 2. Particle Canvas Effect
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function initCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+                this.color = Math.random() > 0.5 ? '#c4942a' : '#1a8c7a';
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function createParticles() {
+            for (let i = 0; i < 100; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', initCanvas);
+        initCanvas();
+        createParticles();
+        animate();
+    </script>
+</body>
+</html>

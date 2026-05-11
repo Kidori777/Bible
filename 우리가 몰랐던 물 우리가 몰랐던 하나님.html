@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>우리가 몰랐던 물, 우리가 몰랐던 하나님</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-forest: #1a2e26;
+            --rust: #8b4513;
+            --gold: #c5a059;
+            --cream: #f4f1ea;
+            --text-dark: #2c3e50;
+            --spine-color: rgba(197, 160, 89, 0.3);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-forest);
+            color: var(--cream);
+            font-family: 'Noto Serif KR', serif;
+            overflow-x: hidden;
+            line-height: 1.8;
+        }
+
+        /* Noise Texture Overlay */
+        .noise-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.05;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Header & Lighthouse Effect */
+        header {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            background: radial-gradient(circle at 50% 40%, rgba(197, 160, 89, 0.15) 0%, rgba(26, 46, 38, 1) 70%);
+            text-align: center;
+            padding: 20px;
+        }
+
+        .lighthouse-beam {
+            position: absolute;
+            top: 40%;
+            width: 2px;
+            height: 2px;
+            background: var(--gold);
+            box-shadow: 0 0 100px 50px rgba(197, 160, 89, 0.4);
+            border-radius: 50%;
+            animation: pulse 4s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.5); opacity: 0.8; }
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: var(--gold);
+            margin-bottom: 20px;
+            z-index: 10;
+            letter-spacing: -0.05em;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 0.8rem;
+            letter-spacing: 0.2em;
+            color: var(--gold);
+            animation: bounce 2s infinite;
+        }
+
+        /* Main Content Layout */
+        .content-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 100px 20px;
+            position: relative;
+        }
+
+        /* Spine & Dots */
+        .spine {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: var(--spine-color);
+            transform: translateX(-50%);
+        }
+
+        .reveal-item {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
+            margin-bottom: 120px;
+            position: relative;
+            width: 100%;
+        }
+
+        .reveal-item.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Story Section Style */
+        .story-box {
+            background: rgba(244, 241, 234, 0.05);
+            border: 1px solid rgba(197, 160, 89, 0.2);
+            padding: 40px;
+            border-radius: 4px;
+            backdrop-filter: blur(5px);
+        }
+
+        .story-box p {
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: #d1cfc8;
+        }
+
+        .highlight {
+            color: var(--gold);
+            font-weight: 900;
+            border-bottom: 1px solid var(--gold);
+            display: inline;
+        }
+
+        /* Section Titles */
+        h2 {
+            font-size: 1.8rem;
+            color: var(--gold);
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        h2::before {
+            content: '';
+            width: 40px;
+            height: 1px;
+            background: var(--gold);
+        }
+
+        /* Typography */
+        p {
+            margin-bottom: 1.8em;
+            font-size: 1.1rem;
+            color: #d1cfc8;
+            text-align: justify;
+            word-break: keep-all;
+        }
+
+        .icon-wrap {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            display: block;
+            text-align: center;
+        }
+
+        /* Verse Box (The Edwards Style) */
+        .verse-container {
+            margin-top: 150px;
+            padding: 60px 40px;
+            border: 2px double var(--gold);
+            background: rgba(197, 160, 89, 0.03);
+            position: relative;
+            text-align: center;
+        }
+
+        .verse-container p {
+            color: var(--cream);
+            font-style: italic;
+            font-size: 1.2rem;
+            line-height: 2;
+        }
+
+        .reference {
+            display: block;
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: var(--gold);
+            font-family: 'Noto Sans KR', sans-serif;
+            font-weight: 700;
+        }
+
+        footer {
+            padding: 100px 20px;
+            text-align: center;
+            border-top: 1px solid var(--spine-color);
+            font-size: 0.8rem;
+            color: var(--spine-color);
+            letter-spacing: 0.1em;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
+
+        @media (max-width: 768px) {
+            header h1 { font-size: 2rem; }
+            .spine { left: 20px; }
+            .content-wrapper { padding-left: 50px; }
+            h2 { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="noise-overlay"></div>
+
+    <header>
+        <div class="lighthouse-beam"></div>
+        <h1>우리가 몰랐던 물,<br>우리가 몰랐던 하나님</h1>
+        <div class="scroll-indicator">SCROLL DOWN</div>
+    </header>
+
+    <main class="content-wrapper">
+        <div class="spine"></div>
+
+        <section class="reveal-item story-section">
+            <div class="story-box">
+                <p>
+                    깊은 강물 속, 물고기들이 모여 이야기를 나누었습니다. “우리 생명이 물에 달려 있다는데, 정작 물이 어떻게 생겼는지 본 적이 없어. 도대체 물이 뭘까?” 서로의 질문은 점점 커졌지만, 누구도 답을 내릴 수 없었습니다. 그때 지혜롭다는 물고기 한 마리가 말했습니다. “큰 바다에 모든 것을 아는 학자가 있다더라. 그에게 물어보자.”
+                </p>
+                <br>
+                <p>
+                    그리하여 몇 마리의 물고기가 먼 바다로 떠났습니다. 늙은 학자 물고기는 조용히 이야기를 듣고, 이렇게 말했습니다. <span class="highlight">“내 어찌 자네들에게 물을 보여줄 수 있겠는가. 자네들은 물 안에서 태어나고, 물 안에서 움직이며, 물 안에서 살다가 죽는다네. 자네들을 둘러싸고 있는 모든 것이 바로 물일세.”</span>
+                </p>
+                <br>
+                <p>
+                    그 순간, 물고기들은 깨달았습니다. 그들이 찾고 있던 ‘물’은 늘 그들과 함께 있었고, 너무 가까이 있었기에 오히려 보이지 않았던 것이었습니다.
+                </p>
+            </div>
+        </section>
+
+        <section class="reveal-item">
+            <span class="icon-wrap">🌊</span>
+            <h2>하나님은 우리가 숨 쉬는 공기처럼, 늘 곁에 계신 분입니다</h2>
+            <p>
+                물고기들은 물 속에서 태어나고, 자라고, 살아가면서도 물의 존재를 인식하지 못합니다. 왜냐하면 물은 그들의 삶의 전부이기 때문이죠. 그들에게 물은 너무 당연하고 익숙해서, 오히려 보이지 않는 것이 되어버린 것입니다.
+            </p>
+            <p>
+                우리도 마찬가지입니다. 하나님을 찾기 위해 멀리 떠나고, 특별한 체험을 기다리며, “하나님은 어디 계신가요?”라고 묻곤 합니다. “하나님이 계시다면 왜 나는 그분을 본 적이 없을까?” “왜 그분의 존재를 느낄 수 없을까?”
+            </p>
+            <p>
+                하지만 하나님은 우리가 살아가는 모든 순간, 모든 공간, 모든 숨결 속에 계신 분입니다. 우리가 사랑을 느낄 때, 우리가 양심의 소리를 들을 때, 우리가 자연의 아름다움에 감탄할 때, 그 모든 순간이 바로 하나님이 우리와 함께 계심을 보여주는 증거입니다.
+            </p>
+        </section>
+
+        <section class="reveal-item">
+            <span class="icon-wrap">✨</span>
+            <h2>결론: 하나님은 멀리 있는 분이 아니라, 지금 여기에 계신 분</h2>
+            <p>
+                하나님은 우리가 찾으러 먼 곳으로 떠나야만 만날 수 있는 분이 아닙니다. 그분은 우리가 태어날 때부터 함께 하셨고, 우리가 고통 속에 있을 때도, 우리가 기쁨을 누릴 때도, 항상 우리 곁에 계셨던 분입니다. 우리가 그분을 인식하지 못했던 이유는, 그분이 너무 멀리 있어서가 아니라, <span class="highlight">너무 가까이 계셨기 때문입니다</span>.
+            </p>
+        </section>
+
+        <section class="reveal-item">
+            <div class="verse-container">
+                <p>
+                    하나님은 한 사람에게서 인류의 모든 민족을 만드시어 온 지면에 거하게 하시고, 그들이 살 시대와 거주할 경계를 미리 정하셨는데, 이것은 사람들이 하나님을 찾도록 하시려는 것입니다. 사람들이 하나님을 더듬어 찾는다면 발견할 수 있는데, 사실 하나님은 우리 각 사람에게서 멀리 떨어져 계시지 않습니다. 우리는 하나님 안에서 살고 움직이며 존재합니다. 여러분 가운데 어떤 시인들은 ‘우리도 그분의 족속입니다.’라고 말하였습니다.
+                </p>
+                <span class="reference">- 사도행전 17장 26절~28절 -</span>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        &copy; 우리가 몰랐던 하나님
+    </footer>
+
+    <script>
+        // Intersection Observer for Smooth Reveal Animation
+        const observerOptions = {
+            threshold: 0.15
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal-item').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Horizontal Lighthouse Beam effect following scroll
+        window.addEventListener('scroll', () => {
+            const scrollPercent = window.scrollY / (document.body.offsetHeight - window.innerHeight);
+            const beam = document.querySelector('.lighthouse-beam');
+            if (beam) {
+                beam.style.transform = `scale(${1 + scrollPercent * 2})`;
+                beam.style.opacity = 0.5 + (scrollPercent * 0.5);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>우상의 기원과 종말 ― 아티클</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Serif+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #06070e;
+            --gold-primary: #c9a84c;
+            --gold-light: #e8c970;
+            --text-main: #e0e0e0;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(201, 168, 76, 0.2);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Noto Serif KR', serif;
+            line-height: 1.8;
+            overflow-x: hidden;
+            word-break: keep-all;
+        }
+
+        #starCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+        .halo {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(201, 168, 76, 0.12) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(40px);
+        }
+        .rotating-ring {
+            position: absolute;
+            width: 480px;
+            height: 480px;
+            border: 1px solid var(--gold-primary);
+            border-radius: 54% 46% 42% 58% / 44% 41% 59% 56%;
+            opacity: 0.2;
+            animation: rotate-organic 15s linear infinite;
+        }
+        .hero-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 4.5rem;
+            color: var(--gold-light);
+            text-shadow: 0 0 30px rgba(201, 168, 76, 0.4);
+            z-index: 1;
+            margin-bottom: 10px;
+        }
+        .stats-badge {
+            padding: 10px 25px;
+            border: 1px solid var(--gold-primary);
+            border-radius: 50px;
+            font-size: 0.9rem;
+            background: rgba(201, 168, 76, 0.05);
+            color: var(--gold-light);
+            z-index: 1;
+            letter-spacing: 2px;
+        }
+
+        /* Body Layout */
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+        section { padding: 120px 0; opacity: 0; transform: translateY(40px); transition: 1.2s ease-out; }
+        section.reveal { opacity: 1; transform: translateY(0); }
+
+        .gcard {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 50px;
+            margin-bottom: 50px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        .section-header { margin-bottom: 40px; border-bottom: 1px solid var(--glass-border); padding-bottom: 20px; }
+        .section-num { color: #ff4d4d; font-size: 1.5rem; margin-right: 10px; }
+        .section-title { font-size: 2.2rem; color: var(--gold-light); display: inline; }
+
+        .ms-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 30px 0; }
+        .grid-item { background: rgba(255,255,255,0.02); padding: 25px; border-radius: 12px; border: 1px solid rgba(201, 168, 76, 0.1); }
+        .stat-num { font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; color: var(--gold-primary); display: block; margin-bottom: 10px; }
+
+        .big-verse {
+            font-size: 1.8rem;
+            text-align: center;
+            color: var(--gold-light);
+            padding: 80px 40px;
+            position: relative;
+            font-style: italic;
+            line-height: 1.6;
+        }
+        .big-verse::before { content: '“'; position: absolute; top: 0; left: 50%; transform: translateX(-50%); font-size: 5rem; opacity: 0.2; }
+
+        /* Typography & Content */
+        .bible-ref { color: var(--gold-primary); font-weight: 700; margin-bottom: 10px; display: block; }
+        .bible-text { border-left: 3px solid var(--gold-primary); padding-left: 20px; margin: 15px 0; font-style: italic; color: #ccc; }
+        .point-arrow { color: var(--gold-light); margin: 12px 0; font-weight: 500; }
+        .warning-tag { background: rgba(255, 77, 77, 0.1); border: 1px solid #ff4d4d; color: #ff4d4d; padding: 5px 12px; border-radius: 4px; display: inline-block; margin: 10px 0; font-size: 0.9rem; }
+        
+        .timeline { position: relative; padding-left: 30px; border-left: 1px solid var(--glass-border); margin: 40px 0; }
+        .timeline-node { position: relative; margin-bottom: 40px; }
+        .timeline-node::before { content: ''; position: absolute; left: -36px; top: 10px; width: 11px; height: 11px; background: var(--gold-primary); border-radius: 50%; box-shadow: 0 0 10px var(--gold-primary); }
+
+        footer { text-align: center; padding: 100px 0; opacity: 0.6; font-size: 0.9rem; border-top: 1px solid var(--glass-border); }
+
+        @keyframes rotate-organic {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.05); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            .ms-grid { grid-template-columns: 1fr; }
+            .hero-title { font-size: 2.8rem; }
+            .gcard { padding: 30px; }
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="starCanvas"></canvas>
+
+<div class="hero">
+    <div class="halo"></div>
+    <div class="rotating-ring"></div>
+    <h1 class="hero-title">IDOLATRY</h1>
+    <div class="stats-badge">우상의 기원부터 최종 형태까지</div>
+</div>
+
+<div class="container">
+
+    <section>
+        <div class="section-header">
+            <span class="section-num">🔴 Ⅰ.</span>
+            <h2 class="section-title">우상의 기원 ― 왜 우상이 생겼는가</h2>
+        </div>
+        <div class="gcard">
+            <div class="timeline-node">
+                <span class="bible-ref">1️⃣ 창조의 목적에서 벗어날 때 우상이 시작됨</span>
+                <p class="bible-text">📖 창 1:26–28 “하나님은 그분 자신의 형상대로 사람을 창조하셨다. 하나님은 그분의 형상대로 사람을 창조하시되… 온갖 것을 통치하여라.”</p>
+                <p class="point-arrow">➡️ 인간은 하나님을 표현하는 형상(image) 으로 창조됨</p>
+                <p class="point-arrow">➡️ 즉, 하나님을 닮아 그분을 나타내도록 설계된 존재</p>
+                <p>👉 그런데 사람이 하나님을 ‘표현’하지 않고 ‘대상화’하기 시작할 때, 하나님을 관계의 주체가 아니라 조작 가능한 객체로 바꿀 때 우상이 발생합니다.</p>
+            </div>
+            <div class="timeline-node">
+                <span class="bible-ref">2️⃣ 타락의 핵심 = 하나님을 하나님 자리에 두지 않음</span>
+                <p class="bible-text">📖 창 3:5 “하나님은 그대들이 그것을 먹는 날에는 눈이 열려서 하나님처럼 되어,”</p>
+                <p class="point-arrow">➡️ 하나님 없이 하나님이 되려는 욕망의 시작이 모든 우상의 뿌리입니다.</p>
+                <p style="color: var(--gold-light); margin-top: 15px;">📌 우상은 언제나 “하나님 없이도 괜찮다” 는 거짓 약속에서 출발합니다.</p>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="section-header">
+            <span class="section-num">🔴 Ⅱ.</span>
+            <h2 class="section-title">율법서에서의 우상 ― 언약 파괴</h2>
+        </div>
+        <div class="gcard">
+            <div class="timeline-node">
+                <span class="bible-ref">1️⃣ 십계명의 구조 자체가 우상 문제</span>
+                <p class="bible-text">📖 출 20:3–5 너는 나 외에 다른 신들을 두어서는 안 된다. 너는 자신을 위하여 우상을 만들어서는 안 되며, 너는 그것들에 절해서도 안 되며, 그것들을 섬겨서도 안 된다.</p>
+                <p class="point-arrow">➡️ 존재(신) → 형상 → 경배 → 섬김</p>
+                <p class="point-arrow">➡️ 우상숭배는 점진적 타락 구조</p>
+            </div>
+            <div class="timeline-node">
+                <span class="bible-ref">2️⃣ 금송아지 사건의 본질</span>
+                <p class="bible-text">📖 출 32장 “이스라엘아, 이것이 너를 이집트 땅에서 이끌어 낸 너의 신이다!”</p>
+                <span class="warning-tag">⚠️ 놀라운 점은</span>
+                <p>* 그들은 여호와를 부정하지 않았습니다.<br>* 여호와를 눈에 보이는 방식으로 바꾸었을 뿐이었습니다.</p>
+                <p class="point-arrow">➡️ 금송아지라는 우상은 다른 신이 아니라, 왜곡된 하나님을 만들어내었다.</p>
+                <p style="color: var(--gold-light);">📌 그래서 하나님은 불같이 가장 진노하신 것입니다 왜냐하면 이스라엘 백성이 금송아지를 만듦으로 하나님을 모욕했기 때문입니다.</p>
+            </div>
+            <div class="timeline-node">
+                <span class="bible-ref">3️⃣ 우상은 반드시 음행으로 표현됨</span>
+                <p class="bible-text">📖 출 34:15–16 “너는 그 땅의 주민들과 언약을 맺지 않도록 해야 한다……자기들의 신들을 음란하게 섬기며 네 아들들도 자기들의 신들을 음란하게 섬기게 만들 것이다.”</p>
+                <p class="point-arrow">➡️ 우상숭배는 하나님과 언약 관계의 배신에서 시작되었습니다.</p>
+                <p class="point-arrow">➡️ 음란은 단순 실수가 아니라 배우자를 버린 행위이며 이는 지속된다는 점입니다.</p>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="section-header">
+            <span class="section-num">🔴 Ⅲ.</span>
+            <h2 class="section-title">역사서 ― 우상과 하나님의 임재 상실</h2>
+        </div>
+        <div class="gcard">
+            <div class="timeline-node">
+                <span class="bible-ref">1️⃣ 사사기의 반복 구조</span>
+                <p class="bible-text">📖 삿 2:11–13 여호와를 버리고 바알을 섬김 → 여호와의 진노 → 압제 → 부르짖음 → 구원 → 다시 우상</p>
+                <p class="point-arrow">➡️ 우상은 하나님의 임재를 상실하게 하였고 이스라엘을 혼란케 하였다.</p>
+                <div class="big-verse">“그 당시 이스라엘 가운데에는 왕이 없었다. 사람들은 저마다 자기가 보기에 옳은 대로 하였다.”</div>
+                <p style="text-align: center; color: var(--gold-light);">📌 우상은 하나님의 통치 부재의 결과입니다.</p>
+            </div>
+            <div class="timeline-node" style="margin-top: 50px;">
+                <span class="bible-ref">2️⃣ 삼손의 비극</span>
+                <p class="bible-text">📖 삿 16:20 “그러나 그는 여호와께서 이미 자기를 떠나셨다는 것을 알지 못하였다.”</p>
+                <p class="point-arrow">➡️ 우상은 서서히 하나님의 임재를 잃게 만들고 있습니다. 우상을 섬기는 자들에게 가장 무서운 상태는 자신이 하나님을 잃은 줄도 모르는 영적 사망의 상태에 놓이게 됩니다.</p>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="section-header">
+            <span class="section-num">🔴 Ⅳ.</span>
+            <h2 class="section-title">시가서 ― 우상의 심리학</h2>
+        </div>
+        <div class="gcard">
+            <div class="timeline-node">
+                <span class="bible-ref">1️⃣ 우상은 인간의 투영</span>
+                <p class="bible-text">📖 시 115:4–8 저들의 우상들은 은과 금에 지나지 않으며, / 사람이 손으로 만든 것. 입이 있어도 말하지 못하고 / 눈이 있어도 보지 못하며 귀가 있어도 듣지 못하고 / 코가 있어도 냄새 맡지 못하며 손이 있어도 만지지 못하고 / 발이 있어도 걷지 못하며 / 목구멍으로 소리 내지도 못한다네. 그것들을 만드는 이들, / 그것들을 신뢰하는 이들이 / 다 그것들과 같다네.</p>
+                <p style="color: var(--gold-light); margin: 20px 0;">📌 핵심 원리: 사람은 자신이 섬기는 것을 닮아가고 있습니다.</p>
+                <p>👉 살아 계신 하나님을 섬기는 자는 영적 생명이 살아 있는 사람으로 살아가지만 죽은 우상을 섬기는 자는 영적인 감각을 잃은 마치 우상과 같은 상태에 놓이게 됩니다.</p>
+            </div>
+            <div class="timeline-node" style="margin-top: 40px;">
+                <span class="bible-ref">2️⃣ 전도서의 우상 비판</span>
+                <p class="bible-text">📖 전 1:2 “허무 중의 허무, 허무 중의 허무라. 모든 것이 허무여라 “</p>
+                <p class="point-arrow">➡️ 하나님이 없는 지혜·노력·성취는 우상에 불과하며 이는 항상 공허하고 허무함을 나타내고 있습니다.</p>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="section-header">
+            <span class="section-num">🔴 Ⅴ.</span>
+            <h2 class="section-title">선지서 ― 우상의 해부학</h2>
+        </div>
+        <div class="ms-grid">
+            <div class="grid-item">
+                <span class="stat-num">이사야</span>
+                <p>나무 절반은 불 피우고 절반은 우상을 만듦. 자기 생존 도구로 우상을 만들고 경배함.</p>
+            </div>
+            <div class="grid-item">
+                <span class="stat-num">예레미야</span>
+                <p>생수의 원천을 저버리고 물을 담지 못하는 새는 저수조를 팠음.</p>
+            </div>
+            <div class="grid-item">
+                <span class="stat-num">에스겔</span>
+                <p>마음 안에 우상들을 두고 죄악에 빠지게 하는 걸림돌을 제 얼굴 앞에 둠.</p>
+            </div>
+        </div>
+        <div class="gcard">
+            <span class="bible-ref">호세아: 결혼 언약의 파괴</span>
+            <p class="bible-text">📖 호 2:13 “그녀가 바알들 앞에 향을 피우고 / 코걸이와 보석으로 치장하고서 / 자기 애인들을 따라가”</p>
+            <p class="point-arrow">➡️ 우상숭배는 정서적·영적 외도로서 결혼 언약을 파괴한 음란한 행위이다.</p>
+        </div>
+    </section>
+
+    <section>
+        <div class="section-header">
+            <span class="section-num">🔴 Ⅵ.</span>
+            <h2 class="section-title">예수님의 우상관 ― 가장 날카로운 계시</h2>
+        </div>
+        <div class="gcard">
+            <div class="timeline-node">
+                <span class="bible-ref">🕊️ 1. 탐심·물질·욕망</span>
+                <p class="bible-text">마 6:24 “그 누구도 두 주인을 섬길 수 없습니다... 여러분은 하나님과 마몬을 함께 섬길 수 없습니다.”</p>
+                <p class="bible-text">빌 3:19 “그들의 최후는 멸망이요, 그들의 신은 자기의 배요... 그들은 생각을 땅의 일에 두는 사람들입니다.”</p>
+                <p>배가 신이되면 불편하면 거부합니다. 고통이나 어려움이 오면 회피합니다. 또한 자신에게 손해가 온다고 여겨지면 불순종하게 됩니다. 이는 모두 십자가의 원칙에 반하는 것입니다.</p>
+            </div>
+            <div class="timeline-node">
+                <span class="bible-ref">🕊️ 2. 종교적 형식 자체도 우상이 될 수 있음</span>
+                <p class="bible-text">마 15:8-9 “이 백성이 입술로는 나를 공경하지만, 마음은 나에게서 멀리 떠나 있다. 사람의 계명을 교훈으로 가르치니, 나에게 헛되이 경배하고 있다.”</p>
+                <p class="bible-text">골 2:23 “...자기 몸을 학대하는 데에는 지혜롭다고 하는 평판이 있지만, 육체의 방종을 막는 데에는 아무런 유익이 없습니다.”</p>
+                <p class="point-arrow">➡️ 하나님 없이도 돌아가는 종교은 우상화되고 어그러진 신앙을 나타내고 있습니다.</p>
+            </div>
+            <div class="timeline-node">
+                <span class="bible-ref">3️⃣ 바리새인의 우상</span>
+                <p class="bible-text">마가복음7:6-8 “...여러분이 하나님의 계명은 버리면서 사람의 전통은 지키고 있습니다.”</p>
+                <p class="point-arrow">➡️ 하나님을 살아있는 인격이 아니라 자신들이 관리하고 통제 가능한 규범으로 축소하였습니다.</p>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="section-header">
+            <span class="section-num">🔴 Ⅶ.</span>
+            <h2 class="section-title">사도행전·서신서 ― 우상의 확장</h2>
+        </div>
+        <div class="gcard">
+            <p class="bible-text">📖 롬 1:23–25 썩지 않는 하나님의 영광을 썩어 없어질 사람과 ... 우상의 모양으로 바꾸었습니다.</p>
+            <p style="color: var(--gold-light);">📌 우상의 본질적인 공식은 교환(swap)이다. 하나님의 영광이 인간의 정욕으로 교환되어졌습니다.</p>
+            <div class="ms-grid">
+                <div class="grid-item">
+                    <span class="bible-ref">골 3:5</span>
+                    <p>탐욕은 우상숭배입니다.</p>
+                </div>
+                <div class="grid-item">
+                    <span class="bible-ref">엡 5:5</span>
+                    <p>우상숭배자는 그리스도와 하나님의 왕국에서 상속받을 것이 없습니다.</p>
+                </div>
+                <div class="grid-item">
+                    <span class="bible-ref">살전 1:9</span>
+                    <p>회심은 우상을 버리고 하나님께 돌아오는 대상 교체입니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="section-header">
+            <span class="section-num">🔴 Ⅷ.</span>
+            <h2 class="section-title">계시록 ― 우상의 최종 형태</h2>
+        </div>
+        <div class="gcard">
+            <p><strong>1️⃣ 짐승 숭배:</strong> 계 13장 형상, 표, 경배, 매매 통제. 우상은 계시록 13에 와서는 짐승으로 성숙 집대성되어 정치·경제·종교 통합 시스템을 구축합니다.</p>
+            <p style="margin: 20px 0;"><strong>2️⃣ 음녀 바벨론:</strong> 계 17–18장 ➡️ 성공·번영·쾌락의 신격화된 모습입니다.</p>
+            <p><strong>3️⃣ 최종 심판 기준:</strong> 계 21:8 “우상숭배자들은 불과 유황으로 타는 못” ➡️ 우상 문제는 사소한 죄가 아니라 왕권에 대한 반역입니다.</p>
+        </div>
+    </section>
+
+    <section>
+        <div class="section-header">
+            <span class="section-num">🔴 Ⅸ.</span>
+            <h2 class="section-title">하나님의 최종 목적 ― 형상 회복</h2>
+        </div>
+        <div class="gcard" style="text-align: center;">
+            <p class="bible-text" style="border:none;">📖 계 22:4 “그들은 그분의 얼굴을 볼 것이고, 그분의 이름이 그들의 이마에 있을 것입니다.”</p>
+            <p style="margin: 20px 0;">📌 성경의 처음 장(창 1)에서는 하나님의 형상이 나오지만, 성경의 마지막 장(계 22)에서는 하나님의 얼굴을 볼 것입니다.</p>
+            <p class="point-arrow">➡️ 우상 없는 세계는 하나님을 직접 보고 닮아 가는 세상입니다.</p>
+        </div>
+    </section>
+
+    <section>
+        <div class="big-verse" style="background: rgba(201, 168, 76, 0.05); border: 1px solid var(--gold-primary); border-radius: 20px;">
+            🔚 최종 요약 (한 문장)<br>
+            <span style="font-size: 1.3rem; font-style: normal; display: block; margin-top: 20px;">
+            우상이란 사람이 하나님을 잃어버린 자리에 대신 세운 모든 것이며, 그것은 사람이 우상을 닮아가게 되고 노예로 만들지만, 하나님은 사람을 당신의 형상으로 회복시키기 위해 우상을 끝까지 제거하십니다.
+            </span>
+        </div>
+        <p style="text-align: right; color: var(--gold-primary); font-weight: bold; margin-top: 20px;">부산교회 2구역</p>
+    </section>
+
+</div>
+
+<footer>
+    <p>© 2026 Interactive Web Article Architect. Designed for Spiritual Insight.</p>
+</footer>
+
+<script>
+    // Star & Shooting Star Background
+    const canvas = document.getElementById('starCanvas');
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+    let shootingStars = [];
+
+    function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    class Star {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 1.2;
+            this.opacity = Math.random();
+            this.blink = Math.random() * 0.02;
+        }
+        draw() {
+            ctx.fillStyle = `rgba(201, 168, 76, ${this.opacity})`;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        update() {
+            this.opacity += this.blink;
+            if (this.opacity > 1 || this.opacity < 0) this.blink *= -1;
+        }
+    }
+
+    class ShootingStar {
+        constructor() { this.reset(); }
+        reset() {
+            this.x = Math.random() * canvas.width;
+            this.y = 0;
+            this.len = Math.random() * 100 + 50;
+            this.speed = Math.random() * 15 + 10;
+            this.active = false;
+            setTimeout(() => { this.active = true; }, Math.random() * 8000);
+        }
+        draw() {
+            if (!this.active) return;
+            ctx.strokeStyle = 'rgba(232, 201, 112, 0.4)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(this.x, this.y);
+            ctx.lineTo(this.x - this.len, this.y + this.len);
+            ctx.stroke();
+        }
+        update() {
+            if (!this.active) return;
+            this.x -= this.speed;
+            this.y += this.speed;
+            if (this.y > canvas.height || this.x < 0) this.reset();
+        }
+    }
+
+    for (let i = 0; i < 200; i++) stars.push(new Star());
+    for (let i = 0; i < 3; i++) shootingStars.push(new ShootingStar());
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        stars.forEach(s => { s.update(); s.draw(); });
+        shootingStars.forEach(s => { s.update(); s.draw(); });
+        requestAnimationFrame(animate);
+    }
+    animate();
+
+    // Intersection Observer for Reveal Effect
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add('reveal');
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('section').forEach(s => observer.observe(s));
+
+    // Parallax on Mouse Move
+    window.addEventListener('mousemove', (e) => {
+        const x = (e.clientX - window.innerWidth / 2) * 0.02;
+        const y = (e.clientY - window.innerHeight / 2) * 0.02;
+        document.querySelector('.halo').style.transform = `translate(${x}px, ${y}px)`;
+    });
+</script>
+
+</body>
+</html>

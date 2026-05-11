@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>하나님의 기대와 양육</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700;900&family=Gowun+Batang:wght@400;700&family=Tenor+Sans&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg:        #fdf6ec;
+            --bg2:       #faf1e4;
+            --cream:     #f8ead4;
+            --terra:     #c4622d;
+            --terra-pale:#fceee6;
+            --terra-mid: #e88058;
+            --sage:      #5a7d5a;
+            --sage-pale: #eaf2ea;
+            --wheat:     #c9983a;
+            --wheat-pale:#fdf3df;
+            --blush:     #c4758a;
+            --blush-pale:#fceef2;
+            --ink:       #2e1f0e;
+            --ink-soft:  #5c4030;
+            --ink-faint: #a08060;
+            --rule:      rgba(196,98,45,0.15);
+            --shadow:    rgba(44,31,14,0.08);
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior:smooth; }
+
+        body {
+            background: var(--bg2);
+            background-image:
+                radial-gradient(ellipse 70% 40% at 50% 0%,
+                    rgba(201,152,58,0.1) 0%, transparent 60%),
+                radial-gradient(ellipse 40% 30% at 10% 60%,
+                    rgba(196,98,45,0.05) 0%, transparent 55%),
+                radial-gradient(ellipse 35% 25% at 90% 40%,
+                    rgba(90,125,90,0.05) 0%, transparent 55%);
+            color: var(--ink);
+            font-family: 'Noto Serif KR', serif;
+            overflow-x: hidden;
+        }
+
+        /* ── PROGRESS BAR ── */
+        #pbar {
+            position: fixed; top:0; left:0;
+            height:3px; width:0%;
+            background: linear-gradient(90deg, var(--terra), var(--wheat), var(--sage));
+            z-index:999; transition: width .1s linear;
+        }
+
+        /* ── HERO / COVER ── */
+        .hero {
+            min-height: 100vh;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            text-align: center;
+            position: relative; z-index:1;
+            padding: 80px 32px 72px;
+            overflow: hidden;
+        }
+
+        /* Warm glow from top */
+        .hero::before {
+            content:'';
+            position:absolute; top:0; left:0; right:0; bottom:0;
+            background:
+                radial-gradient(ellipse 80% 50% at 50% -5%,
+                    rgba(255,210,120,0.28) 0%,
+                    rgba(255,180,80,0.1) 45%,
+                    transparent 68%);
+            pointer-events:none;
+        }
+
+        /* House SVG illustration */
+        .house-wrap {
+            position:relative;
+            width:130px; height:120px;
+            margin-bottom:36px;
+            opacity:0; animation:fadeUp .9s ease .3s forwards;
+        }
+        .house-svg {
+            width:100%; height:100%;
+            filter: drop-shadow(0 6px 18px rgba(196,98,45,.25));
+            animation: houseSway 4s ease-in-out infinite;
+        }
+        @keyframes houseSway {
+            0%,100% { transform: translateY(0); }
+            50%      { transform: translateY(-5px); }
+        }
+
+        /* warm light glow under house */
+        .house-glow {
+            position:absolute; bottom:-12px; left:50%;
+            transform:translateX(-50%);
+            width:100px; height:24px;
+            background: radial-gradient(ellipse, rgba(255,180,60,.35) 0%, transparent 70%);
+            border-radius:50%;
+        }
+
+        .hero-tag {
+            font-family:'Tenor Sans',sans-serif;
+            font-size:10px; letter-spacing:.42em; text-transform:uppercase;
+            color:var(--terra); margin-bottom:22px;
+            opacity:0; animation:fadeUp .9s ease .6s forwards;
+        }
+
+        .hero-title {
+            font-family:'Gowun Batang',serif;
+            font-size: clamp(30px,7vw,68px);
+            font-weight:700; line-height:1.15;
+            color:var(--ink); margin-bottom:18px;
+            opacity:0; animation:fadeUp .9s ease .85s forwards;
+        }
+        .hero-title .warm { color:var(--terra); }
+
+        .hero-divider {
+            display:flex; align-items:center; gap:14px;
+            justify-content:center;
+            margin:18px auto 20px;
+            opacity:0; animation:fadeIn .9s ease 1.2s forwards;
+        }
+        .hero-divider::before, .hero-divider::after {
+            content:''; width:44px; height:1px;
+            background:var(--terra); opacity:.4;
+        }
+        .hero-divider-sym { color:var(--terra); font-size:13px; }
+
+        .hero-sub {
+            font-size:clamp(14px,2vw,16.5px);
+            font-weight:300; line-height:1.95;
+            color:var(--ink-soft); max-width:420px; margin:0 auto;
+            opacity:0; animation:fadeUp .9s ease 1.3s forwards;
+        }
+
+        /* scroll cue */
+        .scroll-dn {
+            position:absolute; bottom:36px; left:50%;
+            transform:translateX(-50%);
+            display:flex; flex-direction:column; align-items:center; gap:10px;
+            opacity:0; animation:fadeIn 1s ease 2.4s forwards;
+        }
+        .scroll-dn span {
+            font-family:'Tenor Sans',sans-serif; font-size:9px;
+            letter-spacing:.38em; text-transform:uppercase;
+            color:var(--ink-faint);
+        }
+        .scroll-line {
+            width:1px; height:40px;
+            background:linear-gradient(to bottom, var(--terra), transparent);
+            animation:lineBreath 2s ease-in-out infinite;
+        }
+        @keyframes lineBreath {
+            0%,100%{opacity:1;transform:scaleY(1);}
+            50%{opacity:.4;transform:scaleY(.6);}
+        }
+
+        /* ── PAGE WRAPPER ── */
+        .page {
+            position:relative; z-index:1;
+            max-width:840px; margin:0 auto;
+            padding:0 28px 100px;
+        }
+
+        /* ── STORY CARD (첫 번째 — 피그말리온 이야기) ── */
+        .story-card {
+            background: var(--cream);
+            border-radius:16px;
+            padding: 48px 44px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(196,98,45,.15);
+            box-shadow: 0 8px 40px var(--shadow),
+                        inset 0 1px 0 rgba(255,255,255,.7);
+            position:relative; overflow:hidden;
+            opacity:0; transform:translateY(28px);
+            transition:opacity .85s ease, transform .85s ease;
+        }
+        .story-card.vis { opacity:1; transform:translateY(0); }
+
+        /* Corner decoration */
+        .story-card::before {
+            content:'';
+            position:absolute; top:0; right:0;
+            width:120px; height:120px;
+            background:radial-gradient(ellipse at top right,
+                rgba(201,152,58,.12) 0%, transparent 65%);
+            border-radius:0 16px 0 0;
+        }
+        .story-card::after {
+            content:'';
+            position:absolute; bottom:0; left:0;
+            width:80px; height:80px;
+            background:radial-gradient(ellipse at bottom left,
+                rgba(196,98,45,.07) 0%, transparent 65%);
+            border-radius:0 0 0 16px;
+        }
+
+        .story-opening {
+            font-family:'Gowun Batang',serif;
+            font-size:clamp(18px,3.5vw,26px);
+            font-weight:700; color:var(--terra);
+            margin-bottom:28px; line-height:1.3;
+            padding-bottom:20px;
+            border-bottom:1px solid rgba(196,98,45,.15);
+        }
+        .story-opening::before {
+            content:'✦ ';
+            font-size:.7em; opacity:.5;
+        }
+
+        /* ── SECTION CARD ── */
+        .sec-card {
+            border-radius:14px;
+            padding:40px 40px;
+            margin-bottom:16px;
+            border:1px solid var(--rule);
+            box-shadow:0 4px 24px var(--shadow);
+            position:relative; overflow:hidden;
+            opacity:0; transform:translateY(24px);
+            transition:opacity .8s ease .1s, transform .8s ease .1s;
+        }
+        .sec-card.vis { opacity:1; transform:translateY(0); }
+
+        .sec-card-blue   { background:linear-gradient(150deg, #eef7ff 0%, var(--bg) 100%); }
+        .sec-card-wheat  { background:linear-gradient(150deg, var(--wheat-pale) 0%, var(--bg) 100%); }
+        .sec-card-sage   { background:linear-gradient(150deg, var(--sage-pale) 0%, var(--bg) 100%); }
+        .sec-card-blush  { background:linear-gradient(150deg, var(--blush-pale) 0%, var(--bg) 100%); }
+        .sec-card-terra  { background:linear-gradient(150deg, var(--terra-pale) 0%, var(--bg) 100%); }
+
+        /* Top accent bar */
+        .sec-card::before {
+            content:''; position:absolute;
+            top:0; left:0; right:0; height:3px;
+            border-radius:14px 14px 0 0;
+        }
+        .sec-card-blue::before   { background:linear-gradient(90deg,#5ba4cf,#9ecbf0); }
+        .sec-card-wheat::before  { background:linear-gradient(90deg,var(--wheat),var(--terra-mid)); }
+        .sec-card-sage::before   { background:linear-gradient(90deg,var(--sage),#7aad7a); }
+        .sec-card-blush::before  { background:linear-gradient(90deg,var(--blush),#d49aaa); }
+        .sec-card-terra::before  { background:linear-gradient(90deg,var(--terra),var(--wheat)); }
+
+        /* ── HEADINGS ── */
+        h2 {
+            font-family:'Gowun Batang',serif;
+            font-size:clamp(22px,5vw,38px);
+            font-weight:700; text-align:center;
+            color:var(--ink);
+            margin-bottom:32px; line-height:1.25;
+        }
+
+        h3 {
+            font-family:'Gowun Batang',serif;
+            font-size:clamp(17px,3.2vw,23px);
+            font-weight:700; text-align:center;
+            color:var(--ink);
+            margin-bottom:22px; line-height:1.3;
+        }
+        .center-text { text-align:center; }
+
+        /* ── BODY TEXT ── */
+        p {
+            font-size:clamp(14.5px,2.1vw,16.5px);
+            line-height:2.1; font-weight:300;
+            color:var(--ink-soft);
+            margin-bottom:16px;
+        }
+        p:last-child { margin-bottom:0; }
+        strong { font-weight:700; color:var(--ink); }
+
+        /* ── SCRIPTURE ── */
+        .scripture {
+            display:block;
+            margin:20px 0;
+            padding:20px 22px 20px 26px;
+            border-left:3px solid var(--wheat);
+            background:rgba(201,152,58,.07);
+            border-radius:0 10px 10px 0;
+            font-size:clamp(14px,2vw,16px);
+            line-height:1.9; font-weight:700;
+            color:var(--ink);
+            white-space:normal;
+            box-shadow:inset 0 0 0 1px rgba(201,152,58,.12);
+            opacity:0; transform:translateX(-14px);
+            transition:opacity .7s ease .2s, transform .7s ease .2s;
+        }
+        .scripture.vis { opacity:1; transform:translateX(0); }
+        .scripture-line { display:inline; }
+
+        /* ── TABLE ── */
+        .table-wrap {
+            margin:20px 0;
+            border-radius:12px; overflow:hidden;
+            border:1px solid rgba(90,125,90,.2);
+            box-shadow:0 3px 16px rgba(44,31,14,.06);
+            opacity:0; transform:translateY(14px);
+            transition:opacity .8s ease .15s, transform .8s ease .15s;
+        }
+        .table-wrap.vis { opacity:1; transform:translateY(0); }
+
+        .pygmalion-table { width:100%; border-collapse:collapse; text-align:center; }
+        .pygmalion-table th, .pygmalion-table td {
+            border:1px solid rgba(90,125,90,.15);
+            padding:14px 16px;
+        }
+        .pygmalion-table th {
+            background:linear-gradient(135deg,var(--sage),#7aad7a);
+            color:#fff; font-weight:700;
+            font-family:'Tenor Sans',sans-serif;
+            font-size:clamp(12px,1.8vw,14px);
+            letter-spacing:.06em;
+        }
+        .pygmalion-table td {
+            font-size:clamp(13px,1.9vw,15px);
+            line-height:1.75; font-weight:300;
+            color:var(--ink-soft); white-space:normal;
+            background:rgba(255,255,255,.5);
+        }
+        .pygmalion-table td strong { color:var(--ink); font-weight:700; }
+        .pygmalion-table tr:hover td {
+            background:rgba(90,125,90,.06);
+            transition:background .25s;
+        }
+
+        /* ── NOTE ── */
+        .note {
+            margin-top:22px; padding:16px 20px;
+            background:rgba(201,152,58,.07);
+            border-radius:8px;
+            border:1px solid rgba(201,152,58,.2);
+            opacity:0; transform:translateY(10px);
+            transition:opacity .7s ease .2s, transform .7s ease .2s;
+        }
+        .note.vis { opacity:1; transform:translateY(0); }
+        .note p { font-size:clamp(12.5px,1.8vw,14px); color:var(--ink-faint); margin-bottom:0; }
+
+        /* ── QUOTE BAND ── */
+        .band {
+            margin:56px -28px;
+            padding:56px 44px;
+            background:var(--terra);
+            text-align:center; position:relative; overflow:hidden;
+            opacity:0; transform:translateY(24px);
+            transition:opacity .9s ease, transform .9s ease;
+        }
+        .band.vis { opacity:1; transform:translateY(0); }
+        .band::before {
+            content:'';
+            position:absolute; inset:0;
+            background:
+                radial-gradient(ellipse 80% 60% at 50% 50%,
+                    rgba(255,220,120,.15) 0%, transparent 70%),
+                repeating-linear-gradient(
+                    90deg, transparent, transparent 32px,
+                    rgba(255,255,255,.03) 32px, rgba(255,255,255,.03) 33px
+                );
+        }
+        .band-text {
+            position:relative;
+            font-family:'Gowun Batang',serif;
+            font-size:clamp(16px,3.2vw,24px);
+            font-weight:700; line-height:1.8;
+            color:#fef6ed; margin-bottom:14px;
+        }
+        .band-text .lt { color:rgba(255,230,180,.85); }
+        .band-ref {
+            position:relative;
+            font-family:'Tenor Sans',sans-serif;
+            font-size:11px; letter-spacing:.3em; text-transform:uppercase;
+            color:rgba(254,246,237,.45);
+        }
+
+        /* ── PRAYER CARD ── */
+        .prayer-text {
+            text-align:center;
+            padding:8px 0;
+            font-size:clamp(14.5px,2vw,16.5px);
+            line-height:2.1; font-weight:300;
+            color:var(--ink-soft);
+        }
+
+        /* ── FOOTER ── */
+        .footer-card {
+            text-align:center;
+            padding:32px 0;
+            border-top:1px solid var(--rule);
+            margin-top:56px;
+            opacity:0; transform:translateY(12px);
+            transition:opacity .7s ease, transform .7s ease;
+        }
+        .footer-card.vis { opacity:1; transform:translateY(0); }
+        .footer-church {
+            font-family:'Gowun Batang',serif;
+            font-size:18px; font-weight:700;
+            color:var(--terra);
+        }
+
+        /* ── SECTION SEP ── */
+        .sep {
+            display:flex; align-items:center; gap:14px;
+            padding:48px 0 0; opacity:.25;
+        }
+        .sep::before,.sep::after {
+            content:''; flex:1; height:1px; background:var(--ink);
+        }
+        .sep-sym { font-size:10px; color:var(--terra); letter-spacing:4px; }
+
+        @media(max-width:600px){
+            .page{padding:0 18px 72px;}
+            .story-card,.sec-card{padding:28px 22px;}
+            .band{margin:44px -18px;padding:44px 24px;}
+        }
+
+        @keyframes fadeUp{
+            from{opacity:0;transform:translateY(20px);}
+            to{opacity:1;transform:translateY(0);}
+        }
+        @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+    </style>
+</head>
+<body>
+
+<div id="pbar"></div>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+    <div class="house-wrap">
+        <div class="house-glow"></div>
+        <svg class="house-svg" viewBox="0 0 130 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- chimney -->
+            <rect x="85" y="20" width="12" height="28" rx="2"
+                fill="rgba(196,98,45,0.7)" stroke="rgba(196,98,45,0.4)" stroke-width="1"/>
+            <!-- smoke -->
+            <path d="M91 18 Q88 10 92 4 Q96 -2 93 -8" stroke="rgba(196,98,45,0.25)" stroke-width="2"
+                fill="none" stroke-linecap="round"/>
+            <path d="M94 16 Q92 9 95 4" stroke="rgba(196,98,45,0.15)" stroke-width="1.5"
+                fill="none" stroke-linecap="round"/>
+            <!-- roof -->
+            <path d="M8 54 L65 14 L122 54 Z"
+                fill="rgba(196,98,45,0.75)" stroke="rgba(196,98,45,0.5)" stroke-width="1.5"/>
+            <!-- roof ridge -->
+            <path d="M8 54 L65 14 L122 54" stroke="rgba(255,255,255,0.2)" stroke-width="1" fill="none"/>
+            <!-- walls -->
+            <rect x="18" y="52" width="94" height="60" rx="2"
+                fill="rgba(253,246,236,0.9)" stroke="rgba(196,98,45,0.3)" stroke-width="1.5"/>
+            <!-- door -->
+            <rect x="54" y="78" width="22" height="34" rx="3"
+                fill="rgba(196,98,45,0.55)" stroke="rgba(196,98,45,0.4)" stroke-width="1"/>
+            <circle cx="71" cy="96" r="2.5" fill="rgba(201,152,58,0.8)"/>
+            <!-- window left -->
+            <rect x="26" y="64" width="20" height="18" rx="3"
+                fill="rgba(255,220,120,0.5)" stroke="rgba(196,98,45,0.3)" stroke-width="1"/>
+            <line x1="36" y1="64" x2="36" y2="82" stroke="rgba(196,98,45,0.2)" stroke-width=".8"/>
+            <line x1="26" y1="73" x2="46" y2="73" stroke="rgba(196,98,45,0.2)" stroke-width=".8"/>
+            <!-- window right -->
+            <rect x="84" y="64" width="20" height="18" rx="3"
+                fill="rgba(255,220,120,0.5)" stroke="rgba(196,98,45,0.3)" stroke-width="1"/>
+            <line x1="94" y1="64" x2="94" y2="82" stroke="rgba(196,98,45,0.2)" stroke-width=".8"/>
+            <line x1="84" y1="73" x2="104" y2="73" stroke="rgba(196,98,45,0.2)" stroke-width=".8"/>
+            <!-- warm window glow -->
+            <rect x="27" y="65" width="18" height="16" rx="2" fill="rgba(255,180,60,0.18)"/>
+            <rect x="85" y="65" width="18" height="16" rx="2" fill="rgba(255,180,60,0.18)"/>
+            <!-- ground line -->
+            <path d="M4 112 Q65 108 126 112" stroke="rgba(90,125,90,0.4)" stroke-width="2"
+                fill="none" stroke-linecap="round"/>
+            <!-- grass dots -->
+            <path d="M10 112 Q12 108 14 112" stroke="rgba(90,125,90,0.5)" stroke-width="1.5" fill="none"/>
+            <path d="M20 113 Q22 109 24 113" stroke="rgba(90,125,90,0.4)" stroke-width="1.5" fill="none"/>
+            <path d="M108 112 Q110 108 112 112" stroke="rgba(90,125,90,0.5)" stroke-width="1.5" fill="none"/>
+            <path d="M116 113 Q118 109 120 113" stroke="rgba(90,125,90,0.4)" stroke-width="1.5" fill="none"/>
+        </svg>
+    </div>
+
+    <p class="hero-tag">부산교회 2구역 &nbsp;·&nbsp; 가정과 양육 말씀</p>
+    <h1 class="hero-title">
+        하나님의 기대와<br><span class="warm">양육</span>
+    </h1>
+    <div class="hero-divider"><span class="hero-divider-sym">🌿</span></div>
+    <p class="hero-sub">
+        아이의 미래는 우연이 아니라<br>양육의 열매라는 성경적 선언
+    </p>
+
+    <div class="scroll-dn">
+        <span>읽기 시작</span>
+        <div class="scroll-line"></div>
+    </div>
+</section>
+
+<!-- ══ CONTENT ══ -->
+<div class="page">
+
+    <!-- ── 피그말리온 이야기 ── -->
+    <div class="story-card">
+        <div class="story-opening">이야기 하나 — 기대가 만들어낸 기적</div>
+
+        <p>미국의 유명한 교육학자가 시골에 있는 어느 학교를 방문했다.</p>
+
+        <p>&nbsp;&nbsp;&nbsp;&nbsp; 그는 수업중인 1학년 교실에 들어가서 '선생님 지금 수업을 받고 있는 학생들 중<br>
+        노란 옷을 입은 소녀와&nbsp;&nbsp;&nbsp;&nbsp; 저기 저 소년은 뛰어난<br>
+        머리를 가진 천재입니다. 그러니 깊은 관심과 애정으로 보살펴 주신다면 반드시<br>
+        &nbsp;&nbsp;&nbsp;&nbsp; 위대한 인물이 될 것입니다'라고 말했다.</p>
+
+        <p>&nbsp;&nbsp;&nbsp;&nbsp; 교사는 이 유명한 교육학자의<br>
+        말을 받들어 지극정성으로 그 두 아이를 보살폈다.<br>
+        &nbsp;&nbsp;&nbsp;&nbsp; 그 결과 두 아이는 졸업할 때 가장 좋은 성적을 거뒀다.</p>
+
+        <p>&nbsp;&nbsp;&nbsp;&nbsp; 그의 예언이 적중한 것에<br>
+        감동한 교사는&nbsp; 교육학자에게 감사의 뜻을 전했다.<br>
+        &nbsp;&nbsp;&nbsp;&nbsp; 그러자 교육학자는 다음과 같은 글을 교사에게 보냈다.</p>
+
+        <p>&nbsp;&nbsp;&nbsp;&nbsp; '존경하는 선생님, 사실 그 두아이는 제가 전혀 모르는 아이였습니다. 저는 다만 눈에<br>
+        띄는 아이 두 명을 골라&nbsp; 선생님에게 부탁했을 뿐입니다. 이로써 전 결론적으로 말할 수 있게 되었습니다. 즉<br>
+        선생님의 지극한 사랑과&nbsp; 보살핌을 받게 된 아이들은 자신의 능력과는 상관없이 무한히 발전할 수 있다는 것을 말입니다.'</p>
+    </div>
+
+    <!-- ── 1. 왜 양육은 중요한가 ── -->
+    <div class="sec-card sec-card-wheat">
+        <h3 class="center-text">📌 1. 왜 양육은 중요한가?</h3>
+
+        <p>성경은 인간이 스스로 완성된 존재가 아니라,<br>
+        양육·훈련·말씀·사랑을 통해 자라가는 존재임을 강조합니다.</p>
+
+        <div class="scripture">
+            <strong>"마땅히 가야 할 길을 따라 아이를 훈련시켜라. 그가 늙어서도 그 길을 떠나지 않으리라." - 잠언 22:6 -</strong>
+        </div>
+
+        <p>이 말씀은 단지 지식을 가르치라는 의미가 아니라<br>
+        정체성, 믿음, 가치관, 삶의 방향을 심어주는 교육의 중요성을 말합니다.<br>
+        아이의 미래는 우연이 아니라 양육의 열매라는 성경적 선언입니다.</p>
+    </div>
+
+    <!-- ── 2. 하나님의 양육 모델 ── -->
+    <div class="sec-card sec-card-sage">
+        <h3 class="center-text">📌 2. 하나님의 양육 모델 ― 가정</h3>
+
+        <p>하나님은 가정을 교육의 시작점으로 정하셨습니다.</p>
+
+        <div class="scripture">
+            <strong>"이스라엘이여! 들으십시오. 여호와는 우리 하나님이시며, 여호와는 오직 한 분이십니다. 그대는 온 마음과 온 혼과 온 힘으로 여호와 그대의 하나님을 사랑해야 합니다……그대는<br>
+            자녀에게 이 말씀을 부지런히 가르치고, 그대가 집에 앉아 있을 때나 길을 갈 때나 누울 때나 일어날 때나 이 말씀을 그들에게 말해 주어야 합니다. - 신명기 6:4–7 -</strong>
+        </div>
+
+        <p>히브리 교육법은 반복·일상·관계 속 교육을 강조합니다.<br>
+        즉, 아이들은 설교가 아니라 삶의 모습을 보며 배우는 존재입니다.</p>
+    </div>
+
+    <!-- ── BAND ── -->
+    <div class="band">
+        <p class="band-text">
+            하나님은 사람을 있는 그대로 보지 않으시고,<br>
+            <span class="lt">될 수 있는 모습으로 보시며 부르셨습니다.</span>
+        </p>
+        <p class="band-ref">성경적 피그말리온 효과</p>
+    </div>
+
+    <!-- ── 3. 피그말리온 효과 ── -->
+    <div class="sec-card sec-card-sage">
+        <h3 class="center-text">📌 3. 성경 속 피그말리온 효과: "하나님이 바라보신 가능성"</h3>
+
+        <p>하나님은 사람을 있는 그대로 보지 않으시고,<br>
+        될 수 있는 모습으로 보시며 부르셨습니다.</p>
+
+        <div class="table-wrap">
+            <table class="pygmalion-table">
+                <thead>
+                    <tr>
+                        <th>하나님이 부르신 방식</th>
+                        <th>당시 현실</th>
+                        <th>하나님의 관점</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>"용맹한 전사!" (사사기 6:12)</strong></td>
+                        <td>기드온은 두려워 숨어 있던 자</td>
+                        <td>하나님은 장차 이스라엘의 지도자로 보심</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><strong>"은혜 받은 사람이여" (눅 1:28)</strong></td>
+                        <td>마리아는 평범한 시골 소녀</td>
+                        <td>구세주의 어머니로 선택</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p>➡ 성경은 하나님이 바라보는 시선이 한 사람의 정체성을 변화시킨다는 원리를 반복적으로 가르칩니다.<br>
+        이것이 바로 성경적 피그말리온 효과입니다.</p>
+    </div>
+
+    <!-- ── 4. 예수님의 교육 방식 ── -->
+    <div class="sec-card sec-card-blue">
+        <h3 class="center-text">📌 4. 예수님의 교육 방식 ― 사랑 + 기대 + 동행</h3>
+
+        <p>예수님은 제자들을 이미 완성된 사람으로 대하지 않으셨습니다.<br>
+        그러나 그들에게 사명, 가능성, 믿음의<br>
+        눈으로 말씀하셨습니다.</p>
+
+        <div class="scripture">
+            <strong>"나를 따라오십시오. 내가 여러분을 사람 얻는 어부가 되게 하겠습니다."<br>
+            — 마태복음 4:19</strong>
+        </div>
+
+        <p>예수님은 제자들의 과거를 보지 않고,<br>
+        그들의 미래를 먼저 선언하셨습니다.<br>
+        그 말씀과 기대가 제자들의 삶을 변화시켰습니다.</p>
+    </div>
+
+    <!-- ── 5. 양육의 열매 ── -->
+    <div class="sec-card sec-card-wheat">
+        <h3 class="center-text">📌 5. 양육이 만들어 내는 열매</h3>
+
+        <p>성경은 양육의 결과가 시간이 지나 확실한 열매로 나타난다고 증언합니다.<br>
+        하나님 말씀으로 양육된 디모데는 어려서부터 성경을 알았습니다.</p>
+
+        <div class="scripture">
+            <strong>또 어려서부터 성경을 알았기 때문입니다. 이 성경은 그대가 그리스도 예수님 안에<br>
+            있는 믿음을 통하여 구원에 이르는 지혜를 얻도록 할 수 있습니다. — 디모데후서 3:15</strong>
+        </div>
+
+        <p>디모데는 어머니 유니게와 할머니 로이스의 신앙 교육으로<br>
+        바울이 인정한 초대교회의 귀한 지도자가 되었습니다.</p>
+    </div>
+
+    <!-- ── 결론 ── -->
+    <div class="sec-card sec-card-blush">
+        <h3 class="center-text">✨ 결론 메시지</h3>
+
+        <p>아이들은 스스로 자라지 않습니다.<br>
+        하나님의 말씀, 사랑, 기대, 그리고 축복 속에서 자랍니다.<br>
+        하나님이 보시듯 바라보고,<br>
+        하나님이 가르치듯 가르칠 때<br>
+        그 아이는 하나님이 계획하신 모습으로 성장하게 됩니다.</p>
+
+        <div style="height:20px;"></div>
+
+        <h3 class="center-text">📌 적용을 위한 기도 한 줄</h3>
+
+        <p class="center-text prayer-text">"주님, 우리의 눈이 아이들의 현재가 아니라<br>
+        주님이 준비하신 미래를 보게 하소서.<br>
+        또한 합당한 양육을 통하여 아이들이 주님안에서 건강하게 성장하길 바랍니다."</p>
+
+        <div class="note">
+            <p>* 피그말리온 효과(Pygmalion Effect)는 "사람이 받는 기대가 그의 실제 행동과 성과를 변화시키는 현상"을 의미합니다.</p>
+        </div>
+    </div>
+
+    <!-- ── FOOTER ── -->
+    <div class="footer-card">
+        <p class="footer-church">부산교회 2구역</p>
+    </div>
+
+</div>
+
+<script>
+    window.addEventListener('scroll', () => {
+        const st = window.scrollY;
+        const dh = document.documentElement.scrollHeight - window.innerHeight;
+        document.getElementById('pbar').style.width = (st / dh * 100) + '%';
+    });
+
+    const io = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+    }, { threshold: 0.07 });
+
+    document.querySelectorAll(
+        '.story-card, .sec-card, .scripture, .table-wrap, .note, .band, .footer-card'
+    ).forEach(el => io.observe(el));
+</script>
+</body>
+</html>

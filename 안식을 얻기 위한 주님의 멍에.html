@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주님이 주시는 참된 안식과 멍에</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Serif+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #06070e;
+            --gold-primary: #c9a84c;
+            --gold-secondary: #e8c970;
+            --text-light: #e0e0e0;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(201, 168, 76, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-light);
+            font-family: 'Noto Serif KR', serif;
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .en {
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--gold-secondary);
+        }
+
+        /* Canvas Background */
+        #starCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Layout Components */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            padding: 100px 0;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease-out;
+        }
+
+        section.reveal {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .halo {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(201, 168, 76, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+            filter: blur(30px);
+        }
+
+        .rotating-ring {
+            position: absolute;
+            width: 450px;
+            height: 450px;
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+            animation: rotate 20s linear infinite;
+        }
+
+        .rotating-ring::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: 50%;
+            width: 10px;
+            height: 10px;
+            background: var(--gold-primary);
+            border-radius: 50%;
+            box-shadow: 0 0 15px var(--gold-primary);
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            letter-spacing: 5px;
+            text-shadow: 0 0 20px rgba(201, 168, 76, 0.5);
+        }
+
+        .stats-badge {
+            display: inline-block;
+            padding: 10px 25px;
+            border: 1px solid var(--gold-primary);
+            border-radius: 50px;
+            font-size: 0.9rem;
+            color: var(--gold-secondary);
+            margin-top: 30px;
+            background: rgba(201, 168, 76, 0.05);
+        }
+
+        /* Glass Card */
+        .gcard {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            transition: transform 0.3s ease;
+        }
+
+        .gcard:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold-primary);
+        }
+
+        /* Grid System */
+        .ms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 50px 0;
+        }
+
+        /* Big Verse */
+        .big-verse {
+            font-size: 1.8rem;
+            text-align: center;
+            padding: 80px 40px;
+            position: relative;
+            color: var(--gold-secondary);
+            font-style: italic;
+        }
+
+        .big-verse::before, .big-verse::after {
+            content: '"';
+            font-family: 'Cormorant Garamond';
+            font-size: 5rem;
+            position: absolute;
+            opacity: 0.3;
+        }
+
+        .big-verse::before { top: 0; left: 0; }
+        .big-verse::after { bottom: 0; right: 0; }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+            border-left: 1px solid var(--glass-border);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 50px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -36px;
+            top: 5px;
+            width: 10px;
+            height: 10px;
+            background: var(--gold-primary);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--gold-primary);
+        }
+
+        /* Utility */
+        .stat-num {
+            font-family: 'Cormorant Garamond';
+            font-size: 2.5rem;
+            color: var(--gold-primary);
+            display: block;
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--gold-primary), transparent);
+            margin: 50px 0;
+        }
+
+        .highlight { color: var(--gold-secondary); font-weight: bold; }
+
+        footer {
+            text-align: center;
+            padding: 50px;
+            font-size: 0.8rem;
+            color: #666;
+            border-top: 1px solid var(--glass-border);
+        }
+
+    </style>
+</head>
+<body>
+
+    <canvas id="starCanvas"></canvas>
+
+    <div class="container">
+        <section class="hero reveal">
+            <div class="halo"></div>
+            <div class="rotating-ring"></div>
+            <h1 class="en">True Rest & Yoke</h1>
+            <p>주님이 주시는 참된 안식과 멍에</p>
+            <div class="stats-badge">
+                <span class="stat-num" data-target="11">0</span>
+                Matthew 11:28-30
+            </div>
+        </section>
+
+        <section class="reveal">
+            <h2 class="en">01. The Misconception of Rest</h2>
+            <div class="gcard">
+                <h3>우리가 흔히 생각하는 “안식”의 오해</h3>
+                <p>보통 우리가 원하는 안식은 아무것도 안 하기, 책임을 내려놓기, 내 마음대로 해도 되는 상태를 의미하곤 합니다. 그래서 "오면 쉬게 해 주신다니까, 그냥 가만히 있으면 되겠지"라고 오해합니다.</p>
+                <hr>
+                <p>그러나 예수님은 <span class="highlight">“나에게로 오라”</span>고 하신 후에 곧바로 <span class="highlight">“나의 멍에를 메고”</span>라고 말씀하십니다. 이는 가만히 쉬라는 말이 아니라, 새로운 왕국의 생활 방식으로의 초대입니다.</p>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <div class="big-verse">
+                “수고하며 짐을 진 사람들이여, 다 나에게로 오십시오. 내가 여러분에게 안식을 줄 것입니다... 나의 멍에를 메고 나에게서 배우십시오.”
+            </div>
+        </section>
+
+        <section class="reveal">
+            <h2 class="en">02. Burden and Awakening</h2>
+            <div class="ms-grid">
+                <div class="gcard">
+                    <h4>우리가 지고 있는 짐</h4>
+                    <ul>
+                        <li>잘해야 한다는 압박</li>
+                        <li>인정받아야 한다는 강박</li>
+                        <li>실패의 두려움</li>
+                    </ul>
+                </div>
+                <div class="gcard">
+                    <h4>진정한 발견</h4>
+                    <p>문제는 짐이 있다는 것이 아니라, 그 짐을 <strong>혼자 지고 있다</strong>는 사실을 발견하는 데 있습니다. 그 깨달음이 우리를 주님께로 인도합니다.</p>
+                </div>
+                <div class="gcard">
+                    <h4>안식의 정의</h4>
+                    <p>예수님이 주시는 안식은 일이 없는 상태가 아니라, 무거운 짐(나의 자아, 세상의 기준)에서 벗어나는 것입니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <h2 class="en">03. The Meaning of the Yoke</h2>
+            <div class="gcard">
+                <p>멍에는 본래 두 마리가 함께 메는 도구입니다. 노련한 소와 어린 소를 묶어 <strong>방향과 속도</strong>를 맞추게 합니다. 주님의 멍에는 "내가 먼저 끌 테니, 너는 옆에서 나와 함께 하지 않겠니?"라는 사랑의 제안입니다.</p>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h4 class="highlight">훈련의 시작</h4>
+                    <p>처음에는 익숙하지 않아 어색하고 내 방식대로 못 해서 답답할 수 있습니다. 마치 처음 운전대를 잡을 때의 긴장감과 같습니다.</p>
+                </div>
+                <div class="timeline-item">
+                    <h4 class="highlight">체험과 발견</h4>
+                    <p>계속 배우다 보면 주님이 함께하심을 체험하고, 내 힘이 덜 들어가는 것을 발견하게 됩니다.</p>
+                </div>
+                <div class="timeline-item">
+                    <h4 class="highlight">혼의 안식</h4>
+                    <p>주님의 온유와 겸손을 배울 때, 비로소 우리의 영혼은 진정한 평안에 도달합니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <h2 class="en">04. Gentle and Humble in Heart</h2>
+            <div class="gcard" style="border-left: 4px solid var(--gold-primary);">
+                <p>온유는 헬라어로 <strong>프라우테스(πραΰτης)</strong>, 즉 '길들여진 힘'을 의미합니다. 야생마가 주인의 손길에 반응하듯, 엄청난 권능을 가졌음에도 아버지의 뜻에 자신을 제한하신 주님의 상태입니다.</p>
+                <p style="margin-top: 20px;">예수님은 "너희가 잘하면 도와줄게"가 아니라, <span class="highlight">"내가 너희와 함께 멍에를 메고 짐을 짊어질 거야"</span>라고 약속하십니다.</p>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <h2 class="en">05. The Architecture of the Yoke</h2>
+            <div class="ms-grid">
+                <div class="gcard">
+                    <span class="en" style="color: var(--gold-primary)">CHRESTOS</span>
+                    <h4>잘 맞는 멍에</h4>
+                    <p>"나의 멍에는 편하고"에서 '편하다'는 뜻은 목에 상처를 내지 않고 딱 맞는다는 뜻입니다.</p>
+                </div>
+                <div class="gcard">
+                    <span class="en" style="color: var(--gold-primary)">DIRECTION</span>
+                    <h4>방향의 일치</h4>
+                    <p>오른쪽으로 가고 싶어도 농부(하나님)가 정한 방향으로 함께 나아가는 안전함입니다.</p>
+                </div>
+                <div class="gcard">
+                    <span class="en" style="color: var(--gold-primary)">SHARING</span>
+                    <h4>힘의 분산</h4>
+                    <p>짐은 하나지만 두 존재가 함께 감당하여 무게를 획기적으로 줄여줍니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <h2 class="en">06. The Cross and the Yoke</h2>
+            <div class="gcard" style="text-align: center;">
+                <p>십자가는 나의 방식이 끝나는 자리이고, 멍에는 주님의 방식에 나를 묶는 자리입니다.</p>
+                <h3 style="margin: 30px 0; font-size: 2rem;">"멍에는 짐을 더 얹는 도구가 아니라,<br>짐을 <span class="highlight">혼자 지지 않게</span> 만드는 도구입니다."</h3>
+                <p class="en">Busan Church, District 2</p>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Interactive Web Article Architect. All Rights Reserved.</p>
+        <p>부산교회 2구역</p>
+    </footer>
+
+    <script>
+        // 1. Canvas Starfield Animation
+        const canvas = document.getElementById('starCanvas');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+        let shootingStars = [];
+
+        function initCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            stars = [];
+            for (let i = 0; i < 200; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 1.5,
+                    opacity: Math.random()
+                });
+            }
+        }
+
+        function drawStars() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#ffffff";
+            stars.forEach(s => {
+                ctx.globalAlpha = s.opacity;
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+                ctx.fill();
+                // Twinkle effect
+                s.opacity += (Math.random() - 0.5) * 0.05;
+                if(s.opacity < 0) s.opacity = 0;
+                if(s.opacity > 1) s.opacity = 1;
+            });
+
+            // Shooting star logic
+            if(Math.random() < 0.01) {
+                shootingStars.push({
+                    x: Math.random() * canvas.width,
+                    y: 0,
+                    len: Math.random() * 80 + 20,
+                    speed: Math.random() * 10 + 5
+                });
+            }
+
+            shootingStars.forEach((ss, index) => {
+                ctx.strokeStyle = "rgba(232, 201, 112, 0.5)";
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(ss.x, ss.y);
+                ctx.lineTo(ss.x - ss.len, ss.y + ss.len);
+                ctx.stroke();
+                ss.x -= ss.speed;
+                ss.y += ss.speed;
+                if(ss.y > canvas.height || ss.x < 0) shootingStars.splice(index, 1);
+            });
+
+            requestAnimationFrame(drawStars);
+        }
+
+        window.addEventListener('resize', initCanvas);
+        initCanvas();
+        drawStars();
+
+        // 2. Intersection Observer for Scroll Reveal
+        const observerOptions = { threshold: 0.1 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('reveal');
+                    // Start count up if stat-num is present
+                    const stat = entry.target.querySelector('.stat-num');
+                    if(stat && !stat.classList.contains('counted')) {
+                        countUp(stat);
+                    }
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(section => observer.observe(section));
+
+        // 3. Count-up Animation
+        function countUp(el) {
+            const target = +el.getAttribute('data-target');
+            let count = 0;
+            const speed = 2000 / target;
+            const updateCount = () => {
+                count++;
+                el.innerText = count;
+                if(count < target) setTimeout(updateCount, speed);
+                else {
+                    el.innerText = target;
+                    el.classList.add('counted');
+                }
+            };
+            updateCount();
+        }
+
+        // 4. Parallax Effect on Mouse Move
+        document.addEventListener('mousemove', (e) => {
+            const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
+            const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+            document.querySelector('.halo').style.transform = `translate(${moveX}px, ${moveY}px)`;
+        });
+    </script>
+</body>
+</html>

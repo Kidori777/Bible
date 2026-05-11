@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>말씀 개요: 우상과 참 생명</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #05060b;
+            --gold-primary: #c9a84c;
+            --gold-light: #f3e5ab;
+            --text-main: #e0e0e0;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(201, 168, 76, 0.3);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Noto Serif KR', serif;
+            line-height: 1.8;
+            overflow-x: hidden;
+            word-break: keep-all;
+        }
+
+        /* 화려한 우주 배경 Canvas */
+        #space-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: #05060b;
+        }
+
+        .container { max-width: 800px; margin: 0 auto; padding: 0 20px; position: relative; }
+
+        /* 메인 타이틀 강조 (황금빛 후광 동그라미) */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .title-halo {
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            border: 1px solid var(--gold-primary);
+            border-radius: 50%;
+            opacity: 0.5;
+            box-shadow: 0 0 60px var(--gold-primary), inset 0 0 30px var(--gold-primary);
+            animation: rotate-halo 20s linear infinite;
+            z-index: 1;
+        }
+
+        .main-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--gold-primary);
+            z-index: 2;
+            text-shadow: 0 0 30px rgba(201, 168, 76, 0.8);
+            margin-bottom: 40px;
+        }
+
+        @keyframes rotate-halo {
+            from { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            to { transform: rotate(360deg) scale(1); }
+        }
+
+        .stats-badge { display: flex; gap: 15px; z-index: 2; }
+        .stat-item {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px 25px;
+            border: 1px solid var(--gold-primary);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+        .stat-num { display: block; font-size: 1.3rem; font-weight: 900; color: var(--gold-light); }
+        .stat-label { font-size: 0.8rem; color: var(--gold-primary); font-weight: 700; letter-spacing: 1px; }
+
+        /* 섹션 스타일 */
+        .section { padding: 80px 0; border-bottom: 1px solid rgba(201, 168, 76, 0.1); }
+        .sub-title {
+            font-size: 1.8rem;
+            color: var(--gold-primary);
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-align: center;
+            justify-content: center;
+        }
+
+        .gcard {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .theme-label { color: var(--gold-light); font-weight: 700; margin-bottom: 15px; display: block; font-size: 1.1rem; }
+        .bible-verse { color: #fff; font-size: 1.15rem; font-weight: 700; display: block; margin-bottom: 15px; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; }
+        .description { color: #ccc; font-size: 1rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
+
+        .highlight-card { border-left: 5px solid #ff4d4d; }
+
+        .summary-box {
+            background: linear-gradient(135deg, #1a1c2c, #05060b);
+            border: 2px solid var(--gold-primary);
+            padding: 40px;
+            border-radius: 25px;
+            margin: 60px 0;
+        }
+        .summary-title { color: var(--gold-primary); font-weight: 900; display: block; margin-bottom: 20px; font-size: 1.2rem; }
+
+        footer { padding: 60px 0; text-align: center; color: #666; font-size: 0.85rem; letter-spacing: 3px; }
+
+        @media (max-width: 600px) {
+            .main-title { font-size: 2.2rem; }
+            .title-halo { width: 260px; height: 260px; }
+            .sub-title { font-size: 1.4rem; }
+            .bible-verse { font-size: 1.05rem; }
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="space-canvas"></canvas>
+
+<div class="container">
+    <header class="hero">
+        <div class="title-halo"></div>
+        <h1 class="main-title">우상과 참 생명</h1>
+        <div class="stats-badge">
+            <div class="stat-item">
+                <span class="stat-num">6</span>
+                <span class="stat-label">주요 주제</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-num">출 20:3–4</span>
+                <span class="stat-label">성경 구절</span>
+            </div>
+        </div>
+    </header>
+
+    <section class="section">
+        <h2 class="sub-title">1️⃣ 우상의 정의 (성경적 의미)</h2>
+        <div class="gcard">
+            <span class="theme-label">🔹 1. 사람이 만든 신</span>
+            <span class="bible-verse">출 20:3–4 “너는 나 외에 다른 신들을 두어서는 안 된다. 너는 자신을 위하여 우상을 만들어서는 안 되며, 위로 하늘에 있는 것이나 아래로 땅에 있는 것이나 땅 아래 물속에 있는 것의 어떤 형체도 만들어서는 안 된다.”</span>
+            <span class="bible-verse">시 115:4 “저들의 우상들은 은과 금에 지나지 않으며, 사람이 손으로 만든 것.”</span>
+            <p class="description">➡️ 우상은 창조주가 아닌 피조물이며 특히 사람의 생각과 손으로 만들어진 욕망이 투영된 대상이다.</p>
+        </div>
+        <div class="gcard">
+            <span class="theme-label">🔹 2. 하나님을 대신하는 모든 것</span>
+            <span class="bible-verse">겔 14:3 “사람의 아들아, 이 사람들은 자기들 마음에 우상들을 두고, 자기들을 죄악에 빠지게 하는 걸림돌을 제 얼굴 앞에 두었다. 그런데도 내가 그들의 요청을 받아들여야만 하겠느냐?”</span>
+            <span class="bible-verse">골 3:5 “탐욕은 우상숭배입니다.”</span>
+            <p class="description">➡️ 우상은 외형적인 조각상만이 아니라 하나님외 사람 마음의 중심을 차지한 것입니다.</p>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="sub-title">2️⃣ 우상의 본질적 특징 (우상 자체의 성격)</h2>
+        <div class="gcard">
+            <span class="theme-label">📌 1. 생명이 없다</span>
+            <span class="bible-verse">시 115:5–7 “입이 있어도 말하지 못하고 눈이 있어도 보지 못하며 귀가 있어도 듣지 못하고 코가 있어도 냄새 맡지 못하며 손이 있어도 만지지 못하고 발이 있어도 걷지 못하며 목구멍으로 소리 내지도 못한다네.”</span>
+            <span class="bible-verse">렘 10:5 “그것들은 오이밭의 기둥처럼 말도 못하고 걷지도 못하므로 사람들이 운반해야 한다. 그것들은 재앙을 내리지도 못하고 복을 내리지도 못하니 그것들을 두려워하지 마라.”</span>
+            <p class="description">➡️ 우상은 응답도 할 수도 없으며 생명으로 인도하거나 구원할 능력이 전혀 없습니다.</p>
+        </div>
+        <div class="gcard">
+            <span class="theme-label">📌 2. 아무것도 할 수 없다</span>
+            <span class="bible-verse">사 44:9–11 “우상을 만드는 이들은 다 허망한 이들. 그들이 기쁘게 여기는 것들은 자신들에게 유익을 주지 못하리라. 그들의 증인들은 보지 못하고 알지 못하여 부끄러움을 당하리라. 참으로 그것과 연합하는 이들은 다 부끄러움을 당하리니 그것을 만든 기술자들이 단지 사람에 불과한 까닭이라.”</span>
+            <span class="bible-verse">사 46:7 “그것은 자리에서 움직이지 못하며 사람이 그것에 대고 부르짖어도 대답하지 못하고 그를 곤경에서 구원하지도 못한다.”</span>
+            <p class="description">➡️ 우상은 위기 앞에서도 침묵할 수 밖에 없는 생명이 없는 것이다.</p>
+        </div>
+        <div class="gcard">
+            <span class="theme-label">📌 3. 스스로를 구원하지도 못한다</span>
+            <span class="bible-verse">사 45:20 “나무 우상을 세운 이들 구원하지도 못하는 신에 대고 비는 이들은 지식 없는 이들이다.”</span>
+            <p class="description">➡️ 오히려 사람들이 우상을 들고 다니는 지경인데 그들에게 빌고 있는 지식 없는 모습을 볼 수 있다.</p>
+        </div>
+        <div class="gcard">
+            <span class="theme-label">📌 4. 허무·거짓·헛됨</span>
+            <span class="bible-verse">렘 2:5 “여호와께서 이렇게 말씀하신다. “너희 조상들이 내게서 무슨 죄악을 발견하였기에 나를 멀리 떠나 헛된 것을 따라다니다가 허망하게 되었느냐?”</span>
+            <span class="bible-verse">전 5:7 “꿈 많고 말 많은 데에는 허무가 있기 마련. 그러니 하나님을 경외하여라.”</span>
+            <p class="description">➡️ 우상은 실체 없는 공허함만을 가져온다.</p>
+        </div>
+        <div class="gcard">
+            <span class="theme-label">📌 5. 우상을 통한 배후</span>
+            <span class="bible-verse">고린도전서 10:20 “이방인들이 희생 제물로 바치는 것들은 귀신들에게 바치는 것이지, 하나님께 드리는 것이 아닙니다. 나는 여러분이 귀신들과 교통하는 사람들이 되기를 원하지 않습니다.”</span>
+            <p class="description">➡️ 우상 자체는 무능하고 생명이 없지만 사탄은 그것을 통로로 삼아 사람의 마음을 미혹케 합니다.</p>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="sub-title">4️⃣ 우상숭배의 결과</h2>
+        <div class="gcard">
+            <span class="theme-label">⚖️ 1. 하나님의 진노와 심판</span>
+            <span class="bible-verse">신 27:15 “여호와께서 가증하게 여기시는 것, 곧 기술자가 손으로 조각하거나 부어 만드는 이 우상을 만들어 은밀한 곳에 세우는 이는 저주를 받습니다. 그러면 모든 백성은 ‘아멘’ 하고 대답하십시오.”</span>
+            <span class="bible-verse">고전 10:7 “그들 중 어떤 사람들처럼 우상숭배자가 되지 마십시오. 성경에 기록된 바와 같습니다. “백성이 앉아서 먹고 마셨으며, 일어서서 흥청거리며 놀았다.””</span>
+        </div>
+        <div class="gcard highlight-card">
+            <span class="theme-label" style="color:#ff4d4d">⚖️ 2. 영적 음행으로 규정됨</span>
+            <span class="bible-verse">호 4:12 “내 백성이 그들의 나무 말뚝에 대고 물으면 그들의 막대기가 그들에게 알려 주니 이는 창녀의 영이 그들을 그릇 행하게 하여 그들이 자기 하나님을 떠나 창녀 짓을 하고 다닌 까닭이라.”</span>
+            <span class="bible-verse">계 2:20 “그러나 너에게 책망할 것이 있다. 그것은 네가 자칭 여언자라는 이세벨이라는 여자를 용납한 것이다. 그 여자는 내 노예들을 가르치고 미혹시켜 음행하게 하고 우상 앞에 바친 희생 제물을 먹게 한다.”</span>
+            <p class="description" style="color:#eee">
+                우상숭배는 창녀의 영으로 표현하고 있습니다. <strong>창녀는 기다림을 싫어합니다.</strong> 창녀는 언약이 없는 책임이 없는 관계를 유지하려고 합니다. 창녀는 여러 대상을 섬기며 상대합니다. 창녀는 감각 중심으로 보이고 느껴지는 것을 선호합니다. 창녀는 자신의 욕구를 통제할 수 없으며 하나님께 맡길 수도 없습니다. 그리고 창녀의 영으로 표현하여 단지 한 순간의 만남이 아니라 영으로 이어져 한번의 실수가 아니라 지속적이며 계속적으로 유혹하는 내적 성향입니다. 창녀는 언약을 깨뜨리고 배우자를 버리고 다른 상대에게로 가서 자신의 욕구를 만족시킵니다.
+            </p>
+        </div>
+        <div class="gcard">
+            <span class="theme-label">⚖️ 3. 하나님의 임재 상실</span>
+            <span class="bible-verse">겔 10장 하나님의 영광이 성전을 떠남</span>
+            <span class="bible-verse">사사기 16:20 “들릴라가 “삼손, 블레셋 사람들이 당신에게 들이닥쳤어요!”라고 소리치자 삼손이 잠에서 깨어나 속으로 ‘내가 전처럼 나가서 몸을 흔들어 떨쳐 버려야지.’라고 생각하였다. 그는 여호와께서 이미 자기를 떠나셨다는 것을 알지 못하였다.”</span>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="sub-title">6️⃣ 하나님이 요구하시는 대조적 삶</h2>
+        <div class="gcard">
+            <span class="theme-label">✨ 1. 우상을 버리고 살아 계신 하나님께로</span>
+            <span class="bible-verse">살전 1:9 “왜냐하면 그들 자신이 우리에 관한 일, 곧 우리가 어떻게 여러분에게로 들어갔는지, 또 여러분이 어떻게 우상들을 버리고 하나님께 돌아와서 살아 계시고 참되신 하나님을 섬겼는지를 알려 주기 때문이며”</span>
+        </div>
+        <div class="gcard">
+            <span class="theme-label">✨ 2. 마음의 성전을 지킴</span>
+            <span class="bible-verse">고전 6:19 “여러분의 몸이 여러분 안에 계신 성령의 성전인 것을 알지 못합니까? 이 성령은 여러분이 하나님께 받은 것이며, 또한 여러분은 여러분 자신의 것이 아닙니다.”</span>
+            <span class="bible-verse">요일 5:21 “어린 자녀 여러분, 여러분 자신을 지켜 우상들을 멀리하십시오.”</span>
+        </div>
+    </section>
+
+    <div class="summary-box">
+        <span class="summary-title">🔚 핵심 요약 한 문장</span>
+        <p>우상은 사람이 손으로 만들지만, 그 배후에는 사탄이 인간의 정욕을 자극하여 하나님을 대신할 대상을 붙들게 만드는 계략이 있습니다. 우상은 생명이 없기에 사람을 무감각하고 공허하게 만들지만, 하나님은 살아 계셔서 말씀하시고, 구원하시며, 사람을 자기 형상과 생명으로 변화시키고 계십니다.</p>
+    </div>
+
+    <footer>부산교회 2구역 | CHURCH BIBLE STUDY</footer>
+</div>
+
+<script>
+    const canvas = document.getElementById('space-canvas');
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+    let meteors = [];
+
+    function init() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        stars = [];
+        for(let i=0; i<250; i++) {
+            stars.push({
+                x: Math.random()*canvas.width,
+                y: Math.random()*canvas.height,
+                size: Math.random()*1.5,
+                blink: Math.random()*0.02
+            });
+        }
+    }
+
+    function draw() {
+        ctx.fillStyle = '#05060b';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        stars.forEach(s => {
+            ctx.fillStyle = `rgba(201, 168, 76, ${0.2 + Math.abs(Math.sin(Date.now()*s.blink)*0.8)})`;
+            ctx.beginPath(); ctx.arc(s.x, s.y, s.size, 0, Math.PI*2); ctx.fill();
+        });
+
+        // 화려한 별똥별 시스템
+        if(Math.random() < 0.03) {
+            meteors.push({
+                x: Math.random()*canvas.width, 
+                y: Math.random()*canvas.height/2, 
+                speedX: 15 + Math.random()*10,
+                speedY: 15 + Math.random()*10,
+                len: 100 + Math.random()*100,
+                opacity: 1
+            });
+        }
+
+        meteors.forEach((m, i) => {
+            ctx.strokeStyle = `rgba(243, 229, 171, ${m.opacity})`;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(m.x, m.y);
+            ctx.lineTo(m.x + m.len, m.y + m.len);
+            ctx.stroke();
+            m.x += m.speedX; m.y += m.speedY; m.opacity -= 0.02;
+            if(m.opacity <= 0) meteors.splice(i, 1);
+        });
+
+        requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('resize', init);
+    init(); draw();
+</script>
+</body>
+</html>

@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>영적 편식 — 냉장고 말씀</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Noto+Serif+KR:wght@400;600;900&family=Bebas+Neue&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;min-height:100vh;background:#e8eff6;font-family:'Noto Sans KR',sans-serif;overflow-x:hidden;}
+
+/* ══ 전체 레이아웃 ══ */
+#app{
+  min-height:100vh;
+  display:flex;flex-direction:column;
+  align-items:center;
+  padding:32px 16px 80px;
+  gap:32px;
+  position:relative;
+}
+
+/* 부엌 타일 배경 */
+#app::before{
+  content:'';position:fixed;inset:0;z-index:0;
+  background:
+    linear-gradient(rgba(220,230,240,0.5) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(220,230,240,0.5) 1px,transparent 1px);
+  background-size:40px 40px;
+  background-color:#dce8f0;
+}
+
+/* ══ 헤더 ══ */
+header{
+  position:relative;z-index:2;
+  text-align:center;padding:20px 0 0;
+}
+.header-tag{
+  font-family:'Special Elite',serif;font-size:10px;
+  letter-spacing:0.5em;text-transform:uppercase;
+  color:rgba(60,100,150,0.5);margin-bottom:10px;display:block;
+}
+.header-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(40px,8vw,80px);
+  color:#1a3a5c;letter-spacing:0.04em;line-height:0.9;
+}
+.header-title span{color:#e84040;}
+.header-sub{
+  font-family:'Noto Serif KR',serif;
+  font-size:clamp(13px,2vw,16px);
+  color:rgba(30,60,100,0.6);margin-top:8px;line-height:1.7;
+  word-break:keep-all;
+}
+
+/* ══ 메인 영역 — 냉장고 + 사이드 ══ */
+#main-area{
+  position:relative;z-index:2;
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:28px;
+  align-items:start;
+  width:100%;max-width:1000px;
+}
+
+/* ══ 냉장고 ══ */
+#fridge{
+  width:clamp(240px,30vw,320px);
+  position:relative;
+  flex-shrink:0;
+}
+
+.fridge-body{
+  background:linear-gradient(160deg,#e8eef4,#d0dce8);
+  border-radius:18px 18px 12px 12px;
+  border:3px solid #b0c4d8;
+  box-shadow:
+    4px 4px 0 #9ab0c8,
+    0 8px 32px rgba(0,0,0,0.15),
+    inset 2px 2px 0 rgba(255,255,255,0.6);
+  overflow:hidden;
+  position:relative;
+}
+
+/* 냉장고 상단 (냉동칸) */
+.fridge-top{
+  background:linear-gradient(160deg,#c8d8e8,#b4c8dc);
+  border-bottom:3px solid #9ab0c8;
+  padding:12px;
+  position:relative;
+  min-height:90px;
+}
+.fridge-top-label{
+  font-family:'Special Elite',serif;font-size:8px;
+  letter-spacing:0.3em;text-transform:uppercase;
+  color:rgba(30,70,120,0.4);margin-bottom:8px;display:block;
+}
+
+/* 냉동칸 음식들 */
+.frozen-items{
+  display:flex;gap:8px;flex-wrap:wrap;
+}
+.frozen-food{
+  background:rgba(200,220,240,0.8);
+  border:1px solid rgba(150,190,230,0.6);
+  border-radius:6px;padding:5px 10px;
+  font-size:11px;font-weight:700;
+  color:#2a5080;cursor:pointer;
+  transition:all 0.15s;white-space:nowrap;
+}
+.frozen-food:hover{background:rgba(180,210,240,0.95);transform:scale(1.05);}
+
+/* 냉장고 문 */
+.fridge-door-wrap{position:relative;}
+.fridge-door{
+  background:linear-gradient(160deg,#dce8f4,#c8d8ec);
+  position:absolute;
+  inset:0;
+  z-index:10;
+  transform-origin:left center;
+  transition:transform 0.7s cubic-bezier(0.4,0,0.2,1), opacity 0.5s;
+  transform-style:preserve-3d;
+  cursor:pointer;
+  border-left:4px solid #b0c4d8;
+  border-radius:0 0 10px 10px;
+  will-change:transform;
+}
+.fridge-door.open{
+  transform:perspective(600px) rotateY(-95deg);
+  opacity:0;
+  pointer-events:none;
+}
+
+/* 문 손잡이 */
+.door-handle{
+  position:absolute;right:14px;top:50%;transform:translateY(-50%);
+  width:10px;height:70px;
+  background:linear-gradient(to right,#c0ccd8,#e0eaf4,#c0ccd8);
+  border-radius:5px;
+  box-shadow:2px 2px 4px rgba(0,0,0,0.2);
+  pointer-events:none;
+}
+
+/* 문 안쪽 선반들 */
+.door-shelf{
+  padding:8px 14px;
+  border-bottom:1px solid rgba(160,190,220,0.4);
+  display:flex;gap:6px;flex-wrap:wrap;align-items:center;
+}
+.door-shelf-label{
+  font-size:8px;letter-spacing:0.2em;
+  color:rgba(40,80,130,0.35);text-transform:uppercase;
+  width:100%;margin-bottom:2px;
+  font-family:'Special Elite',serif;
+}
+
+/* 냉장고 내부 */
+.fridge-interior{
+  position:relative;
+  background:linear-gradient(to bottom,#f0f6ff,#e4f0f8);
+  display:flex;flex-direction:column;
+  gap:8px;padding:12px;
+  min-height:340px;
+  z-index:1;
+}
+.fridge-light{
+  position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:80%;height:30px;
+  background:radial-gradient(ellipse,rgba(255,255,220,0.9),transparent 70%);
+  pointer-events:none;
+}
+
+/* 내부 선반 */
+.shelf{
+  background:rgba(180,210,240,0.3);
+  border:1px solid rgba(150,190,230,0.4);
+  border-radius:4px;
+  padding:8px 10px;
+  display:flex;gap:6px;flex-wrap:wrap;align-items:center;
+  flex:1;
+}
+
+/* 음식 아이템 */
+.food-item{
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  cursor:pointer;transition:transform 0.15s;padding:4px;
+  border-radius:6px;
+  position:relative;
+}
+.food-item:hover{transform:scale(1.12);}
+.food-item:hover .food-tooltip{opacity:1;pointer-events:all;}
+.food-emoji{font-size:clamp(20px,3vw,28px);line-height:1;}
+.food-name{font-size:9px;font-weight:700;color:#2a5080;text-align:center;white-space:nowrap;}
+.food-item.disliked .food-emoji{filter:grayscale(0.4)opacity(0.7);}
+.food-item.disliked .food-name{color:#a0a0b0;}
+
+/* 툴팁 */
+.food-tooltip{
+  position:absolute;bottom:110%;left:50%;transform:translateX(-50%);
+  background:#1a2a3a;color:#fff;
+  padding:6px 10px;border-radius:6px;
+  font-size:10px;white-space:nowrap;
+  opacity:0;transition:opacity 0.2s;
+  pointer-events:none;z-index:100;
+}
+.food-tooltip::after{
+  content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  border:5px solid transparent;border-top-color:#1a2a3a;
+}
+
+/* 문 열기 힌트 */
+.open-hint{
+  display:block;
+  text-align:center;
+  margin-top:8px;
+  font-size:10px;letter-spacing:0.2em;
+  color:rgba(40,80,130,0.5);text-transform:uppercase;
+  font-family:'Special Elite',serif;
+  animation:hintPulse 2s infinite;white-space:nowrap;
+  cursor:pointer;
+  padding:6px;
+}
+@keyframes hintPulse{0%,100%{opacity:0.35}50%{opacity:0.8}}
+
+/* ══ 사이드 패널 ══ */
+#side-panel{
+  display:flex;flex-direction:column;gap:16px;
+}
+
+/* 화이트보드 — 7가지 처방 */
+#whiteboard{
+  background:#f5f2e8;
+  border:3px solid #d4c8a0;
+  border-radius:4px;
+  padding:20px 22px;
+  box-shadow:3px 3px 0 #c4b890,0 4px 16px rgba(0,0,0,0.1);
+  position:relative;
+}
+#whiteboard::before{
+  content:'';position:absolute;
+  top:0;left:0;right:0;height:4px;
+  background:repeating-linear-gradient(90deg,#c84040,#c84040 8px,#404888 8px,#404888 16px);
+  border-radius:2px 2px 0 0;
+}
+.wb-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:22px;color:#2a1a08;
+  letter-spacing:0.05em;margin-bottom:14px;
+  padding-top:8px;
+}
+.recipe-list{display:flex;flex-direction:column;gap:4px;}
+.recipe-item{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:7px 10px;border-radius:4px;
+  cursor:pointer;transition:background 0.15s;
+  border:1px solid transparent;
+}
+.recipe-item:hover{background:rgba(200,100,40,0.08);border-color:rgba(200,100,40,0.2);}
+.recipe-item.active{background:rgba(200,100,40,0.12);border-color:rgba(200,100,40,0.3);}
+.recipe-num{
+  width:22px;height:22px;border-radius:50%;
+  background:#c84040;color:#fff;
+  font-size:11px;font-weight:900;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:1px;
+}
+.recipe-label{
+  font-size:13px;font-weight:700;color:#2a1a08;line-height:1.5;
+}
+.recipe-check{
+  margin-left:auto;flex-shrink:0;
+  width:18px;height:18px;border-radius:3px;
+  border:2px solid #c8b888;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;color:transparent;
+  transition:all 0.2s;
+}
+.recipe-item.done .recipe-check{background:#4a9040;border-color:#4a9040;color:#fff;}
+
+/* ══ 콘텐츠 카드 (클릭 시 나타남) ══ */
+#content-card{
+  background:#fff;
+  border:2px solid #d0dce8;
+  border-radius:8px;
+  padding:22px 24px;
+  box-shadow:0 4px 20px rgba(0,0,0,0.08);
+  min-height:120px;
+  transition:all 0.3s;
+}
+.cc-tag{
+  font-family:'Special Elite',serif;font-size:9px;
+  letter-spacing:0.4em;text-transform:uppercase;
+  color:rgba(200,80,40,0.6);margin-bottom:8px;display:block;
+}
+.cc-title{
+  font-family:'Bebas Neue',sans-serif;font-size:26px;
+  color:#1a2a3a;letter-spacing:0.03em;margin-bottom:10px;
+}
+.cc-body{
+  font-family:'Noto Sans KR',sans-serif;font-size:13.5px;
+  line-height:2;color:rgba(30,50,80,0.75);word-break:keep-all;
+  margin-bottom:0.7em;
+}
+.cc-body:last-child{margin-bottom:0;}
+.cc-body strong{color:#1a2a3a;font-weight:700;}
+.cc-spiritual{
+  background:linear-gradient(135deg,rgba(200,80,40,0.06),rgba(40,80,160,0.06));
+  border-left:3px solid #c84040;
+  padding:12px 14px;margin-top:12px;border-radius:0 4px 4px 0;
+}
+.cc-spiritual-label{
+  font-size:9px;letter-spacing:0.35em;text-transform:uppercase;
+  color:rgba(200,80,40,0.6);margin-bottom:6px;display:block;
+  font-family:'Special Elite',serif;
+}
+.cc-spiritual p{
+  font-family:'Noto Serif KR',serif;font-size:13px;
+  line-height:1.9;color:rgba(30,40,80,0.8);word-break:keep-all;
+}
+
+/* ══ 말씀 섹션 ══ */
+#scripture-section{
+  position:relative;z-index:2;
+  width:100%;max-width:1000px;
+}
+.verse-card{
+  background:#fff;border:2px solid #d0dce8;border-radius:8px;
+  padding:24px 28px;margin-bottom:12px;
+  box-shadow:0 2px 12px rgba(0,0,0,0.06);
+}
+.verse-ref{
+  font-family:'Special Elite',serif;font-size:9px;
+  letter-spacing:0.4em;text-transform:uppercase;
+  color:rgba(200,80,40,0.6);margin-bottom:10px;display:block;
+}
+.verse-text{
+  font-family:'Noto Serif KR',serif;
+  font-size:clamp(14px,2.2vw,18px);font-weight:600;
+  color:#1a2a3a;line-height:1.85;word-break:keep-all;
+  margin-bottom:10px;
+}
+.verse-body{
+  font-size:13.5px;line-height:2;color:rgba(30,50,80,0.7);word-break:keep-all;
+}
+
+/* ══ 클로징 ══ */
+#closing{
+  position:relative;z-index:2;
+  width:100%;max-width:1000px;
+  background:linear-gradient(135deg,#1a2a4a,#2a1a3a);
+  border-radius:12px;
+  padding:40px 36px;
+  text-align:center;
+  box-shadow:0 8px 32px rgba(0,0,0,0.2);
+}
+.closing-big{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(36px,7vw,72px);
+  color:#fff;line-height:0.92;letter-spacing:0.04em;
+  text-shadow:0 0 40px rgba(200,100,40,0.4);margin-bottom:16px;
+}
+.closing-p{
+  font-family:'Noto Serif KR',serif;font-size:15px;
+  color:rgba(200,215,240,0.75);line-height:2;word-break:keep-all;
+  margin-bottom:0.7em;max-width:600px;margin-left:auto;margin-right:auto;
+}
+.closing-verse{
+  margin-top:24px;padding:20px 24px;
+  background:rgba(255,255,255,0.06);border-radius:8px;
+  border:1px solid rgba(255,255,255,0.1);
+}
+.closing-verse p{
+  font-family:'Noto Serif KR',serif;font-size:15px;font-weight:600;
+  color:#f0e8c8;line-height:1.85;word-break:keep-all;
+}
+.closing-verse .ref{
+  font-family:'Special Elite',serif;font-size:9px;
+  letter-spacing:0.4em;color:rgba(200,160,80,0.6);
+  text-transform:uppercase;display:block;margin-bottom:8px;
+}
+
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:#dce8f0}
+::-webkit-scrollbar-thumb{background:rgba(100,150,200,0.4);border-radius:2px}
+
+@media(max-width:700px){
+  #main-area{grid-template-columns:1fr;justify-items:center;}
+  #fridge{width:min(320px,90vw);}
+  #side-panel{width:100%;max-width:500px;}
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- 헤더 -->
+  <header>
+    <span class="header-tag">편식(偏食) · Picky Eating · Spiritual Growth</span>
+    <h1 class="header-title">영적<br><span>편식</span></h1>
+    <p class="header-sub">아이들의 음식 편식처럼<br>우리 영혼도 편식합니다</p>
+  </header>
+
+  <!-- 메인: 냉장고 + 사이드 -->
+  <div id="main-area">
+
+    <!-- 냉장고 -->
+    <div id="fridge">
+      <div class="fridge-body">
+
+        <!-- 냉동칸 -->
+        <div class="fridge-top">
+          <span class="fridge-top-label">세상의 맛 · World's Taste</span>
+          <div class="frozen-items">
+            <div class="frozen-food" onclick="showWorld('sns')">📱 SNS</div>
+            <div class="frozen-food" onclick="showWorld('game')">🎮 게임</div>
+            <div class="frozen-food" onclick="showWorld('music')">🎵 음악</div>
+            <div class="frozen-food" onclick="showWorld('fast')">🍔 패스트푸드</div>
+            <div class="frozen-food" onclick="showWorld('trend')">🔥 트랜드</div>
+          </div>
+        </div>
+
+        <!-- 냉장칸 문 + 내부 -->
+        <div class="fridge-door-wrap" style="position:relative;min-height:340px;">
+          <!-- 내부 (문 뒤) -->
+          <div class="fridge-interior" id="fridge-interior">
+            <div class="fridge-light"></div>
+            <div class="shelf">
+              <div class="food-item" onclick="showFood('bible')">
+                <div class="food-emoji">📖</div>
+                <div class="food-name">성경</div>
+                <div class="food-tooltip">생명나무 열매</div>
+              </div>
+              <div class="food-item" onclick="showFood('prayer')">
+                <div class="food-emoji">🙏</div>
+                <div class="food-name">기도</div>
+                <div class="food-tooltip">영혼의 호흡</div>
+              </div>
+              <div class="food-item" onclick="showFood('worship')">
+                <div class="food-emoji">🎶</div>
+                <div class="food-name">찬양</div>
+                <div class="food-tooltip">감사의 제사</div>
+              </div>
+              <div class="food-item" onclick="showFood('fellowship')">
+                <div class="food-emoji">🫂</div>
+                <div class="food-name">교제</div>
+                <div class="food-tooltip">뷔페 식탁</div>
+              </div>
+            </div>
+            <div class="shelf">
+              <div class="food-item disliked" onclick="showFood('vegetable')">
+                <div class="food-emoji">🥦</div>
+                <div class="food-name">채소</div>
+                <div class="food-tooltip">씹기 싫은 말씀</div>
+              </div>
+              <div class="food-item disliked" onclick="showFood('mushroom')">
+                <div class="food-emoji">🍄</div>
+                <div class="food-name">버섯</div>
+                <div class="food-tooltip">물컹해서 싫어</div>
+              </div>
+              <div class="food-item disliked" onclick="showFood('onion')">
+                <div class="food-emoji">🧅</div>
+                <div class="food-name">양파</div>
+                <div class="food-tooltip">냄새가 이상해</div>
+              </div>
+              <div class="food-item disliked" onclick="showFood('spinach')">
+                <div class="food-emoji">🥬</div>
+                <div class="food-name">시금치</div>
+                <div class="food-tooltip">맛이 없어</div>
+              </div>
+              <div class="food-item disliked" onclick="showFood('carrot')">
+                <div class="food-emoji">🥕</div>
+                <div class="food-name">당근</div>
+                <div class="food-tooltip">그냥 싫어</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 냉장고 문 (손잡이 클릭으로만 열림) -->
+          <div class="fridge-door" id="fridge-door">
+            <div class="door-handle" onclick="toggleDoor()" title="클릭하여 열기"></div>
+            <!-- 문 안쪽 선반 — 각자 onclick, stopPropagation -->
+            <div class="door-shelf">
+              <span class="door-shelf-label">Door Shelf · 단 음식</span>
+              <div class="frozen-food" style="background:rgba(255,220,180,0.3);border-color:rgba(200,150,80,0.4);color:#6a4020;"
+                onclick="event.stopPropagation();showDoorFood('apple')">🍎 사과</div>
+              <div class="frozen-food" style="background:rgba(255,220,180,0.3);border-color:rgba(200,150,80,0.4);color:#6a4020;"
+                onclick="event.stopPropagation();showDoorFood('banana')">🍌 바나나</div>
+              <div class="frozen-food" style="background:rgba(255,220,180,0.3);border-color:rgba(200,150,80,0.4);color:#6a4020;"
+                onclick="event.stopPropagation();showDoorFood('choco')">🍫 초콜릿</div>
+            </div>
+            <div class="door-shelf">
+              <div class="frozen-food" style="background:rgba(200,230,255,0.3);border-color:rgba(100,160,220,0.4);color:#204060;"
+                onclick="event.stopPropagation();showDoorFood('milk')">🥛 우유</div>
+              <div class="frozen-food" style="background:rgba(200,230,255,0.3);border-color:rgba(100,160,220,0.4);color:#204060;"
+                onclick="event.stopPropagation();showDoorFood('juice')">🧃 주스</div>
+            </div>
+            <!-- 문 전체 클릭 → 열기 -->
+            <div style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);
+              font-family:'Special Elite',serif;font-size:9px;letter-spacing:0.3em;
+              color:rgba(40,80,130,0.4);text-transform:uppercase;white-space:nowrap;
+              cursor:pointer;animation:hintPulse 2s infinite;"
+              onclick="toggleDoor()">← 손잡이 또는 여기 클릭</div>
+          </div>
+        </div>
+
+      </div><!-- /fridge-body -->
+      <div class="open-hint" onclick="toggleDoor()" id="door-hint">← 클릭하여 열기</div>
+
+      <!-- 냉장고 브랜드 라벨 -->
+      <div style="text-align:center;margin-top:8px;font-family:'Special Elite',serif;font-size:10px;letter-spacing:0.3em;color:rgba(30,70,120,0.4);text-transform:uppercase;">Life · Tree · Refrigerator</div>
+    </div><!-- /fridge -->
+
+    <!-- 사이드 패널 -->
+    <div id="side-panel">
+
+      <!-- 화이트보드 -->
+      <div id="whiteboard">
+        <div class="wb-title">7가지 처방전</div>
+        <div class="recipe-list" id="recipe-list">
+          <!-- JS로 생성 -->
+        </div>
+      </div>
+
+      <!-- 콘텐츠 카드 -->
+      <div id="content-card">
+        <span class="cc-tag">아이템을 클릭하거나 처방을 선택하세요</span>
+        <div class="cc-title">편식(偏食)이란?</div>
+        <p class="cc-body">偏(치우칠 편)에 食(밥 식)자로, 어떤 음식만을 가려서 즐겨 먹는다는 뜻입니다. 아이들의 성장과 발달에 악영향을 주므로 고쳐야 하는 습관입니다.</p>
+        <p class="cc-body">우리의 먹는 음식이 신체발달과 정서발달에 큰 영향을 미치기 때문입니다.</p>
+        <div class="cc-spiritual">
+          <span class="cc-spiritual-label">영적 적용 · Spiritual</span>
+          <p>성경에도 하나님이 당신의 풍성을 먹는 것으로 표현해 놓으시고 먹길 원하셨습니다. 아담과 하와가 편식(偏食)을 하게 되었고, 이 결과로 인류는 사탄에게 속하게 되었습니다.</p>
+        </div>
+      </div>
+
+    </div><!-- /side-panel -->
+  </div><!-- /main-area -->
+
+  <!-- 말씀 섹션 -->
+  <div id="scripture-section">
+    <div class="verse-card">
+      <span class="verse-ref">창세기 2장 9절 · Genesis 2:9</span>
+      <p class="verse-text">"여호와 하나님이 그 땅에서 보기에 아름답고 먹기에 좋은 나무가 나게 하시니"</p>
+      <p class="verse-body">하나님은 먹기에 좋은 것들을 준비하셨습니다. 생명나무는 우리에게 열려있습니다. 그러나 우리 아이들은 이미 세상의 탐스러운 맛으로 길들여졌기 때문에 생명나무를 싫어합니다.</p>
+    </div>
+    <div class="verse-card">
+      <span class="verse-ref">창세기 2장 16절 · Genesis 2:16</span>
+      <p class="verse-text">"여호와 하나님이 그 사람에게 명하여 가라사대 동산 각종 나무의 실과는 네가 임의로 먹되"</p>
+      <p class="verse-body">하나님은 동산 각종 나무의 실과를 임의로 먹을 수 있게 하셨습니다. 영적 편식 습관을 고치기 위해서 "나중에 크면 알아서 신앙 잘 하겠지" 또는 "무슨 수를 써서라도 꼭 신앙생활 해야 해" — 이런 생각들 모두 영적 편식 습관을 고치는데 전혀 도움이 안 된다는 사실입니다.</p>
+    </div>
+  </div>
+
+  <!-- 클로징 -->
+  <div id="closing">
+    <div class="closing-big">먹고<br>자라야<br>합니다</div>
+    <p class="closing-p">성장기의 아이들이 그때 먹지 못한다면 올바르게 성장하지 못합니다. 영적 성장도 마찬가지입니다. 지금 먹지 않으면 영혼이 자라지 못합니다.</p>
+    <p class="closing-p">주님은 죽은 자의 하나님이 아니라 부활하고 살아있는 자의 하나님인 것입니다. 아브라함의 하나님, 이삭의 하나님, 야곱의 하나님 — 이 하나님을 나의 하나님으로 먹고 누려야 합니다.</p>
+    <div class="closing-verse">
+      <span class="ref">Genesis 2:9 · 창세기 2장 9절</span>
+      <p>보기에 아름답고 먹기에 좋은 나무 — 생명나무가 지금도 우리 앞에 있습니다.</p>
+    </div>
+  </div>
+
+</div><!-- /app -->
+
+<script>
+// ══════════════════════════════════════════════
+//  데이터
+// ══════════════════════════════════════════════
+const RECIPES = [
+  {
+    num:1, label:'강요는 절대 금물',
+    food:'강요하면 거부감만 늘어날 뿐입니다.',
+    food2:'싫어하는 음식을 억지로 강요하면 역효과가 납니다. 육식 위주 식탁을 채소 위주로 조금씩 바꾸어야 합니다.',
+    spiritual:'"신앙생활 해라, 성경책 읽어라" — 일주일 내내 가만있다가 토요일 저녁만 되면 강요하지는 않으십니까? 일주일 내내 세상의 맛에 길들여져 있다가 툭 던지는 이야기는 아이에게 거부감만 늘어날 뿐입니다.',
+  },
+  {
+    num:2, label:'호기심을 자극한다',
+    food:'부모의 말과 행동이 편식 습관을 만듭니다.',
+    food2:'"우와! 이거 정말 맛있는데"하면서 조금은 과장된 표현을 통해 관심을 끄는 것입니다. 부모가 좋아하지 않는 음식들은 아이들도 잘 먹지 않습니다.',
+    spiritual:'"아멘! 오늘 주님이 정말 나에게 아름다운 은혜를 허락하셨어"라고 하면서 주님에 관한 관심을 갖게 하는 것입니다. 나의 영적 상태를 먼저 돌아봐야 할 것입니다.',
+  },
+  {
+    num:3, label:'놀이와 대화로 흥미를',
+    food:'아이들과 함께 음식을 만드는 음식 놀이를 통해 자연스러운 접근을 하게 합니다.',
+    food2:'내가 직접 만든 음식을 먹음으로 음식을 만드는 즐거움과 기쁨을 맛볼 수 있습니다.',
+    spiritual:'자녀와의 대화가 없다면 그 가정은 합당하게 주님을 누릴 수 없습니다. 소그룹 모임에 아이들을 참여시킴으로써 주님의 사모함이 자라나야 할 것입니다.',
+  },
+  {
+    num:4, label:'모양을 변형시킨다',
+    food:'어린아이들이 싫어하는 것을 삶거나 갈아서 형태를 변형시킵니다.',
+    food2:'물컹한 미역을 튀기거나, 콩밥을 싫어하면 갈아서 동그랑땡을 만들고, 시금치 수제비 등으로 변형합니다. 아이가 좋아하는 모양으로 만들어 친근감을 높입니다.',
+    spiritual:'우리 아이들에게 주님의 이상을 분명하게 상기시켜 주어야 합니다. 학생들이 공부하고 일하고 결혼하는 모든 부분이 어떻게 주님 앞에 드려지고 쓰임 받을 수 있는가에 대한 이상을 심어주어야 합니다.',
+  },
+  {
+    num:5, label:'대체 식품 활용',
+    food:'단맛을 좋아하는 아이들을 위해 인공식품보다는 고구마나 단 맛이 나는 과일로 간식을 만들어 줍니다.',
+    food2:'아이들의 본능적인 단맛 선호를 자연식품으로 채워주는 것입니다. 패스트푸드 대신 건강한 대안을 제공합니다.',
+    spiritual:'집회 모임의 성격을 부드럽고 맛있게 하여야 합니다. 지금 상황에 맞는 단어와 예화를 통하여 성경의 즐거움을 맛보아야 할 것입니다. 부모가 함께 모임에 참여함으로써 색다른 간식의 맛도 만들어 주어야 합니다.',
+  },
+  {
+    num:6, label:'향 좋은 소스와 함께',
+    food:'버섯을 싫어하면 아이가 좋아하는 탕수육을 응용하여 버섯 탕수육을 만들어 줍니다.',
+    food2:'특정 채소를 싫어한다면 아이가 좋아하는 다른 재료와 섞어서 조리하는 것도 좋은 방법입니다.',
+    spiritual:'나의 음식 실력이 없다면 다른 음식을 잘하는 최고의 셰프를 모시고 와서 그들에게 맛을 보여 주어야 합니다. 지체들의 도움을 받아 여러 생활적인 간증들을 통하여 여러 영적인 음식들을 맛보게 하여야 합니다.',
+  },
+  {
+    num:7, label:'효능을 알려준다',
+    food:'"시금치를 먹으면 힘이 세어진다", "채소를 먹으면 예뻐진다" — 고전적이지만 효과가 좋습니다.',
+    food2:'음식에 대한 효능을 알려줌으로써 아이가 먹고 싶은 동기를 부여합니다.',
+    spiritual:'성경 속에 나온 인물들을 통하여 그들이 체험하고 누린 하나님의 역사를 이야기해 주어야 합니다. 그래야 아브라함의 하나님, 이삭의 하나님, 야곱의 하나님이 나의 하나님인 것을 알게 될 것입니다.',
+  },
+];
+
+const DOOR_DATA = {
+  apple:{tag:'단 음식 · 대체식품',title:'🍎 사과 — 건강한 단맛',
+    body:'단맛을 좋아하는 아이들을 위해 인공식품보다는 고구마나 단 맛이 나는 과일 등으로 간식을 만들어 주어야 합니다. 사과는 아이들이 좋아하는 자연의 단맛입니다.',
+    spiritual:'패스트푸드와 탄산음료 대신 건강한 대안을 제공하듯, 세상의 자극적인 문화 대신 주님 안에서의 진짜 기쁨을 맛보게 해야 합니다.'},
+  banana:{tag:'단 음식 · 대체식품',title:'🍌 바나나 — 아이들이 좋아하는 맛',
+    body:'바나나는 아이들이 거부감 없이 먹는 대표적인 과일입니다. 싫어하는 음식을 억지로 강요하기보다 좋아하는 것에서 시작하는 지혜가 필요합니다.',
+    spiritual:'"나중에 크면 알아서 신앙 잘 하겠지"라는 생각은 금물입니다. 지금 이 순간 아이들이 좋아하는 방식으로 주님의 맛을 소개해야 합니다.'},
+  choco:{tag:'단맛 선호 · 주의',title:'🍫 초콜릿 — 본능적 단맛',
+    body:'본능적으로 단맛에 대한 선호도가 높아서 단맛이 강한 과자나 음료를 찾습니다. 초콜릿은 맛있지만 편식의 원인이 됩니다.',
+    spiritual:'세상의 음악, 영화, 문화 트랜드는 그 누가 가르쳐 주지 않아도 우리 생활 전체를 사로잡아 갑니다. 먹음직하고 보암직하고 탐스럽기 때문입니다.'},
+  milk:{tag:'기본 영양 · 생명',title:'🥛 우유 — 성장의 기본',
+    body:'우유는 성장기 아이들에게 가장 기본이 되는 영양입니다. 매일 마셔야 뼈가 튼튼해집니다.',
+    spiritual:'말씀은 영혼의 젖입니다. 성장기의 아이들이 그때 먹지 못한다면 올바르게 성장하지 못합니다. 영적 성장도 마찬가지입니다.'},
+  juice:{tag:'단맛 · 대체 음료',title:'🧃 주스 — 과일의 변형',
+    body:'주스는 과일의 모양을 변형시킨 것입니다. 싫어하는 채소도 주스로 갈면 아이들이 더 잘 먹기도 합니다.',
+    spiritual:'어린아이들이 싫어하는 것을 삶거나 갈아서 형태를 변형시키는 방법처럼, 집회 모임의 성격을 부드럽고 맛있게 하여 아이들이 자연스럽게 주님께 다가오게 해야 합니다.'},
+};
+
+function showDoorFood(key){
+  const d = DOOR_DATA[key];
+  if(!d) return;
+  setCard(d.tag, d.title, d.body, d.spiritual);
+}
+
+const FOOD_DATA = {
+  bible:{tag:'생명나무',title:'성경 — 생명의 양식',body:'하나님은 당신의 풍성을 먹는 것으로 표현하셨습니다. 생명나무 열매는 우리에게 열려있습니다.',spiritual:'그러나 아이들은 이미 세상의 탐스러운 맛으로 길들여졌기 때문에 생명나무를 싫어합니다. 왜냐하면 손만 뻗으면 먹음직하고 보암직하고 지혜롭게 할 탐스런 과실들이 즐비하기 때문입니다.'},
+  prayer:{tag:'영혼의 호흡',title:'기도 — 하나님과의 대화',body:'기도는 영혼의 호흡입니다. 매일 먹어야 하는 밥처럼 매일 필요합니다.',spiritual:'부모가 기도하는 삶을 보여줄 때 아이들도 기도의 맛을 알게 됩니다. 하루의 일과 중에 주님이 허락하신 간증들을 자연스럽게 대화할 때 그들은 그들의 삶 가운데에서도 주님을 찾게 될 것입니다.'},
+  worship:{tag:'감사의 제사',title:'찬양 — 감사와 기쁨의 음식',body:'찬양은 영혼에 기쁨을 줍니다. 세상 음악이 아닌 영적 찬양으로 영혼을 채워야 합니다.',spiritual:'세상의 음악과 영화 그리고 그들을 사로잡는 문화 트랜드는 그 누가 가르쳐 주지 않아도 우리 생활 전체를 사로잡아 갑니다.'},
+  fellowship:{tag:'뷔페 식탁',title:'교제 — 함께 먹는 밥상',body:'함께 먹는 밥은 더 맛있습니다. 소그룹 모임은 영적 뷔페 식탁입니다.',spiritual:'소그룹 모임 때 아이들을 참여시킴으로써 그 소그룹 모임이 청년 학생회에서 맛보지 못한 고급스런 음식의 품격을 맛봄으로써 주님의 사모함이 자라나야 할 것입니다.'},
+  vegetable:{tag:'싫어하는 음식',title:'채소류 — 씹기 싫은 말씀',body:'아이들이 제일 싫어하는 음식 중 하나입니다. 색이 푸르고 향이 낯섭니다.',spiritual:'"씹는 느낌이 싫다, 맛이 없다, 냄새가 이상하다" — 이처럼 아이들이 말씀을 어렵고 지루하게 느낄 때 강요하면 거부감만 늘어납니다.'},
+  mushroom:{tag:'질감이 싫어',title:'버섯 — 물컹해서 싫어',body:'버섯은 물컹한 질감 때문에 아이들이 싫어합니다.',spiritual:'버섯을 싫어하면 아이가 좋아하는 탕수육을 응용하여 버섯 탕수육을 만들어 줍니다 — 모양을 변형시켜 접근하는 지혜가 필요합니다.'},
+  onion:{tag:'냄새가 이상해',title:'양파 — 독특한 향이 싫어',body:'독특한 향의 음식을 싫어합니다. 양파, 파 등이 대표적입니다.',spiritual:'강압적인 접근은 절대 금물입니다. 일주일 내내 가만있다가 토요일 저녁만 되면 강요하는 방식은 거부감만 늘립니다.'},
+  spinach:{tag:'맛이 없어',title:'시금치 — 그냥 먹기 싫어',body:'"시금치를 먹으면 힘이 세어진다" — 고전적인 방법이지만 효과가 좋습니다.',spiritual:'성경 속 인물들의 이야기를 통하여 하나님의 역사를 알려주어야 합니다. 그래야 아브라함의 하나님이 나의 하나님인 것을 알게 됩니다.'},
+  carrot:{tag:'그냥 싫어',title:'당근 — 이유도 모르고 싫어',body:'이유를 설명하기도 어렵게 그냥 싫은 음식이 있습니다.',spiritual:'호기심을 자극해야 합니다. "우와! 이거 정말 맛있는데"하면서 조금은 과장된 표현을 통해 관심을 끄는 것처럼, 주님의 은혜를 자연스럽게 나눠야 합니다.'},
+};
+
+const WORLD_DATA = {
+  sns:{tag:'세상의 맛',title:'📱 SNS — 먹음직스런 열매',body:'손만 뻗으면 닿는 먹음직하고 보암직하고 지혜롭게 할 탐스런 과실입니다.',spiritual:'아담과 하와는 선악을 알게 하는 열매를 먹었습니다. 그 결과 눈은 밝아 부끄러움을 알았고 평안이 깨어져서 두려움이 생겨 하나님 앞에 나오지 못하고 숨는 결과를 초래했습니다.'},
+  game:{tag:'세상의 맛',title:'🎮 게임 — 달콤한 자극',body:'본능적으로 단맛에 대한 선호도가 높아서 단맛이 강한 과자나 음료를 찾는 것처럼, 자극적인 게임에 끌립니다.',spiritual:'이러한 잘못된 편식 습관은 어렸을 때 고치지 아니하면 나중에 커서도 고치기 힘들기 때문입니다.'},
+  music:{tag:'세상의 맛',title:'🎵 세상 음악 — 귀에 익은 맛',body:'세상의 음악은 그 누가 가르쳐 주지 않아도 우리 생활 전체를 사로잡아 갑니다.',spiritual:'"나중에 크면 알아서 신앙 잘 하겠지" — 이런 생각은 영적 편식 습관을 고치는데 전혀 도움이 안 됩니다.'},
+  fast:{tag:'소아비만',title:'🍔 패스트푸드 — 중독의 맛',body:'요즘 패스트푸드나 탄산음료로 인하여 소아비만이 많이 발생하여 어떤 경우는 성인병의 증상이 아이들에게도 나타납니다.',spiritual:'세상적 음식으로만 채워진 가족 식탁을 주님이 선호하는 영적인 식탁으로 조금씩 바꾸어야 합니다.'},
+  trend:{tag:'문화 트랜드',title:'🔥 트랜드 — 시대의 입맛',body:'세상의 문화 트랜드는 그 누가 가르쳐 주지 않아도 우리 생활 전체를 사로잡아 가는 것을 볼 수 있습니다.',spiritual:'그들이 손만 뻗으면 먹음직하고 보암직하고 지혜롭게 할 탐스런 과실들이 즐비하기 때문입니다. 왜 그들이 이러한 것에 손을 대고 맛을 볼까요? 그것은 먹음직하고 보암직하고 지혜롭게 할 탐스러움 때문입니다.'},
+};
+
+// ══════════════════════════════════════════════
+//  냉장고 문 토글
+// ══════════════════════════════════════════════
+let doorOpen = false;
+function toggleDoor(){
+  doorOpen = !doorOpen;
+  document.getElementById('fridge-door').classList.toggle('open', doorOpen);
+  document.querySelector('.open-hint').textContent = doorOpen ? '→ 클릭하여 닫기' : '↑ 클릭하여 열기';
+}
+
+// ══════════════════════════════════════════════
+//  콘텐츠 카드 업데이트
+// ══════════════════════════════════════════════
+function setCard(tag, title, body, spiritual){
+  const card = document.getElementById('content-card');
+  card.innerHTML = `
+    <span class="cc-tag">${tag}</span>
+    <div class="cc-title">${title}</div>
+    <p class="cc-body">${body}</p>
+    <div class="cc-spiritual">
+      <span class="cc-spiritual-label">영적 적용 · Spiritual</span>
+      <p>${spiritual}</p>
+    </div>
+  `;
+  card.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function showFood(key){
+  const d = FOOD_DATA[key];
+  if(!d)return;
+  setCard(d.tag, d.title, d.body, d.spiritual);
+}
+
+function showWorld(key){
+  const d = WORLD_DATA[key];
+  if(!d)return;
+  setCard(d.tag, d.title, d.body, d.spiritual);
+}
+
+// ══════════════════════════════════════════════
+//  레시피 리스트 생성
+// ══════════════════════════════════════════════
+const recipeList = document.getElementById('recipe-list');
+RECIPES.forEach((r,i)=>{
+  const el = document.createElement('div');
+  el.className = 'recipe-item';
+  el.dataset.idx = i;
+  el.innerHTML = `
+    <div class="recipe-num">${r.num}</div>
+    <div class="recipe-label">${r.label}</div>
+    <div class="recipe-check">✓</div>
+  `;
+  el.addEventListener('click',()=>{
+    // 활성 표시
+    document.querySelectorAll('.recipe-item').forEach(x=>x.classList.remove('active'));
+    el.classList.add('active');
+    el.classList.toggle('done');
+    // 카드 업데이트
+    setCard(
+      `처방 ${r.num} — ${r.label}`,
+      r.label,
+      r.food2,
+      r.spiritual
+    );
+  });
+  recipeList.appendChild(el);
+});
+</script>
+</body>
+</html>

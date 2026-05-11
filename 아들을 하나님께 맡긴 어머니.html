@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>아들을 하나님께 맡긴 어머니 — 수잔나 웨슬리</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600&family=Cormorant+Garamond:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+/* ══════════════════════════════
+   색상 — 배경/글자 대비 최우선
+══════════════════════════════ */
+:root {
+  --paper:      #f7f1e4;   /* 크림 종이 */
+  --paper2:     #ede4cf;   /* 약간 어두운 종이 */
+  --paper3:     #e2d6bc;   /* 가장 어두운 종이 */
+  --midnight:   #1a1f2e;   /* 깊은 밤색 */
+  --midnight2:  #232b3a;   /* 보조 밤색 */
+  --ink-dark:   #18130c;   /* 종이 위 글자 — 거의 검정 */
+  --ink-mid:    #3a3020;   /* 종이 위 보조 글자 */
+  --ink-light:  #f0ead8;   /* 어두운 배경 위 글자 — 거의 흰색 */
+  --ink-light2: #c8bfa8;   /* 어두운 배경 위 보조 글자 */
+  --gold:       #a07010;   /* 종이 위 금색 */
+  --gold-night: #d4a030;   /* 밤 배경 위 금색 */
+  --red-seal:   #7a2010;   /* 봉인 붉은색 */
+  --eagle:      #4a5a30;   /* 독수리 녹색 */
+}
+
+html { scroll-behavior:smooth; }
+body { font-family:'Noto Serif KR',serif; background:var(--midnight); overflow-x:hidden; }
+
+/* ══════════════════════════════
+   공통 타이포
+══════════════════════════════ */
+.on-paper  { background:var(--paper);    color:var(--ink-dark); }
+.on-paper2 { background:var(--paper2);   color:var(--ink-dark); }
+.on-paper3 { background:var(--paper3);   color:var(--ink-dark); }
+.on-night  { background:var(--midnight); color:var(--ink-light); }
+.on-night2 { background:var(--midnight2);color:var(--ink-light); }
+
+/* ══════════════════════════════
+   HERO — 책상 위 첫 장면
+══════════════════════════════ */
+.hero {
+  background: var(--midnight);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 별 배경 */
+.stars { position:absolute; inset:0; pointer-events:none; }
+
+/* 책상 위 편지지 느낌 */
+.hero-card {
+  background: var(--paper);
+  max-width: 640px;
+  width: 100%;
+  padding: 64px 60px;
+  position: relative;
+  box-shadow: 0 8px 48px rgba(0,0,0,0.7), 0 2px 8px rgba(0,0,0,0.4);
+  transform: rotate(-0.5deg);
+  animation: settle 1s ease-out both;
+}
+
+@keyframes settle {
+  from { opacity:0; transform:rotate(-2deg) translateY(-24px); }
+  to   { opacity:1; transform:rotate(-0.5deg) translateY(0); }
+}
+
+/* 왼쪽 세로줄 (편지지) */
+.hero-card::before {
+  content:'';
+  position:absolute;
+  left:52px; top:0; bottom:0;
+  width:1px;
+  background: rgba(160,112,16,0.25);
+}
+
+/* 빨간 봉인 */
+.seal {
+  position:absolute;
+  top:-18px; right:40px;
+  width:36px; height:36px;
+  border-radius:50%;
+  background:var(--red-seal);
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 2px 8px rgba(0,0,0,0.4);
+}
+.seal-text { font-size:11px; color:#f0e0d0; font-family:'Cormorant Garamond',serif; font-weight:600; letter-spacing:1px; }
+
+.hero-date {
+  font-size:10px; letter-spacing:4px; text-transform:uppercase;
+  color:var(--gold); margin-bottom:28px; font-weight:400;
+}
+
+.hero-title {
+  font-family:'Cormorant Garamond',serif;
+  font-size:46px; font-weight:700;
+  color:var(--ink-dark); line-height:1.15;
+  margin-bottom:12px;
+}
+
+.hero-subtitle {
+  font-size:13px; letter-spacing:3px;
+  color:var(--ink-mid); margin-bottom:32px; font-weight:300;
+}
+
+.hero-body {
+  font-size:16px; line-height:2.3;
+  color:var(--ink-dark); font-weight:300;
+  word-break:keep-all;
+}
+
+.hero-body b { font-weight:600; color:var(--ink-dark); }
+
+.hero-rule {
+  width:100%; height:1px;
+  background:rgba(160,112,16,0.2);
+  margin:28px 0;
+}
+
+/* 스크롤 힌트 */
+.scroll-cue {
+  position:absolute; bottom:32px; left:50%;
+  transform:translateX(-50%);
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+  animation:cue 2.5s ease-in-out infinite;
+}
+.scroll-cue-line { width:1px; height:36px; background:linear-gradient(180deg,var(--gold-night),transparent); }
+@keyframes cue { 0%,100%{opacity:.4;transform:translateX(-50%) translateY(0)} 50%{opacity:.9;transform:translateX(-50%) translateY(8px)} }
+
+/* ══════════════════════════════
+   구분 띠
+══════════════════════════════ */
+.band {
+  background:var(--paper3);
+  padding:14px 0;
+  text-align:center;
+  border-top:2px solid rgba(160,112,16,0.3);
+  border-bottom:2px solid rgba(160,112,16,0.3);
+}
+.band-text {
+  font-size:10px; letter-spacing:5px;
+  text-transform:uppercase; color:var(--gold);
+  font-weight:400; font-family:'Cormorant Garamond',serif;
+}
+
+/* ══════════════════════════════
+   교육 섹션 — 격자 카드
+══════════════════════════════ */
+.edu-section {
+  background:var(--paper2);
+  padding:80px 0;
+}
+
+.edu-inner {
+  max-width:760px; margin:0 auto; padding:0 48px;
+}
+
+.sec-label {
+  font-size:10px; letter-spacing:5px; text-transform:uppercase;
+  color:var(--gold); margin-bottom:16px; font-weight:400;
+  display:flex; align-items:center; gap:12px;
+}
+.sec-label::after { content:''; flex:1; height:1px; background:rgba(160,112,16,0.2); }
+
+.sec-heading {
+  font-family:'Cormorant Garamond',serif;
+  font-size:38px; font-weight:700;
+  color:var(--ink-dark); line-height:1.2; margin-bottom:28px;
+}
+
+.body-text {
+  font-size:16px; line-height:2.3;
+  color:var(--ink-dark); font-weight:300;
+  word-break:keep-all; margin-bottom:20px;
+}
+.body-text b { font-weight:600; }
+
+/* 3개 교육 카드 */
+.edu-cards {
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:2px; margin:32px 0;
+}
+
+.edu-card {
+  background:var(--paper3);
+  padding:32px 24px;
+  text-align:center;
+}
+
+.edu-card-num {
+  font-family:'Cormorant Garamond',serif;
+  font-size:40px; font-weight:700;
+  color:rgba(160,112,16,0.35);
+  line-height:1; margin-bottom:12px;
+}
+
+.edu-card-title {
+  font-size:15px; font-weight:600;
+  color:var(--ink-dark); margin-bottom:8px; line-height:1.5;
+}
+
+.edu-card-desc {
+  font-size:13px; line-height:1.9;
+  color:var(--ink-mid); font-weight:300;
+}
+
+/* 매일 1시간 강조 박스 */
+.daily-box {
+  background:var(--paper3);
+  border-left:4px solid var(--gold);
+  padding:28px 28px 28px 32px;
+  margin:28px 0;
+}
+
+.daily-big {
+  font-family:'Cormorant Garamond',serif;
+  font-size:52px; font-weight:700;
+  color:var(--gold); line-height:1; margin-bottom:8px;
+}
+
+.daily-desc {
+  font-size:16px; line-height:2;
+  color:var(--ink-dark); font-weight:300;
+}
+
+/* ══════════════════════════════
+   편지 교환 섹션 (어두운)
+══════════════════════════════ */
+.letters-section {
+  background:var(--midnight);
+  padding:80px 0;
+}
+
+.letters-inner {
+  max-width:760px; margin:0 auto; padding:0 48px;
+}
+
+.night-label {
+  font-size:10px; letter-spacing:5px; text-transform:uppercase;
+  color:var(--gold-night); margin-bottom:16px; font-weight:400;
+  display:flex; align-items:center; gap:12px;
+}
+.night-label::after { content:''; flex:1; height:1px; background:rgba(212,160,48,0.2); }
+
+.night-heading {
+  font-family:'Cormorant Garamond',serif;
+  font-size:38px; font-weight:700;
+  color:var(--ink-light); line-height:1.2; margin-bottom:28px;
+}
+
+.night-body {
+  font-size:16px; line-height:2.3;
+  color:var(--ink-light); font-weight:300;
+  word-break:keep-all; margin-bottom:20px;
+}
+.night-body b { font-weight:600; color:#fff; }
+
+/* 편지 카드 */
+.letter-card {
+  border:1px solid;
+  padding:36px 36px 32px;
+  margin:28px 0;
+  position:relative;
+}
+
+.letter-card.from-son {
+  background:var(--midnight2);
+  border-color:rgba(255,255,255,0.1);
+}
+
+.letter-card.from-mother {
+  background:#141a24;
+  border-color:rgba(212,160,48,0.3);
+}
+
+.letter-from {
+  font-size:10px; letter-spacing:3px; text-transform:uppercase;
+  font-weight:400; margin-bottom:16px;
+}
+.from-son    .letter-from { color:rgba(200,220,255,0.7); }
+.from-mother .letter-from { color:var(--gold-night); }
+
+.letter-text {
+  font-size:17px; line-height:2.2;
+  font-weight:300; word-break:keep-all;
+}
+.from-son    .letter-text { color:var(--ink-light); }
+.from-mother .letter-text { color:var(--ink-light); }
+
+.letter-text b { font-weight:600; color:#fff; }
+
+/* 화살표 연결 */
+.letter-arrow {
+  text-align:center; padding:8px 0;
+  color:rgba(212,160,48,0.6); font-size:20px;
+}
+
+/* ══════════════════════════════
+   고백 + 독수리 섹션 (밝은)
+══════════════════════════════ */
+.confession-section {
+  background:var(--paper);
+  padding:80px 0;
+}
+
+.confession-inner {
+  max-width:760px; margin:0 auto; padding:0 48px;
+}
+
+.confession-quote {
+  text-align:center;
+  padding:44px 40px;
+  border:1px solid rgba(160,112,16,0.3);
+  margin:28px 0;
+  background:var(--paper2);
+  position:relative;
+}
+.confession-quote::before,
+.confession-quote::after {
+  content:'';
+  position:absolute; left:50%; transform:translateX(-50%);
+  width:48px; height:1px; background:var(--gold);
+}
+.confession-quote::before { top:0; }
+.confession-quote::after  { bottom:0; }
+
+.conf-who {
+  font-size:10px; letter-spacing:4px; text-transform:uppercase;
+  color:var(--gold); margin-bottom:16px; font-weight:400;
+}
+
+.conf-text {
+  font-family:'Cormorant Garamond',serif;
+  font-size:24px; font-weight:600;
+  color:var(--ink-dark); line-height:1.8;
+}
+
+/* ══════════════════════════════
+   신명기 32 — 독수리 시각
+══════════════════════════════ */
+.eagle-section {
+  background:var(--midnight);
+  padding:80px 0;
+}
+
+.eagle-inner {
+  max-width:760px; margin:0 auto; padding:0 48px;
+}
+
+/* 신명기 박스 */
+.deut-box {
+  border:1px solid var(--gold-night);
+  padding:48px 44px;
+  margin:32px 0;
+  text-align:center;
+  position:relative;
+}
+
+.deut-ref {
+  font-size:10px; letter-spacing:5px; text-transform:uppercase;
+  color:var(--gold-night); margin-bottom:24px; font-weight:400;
+  font-family:'Cormorant Garamond',serif;
+}
+
+.deut-text {
+  font-size:17px; line-height:2.4;
+  color:var(--ink-light); font-weight:300;
+  word-break:keep-all; text-align:left;
+}
+
+.deut-text b { font-weight:600; color:#fff; }
+
+/* 독수리 3단계 시각화 */
+.eagle-steps {
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:2px; margin:32px 0;
+}
+
+.eagle-step {
+  background:var(--midnight2);
+  padding:32px 24px; text-align:center;
+}
+
+.step-icon { margin:0 auto 16px; display:block; }
+
+.step-ko {
+  font-size:14px; line-height:2;
+  color:var(--ink-light); font-weight:300;
+}
+.step-ko b { font-weight:600; color:#fff; }
+
+/* ══════════════════════════════
+   클로징 메시지
+══════════════════════════════ */
+.closing-section {
+  background:var(--paper2);
+  padding:80px 0;
+}
+
+.closing-inner {
+  max-width:720px; margin:0 auto; padding:0 48px;
+}
+
+/* 부모가 줄 수 있는 것 */
+.gift-compare {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:2px; margin:32px 0;
+}
+
+.gift-no {
+  background:var(--paper3);
+  padding:36px 28px; text-align:center;
+}
+
+.gift-yes {
+  background:var(--ink-dark);
+  padding:36px 28px; text-align:center;
+}
+
+.gift-label {
+  font-size:10px; letter-spacing:4px; text-transform:uppercase;
+  font-weight:400; margin-bottom:14px;
+}
+.gift-no  .gift-label { color:var(--gold); }
+.gift-yes .gift-label { color:var(--gold-night); }
+
+.gift-word {
+  font-family:'Cormorant Garamond',serif;
+  font-size:32px; font-weight:700; margin-bottom:12px; line-height:1.2;
+}
+.gift-no  .gift-word { color:rgba(60,48,32,0.4); text-decoration:line-through; text-decoration-color:#c04020; }
+.gift-yes .gift-word { color:var(--ink-light); }
+
+.gift-desc {
+  font-size:14px; line-height:2;
+  font-weight:300;
+}
+.gift-no  .gift-desc { color:var(--ink-mid); }
+.gift-yes .gift-desc { color:var(--ink-light2); }
+
+/* 마지막 문장 */
+.final-verse {
+  text-align:center;
+  padding:48px 32px;
+  margin-top:48px;
+  border-top:2px solid rgba(160,112,16,0.2);
+}
+
+.final-text {
+  font-size:17px; line-height:2.4;
+  color:var(--ink-dark); font-weight:300;
+  word-break:keep-all; max-width:520px; margin:0 auto 28px;
+}
+.final-text b { font-weight:600; }
+
+.final-vline {
+  width:1px; height:48px;
+  background:linear-gradient(180deg, var(--gold), transparent);
+  margin:0 auto;
+}
+
+/* ══════════════════════════════
+   페이드인
+══════════════════════════════ */
+.fi {
+  opacity:0; transform:translateY(20px);
+  transition:opacity .85s ease, transform .85s ease;
+}
+.fi.in { opacity:1; transform:translateY(0); }
+
+/* ══════════════════════════════
+   반응형
+══════════════════════════════ */
+@media (max-width:660px) {
+  .hero-card { padding:48px 28px; }
+  .hero-card::before { left:28px; }
+  .edu-inner,.letters-inner,.eagle-inner,.confession-inner,.closing-inner { padding:0 24px; }
+  .edu-cards,.eagle-steps,.gift-compare { grid-template-columns:1fr; }
+  .hero-title { font-size:34px; }
+  .sec-heading,.night-heading { font-size:30px; }
+  .gift-yes .gift-word, .gift-no .gift-word { font-size:26px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════ HERO ════ -->
+<div class="hero">
+  <svg class="stars" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="8%"  cy="12%" r="1"   fill="rgba(255,255,255,0.5)"/>
+    <circle cx="23%" cy="7%"  r="1.5" fill="rgba(255,255,255,0.4)"/>
+    <circle cx="45%" cy="4%"  r="1"   fill="rgba(255,255,255,0.6)"/>
+    <circle cx="67%" cy="9%"  r="1"   fill="rgba(255,255,255,0.35)"/>
+    <circle cx="82%" cy="5%"  r="1.5" fill="rgba(255,255,255,0.45)"/>
+    <circle cx="91%" cy="15%" r="1"   fill="rgba(255,255,255,0.5)"/>
+    <circle cx="15%" cy="28%" r="1"   fill="rgba(255,255,255,0.3)"/>
+    <circle cx="78%" cy="22%" r="1"   fill="rgba(255,255,255,0.4)"/>
+    <circle cx="55%" cy="18%" r="1.5" fill="rgba(255,255,255,0.35)"/>
+  </svg>
+
+  <div class="hero-card">
+    <div class="seal"><span class="seal-text">SW</span></div>
+    <div class="hero-date">18th Century · England · Susanna Wesley</div>
+    <div class="hero-title">아들을 하나님께<br>맡긴 어머니</div>
+    <div class="hero-subtitle">존 웨슬리의 어머니 이야기</div>
+    <div class="hero-rule"></div>
+    <p class="hero-body">
+      18세기 영국에 수잔나 웨슬리(Susanna Wesley)라는 어머니가 있었습니다.
+      그녀는 무려 <b>19명의 자녀</b>를 낳아 길렀습니다.<br><br>
+      그중 두 아들은 훗날 세계 교회 역사에 큰 영향을 끼친 인물이 됩니다.
+      바로 <b>존 웨슬리</b>(감리교 운동의 지도자)와
+      <b>찰스 웨슬리</b>(6,000곡이 넘는 찬송가를 남긴 찬송 시인)입니다.
+    </p>
+  </div>
+
+  <div class="scroll-cue"><div class="scroll-cue-line"></div></div>
+</div>
+
+<div class="band"><div class="band-text">수잔나 웨슬리의 교육</div></div>
+
+<!-- ════ 교육 섹션 ════ -->
+<div class="edu-section">
+  <div class="edu-inner">
+
+    <div class="sec-label fi">어머니의 사명</div>
+    <div class="sec-heading fi">자녀 교육은<br>하나님이 맡기신 사명</div>
+
+    <p class="body-text fi">
+      수잔나 웨슬리는 부유한 사람이 아니었습니다.
+      가정 형편도 넉넉하지 않았고, 많은 자녀를 돌보며 살아야 했습니다.
+      그럼에도 그녀는 자녀 교육을 하나님이 맡기신 사명으로 여겼습니다.
+    </p>
+
+    <div class="edu-cards fi">
+      <div class="edu-card">
+        <div class="edu-card-num">一</div>
+        <div class="edu-card-title">하나님을 경외하는 마음</div>
+        <div class="edu-card-desc">모든 것의 시작은 하나님을 아는 것</div>
+      </div>
+      <div class="edu-card">
+        <div class="edu-card-num">二</div>
+        <div class="edu-card-title">스스로 절제하는 삶</div>
+        <div class="edu-card-desc">자기 자신을 다스릴 줄 아는 사람</div>
+      </div>
+      <div class="edu-card">
+        <div class="edu-card-num">三</div>
+        <div class="edu-card-title">자신의 행동에 책임지는 태도</div>
+        <div class="edu-card-desc">말과 행동에 무게를 두는 사람</div>
+      </div>
+    </div>
+
+    <div class="daily-box fi">
+      <div class="daily-big">매일 1시간</div>
+      <div class="daily-desc">
+        자녀들을 <b>한 명씩 따로 불러</b> 대화를 나누고 함께 기도하는 시간.<br>
+        아이들이 잘못하면 분명하게 바로잡았지만,<br>
+        언제나 사랑과 기도 속에서 자녀들을 양육했습니다.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="band"><div class="band-text">편지 — 출발의 날</div></div>
+
+<!-- ════ 편지 교환 ════ -->
+<div class="letters-section">
+  <div class="letters-inner">
+
+    <div class="night-label fi">두 사람의 편지</div>
+    <div class="night-heading fi">긴 여행을 떠나기 전</div>
+
+    <p class="night-body fi">
+      세월이 흐르면서 아이들은 점점 자라 각자의 길을 향해 떠나게 되었습니다.
+      어느 날, 존 웨슬리는 긴 전도 여행을 떠나기 전 어머니에게 편지를 보냈습니다.
+    </p>
+
+    <div class="letter-card from-son fi">
+      <div class="letter-from">존 웨슬리가 어머니에게</div>
+      <div class="letter-text">
+        "어머니, 저는 이제 세상을 향해 나아갑니다.<br>
+        하지만 제가 이 길을 잘 걸어갈 수 있을지 <b>두렵습니다.</b>"
+      </div>
+    </div>
+
+    <div class="letter-arrow">↓</div>
+
+    <div class="letter-card from-mother fi">
+      <div class="letter-from">수잔나 웨슬리의 답장</div>
+      <div class="letter-text">
+        "내 아들아,<br>
+        나는 너를 위해 할 일을 <b>이미 다 했다.</b><br>
+        이제 너는 <b>하나님께 맡겨진 사람이다.</b><br>
+        나는 너를 기도로 하나님께 맡긴다.<br>
+        <b>하나님께서 너의 삶을 인도하실 것이다.</b>"
+      </div>
+    </div>
+
+    <p class="night-body fi" style="margin-top:32px;">
+      그 후 존 웨슬리는 평생 영국과 미국을 다니며 복음을 전했고,
+      수많은 사람들을 하나님께로 인도했습니다.
+    </p>
+
+  </div>
+</div>
+
+<div class="band"><div class="band-text">존 웨슬리의 고백</div></div>
+
+<!-- ════ 고백 ════ -->
+<div class="confession-section">
+  <div class="confession-inner">
+
+    <div class="sec-label fi">훗날의 고백</div>
+    <div class="sec-heading fi">신앙의 기초는<br>어디에서 왔는가</div>
+
+    <div class="confession-quote fi">
+      <div class="conf-who">존 웨슬리 · John Wesley</div>
+      <div class="conf-text">
+        "내가 가진 신앙의 기초는<br>
+        어머니의 무릎 위에서 배운 것이다."
+      </div>
+    </div>
+
+    <p class="body-text fi">
+      부모는 자녀를 영원히 품에 안고 살아갈 수는 없습니다.
+      어느 날이 되면 자녀는 자신의 인생을 향해 세상 속으로 나아가야 합니다.
+      그때 부모가 할 수 있는 가장 중요한 일이 있습니다.
+    </p>
+
+    <div class="edu-cards fi" style="margin-top:0;">
+      <div class="edu-card">
+        <div class="edu-card-num" style="font-size:28px;">①</div>
+        <div class="edu-card-title">하나님 말씀으로 자녀를 양육한다</div>
+      </div>
+      <div class="edu-card">
+        <div class="edu-card-num" style="font-size:28px;">②</div>
+        <div class="edu-card-title">사랑으로 그 삶을 세워 준다</div>
+      </div>
+      <div class="edu-card">
+        <div class="edu-card-num" style="font-size:28px;">③</div>
+        <div class="edu-card-title">때가 되면 하나님께 맡긴다</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="band"><div class="band-text">신명기 32장 9–12절</div></div>
+
+<!-- ════ 독수리 — 신명기 ════ -->
+<div class="eagle-section">
+  <div class="eagle-inner">
+
+    <div class="night-label fi">말씀</div>
+    <div class="night-heading fi">독수리처럼 인도하시는 하나님</div>
+
+    <div class="deut-box fi">
+      <div class="deut-ref">신명기 32장 9–12절</div>
+      <p class="deut-text">
+        여호와의 몫은 그분의 백성이니<br>
+        그분의 유업으로 정하신 몫은 야곱이라.<br><br>
+        여호와는 그를 광야의 땅에서,<br>
+        우짖는 소리만 들리는 황폐해진 사막에서 발견하시어<br>
+        <b>감싸시고 주의 깊게 돌보시며</b><br>
+        <b>자신의 눈동자처럼 지켜 주셨다네.</b><br><br>
+        마치 독수리가 자기 둥지를 뒤흔들고는<br>
+        자기 새끼들 위를 맴돌다가<br>
+        <b>날개를 펼쳐 새끼들을 받아 그 날개 위에 태우듯,</b><br><br>
+        여호와께서 홀로 그를 인도하셨으며<br>
+        그분과 함께한 다른 신은 없었다네.
+      </p>
+    </div>
+
+    <!-- 독수리 3단계 -->
+    <div class="eagle-steps fi">
+      <div class="eagle-step">
+        <svg class="step-icon" width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+          <!-- 둥지 -->
+          <ellipse cx="24" cy="36" rx="18" ry="7" fill="none" stroke="#8a7040" stroke-width="1.5"/>
+          <path d="M8 36 C10 28 14 24 24 22 C34 24 38 28 40 36" fill="none" stroke="#8a7040" stroke-width="1.2" stroke-dasharray="3,2"/>
+          <!-- 흔드는 모습 -->
+          <line x1="18" y1="28" x2="14" y2="20" stroke="#a08040" stroke-width="1.2"/>
+          <line x1="30" y1="28" x2="34" y2="20" stroke="#a08040" stroke-width="1.2"/>
+        </svg>
+        <div class="step-ko"><b>둥지를 흔든다</b><br>안락함에서<br>나오게 하신다</div>
+      </div>
+      <div class="eagle-step">
+        <svg class="step-icon" width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+          <!-- 맴돌기 -->
+          <path d="M24 8 C36 10 44 20 40 32 C36 40 14 42 10 32 C6 22 14 10 24 8"
+            fill="none" stroke="#a08040" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <polygon points="24,4 20,12 28,12" fill="#a08040"/>
+        </svg>
+        <div class="step-ko"><b>위를 맴돈다</b><br>포기하지 않고<br>지켜보신다</div>
+      </div>
+      <div class="eagle-step">
+        <svg class="step-icon" width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+          <!-- 날개 위에 태움 -->
+          <path d="M4 28 C12 20 20 18 24 18 C28 18 36 20 44 28" fill="none" stroke="#a08040" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="24" cy="22" r="5" fill="none" stroke="#c8a040" stroke-width="1.5"/>
+          <line x1="24" y1="17" x2="24" y2="14" stroke="#c8a040" stroke-width="1.2"/>
+        </svg>
+        <div class="step-ko"><b>날개 위에 태운다</b><br>친히 받아<br>인도하신다</div>
+      </div>
+    </div>
+
+    <p class="night-body fi">
+      자녀의 인생을 끝까지 책임지시는 분은 부모가 아니라 <b>하나님이십니다.</b>
+    </p>
+
+  </div>
+</div>
+
+<div class="band"><div class="band-text">부모가 줄 수 있는 가장 큰 선물</div></div>
+
+<!-- ════ 클로징 ════ -->
+<div class="closing-section">
+  <div class="closing-inner">
+
+    <div class="sec-label fi">우리의 선택</div>
+    <div class="sec-heading fi">가장 큰 선물은<br>무엇인가</div>
+
+    <div class="gift-compare fi">
+      <div class="gift-no">
+        <div class="gift-label">세상이 말하는 선물</div>
+        <div class="gift-word">재산과<br>성공</div>
+        <div class="gift-desc">많은 재산<br>좋은 직장<br>사회적 성공</div>
+      </div>
+      <div class="gift-yes">
+        <div class="gift-label">성경이 말하는 선물</div>
+        <div class="gift-word">하나님을<br>의지하는 믿음</div>
+        <div class="gift-desc" style="color:var(--ink-light2);">
+          어디에 있든지<br>어떤 길을 가든지<br>하나님의 인도하심 속에서
+        </div>
+      </div>
+    </div>
+
+    <div class="final-verse fi">
+      <p class="final-text">
+        그 믿음을 가진 사람은<br>
+        어디에 있든지, 어떤 길을 가든지<br>
+        <b>하나님의 인도하심 속에서</b><br>
+        자기 인생의 길을 걸어가게 될 것입니다.
+      </p>
+      <div class="final-vline"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.fi').forEach(el => io.observe(el));
+</script>
+</body>
+</html>

@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>파스칼의 불의 밤과 기념문서</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700;900&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --void: #06050f;
+            --night: #0d0b1a;
+            --deep: #12102a;
+            --shadow: #1a1735;
+            --candle: #f5c842;
+            --flame: #f97316;
+            --ember: #ef4444;
+            --gold: #d4a853;
+            --gold-pale: #f0d898;
+            --light: #fef9e7;
+            --parchment: #f5edd8;
+            --parchment-dark: #e8d9b8;
+            --ink: #1e1b30;
+            --ink-soft: #2e2b45;
+            --mist: rgba(245,200,66,0.06);
+            --divine: #b8ceff;
+            --divine-bright: #dce8ff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--void);
+            color: var(--light);
+            font-family: 'Noto Serif KR', serif;
+            overflow-x: hidden;
+        }
+
+        /* ══════════════════════════
+           ACT I — 어두운 밤, 고뇌
+        ══════════════════════════ */
+        .act-night {
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: radial-gradient(ellipse 80% 60% at 50% 40%,
+                #1a1530 0%, #0d0b1a 50%, #06050f 100%);
+            padding: 80px 24px 100px;
+        }
+
+        /* 별빛 */
+        .stars {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .star {
+            position: absolute;
+            border-radius: 50%;
+            background: #fff;
+            animation: star-twinkle ease-in-out infinite;
+        }
+        @keyframes star-twinkle {
+            0%, 100% { opacity: 0.1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.4); }
+        }
+
+        /* 창문 빛 */
+        .window-light {
+            position: absolute;
+            top: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 80px;
+            background: linear-gradient(180deg, rgba(180,200,255,0.12), transparent);
+            z-index: 2;
+        }
+
+        .act-night-inner {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            max-width: 720px;
+        }
+
+        .act-label {
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 10px;
+            letter-spacing: 5px;
+            color: rgba(255,255,255,0.25);
+            text-transform: uppercase;
+            margin-bottom: 32px;
+            opacity: 0;
+            animation: rise 1s 0.3s forwards;
+        }
+
+        .act-date {
+            font-size: 13px;
+            letter-spacing: 3px;
+            color: var(--gold);
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: rise 1s 0.6s forwards;
+        }
+
+        .act-title {
+            font-size: clamp(32px, 6vw, 62px);
+            font-weight: 900;
+            line-height: 1.15;
+            color: #fff;
+            margin-bottom: 16px;
+            opacity: 0;
+            animation: rise 1.2s 0.9s forwards;
+            text-shadow: 0 0 80px rgba(245,200,66,0.15);
+        }
+        .act-title span {
+            color: var(--candle);
+            display: block;
+        }
+
+        .act-subtitle {
+            font-size: 14px;
+            color: rgba(255,255,255,0.35);
+            letter-spacing: 2px;
+            margin-bottom: 60px;
+            opacity: 0;
+            animation: rise 1s 1.2s forwards;
+        }
+
+        /* 양초 SVG */
+        .candle-wrap {
+            margin: 0 auto 40px;
+            opacity: 0;
+            animation: rise 1.5s 1.4s forwards;
+        }
+        .candle-svg { width: 48px; height: 100px; }
+        .flame-anim {
+            transform-origin: 50% 100%;
+            animation: flame-flicker 2.5s ease-in-out infinite;
+        }
+        @keyframes flame-flicker {
+            0%, 100% { transform: scaleX(1) scaleY(1) rotate(-1deg); opacity: 1; }
+            25% { transform: scaleX(0.85) scaleY(1.12) rotate(2deg); opacity: 0.9; }
+            50% { transform: scaleX(1.1) scaleY(0.92) rotate(-2deg); opacity: 1; }
+            75% { transform: scaleX(0.9) scaleY(1.08) rotate(1deg); opacity: 0.85; }
+        }
+
+        .act-night-body {
+            font-size: 15px;
+            line-height: 2.1;
+            color: rgba(255,255,255,0.6);
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0;
+            animation: rise 1.2s 1.8s forwards;
+        }
+        .act-night-body strong {
+            color: var(--gold-pale);
+            font-weight: 600;
+        }
+        .act-night-body .highlight-text {
+            font-weight: 600;
+            color: var(--divine-bright);
+            background: rgba(184,206,255,0.1);
+            padding: 1px 5px;
+            border-radius: 3px;
+        }
+
+        @keyframes rise {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ══════════════════════════
+           ACT II — 불의 임재
+        ══════════════════════════ */
+        .act-fire {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 100px 24px;
+            background: radial-gradient(ellipse 70% 70% at 50% 50%,
+                #2d1500 0%, #1a0a00 40%, #0d0500 70%, #06050f 100%);
+        }
+
+        /* 중앙 빛 폭발 */
+        .fire-core {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            pointer-events: none;
+        }
+        .fire-ring {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            animation: ring-pulse ease-out infinite;
+        }
+        .fire-ring:nth-child(1) {
+            width: 120px; height: 120px;
+            background: radial-gradient(circle, rgba(249,115,22,0.5) 0%, transparent 70%);
+            animation-duration: 2s; animation-delay: 0s;
+        }
+        .fire-ring:nth-child(2) {
+            width: 280px; height: 280px;
+            background: radial-gradient(circle, rgba(245,200,66,0.18) 0%, transparent 70%);
+            animation-duration: 2s; animation-delay: 0.4s;
+        }
+        .fire-ring:nth-child(3) {
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(245,200,66,0.07) 0%, transparent 70%);
+            animation-duration: 2s; animation-delay: 0.8s;
+        }
+        .fire-ring:nth-child(4) {
+            width: 800px; height: 800px;
+            background: radial-gradient(circle, rgba(245,200,66,0.03) 0%, transparent 70%);
+            animation-duration: 2s; animation-delay: 1.2s;
+        }
+        @keyframes ring-pulse {
+            0% { opacity: 0; transform: translate(-50%,-50%) scale(0.6); }
+            40% { opacity: 1; }
+            100% { opacity: 0; transform: translate(-50%,-50%) scale(1.3); }
+        }
+
+        .act-fire-inner {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            max-width: 680px;
+        }
+
+        .fire-eyebrow {
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 10px;
+            letter-spacing: 5px;
+            color: var(--flame);
+            text-transform: uppercase;
+            margin-bottom: 32px;
+        }
+
+        .fire-headline {
+            font-size: clamp(28px, 5.5vw, 56px);
+            font-weight: 900;
+            line-height: 1.2;
+            color: #fff;
+            margin-bottom: 48px;
+            text-shadow: 0 0 60px rgba(249,115,22,0.5), 0 0 120px rgba(245,200,66,0.2);
+        }
+        .fire-headline em {
+            color: var(--candle);
+            font-style: normal;
+        }
+
+        /* 기념문서 인용 카드들 */
+        .scripture-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin: 48px 0;
+        }
+        .scripture-card {
+            background: rgba(245,200,66,0.06);
+            border: 1px solid rgba(245,200,66,0.2);
+            border-radius: 8px;
+            padding: 22px 28px;
+            font-size: clamp(16px, 2.5vw, 22px);
+            font-weight: 700;
+            color: var(--candle);
+            letter-spacing: 1.5px;
+            line-height: 1.6;
+            position: relative;
+            overflow: hidden;
+            animation: card-glow 4s ease-in-out infinite;
+        }
+        .scripture-card:nth-child(2) { animation-delay: 0.7s; }
+        .scripture-card:nth-child(3) {
+            font-size: clamp(20px, 3.5vw, 32px);
+            color: #fff;
+            background: rgba(249,115,22,0.1);
+            border-color: rgba(249,115,22,0.4);
+            text-shadow: 0 0 30px rgba(249,115,22,0.5);
+            animation-delay: 1.4s;
+        }
+        .scripture-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.02), transparent);
+            pointer-events: none;
+        }
+        @keyframes card-glow {
+            0%, 100% { box-shadow: 0 0 0 rgba(245,200,66,0); }
+            50% { box-shadow: 0 0 24px rgba(245,200,66,0.12); }
+        }
+
+        .act-fire-body {
+            font-size: 15px;
+            line-height: 2.1;
+            color: rgba(255,255,255,0.65);
+            text-align: left;
+        }
+        .act-fire-body p { margin-bottom: 20px; }
+        .act-fire-body strong { color: var(--gold-pale); font-weight: 600; }
+        .act-fire-body .highlight-text {
+            font-weight: 600;
+            color: var(--divine-bright);
+            background: rgba(184,206,255,0.1);
+            padding: 1px 5px;
+            border-radius: 3px;
+        }
+
+        /* ══════════════════════════
+           중간 전환 — 분기선
+        ══════════════════════════ */
+        .transition-divider {
+            position: relative;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, #1a0a00 0%, #06050f 100%);
+            overflow: hidden;
+        }
+        .transition-divider::before {
+            content: '';
+            position: absolute;
+            left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(212,168,83,0.4), transparent);
+        }
+        .divider-cross {
+            width: 28px; height: 28px;
+            position: relative;
+            z-index: 2;
+        }
+        .divider-cross::before,
+        .divider-cross::after {
+            content: '';
+            position: absolute;
+            background: var(--gold);
+            border-radius: 2px;
+        }
+        .divider-cross::before { top: 50%; left: 0; right: 0; height: 1px; transform: translateY(-50%); }
+        .divider-cross::after { left: 50%; top: 0; bottom: 0; width: 1px; transform: translateX(-50%); }
+
+        /* ══════════════════════════
+           ACT III — 파스칼 & 바울
+        ══════════════════════════ */
+        .act-comparison {
+            background: var(--deep);
+            padding: 100px 24px;
+        }
+        .act-comparison-inner {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+        .section-eyebrow {
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 10px;
+            letter-spacing: 5px;
+            color: rgba(255,255,255,0.25);
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        .section-h2 {
+            font-size: clamp(22px, 4vw, 36px);
+            font-weight: 800;
+            text-align: center;
+            color: #fff;
+            margin-bottom: 60px;
+            line-height: 1.3;
+        }
+        .section-h2 span { color: var(--gold); }
+
+        .body-text {
+            font-size: 15px;
+            line-height: 2.1;
+            color: rgba(255,255,255,0.65);
+            margin-bottom: 20px;
+        }
+        .body-text:last-child { margin-bottom: 0; }
+        .body-text strong { color: var(--gold-pale); font-weight: 600; }
+        .body-text .highlight-text {
+            font-weight: 600;
+            color: var(--divine-bright);
+            background: rgba(184,206,255,0.1);
+            padding: 1px 5px;
+            border-radius: 3px;
+        }
+
+        /* ══════════════════════════
+           ACT IV — 양피지: 갈대
+        ══════════════════════════ */
+        .act-pascal {
+            position: relative;
+            padding: 100px 24px;
+            overflow: hidden;
+            background: linear-gradient(180deg, var(--deep) 0%, #0f0c22 100%);
+        }
+        .act-pascal-inner {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .pascal-quote-card {
+            background: var(--parchment);
+            color: var(--ink);
+            border-radius: 12px;
+            padding: 44px 44px;
+            margin: 48px 0;
+            position: relative;
+            box-shadow: 0 20px 80px rgba(0,0,0,0.6);
+        }
+        .pascal-quote-card::before {
+            content: '\201C';
+            position: absolute;
+            top: 12px; left: 28px;
+            font-size: 100px;
+            color: var(--parchment-dark);
+            font-family: 'Noto Serif KR', serif;
+            line-height: 1;
+            pointer-events: none;
+        }
+        .pascal-quote-card p {
+            font-size: clamp(16px, 2.5vw, 22px);
+            font-weight: 700;
+            line-height: 1.7;
+            color: var(--ink);
+            position: relative;
+            z-index: 1;
+            margin-bottom: 0;
+        }
+        .pascal-quote-card .bold-text { font-weight: 700; }
+
+        .bullet-list {
+            list-style: none;
+            padding: 0;
+            margin: 28px 0;
+        }
+        .bullet-list li {
+            font-size: 15px;
+            color: rgba(255,255,255,0.7);
+            line-height: 1.9;
+            padding: 12px 0 12px 32px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+        }
+        .bullet-list li::before {
+            content: '◆';
+            position: absolute; left: 0;
+            color: var(--gold);
+            font-size: 9px;
+            top: 18px;
+        }
+        .bullet-list li:last-child { border-bottom: none; }
+        .bullet-list .bold-text { color: var(--gold-pale); font-weight: 600; }
+
+        /* ══════════════════════════
+           ACT V — 어거스틴
+        ══════════════════════════ */
+        .act-augustine {
+            background: linear-gradient(180deg, #0f0c22 0%, var(--night) 100%);
+            padding: 100px 24px;
+        }
+        .act-augustine-inner {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .ol-styled {
+            counter-reset: item;
+            list-style: none;
+            padding: 0;
+            margin: 32px 0;
+        }
+        .ol-styled > li {
+            counter-increment: item;
+            padding: 20px 20px 20px 60px;
+            margin-bottom: 12px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 8px;
+            position: relative;
+            font-size: 14px;
+            color: rgba(255,255,255,0.65);
+            line-height: 1.8;
+        }
+        .ol-styled > li::before {
+            content: counter(item);
+            position: absolute;
+            left: 20px; top: 20px;
+            width: 26px; height: 26px;
+            border-radius: 50%;
+            background: rgba(212,168,83,0.15);
+            border: 1px solid rgba(212,168,83,0.3);
+            color: var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .ol-styled > li .bold-text { color: var(--gold-pale); font-weight: 600; }
+        .ol-styled ul {
+            list-style: none;
+            margin-top: 10px;
+            padding: 0;
+        }
+        .ol-styled ul li {
+            padding: 5px 0 5px 18px;
+            position: relative;
+            font-size: 13px;
+            color: rgba(255,255,255,0.45);
+        }
+        .ol-styled ul li::before {
+            content: '–';
+            position: absolute; left: 0;
+            color: var(--gold);
+        }
+
+        /* ══════════════════════════
+           FOOTER
+        ══════════════════════════ */
+        .act-footer {
+            background: var(--void);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding: 60px 24px;
+            text-align: center;
+        }
+        .footer-text {
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 13px;
+            color: rgba(255,255,255,0.2);
+            letter-spacing: 2px;
+        }
+        .footer-text .icon-text { color: rgba(245,200,66,0.4); margin-right: 6px; }
+
+        /* 공통 구분선 */
+        .inner-rule {
+            width: 40px; height: 1px;
+            background: rgba(212,168,83,0.4);
+            margin: 48px auto;
+        }
+
+        /* reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.9s ease, transform 0.9s ease;
+        }
+        .reveal.on { opacity: 1; transform: none; }
+
+        @media (max-width: 600px) {
+            .act-night, .act-fire, .act-comparison, .act-pascal, .act-augustine { padding: 72px 20px; }
+            .pascal-quote-card { padding: 32px 24px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════
+     ACT I  어두운 밤, 한 남자의 고뇌
+════════════════════════════════════ -->
+<section class="act-night">
+    <!-- 별 -->
+    <div class="stars" id="stars"></div>
+    <div class="window-light"></div>
+
+    <div class="act-night-inner">
+        <div class="act-label">prologue · 1654년 11월 23일</div>
+        <div class="act-date">파리, 늦은 밤 — 한 천재의 골방</div>
+
+        <h1 class="act-title">
+            파스칼의 <span>불의 밤</span>
+        </h1>
+        <p class="act-subtitle">그가 죽는 날까지 심장 가까이 품고 있던 기념문서</p>
+
+        <!-- 양초 -->
+        <div class="candle-wrap">
+            <svg class="candle-svg" viewBox="0 0 48 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- 심지 -->
+                <line x1="24" y1="28" x2="24" y2="36" stroke="#888" stroke-width="1.5"/>
+                <!-- 불꽃 -->
+                <g class="flame-anim">
+                    <ellipse cx="24" cy="22" rx="5" ry="8" fill="#f97316" opacity="0.9"/>
+                    <ellipse cx="24" cy="24" rx="3" ry="5" fill="#fbbf24"/>
+                    <ellipse cx="24" cy="26" rx="1.5" ry="2.5" fill="#fef3c7"/>
+                </g>
+                <!-- 촛농 -->
+                <rect x="18" y="36" width="12" height="52" rx="3" fill="#e8d9b8"/>
+                <rect x="18" y="36" width="12" height="8" rx="1" fill="#d4c5a0"/>
+            </svg>
+        </div>
+
+        <p class="act-night-body">
+            블레즈 파스칼은 수학자이자 물리학자, 철학자였습니다. 젊은 나이에 이미 별과 기계, 확률과 수학 문제를 연구하며 사람들의 한계를 넘어서는 천재였지만, 그의 마음속 깊이에는 채워지지 않을 <strong>갈증</strong>이 있었습니다.
+        </p>
+        <p class="act-night-body" style="margin-top:16px;">
+            "내가 아는 지식만으로, 내 생각만으로 만족할 수 있을까?"라는 질문이 끊임없이 떠올랐습니다. 그러던 <strong>1654년 11월 23일 밤</strong>, 파스칼은 <span class="highlight-text">자신의 방에서 홀로 기도하며</span> 하나님 앞에 마음을 모았습니다.
+        </p>
+    </div>
+</section>
+
+<!-- ════════════════════════════════════
+     ACT II  불 — 하나님의 임재
+════════════════════════════════════ -->
+<section class="act-fire">
+    <div class="fire-core">
+        <div class="fire-ring"></div>
+        <div class="fire-ring"></div>
+        <div class="fire-ring"></div>
+        <div class="fire-ring"></div>
+    </div>
+
+    <div class="act-fire-inner reveal">
+        <div class="fire-eyebrow">the memorial · 기념문서</div>
+        <h2 class="fire-headline">
+            그때 그는 이전까지<br>한 번도 경험하지 못했던<br><em>강렬한 하나님의 임재</em>를 느낍니다
+        </h2>
+
+        <p class="act-fire-body" style="text-align:center; margin-bottom:0;">
+            말 그대로 뜨겁고 밝으며, 모든 것을 흔드는 순간이었습니다.<br>그는 떨리는 손으로 작은 종이를 꺼내, 지금 느끼는 것들을 단숨에 적기 시작했습니다.
+        </p>
+
+        <!-- 기념문서 인용 -->
+        <div class="scripture-cards">
+            <div class="scripture-card">"아브라함의 하나님, 이삭의 하나님, 야곱의 하나님."</div>
+            <div class="scripture-card">"철학자와 학자의 하나님이 아니라!"</div>
+            <div class="scripture-card">"기쁨! 기쁨! 기쁨! 눈물! 눈물! 눈물!"</div>
+        </div>
+
+        <div class="act-fire-body">
+            <p>짧은 단어들의 연속이지만, 그 안에는 한 가지 분명한 사실이 담겨 있습니다. 그는 이제 하나님을 지식으로 아는 것이 아니라, <strong><span class="highlight-text">인격적으로 만났다</span></strong>는 것입니다.</p>
+            <p>그리고 이 만남은 그의 삶 전체를 흔들었습니다. 이전까지의 생각과 계획, 연구와 계산만으로는 느낄 수 없었던 <strong>평안과 기쁨</strong>이 그의 마음속에 자리 잡았습니다.</p>
+            <p>그 기록은 그가 죽은 후, 옷 안쪽에 꿰매져 있던 것이 발견되어 <strong><span class="highlight-text">기념문서(Mémorial)</span></strong>라는 이름으로 알려지게 됩니다. 그가 적은 말들은 절규 같고, 찬양 같고, 눈물 같았습니다.</p>
+        </div>
+    </div>
+</section>
+
+<div class="transition-divider">
+    <div class="divider-cross"></div>
+</div>
+
+<!-- ════════════════════════════════════
+     ACT III  파스칼과 바울 — 두 인격적 만남
+════════════════════════════════════ -->
+<section class="act-comparison">
+    <div class="act-comparison-inner reveal">
+        <div class="section-eyebrow">parallel · 두 만남의 이야기</div>
+        <h2 class="section-h2">사도 바울의 다메섹과<br><span>파스칼의 불의 밤</span></h2>
+
+        <p class="body-text">흥미로운 점은, 이 체험이 <strong>사도 바울의 다메섹 도상 회심</strong>과 매우 닮아 있다는 것입니다. 바울도 이미 유대 율법에 능통하고 하나님을 열심히 섬기는 사람이었지만, 예수님을 직접 만나는 순간, 그는 완전히 새로운 사람이 됩니다.</p>
+        <p class="body-text">빛 가운데서 예수님을 만난 바울처럼, 파스칼도 <strong>불의 빛 속에서 하나님을 만났습니다</strong>. 두 사람 모두 지식과 열심으로는 채울 수 없는 공허를, 하나님의 임재로 채운 것입니다.</p>
+        <p class="body-text">이후 파스칼은 삶의 중심을 바꾸었습니다. <strong>성경</strong>과 어거스틴의 <strong>『참회록』</strong>을 가까이하며, 자신의 사유와 신앙을 정리했습니다. 바울 역시 회심 후, 이전과는 전혀 다른 삶을 살았습니다. 적대자에서 복음의 사도로, 세상과 자신의 목적을 완전히 바꾸었습니다.</p>
+        <p class="body-text">이 이야기에서 중요한 것은 무엇일까요? 우리는 파스칼과 바울처럼 지식이 많거나 열심이 많다고 해서 하나님을 '만난 것'이 아닙니다. 진정한 변화는 <strong>인격적 만남</strong>에서 시작되며, 그 만남은 삶 전체를 흔들고, 사고방식과 행동까지 바꿔 놓습니다.</p>
+    </div>
+</section>
+
+<div class="transition-divider">
+    <div class="divider-cross"></div>
+</div>
+
+<!-- ════════════════════════════════════
+     ACT IV  인간은 생각하는 갈대다
+════════════════════════════════════ -->
+<section class="act-pascal">
+    <div class="act-pascal-inner reveal">
+        <div class="section-eyebrow">참조 · pensées</div>
+        <h2 class="section-h2"><span style="color:var(--gold); margin-right:10px; font-size:0.8em;">✦</span>파스칼의 "인간은 생각하는 갈대다"</h2>
+
+        <p class="body-text"><strong>'갈대'란 무엇인가?</strong> → <strong>인간의 연약함</strong>을 이야기하고 있습니다. 그러나 인간은 연약하지만, <strong>생각할 수 있고 하나님을 찾을 수 있는 존재</strong>라는 것이죠. 파스칼에게 <strong>'생각'</strong>이란 단순한 지적 활동이 아닙니다.</p>
+
+        <div class="pascal-quote-card">
+            <p>그는 이런 말을 했습니다.<br>"인간의 위대함은 하나님을 찾는 데 있다."</p>
+        </div>
+
+        <p class="body-text">인간은 약하지만, 자신의 한계를 생각할 줄 알기 때문에 자신을 넘어서는 초월자, <strong>하나님을 찾게 된다</strong>. 바로 <strong>생각하는 능력</strong>이 인간을 하나님께로 이끌 수 있는 통로라는 것입니다. 그래서 파스칼의 결론은 명확합니다.</p>
+
+        <ul class="bullet-list">
+            <li><span class="bold-text">인간은 연약하기 때문에 하나님이 필요하고,</span></li>
+            <li><span class="bold-text">인간은 생각하기 때문에 하나님을 찾을 수 있다는 것입니다.</span></li>
+        </ul>
+    </div>
+</section>
+
+<div class="transition-divider">
+    <div class="divider-cross"></div>
+</div>
+
+<!-- ════════════════════════════════════
+     ACT V  어거스틴의 참회록
+════════════════════════════════════ -->
+<section class="act-augustine">
+    <div class="act-augustine-inner reveal">
+        <div class="section-eyebrow">참조 · confessions</div>
+        <h2 class="section-h2"><span style="color:var(--gold); margin-right:10px; font-size:0.8em;">📖</span>어거스틴의 『참회록』(Confessions)과 관련 설명</h2>
+
+        <p class="body-text">『참회록』은 <strong>어거스틴(Augustine of Hippo, 354–430)</strong>이 쓴 자서전 겸 신앙서입니다.</p>
+
+        <h3 style="text-align:center; font-size:15px; color:rgba(255,255,255,0.5); letter-spacing:2px; font-weight:400; margin:32px 0 0; font-family:'Noto Sans KR',sans-serif;">
+            <span style="color:#ef4444; margin-right:6px;">♥</span>핵심 내용
+        </h3>
+
+        <ol class="ol-styled">
+            <li>
+                <span class="bold-text">자신의 죄와 연약함 고백</span>
+                <ul>
+                    <li>어린 시절부터 젊은 시절까지의 죄, 방황, 욕망을 솔직하게 기록</li>
+                    <li>예: 도둑질, 허영, 쾌락 추구 등</li>
+                </ul>
+            </li>
+            <li>
+                <span class="bold-text">하나님의 은혜 체험</span>
+                <ul>
+                    <li>죄 많은 자신을 하나님이 어떻게 인도하셨는지 기록</li>
+                    <li>은혜가 찾아오고 마음이 변하는 순간을 자세히 묘사</li>
+                </ul>
+            </li>
+            <li>
+                <span class="bold-text">인간 이성과 신앙의 관계 탐구</span>
+                <ul>
+                    <li>인간 지성만으로는 만족할 수 없고, 하나님의 사랑이 필요함을 설명</li>
+                </ul>
+            </li>
+            <li>
+                <span class="bold-text">기도문 형식</span>
+                <ul>
+                    <li>단순한 이야기만 아니라, 하나님께 드리는 시적 기도문과 묵상이 섞임</li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+</section>
+
+<!-- ════════════════════════════════════
+     FOOTER
+════════════════════════════════════ -->
+<footer class="act-footer">
+    <p class="footer-text">
+        <i class="fas fa-church icon-text" style="display:none;"></i><span style="margin-right:6px; color:rgba(245,200,66,0.4);">⛪</span>부산교회 2구역
+    </p>
+</footer>
+
+<script>
+    // 별 생성
+    const starsEl = document.getElementById('stars');
+    for (let i = 0; i < 120; i++) {
+        const s = document.createElement('div');
+        s.classList.add('star');
+        const size = Math.random() * 2 + 0.5;
+        s.style.cssText = `
+            width:${size}px; height:${size}px;
+            top:${Math.random()*100}%;
+            left:${Math.random()*100}%;
+            animation-duration:${2 + Math.random()*4}s;
+            animation-delay:${Math.random()*5}s;
+        `;
+        starsEl.appendChild(s);
+    }
+
+    // 스크롤 reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+            if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); }
+        });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => io.observe(el));
+</script>
+</body>
+</html>

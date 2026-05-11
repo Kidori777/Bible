@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>창꼬치의 비극과 심리적 한계</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --deep: #0a0e1a;
+            --navy: #0d1b3e;
+            --ocean: #0f3460;
+            --water: #16537e;
+            --glass: rgba(255,255,255,0.06);
+            --glass-border: rgba(255,255,255,0.12);
+            --accent: #4fc3f7;
+            --accent2: #e74c3c;
+            --gold: #f0c040;
+            --text: #e8edf5;
+            --muted: #8a9ab8;
+            --serif: 'Noto Serif KR', serif;
+            --sans: 'Noto Sans KR', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--deep);
+            color: var(--text);
+            font-family: var(--sans);
+            font-weight: 300;
+            line-height: 1.9;
+            overflow-x: hidden;
+        }
+
+        /* ── 배경 물결 애니메이션 ── */
+        .bg-layer {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .wave {
+            position: absolute;
+            width: 200%;
+            border-radius: 40%;
+            opacity: 0.04;
+            animation: drift linear infinite;
+        }
+        .wave:nth-child(1) { height: 700px; bottom: -200px; background: var(--accent); animation-duration: 18s; }
+        .wave:nth-child(2) { height: 600px; bottom: -250px; background: #1a6090; animation-duration: 24s; animation-direction: reverse; }
+        .wave:nth-child(3) { height: 500px; bottom: -300px; background: var(--water); animation-duration: 30s; }
+
+        @keyframes drift {
+            0%   { transform: rotate(0deg) translateX(0); }
+            100% { transform: rotate(360deg) translateX(0); }
+        }
+
+        /* ── 레이아웃 ── */
+        .page {
+            position: relative;
+            z-index: 1;
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 80px 28px 100px;
+        }
+
+        /* ── 헤더 ── */
+        header {
+            text-align: center;
+            margin-bottom: 80px;
+            animation: fadeUp 1s ease both;
+        }
+        .kicker {
+            display: inline-block;
+            font-family: var(--sans);
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--accent);
+            border: 1px solid rgba(79,195,247,0.35);
+            padding: 5px 18px;
+            border-radius: 20px;
+            margin-bottom: 28px;
+        }
+        h1 {
+            font-family: var(--serif);
+            font-size: clamp(1.8rem, 5vw, 2.8rem);
+            font-weight: 900;
+            color: #fff;
+            line-height: 1.4;
+            letter-spacing: -0.02em;
+            margin-bottom: 24px;
+        }
+        h1 em {
+            font-style: normal;
+            color: var(--accent);
+        }
+        .subtitle-line {
+            width: 48px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            margin: 0 auto;
+            border-radius: 2px;
+        }
+
+        /* ── 섹션 제목 ── */
+        h2 {
+            font-family: var(--serif);
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fff;
+            margin: 64px 0 24px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        h2::before {
+            content: '';
+            display: block;
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent);
+            flex-shrink: 0;
+        }
+        h2::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, var(--glass-border), transparent);
+        }
+
+        /* ── 산문 단락 ── */
+        p {
+            font-size: 1rem;
+            color: #c8d3e8;
+            margin-bottom: 1.6em;
+            text-align: justify;
+            word-break: keep-all;
+        }
+        strong, b {
+            color: #fff;
+            font-weight: 600;
+        }
+
+        /* ── 이야기 카드 ── */
+        .story-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 36px 36px;
+            margin: 48px 0;
+            position: relative;
+            overflow: hidden;
+            animation: fadeUp 1s 0.3s ease both;
+        }
+        .story-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--water), transparent);
+        }
+        .story-card .fish-icon {
+            position: absolute;
+            top: 20px; right: 24px;
+            font-size: 1.8rem;
+            opacity: 0.15;
+        }
+        .story-card p {
+            font-family: var(--serif);
+            font-size: 1.02rem;
+            font-weight: 400;
+            color: #d4dff0;
+            line-height: 2;
+        }
+        .story-card p + p {
+            padding-top: 1em;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+
+        /* ── 하이라이트 텍스트 ── */
+        .highlight {
+            color: var(--accent2);
+            font-weight: 600;
+        }
+
+        /* ── 핵심 인사이트 박스 ── */
+        .insight-box {
+            display: grid;
+            grid-template-columns: 4px 1fr;
+            gap: 0 24px;
+            margin: 48px 0;
+            animation: fadeUp 1s 0.5s ease both;
+        }
+        .insight-box .bar {
+            background: linear-gradient(180deg, var(--accent), var(--water));
+            border-radius: 4px;
+        }
+        .insight-box .content {
+            padding: 4px 0;
+        }
+        .insight-box p {
+            color: #c8d3e8;
+            font-size: 0.98rem;
+            margin-bottom: 0;
+        }
+
+        /* ── 성경 구절 ── */
+        .verse-block {
+            background: linear-gradient(135deg, rgba(15,52,96,0.55), rgba(10,14,26,0.8));
+            border: 1px solid rgba(79,195,247,0.2);
+            border-radius: 16px;
+            padding: 40px 40px 32px;
+            margin: 56px 0;
+            position: relative;
+            animation: fadeUp 1s 0.6s ease both;
+        }
+        .verse-block::before {
+            content: '\201C';
+            font-family: Georgia, serif;
+            font-size: 7rem;
+            line-height: 1;
+            color: var(--accent);
+            opacity: 0.18;
+            position: absolute;
+            top: -10px; left: 20px;
+        }
+        .verse-block p {
+            font-family: var(--serif);
+            font-size: 1.08rem;
+            color: #dde6f5;
+            line-height: 2.1;
+            margin-bottom: 0;
+            position: relative;
+            z-index: 1;
+        }
+        .verse-block .verse-highlight {
+            color: var(--gold);
+            font-weight: 600;
+        }
+        .verse-block .reference {
+            display: block;
+            text-align: right;
+            font-size: 0.82rem;
+            color: var(--accent);
+            letter-spacing: 0.1em;
+            margin-top: 20px;
+            font-family: var(--sans);
+        }
+
+        /* ── 결론 단락 ── */
+        .closing-section {
+            margin-top: 56px;
+            animation: fadeUp 1s 0.7s ease both;
+        }
+        .closing-section p {
+            font-size: 1rem;
+        }
+        .closing-section p:last-of-type {
+            color: #d4dff0;
+            font-weight: 400;
+        }
+
+        /* ── 노트 ── */
+        .note-box {
+            margin-top: 72px;
+            padding: 24px 28px;
+            border-top: 1px dashed rgba(255,255,255,0.12);
+            animation: fadeUp 1s 0.8s ease both;
+        }
+        .note-box p {
+            font-size: 0.85rem;
+            color: var(--muted);
+            margin-bottom: 0.5em;
+        }
+        .note-box strong {
+            color: #9ab0cc;
+        }
+
+        /* ── 물고기 장식 divider ── */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 48px 0;
+            opacity: 0.3;
+        }
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--glass-border);
+        }
+        .divider span { font-size: 1.1rem; }
+
+        /* ── 애니메이션 ── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── 스크롤 reveal ── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: none;
+        }
+
+        /* ── 반응형 ── */
+        @media (max-width: 520px) {
+            .story-card, .verse-block { padding: 24px 20px; }
+            .page { padding: 50px 18px 70px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="bg-layer">
+    <div class="wave"></div>
+    <div class="wave"></div>
+    <div class="wave"></div>
+</div>
+
+<div class="page">
+
+    <!-- 헤더 -->
+    <header>
+        <div class="kicker">심리학적 통찰</div>
+        <h1>창꼬치의 <em>비극</em>과<br>심리적 한계</h1>
+        <div class="subtitle-line"></div>
+    </header>
+
+    <!-- 이야기 -->
+    <div class="story-card reveal">
+        <div class="fish-icon">🐟</div>
+        <p>
+            한 심리학자가 <strong>창꼬치</strong>라는 물고기와 작은 물고기들을 같은 수조에 넣었습니다. 창꼬치는 작은 물고기들을 잡아먹으며 편안히 지냈습니다.
+        </p>
+        <p>
+            며칠 후, 학자는 수조 한가운데를 얇고 투명한 <strong>'유리막'</strong>으로 가로막았습니다. 창꼬치는 한쪽에, 먹이인 작은 물고기들은 다른 쪽에 몰아넣었습니다.
+        </p>
+        <p>
+            배가 고파진 창꼬치들은 먹이를 향해 돌진했지만, 눈에 보이지 않는 유리막에 부딪히며 번번이 실패했습니다. 바로 눈앞에 먹이가 있었지만 결코 먹을 수 없는 상황이 된 것입니다. 며칠 동안 계속된 실패로 인해 창꼬치들은 유리막에 부딪히는 것을 포기하고 말았습니다.
+        </p>
+        <p>
+            그 후 학자는 유리막을 치웠습니다. 하지만 놀라운 일이 벌어졌습니다. 우리 생각에는 풍성한 만찬을 다시 얻게 된 창꼬치들이 먹이를 향해 돌진할 것 같았지만, 실제로는 전혀 다른 결과가 나타났습니다.
+        </p>
+        <p>
+            바로 머리 위에서 놀고 있는 작은 물고기들을 보고도 창꼬치들은 아무런 반응을 보이지 않았습니다. 창꼬치들에게 작은 물고기들은 이미 잡아먹을 수 없는 <strong class="highlight">'그림의 떡'</strong>으로 세뇌되어 있었던 것입니다. 결국 창꼬치들은 풍성한 먹잇감을 눈앞에 두고도 대부분 굶어 죽고 말았습니다.
+        </p>
+    </div>
+
+    <div class="divider"><span>🌊</span></div>
+
+    <!-- 해설 -->
+    <div class="insight-box reveal">
+        <div class="bar"></div>
+        <div class="content">
+            <p>
+                이 이야기는 심리학적 실험을 통해 <strong>'심리적 한계'</strong>와 <strong>'세뇌'</strong>의 영향을 보여주는 사례입니다. 창꼬치들은 유리막이라는 장애물에 반복적으로 부딪히면서 점차 자신의 능력을 믿지 못하게 되었고, 결국 장애물이 사라진 후에도 먹이를 얻을 수 없다고 스스로 단정해 버린 것입니다. 이러한 심리적 현상은 사람에게도 비슷하게 나타날 수 있습니다. 어떤 장애물에 반복적으로 부딪히고, 그 장애물이 사라진 후에도 이전의 제한된 사고방식이 지속되면, 우리는 새로운 기회를 인식하거나 활용하지 못하게 될 수 있습니다.
+            </p>
+        </div>
+    </div>
+
+    <!-- 성경 구절 -->
+    <div class="verse-block reveal">
+        <p>
+            여러분은 이 시대를 본받지 마십시오. 오직 여러분은 <span class="verse-highlight">생각이 새로워짐으로 변화되어 하나님의 선한 뜻, 하나님께서 기뻐하시는 뜻, 하나님의 온전한 뜻이 무엇인지 분별하도록 하십시오.</span>
+        </p>
+        <span class="reference">— 로마서 12장 2절 —</span>
+    </div>
+
+    <!-- 결론 -->
+    <div class="closing-section reveal">
+        <p>
+            우리도 창꼬치처럼 외부의 장애물로 인해 마음속에 새로운 가능성을 막을 때가 있습니다. 세상의 바람에 휩쓸리며 안주하다 보면 결국 영혼의 기근 상태에 이르게 됩니다. 영혼은 배고픈데 육체가 즐겁다고 해서 "내 혼아, 즐기자!"라고 안주하시겠습니까?
+        </p>
+        <p>
+            세상의 바람과 흐름에 휩쓸리지 않기 위해서는 <strong>영 안에서 우리의 생각이 새로워지고 변화되어야</strong> 합니다. 그럴 때 우리는 비로소 하나님의 선하시고, 기뻐하시고, 온전하신 뜻이 무엇인지 분별하여 앞으로 나아갈 수 있을 것입니다.
+        </p>
+    </div>
+
+    <!-- 참고 노트 -->
+    <div class="note-box reveal">
+        <p><strong>참고: '창꼬치' 실험의 진실</strong></p>
+        <p>
+            실제 심리학 실험으로 <strong>창꼬치(pike)</strong>라는 물고기를 사용하며, 투명한 장애물을 통해 학습된 무력감을 보여주는 사례로 널리 알려져 있습니다. 창꼬치 증후군(Pike Syndrome)라고 불리우고 있습니다.
+        </p>
+    </div>
+
+</div>
+
+<script>
+    // 스크롤 reveal
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(el => {
+            if (el.isIntersecting) {
+                el.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

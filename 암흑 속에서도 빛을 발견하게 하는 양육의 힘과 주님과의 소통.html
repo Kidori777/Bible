@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>암흑 속에서도 빛을 발견하게 하는 양육의 힘</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --bg-light: #fffbeb;
+            --text-main: #334155;
+            --accent-gold: #d97706;
+            --accent-blue: #0ea5e9;
+            --accent-rose: #be185d;
+        }
+
+        * {
+            box-sizing: border-box;
+            word-break: keep-all;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Gowun Batang', serif;
+            background-color: var(--bg-dark);
+            color: var(--bg-light);
+            overflow-x: hidden;
+            line-height: 1.8;
+        }
+
+        /* Scroll Reveal Setup */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1.2s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(to bottom, #0f172a, #1e293b);
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #fcd34d;
+            text-shadow: 0 0 15px rgba(252, 211, 77, 0.5);
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 30px;
+            animation: bounce 2s infinite;
+            font-size: 1.5rem;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
+
+        /* Main Container */
+        .content-wrapper {
+            max-width: 680px;
+            margin: 0 auto;
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            padding: 60px 40px;
+            border-radius: 40px 40px 0 0;
+            box-shadow: 0 -20px 40px rgba(0,0,0,0.3);
+        }
+
+        /* Sections */
+        .section {
+            margin-bottom: 80px;
+            position: relative;
+        }
+
+        .sub-title {
+            display: flex;
+            align-items: center;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            color: var(--accent-rose);
+        }
+
+        .sub-title .icon {
+            margin-right: 10px;
+        }
+
+        /* Dialogue Box Styles */
+        .theme-message { border-left: 4px solid #f472b6; padding-left: 20px; }
+        .theme-gods-way { border-left: 4px solid #38bdf8; padding-left: 20px; }
+        .theme-next-generation { border-left: 4px solid #4ade80; padding-left: 20px; }
+        .theme-prayer-ministry { border-left: 4px solid #fbbf24; padding-left: 20px; }
+
+        blockquote {
+            margin: 30px 0;
+            padding: 20px;
+            background-color: #f8fafc;
+            border-radius: 15px;
+            font-style: italic;
+            border: 1px dashed #cbd5e1;
+            position: relative;
+        }
+
+        blockquote::before {
+            content: '"';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            font-size: 3rem;
+            color: #e2e8f0;
+        }
+
+        .scripture-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fffbeb 100%);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid #fde68a;
+            margin-top: 50px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px;
+            color: #94a3b8;
+            font-size: 0.9rem;
+            background-color: var(--bg-light);
+        }
+
+        .horizon-line {
+            height: 1px;
+            background: linear-gradient(to right, transparent, #cbd5e1, transparent);
+            margin: 60px 0;
+        }
+
+        /* Breathing Animation for Light Orb */
+        .light-orb {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(252, 211, 77, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            top: 10%;
+            right: -100px;
+            z-index: -1;
+            animation: breathe 8s infinite ease-in-out;
+        }
+
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.3); opacity: 0.6; }
+        }
+
+        @media (max-width: 600px) {
+            .content-wrapper { padding: 40px 20px; }
+            .hero h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="light-orb"></div>
+
+    <section class="hero">
+        <div class="reveal">
+            <span style="font-size: 3rem;">💡</span>
+            <h1>암흑 속에서도 빛을 발견하게 하는<br>양육의 힘과 주님과의 소통</h1>
+            <p style="color: #94a3b8;">🙏 믿음과 성장의 이야기</p>
+        </div>
+        <div class="scroll-hint">↓</div>
+    </section>
+
+    <div class="content-wrapper">
+        
+        <div class="section reveal theme-message">
+            <div class="sub-title">
+                <span class="icon">⚫</span> 어둠 속의 작은 빛
+            </div>
+            <p>오늘 우리는 한 어린 소녀의 이야기를 통해 양육과 소통의 힘, 그리고 하나님과의 관계를 함께 생각해보고자 합니다.</p>
+            <p>헬렌 켈러는 태어날 때 건강한 아기였습니다. 그러나 생후 19개월, 뜻뜻밖의 질병으로 시력과 청력을 모두 잃었습니다.</p>
+            <p>그로 인해 어린 헬렌은 자기 통제를 할 수 없는 야수와 같은 상태가 되었고, 부모님과 주변 사람들은 그녀의 난폭함과 저항 때문에 큰 어려움을 겪었습니다.</p>
+            <p>손에 잡히는 물건을 닥치는 대로 던지고, 부모가 가르치려 하면 마루바닥에 눕고 반항하는 어린 소녀.</p>
+            <p>그런 헬렌에게 세상은 암흑과 다름없었습니다.</p>
+            <p>하지만 한 사람이 나타났습니다. 바로 안 사리반 선생님이었습니다.</p>
+        </div>
+
+        <div class="horizon-line"></div>
+
+        <div class="section reveal theme-gods-way">
+            <div class="sub-title">
+                <span class="icon">✨</span> 헌신과 기적
+            </div>
+            <p>사리반 선생님도 어린 시절 힘든 삶을 살았습니다.</p>
+            <p>열 살 때부터 고아원에서 가혹한 환경을 겪고, 동생을 잃었으며, 자신의 시력마저 거의 상실될 뻔했습니다.</p>
+            <p>그럼에도 불구하고 그녀는 포기하지 않았습니다. 헬렌을 만나, 소통하려는 강한 의지를 가지고 양육했습니다.</p>
+            <p>헬렌은 마침내 말의 존재를 깨달았습니다. 그녀가 회고록에서 쓴 것처럼,</p>
+            <blockquote>
+                “말이 있다는 것을 처음으로 알게 된 날 밤, 나는 침대 위에서 기쁘고도 기뻤던 나머지, 그때 처음으로 빨리 내일이 왔으면 하고 생각했다.”
+            </blockquote>
+            <p>이 순간은 단순한 학습의 시작이 아니라, 헬렌이 자신의 세계를 이해하고, 세상과 소통할 수 있는 기적의 순간이었습니다.</p>
+            <p>그 후 헬렌은 읽고 쓰고 말하며 스무 살에 대학 진학이 가능했고, 사회에 기여하며 자신의 삶을 풍성하게 만들었습니다.</p>
+            <p>그녀가 처음 한 말,</p>
+            <blockquote>
+                “저는 벙어리가 아니에요.”
+            </blockquote>
+            <p>는 세상과의 다리를 처음 발견한 순간이었습니다.</p>
+        </div>
+
+        <div class="horizon-line"></div>
+
+        <div class="section reveal theme-next-generation">
+            <div class="sub-title">
+                <span class="icon">👶</span> 본론 2 – 하나님과 나의 첫 울음
+            </div>
+            <p>여기서 우리는 생각해 볼 수 있습니다. 헬렌과 사리반의 이야기는 하나님과 나 사이의 관계와 닮아 있습니다.</p>
+            <p>우리는 태어나 세상의 소리와 물질을 만지며 살아왔습니다.</p>
+            <p>그러다 성경을 통해 하나님의 마음을 알게 되었고, 말씀을 전해주고 가르쳐 주는 형제·자매를 통해 하나님과 첫 의사소통을 경험합니다.</p>
+            <p>아기가 엄마 뱃속에서 태어나 첫 울음으로 자신의 존재를 알리듯,</p>
+            <p>우리도 주님을 영접하고 믿은 후, 주님의 이름을 부르며 주님과의 대화를 시작합니다.</p>
+            <p>그 대화 속에서 우리는 교회생활과 모임을 통해 나의 하나님을 신언하며, 나의 삶 속에서 나타난 하나님을 나누고 성장하게 됩니다.</p>
+            <p>헬렌이 처음 입에서 내뱉은 말, “저는 벙어리가 아니에요.”처럼,</p>
+            <p>우리도 교회 모임 속에서 벙어리처럼 가만히 있지 않고, 주님과의 대화와 형제·자매와의 교통을 사모하며, 내일이 빨리 오기를 바라는 소망의 자들이 되어야 합니다.</p>
+        </div>
+
+        <div class="section reveal theme-prayer-ministry">
+            <div class="sub-title">
+                <span class="icon">🗣️</span> 소통과 은혜의 삶
+            </div>
+            <p>헬렌 켈러와 사리반 선생님의 이야기는 단순한 양육의 성공 사례가 아닙니다.</p>
+            <p>한 사람의 삶을 변화시키는 힘은 관심과 사랑, 소통에서 옵니다.</p>
+            <p>우리의 신앙도 마찬가지입니다.</p>
+            <p>하나님과의 대화,</p>
+            <p>형제·자매와의 교통,</p>
+            <p>삶 속에서 하나님을 신언하는 모든 경험이 우리의 영혼을 성장시키고 함께 건축되어 표현하는 길을 열어 줍니다.</p>
+
+            <div class="scripture-box">
+                <p>📖 “주 예수 그리스도의 은혜와 하나님의 사랑과 성령의 교통이 여러분 모두와 함께하기를 바랍니다.”<br>- 고린도후서 13:14 -</p>
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="footer">
+        <p>부산교회 2구역</p>
+    </footer>
+
+    <script>
+        // Intersection Observer for Scroll Reveal
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

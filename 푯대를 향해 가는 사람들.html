@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>푯대를 향해 가는 사람들</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700;900&family=Gowun+Batang:wght@400;700&family=Tenor+Sans&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --river:     #003d35;
+            --river2:    #00574d;
+            --teal:      #00897b;
+            --teal-lt:   #4db6ac;
+            --teal-pale: #e0f2f1;
+            --dawn:      #e8520a;
+            --dawn-lt:   #ff8a50;
+            --gold:      #c9923a;
+            --gold-pale: #fff3e0;
+            --sage:      #2e6b40;
+            --sage-lt:   #4caf50;
+            --parchment: #fdf8f2;
+            --ink:       #1a2820;
+            --ink-soft:  #3d5248;
+            --ink-faint: #7a9990;
+            --rule:      rgba(0,137,123,0.2);
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior:smooth; }
+
+        body {
+            background: var(--parchment);
+            color: var(--ink);
+            font-family: 'Noto Serif KR', serif;
+            overflow-x: hidden;
+        }
+
+        /* ══ PROGRESS BAR ══ */
+        #pbar {
+            position:fixed; top:0; left:0;
+            height:3px; width:0%;
+            background:linear-gradient(90deg,var(--river),var(--teal),var(--dawn));
+            z-index:999; transition:width .1s linear;
+        }
+
+        /* ══════════════════════════════════════
+           CINEMATIC OPENING — RIVER SCENE
+        ══════════════════════════════════════ */
+        .opening {
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+            display: flex; flex-direction: column;
+            justify-content: flex-end;
+            padding-bottom: 80px;
+        }
+
+        /* Sky gradient */
+        .sky {
+            position: absolute; inset: 0;
+            background: linear-gradient(
+                180deg,
+                #0a1f1a 0%,
+                #0f3028 18%,
+                #1a4a38 35%,
+                #1e5c48 50%,
+                #234f40 65%,
+                #2d6655 80%,
+                #3d8070 95%,
+                #4db6ac 100%
+            );
+        }
+
+        /* Stars */
+        .stars {
+            position:absolute; inset:0; pointer-events:none;
+        }
+        .star {
+            position:absolute; border-radius:50%;
+            background:#fff; animation:twinkle linear infinite;
+        }
+        @keyframes twinkle {
+            0%,100%{opacity:.8;} 50%{opacity:.2;}
+        }
+
+        /* Dawn light breaking on horizon */
+        .dawn-light {
+            position:absolute; bottom:38%; left:50%;
+            transform:translateX(-50%);
+            width:500px; height:300px;
+            background:radial-gradient(ellipse 70% 50% at 50% 100%,
+                rgba(232,82,10,.28) 0%,
+                rgba(201,146,58,.14) 40%,
+                transparent 70%);
+            pointer-events:none;
+        }
+
+        /* River water */
+        .river-layer {
+            position:absolute; bottom:0; left:0; right:0;
+            height:38%;
+            background:linear-gradient(
+                180deg,
+                rgba(0,61,53,.85) 0%,
+                rgba(0,87,77,.9) 40%,
+                rgba(0,61,53,.95) 100%
+            );
+            overflow:hidden;
+        }
+
+        /* Water ripple lines */
+        .ripple-line {
+            position:absolute; left:0; right:0;
+            height:1px;
+            background:linear-gradient(90deg,
+                transparent 0%, rgba(77,182,172,.3) 30%,
+                rgba(77,182,172,.5) 50%,
+                rgba(77,182,172,.3) 70%, transparent 100%);
+            animation:rippleMove ease-in-out infinite;
+        }
+        @keyframes rippleMove {
+            0%,100%{transform:scaleX(1) translateX(0); opacity:.3;}
+            50%{transform:scaleX(.96) translateX(8px); opacity:.7;}
+        }
+
+        /* Mountain / hill silhouette */
+        .hills {
+            position:absolute; bottom:37%; left:0; right:0;
+            height:120px;
+        }
+        .hills svg { width:100%; height:100%; }
+
+        /* Trees */
+        .trees {
+            position:absolute; bottom:36%; left:0; right:0;
+            height:80px; pointer-events:none;
+        }
+
+        /* Hero text box */
+        .hero-box {
+            position:relative; z-index:10;
+            max-width:760px; margin:0 auto;
+            padding:0 32px;
+            text-align:center;
+        }
+
+        .hero-eyebrow {
+            font-family:'Tenor Sans',sans-serif;
+            font-size:10px; letter-spacing:.45em; text-transform:uppercase;
+            color:var(--teal-lt); margin-bottom:20px;
+            opacity:0; animation:fadeUp .9s ease .3s forwards;
+        }
+
+        .hero-title {
+            font-family:'Gowun Batang',serif;
+            font-size:clamp(36px,9vw,90px);
+            font-weight:700; line-height:1.05;
+            color:#e8f5f2;
+            margin-bottom:20px;
+            text-shadow:0 4px 32px rgba(0,61,53,.8);
+            opacity:0; animation:fadeUp .9s ease .6s forwards;
+        }
+        .hero-title .sheep { font-size:.7em; }
+        .hero-title .gld { color:var(--dawn-lt); }
+
+        .hero-sub {
+            font-size:clamp(13px,2vw,16px);
+            font-weight:300; line-height:1.9;
+            color:rgba(224,242,241,.65);
+            max-width:480px; margin:0 auto 32px;
+            opacity:0; animation:fadeUp .9s ease .9s forwards;
+        }
+
+        .scroll-dn {
+            display:flex; flex-direction:column; align-items:center; gap:10px;
+            opacity:0; animation:fadeIn 1s ease 2s forwards;
+        }
+        .scroll-dn span {
+            font-family:'Tenor Sans',sans-serif; font-size:9px;
+            letter-spacing:.4em; text-transform:uppercase;
+            color:rgba(77,182,172,.6);
+        }
+        .scroll-arr {
+            width:18px; height:18px;
+            border-right:1.5px solid var(--teal-lt);
+            border-bottom:1.5px solid var(--teal-lt);
+            transform:rotate(45deg); opacity:.5;
+            animation:arrBounce 1.6s ease-in-out infinite;
+        }
+        @keyframes arrBounce {
+            0%,100%{transform:rotate(45deg) translate(0,0);}
+            50%{transform:rotate(45deg) translate(3px,3px);}
+        }
+
+        /* ══════════════════════════════════════
+           STORY — NARRATIVE SECTION
+        ══════════════════════════════════════ */
+        .story-wrap {
+            position:relative; z-index:1;
+            background:var(--parchment);
+        }
+
+        /* Wave transition from river to parchment */
+        .wave-top {
+            display:block; width:100%;
+            line-height:0; margin-top:-2px;
+        }
+
+        .narrative-section {
+            max-width:800px; margin:0 auto;
+            padding:60px 32px 0;
+        }
+
+        /* Big drop cap opening */
+        .narrative-intro {
+            position:relative;
+            padding:40px 0 48px;
+            border-bottom:1px solid var(--rule);
+            opacity:0; transform:translateY(24px);
+            transition:opacity .85s ease, transform .85s ease;
+        }
+        .narrative-intro.vis { opacity:1; transform:translateY(0); }
+
+        .drop-label {
+            font-family:'Tenor Sans',sans-serif;
+            font-size:10px; letter-spacing:.4em; text-transform:uppercase;
+            color:var(--teal); margin-bottom:28px; display:block;
+        }
+
+        .narrative p {
+            font-size:clamp(15px,2.1vw,17px);
+            line-height:2.15; font-weight:300;
+            color:var(--ink-soft);
+            margin-bottom:18px;
+        }
+        .narrative p:last-child { margin-bottom:0; }
+
+        /* Pull quote — the key moment */
+        .pull-moment {
+            margin:32px 0;
+            padding:28px 32px;
+            background:linear-gradient(135deg,rgba(0,137,123,.05),rgba(232,82,10,.04));
+            border:1px solid rgba(0,137,123,.18);
+            border-radius:4px;
+            text-align:center;
+            position:relative;
+        }
+        .pull-moment::before {
+            content:'"';
+            position:absolute; top:2px; left:20px;
+            font-family:'Gowun Batang',serif;
+            font-size:72px; color:var(--teal); opacity:.12; line-height:1;
+        }
+        .pull-moment p {
+            font-family:'Gowun Batang',serif;
+            font-size:clamp(18px,3.5vw,26px) !important;
+            font-weight:700 !important;
+            color:var(--dawn) !important;
+            line-height:1.5 !important;
+            margin:0 !important;
+        }
+
+        /* ══════════════════════════════════════
+           PRINCIPLE CHAPTERS
+        ══════════════════════════════════════ */
+        .chapters {
+            max-width:800px; margin:0 auto;
+            padding:0 32px 80px;
+        }
+
+        /* Chapter separator */
+        .ch-sep {
+            display:flex; align-items:center; gap:16px;
+            padding:64px 0 0; opacity:.3;
+        }
+        .ch-sep::before,.ch-sep::after {
+            content:''; flex:1; height:1px; background:var(--teal);
+        }
+        .ch-sep-sym { color:var(--teal-lt); font-size:11px; letter-spacing:4px; }
+
+        /* Chapter card */
+        .ch-card {
+            margin-top:32px;
+            border-radius:12px;
+            overflow:hidden;
+            border:1px solid var(--rule);
+            box-shadow:0 6px 32px rgba(0,61,53,.07);
+            opacity:0; transform:translateY(28px);
+            transition:opacity .85s ease, transform .85s ease;
+        }
+        .ch-card.vis { opacity:1; transform:translateY(0); }
+
+        /* Chapter header band */
+        .ch-head {
+            padding:22px 32px;
+            display:flex; align-items:center; gap:16px;
+        }
+        .ch-head-1 { background:linear-gradient(135deg,#003d35,#005a4e); }
+        .ch-head-2 { background:linear-gradient(135deg,#4a1a00,#7a3010); }
+        .ch-head-3 { background:linear-gradient(135deg,#1a3a00,#2e6040); }
+        .ch-head-4 { background:linear-gradient(135deg,#003d35,#1a4a60); }
+
+        .ch-num {
+            font-family:'Gowun Batang',serif;
+            font-size:clamp(32px,7vw,64px);
+            font-weight:700; line-height:1; color:rgba(255,255,255,.15);
+            flex-shrink:0;
+        }
+
+        .ch-title-wrap {}
+        .ch-emoji {
+            font-size:clamp(18px,3.5vw,26px);
+            margin-bottom:4px; display:block;
+        }
+        .ch-title {
+            font-family:'Gowun Batang',serif;
+            font-size:clamp(17px,3.2vw,24px);
+            font-weight:700; color:#e0f2f1; line-height:1.25;
+        }
+        .ch-subtitle {
+            font-family:'Tenor Sans',sans-serif;
+            font-size:11px; letter-spacing:.22em;
+            color:rgba(224,242,241,.45); text-transform:uppercase;
+            margin-top:5px; display:block;
+        }
+
+        /* Chapter body */
+        .ch-body {
+            padding:32px 36px;
+            background:var(--parchment);
+        }
+
+        .ch-body p {
+            font-size:clamp(15px,2.1vw,17px);
+            line-height:2.1; font-weight:300;
+            color:var(--ink-soft); margin-bottom:16px;
+        }
+        .ch-body p:last-child { margin-bottom:0; }
+
+        .ch-body strong {
+            font-weight:700; color:var(--dawn);
+        }
+
+        /* Blockquote */
+        .ch-body blockquote {
+            margin:20px 0;
+            padding:20px 22px 20px 26px;
+            border-left:3px solid var(--teal-lt);
+            background:rgba(0,137,123,.05);
+            border-radius:0 8px 8px 0;
+            font-size:clamp(14px,2vw,16px);
+            line-height:1.9; color:var(--ink);
+            font-style:normal;
+        }
+        .ch-body blockquote[style*="background-color"] {
+            background:rgba(46,107,64,.06) !important;
+            border-left-color:var(--sage-lt) !important;
+        }
+
+        /* ══════════════════════════════════════
+           SUMMARY + FOOTER
+        ══════════════════════════════════════ */
+        .summary-section {
+            max-width:800px; margin:0 auto;
+            padding:0 32px 80px;
+        }
+
+        .summary-box {
+            text-align:center;
+            padding:36px 40px;
+            margin-top:16px;
+            background:linear-gradient(135deg,var(--teal-pale),#e8f5e9);
+            border-radius:12px;
+            font-family:'Gowun Batang',serif;
+            font-size:clamp(16px,3vw,22px);
+            font-weight:700; color:var(--river);
+            border:2px solid rgba(0,137,123,.25);
+            box-shadow:0 6px 24px rgba(0,61,53,.08);
+            opacity:0; transform:translateY(20px);
+            transition:opacity .9s ease, transform .9s ease;
+        }
+        .summary-box.vis { opacity:1; transform:translateY(0); }
+
+        .footer-note {
+            display:block; text-align:center;
+            margin-top:56px; padding-top:28px;
+            border-top:1px solid var(--rule);
+            font-family:'Gowun Batang',serif;
+            font-size:clamp(18px,3.5vw,28px);
+            font-weight:900; color:var(--dawn);
+            opacity:0; transform:translateY(12px);
+            transition:opacity .7s ease .1s, transform .7s ease .1s;
+        }
+        .footer-note.vis { opacity:1; transform:translateY(0); }
+
+        /* ── MOBILE ── */
+        @media(max-width:600px){
+            .hero-box { padding:0 20px; }
+            .narrative-section,.chapters,.summary-section { padding-left:18px; padding-right:18px; }
+            .ch-head { padding:18px 22px; }
+            .ch-body { padding:24px 22px; }
+        }
+
+        /* ── ANIMATIONS ── */
+        @keyframes fadeUp {
+            from{opacity:0;transform:translateY(20px);}
+            to{opacity:1;transform:translateY(0);}
+        }
+        @keyframes fadeIn {from{opacity:0;}to{opacity:1;}}
+    </style>
+</head>
+<body>
+
+<div id="pbar"></div>
+
+<!-- ══ CINEMATIC OPENING ══ -->
+<section class="opening">
+    <div class="sky"></div>
+
+    <!-- Stars (JS generated) -->
+    <div class="stars" id="stars"></div>
+
+    <!-- Dawn glow -->
+    <div class="dawn-light"></div>
+
+    <!-- Hill silhouette -->
+    <div class="hills">
+        <svg viewBox="0 0 1440 120" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 120 Q180 20 360 60 Q480 90 600 40 Q720 0 900 50 Q1080 90 1200 30 Q1320 -10 1440 50 L1440 120 Z"
+                fill="#0f2820" opacity=".9"/>
+            <path d="M0 120 Q240 60 400 90 Q560 110 720 70 Q900 40 1080 80 Q1200 100 1440 60 L1440 120 Z"
+                fill="#0a1f18" opacity=".7"/>
+        </svg>
+    </div>
+
+    <!-- Trees -->
+    <div class="trees">
+        <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- simplified tree silhouettes -->
+            <g fill="#061510" opacity=".85">
+                <polygon points="60,80 80,30 100,80"/>
+                <polygon points="70,80 90,10 110,80"/>
+                <rect x="83" y="60" width="14" height="20"/>
+                <polygon points="180,80 200,35 220,80"/>
+                <polygon points="190,80 210,15 230,80"/>
+                <rect x="203" y="62" width="14" height="18"/>
+                <polygon points="1200,80 1220,32 1240,80"/>
+                <polygon points="1210,80 1230,12 1250,80"/>
+                <rect x="1223" y="60" width="14" height="20"/>
+                <polygon points="1310,80 1330,38 1350,80"/>
+                <polygon points="1320,80 1340,18 1360,80"/>
+                <rect x="1333" y="64" width="14" height="16"/>
+            </g>
+        </svg>
+    </div>
+
+    <!-- River -->
+    <div class="river-layer">
+        <div class="ripple-line" style="top:15%;animation-duration:3.8s;animation-delay:0s;"></div>
+        <div class="ripple-line" style="top:30%;animation-duration:4.5s;animation-delay:.6s;"></div>
+        <div class="ripple-line" style="top:48%;animation-duration:3.2s;animation-delay:1.2s;"></div>
+        <div class="ripple-line" style="top:65%;animation-duration:5s;animation-delay:.3s;"></div>
+        <div class="ripple-line" style="top:80%;animation-duration:4.1s;animation-delay:.9s;"></div>
+    </div>
+
+    <!-- Hero text -->
+    <div class="hero-box">
+        <p class="hero-eyebrow">부산교회 2구역 &nbsp;·&nbsp; 요한복음 10장 · 빌립보서 3장</p>
+        <h1 class="hero-title">
+            <span class="sheep">🐑</span><br>
+            푯대를 향해<br>가는 <span class="gld">사람들</span>
+        </h1>
+        <p class="hero-sub">
+            시리아 강가의 목동과 양떼,<br>그리고 다시 살아난 두 사람의 이야기
+        </p>
+        <div class="scroll-dn">
+            <span>이야기 속으로</span>
+            <div class="scroll-arr"></div>
+        </div>
+    </div>
+</section>
+
+<!-- ══ WAVE TRANSITION ══ -->
+<div class="story-wrap">
+    <svg class="wave-top" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0 60 Q180 0 360 30 Q540 55 720 20 Q900 0 1080 35 Q1260 55 1440 15 L1440 60 Z"
+            fill="#fdf8f2"/>
+    </svg>
+
+    <!-- ══ NARRATIVE ══ -->
+    <div class="narrative-section">
+        <div class="narrative-intro">
+            <span class="drop-label">서문 &nbsp;·&nbsp; 시리아 강가의 이야기</span>
+
+            <div class="narrative">
+                <p>
+                    중동의 시리아 어느 강가, 한 중년 부부가 나란히 앉아 있었습니다. 삶의 의욕을 잃은 그들은 사업을 정리하고, 가진 돈이 다 떨어지면 생을 마치기로 결심한 채 세계 곳곳을 떠돌고 있었습니다. 그들의 마지막 여정은 이 강변까지 이르게 되었습니다.
+                </p>
+                <p>
+                    그때, 그들의 눈앞에 뜻밖의 장면이 펼쳐졌습니다. 멀리서 한 목동이 기다란 막대기를 들고 수백 마리의 양떼를 몰고 오고 있었습니다. 그 뒤를 질서 있게 따르는 양들의 모습이 신기해 부부는 한참을 바라보았습니다. 강가에 이르자 양떼는 발을 멈추었습니다. 물가 앞에서 선뜻 나아가지 못하는 양들의 모습은 마치 두려움에 머무는 인간의 모습 같았습니다.
+                </p>
+                <p>
+                    잠시 후, 목동은 그 무리 가운데로 들어가 작은 새끼 양 한 마리를 조심스레 들어 올렸습니다. 그리고는 그것을 자신의 어깨에 메고 조용히 강물 속으로 걸어 들어갔습니다. 강폭은 넓었지만 물은 목동의 무릎에도 미치지 않을 정도로 깊지 않았습니다.
+                </p>
+                <p>
+                    그러자 새끼 양을 잃은 **어미 양이 울부짖으며 강물 속으로 뛰어들었고, 그 모습을 본 다른 양들도 하나둘씩 뒤따라 강을 건너기 시작했습니다.** 순식간에 수백 마리의 양이 줄지어 물살을 헤치며 반대편으로 나아갔습니다.
+                </p>
+                <p>
+                    그 광경을 지켜보던 부부는 자신도 모르게 서로의 손목을 꽉 붙잡았습니다. 그 순간, 그들의 가슴속에 강한 영감과 새로운 생명의 숨결이 밀려왔습니다. 그들은 조용히 일어나 서로를 바라보며 말했습니다.
+                </p>
+
+                <div class="pull-moment">
+                    <p>"이제 우리도 다시 시작하자."</p>
+                </div>
+
+                <p>
+                    그들은 그렇게, 고향으로 돌아가 삶을 다시 일으켜 세웠습니다.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ PRINCIPLE CHAPTERS ══ -->
+    <div class="chapters">
+
+        <!-- CH 1 -->
+        <div class="ch-sep"><span class="ch-sep-sym">✦ ✦ ✦</span></div>
+        <div class="ch-card">
+            <div class="ch-head ch-head-1">
+                <div class="ch-num">1</div>
+                <div class="ch-title-wrap">
+                    <span class="ch-emoji">1️⃣</span>
+                    <div class="ch-title">본이 이끄는 힘 — 참된 지도자의 길</div>
+                    <span class="ch-subtitle">요한복음 10장 11절</span>
+                </div>
+            </div>
+            <div class="ch-body">
+                <p>
+                    목동은 양들을 억지로 밀어넣지 않았습니다. 그는 단지 <strong>앞서서 먼저 들어갔습니다.</strong> 그 한 걸음이 수백 마리의 양떼를 움직였습니다. 이는 예수님께서 십자가의 길을 먼저 걸으신 선한 목자의 모습과 같습니다.
+                </p>
+                <blockquote>
+                    "나는 선한 목자입니다. 선한 목자는 양들을 위하여 자기 목숨을 버리지만"<br>
+                    — 요한복음 10장 11절
+                </blockquote>
+                <p>
+                    참된 지도자는 명령하는 자가 아니라, 자신이 먼저 걸어감으로 길을 보여주는 사람입니다.
+                </p>
+            </div>
+        </div>
+
+        <!-- CH 2 -->
+        <div class="ch-sep"><span class="ch-sep-sym">✦ ✦ ✦</span></div>
+        <div class="ch-card">
+            <div class="ch-head ch-head-2">
+                <div class="ch-num">2</div>
+                <div class="ch-title-wrap">
+                    <span class="ch-emoji">2️⃣</span>
+                    <div class="ch-title">사랑이 길을 연다 — 두려움을 이기는 힘</div>
+                    <span class="ch-subtitle">요한일서 4장 18절</span>
+                </div>
+            </div>
+            <div class="ch-body">
+                <p>
+                    어미 양은 새끼가 물 너머에 있다는 사실 하나로 <strong>두려움을 이기고 강물 속으로 뛰어들었습니다.</strong> 사랑은 두려움을 이기는 가장 강력한 힘입니다.
+                </p>
+                <blockquote>
+                    "사랑에는 두려움이 없으며, 온전한 사랑은 도리어 두려움을 쫓아냅니다."<br>
+                    — 요한일서 4장 18절
+                </blockquote>
+                <p>
+                    이 부부 또한 서로를 향한 <strong>사랑</strong>을 붙잡음으로써 삶의 무게를 이겨내고 다시 일어설 용기를 얻었습니다.
+                </p>
+            </div>
+        </div>
+
+        <!-- CH 3 -->
+        <div class="ch-sep"><span class="ch-sep-sym">✦ ✦ ✦</span></div>
+        <div class="ch-card">
+            <div class="ch-head ch-head-3">
+                <div class="ch-num">3</div>
+                <div class="ch-title-wrap">
+                    <span class="ch-emoji">3️⃣</span>
+                    <div class="ch-title">작은 장면 속의 기적 — 절망을 넘어서는 소망</div>
+                    <span class="ch-subtitle">이사야 42장 3절</span>
+                </div>
+            </div>
+            <div class="ch-body">
+                <p>
+                    삶의 의미를 잃은 부부는 단순한 광경 하나로 다시 살아야 할 이유를 발견했습니다. 하나님은 종종 크고 놀라운 기적이 아니라, 이처럼 <strong>평범한 장면 속에서 새 생명의 숨결</strong>을 불어넣으십니다.
+                </p>
+                <blockquote>
+                    "그는 상한 갈대를 꺾지 않고 가까스로 타는 심지를 끄지 않으며 진리 안에서 정의를 가져오리라."<br>
+                    — 이사야 42장 3절
+                </blockquote>
+                <p>
+                    작은 감동 하나가 꺼져가던 마음의 등불을 다시 밝히는 것입니다.
+                </p>
+            </div>
+        </div>
+
+        <!-- CH 4 -->
+        <div class="ch-sep"><span class="ch-sep-sym">✦ ✦ ✦</span></div>
+        <div class="ch-card">
+            <div class="ch-head ch-head-4">
+                <div class="ch-num">4</div>
+                <div class="ch-title-wrap">
+                    <span class="ch-emoji">4️⃣</span>
+                    <div class="ch-title">하나님은 앞서 가시는 분 — 우리의 푯대를 향하여</div>
+                    <span class="ch-subtitle">신명기 31장 8절 · 빌립보서 3장 14절</span>
+                </div>
+            </div>
+            <div class="ch-body">
+                <p>
+                    목동이 먼저 강을 건너듯, 하나님께서도 우리가 가야 할 길을 먼저 걸어가십니다.
+                </p>
+                <blockquote>
+                    "여호와께서 직접 그대 앞에서 가실 것입니다. 그분은 그대와 함께하시며 그대를 떠나지도 않으시고 저버리지도 않으실 것입니다. 두려워하지도 말고 겁내지도 마십시오."<br>
+                    — 신명기 31장 8절
+                </blockquote>
+                <p>
+                    우리는 그분이 세우신 푯대를 향해 달려가는 사람들입니다. 사도 바울은 이렇게 고백했습니다.
+                </p>
+                <blockquote style="background-color: #E8F5E9; border-left: 4px solid var(--color-heading);">
+                    "나는 하나님이 그리스도 예수 안에서 위에서 부르신 부름의 상을 위하여 <strong>푯대를 향하여 달려갑니다.</strong>"<br>
+                    — 빌립보서 3장 14절
+                </blockquote>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ══ SUMMARY + FOOTER ══ -->
+    <div class="summary-section">
+        <div class="summary-box">
+            ✅ 요약: 우리의 선한 목자 되신 주님을 따라 사랑과 용기로 푯대를 향해 나아갑시다.
+        </div>
+
+        <div class="footer-note">
+            부산교회 2구역
+        </div>
+    </div>
+
+</div><!-- /story-wrap -->
+
+<script>
+/* ── Stars ── */
+(function(){
+    const wrap = document.getElementById('stars');
+    for(let i=0;i<120;i++){
+        const s = document.createElement('div');
+        s.className = 'star';
+        const size = Math.random()*2+.5;
+        s.style.cssText = `
+            width:${size}px;height:${size}px;
+            top:${Math.random()*62}%;
+            left:${Math.random()*100}%;
+            animation-duration:${Math.random()*3+2}s;
+            animation-delay:${Math.random()*4}s;
+            opacity:${Math.random()*.7+.1};
+        `;
+        wrap.appendChild(s);
+    }
+})();
+
+/* ── Progress bar ── */
+window.addEventListener('scroll', () => {
+    const st = window.scrollY;
+    const dh = document.documentElement.scrollHeight - window.innerHeight;
+    document.getElementById('pbar').style.width = (st / dh * 100) + '%';
+});
+
+/* ── Intersection observer ── */
+const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('vis'); });
+}, { threshold: 0.08 });
+
+document.querySelectorAll(
+    '.narrative-intro, .ch-card, .summary-box, .footer-note'
+).forEach(el => io.observe(el));
+</script>
+</body>
+</html>

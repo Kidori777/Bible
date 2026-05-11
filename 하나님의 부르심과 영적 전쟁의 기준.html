@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>말씀 개요: 하나님의 부르심과 영적 전쟁의 기준</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;700;900&family=Bebas+Neue&family=Tenor+Sans&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg:         #07090f;
+            --gold:       #c8952a;
+            --gold-lt:    #e8b84b;
+            --gold-pale:  #f5e4b8;
+            --crimson-lt: #cc3333;
+            --ice:        #4a9abf;
+            --sage:       #3a7a50;
+            --violet:     #6b3faa;
+            --parchment:  #f2ead8;
+            --rule:       rgba(200,149,42,0.18);
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior:smooth; }
+        body {
+            font-family:'Noto Serif KR',serif;
+            line-height:1.6;
+            background:var(--bg);
+            color:var(--parchment);
+            overflow-x:hidden;
+        }
+
+        /* CANVAS */
+        #bg-canvas {
+            position:fixed;top:0;left:0;width:100%;height:100%;
+            z-index:0;pointer-events:none;
+        }
+
+        /* PROGRESS BAR */
+        #pbar {
+            position:fixed;top:0;left:0;height:3px;width:0%;
+            background:linear-gradient(90deg,#9b2020,var(--gold),var(--gold-lt));
+            z-index:999;transition:width .1s linear;
+        }
+
+        /* NAV */
+        nav {
+            position:fixed;top:0;left:0;right:0;z-index:100;
+            display:flex;justify-content:center;gap:4px;
+            padding:14px 20px 10px;
+            background:linear-gradient(to bottom,rgba(7,9,15,.95),transparent);
+            backdrop-filter:blur(8px);
+        }
+        .nav-btn {
+            font-family:'Tenor Sans',sans-serif;
+            font-size:9px;letter-spacing:.28em;text-transform:uppercase;
+            color:rgba(242,234,216,.38);
+            background:none;border:none;cursor:pointer;
+            padding:6px 11px;border-radius:2px;
+            transition:color .3s,background .3s;
+            white-space:nowrap;
+        }
+        .nav-btn:hover,.nav-btn.active {
+            color:var(--gold-lt);
+            background:rgba(200,149,42,.1);
+        }
+
+        /* HERO */
+        .hero {
+            min-height:100vh;
+            display:flex;flex-direction:column;
+            justify-content:center;align-items:center;
+            text-align:center;
+            position:relative;z-index:1;
+            padding:110px 32px 80px;
+        }
+        .hero-eyebrow {
+            font-family:'Tenor Sans',sans-serif;
+            font-size:10px;letter-spacing:.45em;text-transform:uppercase;
+            color:var(--gold);margin-bottom:28px;
+            opacity:0;animation:fadeUp .9s ease .3s forwards;
+        }
+
+        /* Shield */
+        .shield-wrap {
+            position:relative;width:130px;height:130px;margin-bottom:36px;
+        }
+        .shield-svg {
+            width:100%;height:100%;
+            filter:drop-shadow(0 0 18px rgba(200,149,42,.55));
+            animation:shieldPulse 3s ease-in-out infinite;
+        }
+        @keyframes shieldPulse {
+            0%,100%{filter:drop-shadow(0 0 14px rgba(200,149,42,.4));}
+            50%{filter:drop-shadow(0 0 36px rgba(200,149,42,.9));}
+        }
+        .ring {
+            position:absolute;border-radius:50%;
+            border:1px solid rgba(200,149,42,.2);
+            animation:ringOut 3s ease-out infinite;pointer-events:none;
+        }
+        .ring:nth-child(1){inset:-16px;}
+        .ring:nth-child(2){inset:-34px;animation-delay:.9s;}
+        .ring:nth-child(3){inset:-54px;animation-delay:1.8s;}
+        @keyframes ringOut{
+            0%{opacity:.55;transform:scale(.92);}
+            100%{opacity:0;transform:scale(1.28);}
+        }
+
+        /* MAIN-TITLE in hero */
+        .hero .main-title {
+            font-family:'Bebas Neue',sans-serif;
+            font-size:clamp(32px,8vw,84px);
+            font-weight:400;line-height:1.0;letter-spacing:.03em;
+            color:var(--parchment);
+            margin-bottom:24px;text-align:center;
+            opacity:0;animation:fadeUp .9s ease .55s forwards;
+        }
+        .hero .main-title .icon { font-size:.68em; }
+
+        /* Intro p in hero */
+        .hero-intro {
+            font-size:clamp(14px,2.1vw,16.5px);
+            font-weight:300;line-height:1.95;
+            color:rgba(242,234,216,.6);
+            max-width:540px;margin:0 auto;
+            opacity:0;animation:fadeUp .9s ease .85s forwards;
+        }
+        .hero-intro .emphasis { color:#e07070;font-weight:700; }
+
+        /* scroll hint */
+        .scroll-dn {
+            position:absolute;bottom:36px;left:50%;
+            transform:translateX(-50%);
+            display:flex;flex-direction:column;align-items:center;gap:8px;
+            opacity:0;animation:fadeIn 1s ease 2s forwards;
+        }
+        .scroll-dn span {
+            font-family:'Tenor Sans',sans-serif;font-size:9px;
+            letter-spacing:.4em;text-transform:uppercase;color:rgba(200,149,42,.5);
+        }
+        .chevron {
+            width:15px;height:15px;
+            border-right:1.5px solid var(--gold);border-bottom:1.5px solid var(--gold);
+            transform:rotate(45deg);opacity:.5;
+            animation:chevBounce 1.6s ease-in-out infinite;
+        }
+        @keyframes chevBounce{
+            0%,100%{transform:rotate(45deg) translate(0,0);}
+            50%{transform:rotate(45deg) translate(3px,3px);}
+        }
+
+        /* CONTAINER */
+        .container {
+            position:relative;z-index:1;
+            max-width:860px;margin:0 auto;
+            padding:0 32px 80px;
+        }
+
+        /* SUB-TITLE */
+        .sub-title {
+            font-family:'Bebas Neue',sans-serif;
+            font-size:clamp(24px,5.5vw,50px);
+            font-weight:400;line-height:1.05;letter-spacing:.03em;
+            text-align:left;
+            color:var(--gold-lt);
+            margin:70px 0 22px;
+            padding-top:58px;
+            border-top:1px solid var(--rule);
+            opacity:0;transform:translateY(20px);
+            transition:opacity .7s ease,transform .7s ease;
+        }
+        .sub-title.vis{opacity:1;transform:translateY(0);}
+        .sub-title .icon{font-size:.68em;margin-right:8px;}
+
+        /* SECTION */
+        .section {
+            padding:30px 34px;margin-bottom:10px;
+            border-radius:3px;border:1px solid var(--rule);
+            opacity:0;transform:translateY(22px);
+            transition:opacity .8s ease .1s,transform .8s ease .1s;
+        }
+        .section.vis{opacity:1;transform:translateY(0);}
+        .message   {background:rgba(0,123,255,.05); border-left:3px solid var(--ice);}
+        .path      {background:rgba(255,193,7,.045);border-left:3px solid var(--gold);}
+        .generation{background:rgba(40,167,69,.05); border-left:3px solid var(--sage);}
+        .prayer    {background:rgba(111,66,193,.05);border-left:3px solid var(--violet);}
+
+        /* TEXT inside section */
+        .section p,
+        .section li {
+            font-size:clamp(14.5px,2.1vw,16.5px);
+            line-height:2.05;font-weight:300;
+            color:rgba(242,234,216,.78);
+        }
+        .section p{margin-bottom:13px;}
+        .section p:last-child{margin-bottom:0;}
+        .section ul{padding-left:22px;margin:10px 0 13px;}
+        .section li{margin-bottom:7px;}
+
+        /* LIST-ITEM */
+        .list-item{margin-bottom:28px;padding-left:0;}
+        .list-item:last-of-type{margin-bottom:0;}
+
+        /* LIST-TITLE */
+        .list-title {
+            display:inline-block;
+            font-family:'Noto Serif KR',serif;
+            font-weight:700;
+            font-size:clamp(14px,2.2vw,16px);
+            color:var(--gold-lt);
+            margin-bottom:10px;
+        }
+
+        /* BIBLE-VERSE */
+        .bible-verse {
+            display:block;
+            margin:14px 0;padding:17px 20px 17px 22px;
+            background:rgba(200,149,42,.06);
+            border-left:3px solid var(--gold);
+            border-radius:0 3px 3px 0;
+            font-size:clamp(14px,2vw,16px) !important;
+            line-height:1.85 !important;
+            font-weight:400 !important;
+            color:var(--parchment) !important;
+            white-space:pre-wrap;overflow-wrap:break-word;
+        }
+
+        /* EMPHASIS */
+        .emphasis{font-weight:700;color:#e07070;}
+
+        /* HIGHLIGHT */
+        .highlight {
+            background:rgba(200,149,42,.17);
+            padding:2px 6px;border-radius:3px;
+            color:var(--gold-pale);font-weight:600;
+        }
+
+        /* ICON */
+        .icon{margin-right:8px;font-size:1.1em;}
+
+        /* STRONG */
+        strong{font-weight:700;color:var(--parchment);}
+
+        /* BLOCKQUOTE */
+        blockquote {
+            margin:22px 0 8px;
+            padding:22px 26px 22px 30px;
+            border-left:3px solid var(--gold) !important;
+            background:rgba(200,149,42,.05);
+            border-radius:0 3px 3px 0;
+            position:relative;
+        }
+        blockquote::before {
+            content:'"';
+            position:absolute;top:6px;left:10px;
+            font-family:'Bebas Neue',sans-serif;
+            font-size:52px;color:var(--gold);opacity:.15;line-height:1;
+        }
+        blockquote p {
+            font-size:clamp(14.5px,2.1vw,16.5px) !important;
+            line-height:1.95 !important;
+            color:var(--parchment) !important;
+            margin-bottom:8px !important;
+        }
+        blockquote p:last-child{margin-bottom:0 !important;}
+        .section.prayer blockquote{
+            border-left-color:var(--violet) !important;
+            background:rgba(111,66,193,.07);
+        }
+
+        /* FOOTER */
+        .footer {
+            position:relative;z-index:1;
+            text-align:center;
+            margin-top:56px;padding-top:28px;
+            border-top:1px solid var(--rule);
+            font-family:'Tenor Sans',sans-serif;
+            font-size:12px;letter-spacing:.32em;text-transform:uppercase;
+            color:rgba(200,149,42,.5);
+        }
+
+        @media(max-width:600px){
+            .container{padding:0 18px 56px;}
+            nav{gap:1px;padding:10px 4px 8px;}
+            .nav-btn{font-size:8px;padding:5px 7px;letter-spacing:.15em;}
+            .section{padding:20px 18px;}
+        }
+
+        @keyframes fadeUp{
+            from{opacity:0;transform:translateY(20px);}
+            to{opacity:1;transform:translateY(0);}
+        }
+        @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+    </style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+<div id="pbar"></div>
+
+<nav>
+    <button class="nav-btn active" onclick="goTo('#hero')">부르심</button>
+    <button class="nav-btn" onclick="goTo('#s1')">전쟁기준</button>
+    <button class="nav-btn" onclick="goTo('#s2')">영적의미</button>
+    <button class="nav-btn" onclick="goTo('#s3')">증인들</button>
+    <button class="nav-btn" onclick="goTo('#s4')">자세</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+    <p class="hero-eyebrow">부산교회 2구역 &nbsp;·&nbsp; 신명기 20:5–8</p>
+    <div class="shield-wrap">
+        <div class="ring"></div><div class="ring"></div><div class="ring"></div>
+        <svg class="shield-svg" viewBox="0 0 100 118" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 4L8 19V58C8 82 50 114 50 114C50 114 92 82 92 58V19L50 4Z"
+                fill="rgba(200,149,42,0.07)" stroke="rgba(200,149,42,0.65)" stroke-width="1.5"/>
+            <path d="M50 14L18 26V58C18 76 50 104 50 104C50 104 82 76 82 58V26L50 14Z"
+                fill="rgba(200,149,42,0.04)" stroke="rgba(200,149,42,0.28)" stroke-width="1"/>
+            <line x1="50" y1="34" x2="50" y2="82" stroke="rgba(200,149,42,0.55)" stroke-width="1.5"/>
+            <line x1="28" y1="56" x2="72" y2="56" stroke="rgba(200,149,42,0.55)" stroke-width="1.5"/>
+        </svg>
+    </div>
+
+    <!-- 원본 main-title 100% 그대로 -->
+    <div class="main-title">
+        <span class="icon">🛡️</span> 하나님의 부르심과 영적 전쟁의 기준 <span class="icon">⚔️</span>
+    </div>
+
+    <!-- 원본 첫 단락 100% 그대로 -->
+    <p class="hero-intro">성경은 전쟁에 나아가는 기준을 단순한 군사 규정이 아니라, 하나님 나라의 부르심과 영적 태도로 가르칩니다. 이 흐름을 따라가면 <span class="emphasis">"세상에는 정년이 있지만, 하나님의 부르심에는 나이 제한이 없다"</span>라는 진리가 자연스럽게 드러납니다.</p>
+
+    <div class="scroll-dn"><span>아래로</span><div class="chevron"></div></div>
+</section>
+
+<!-- MAIN CONTENT — 원본 HTML 100% 그대로 -->
+<div class="container">
+
+    <div class="sub-title" id="s1">
+        <span class="icon">1️⃣</span> 성경에 나타난 '전쟁에 나아갈 기준' (신명기 20:5–8)
+    </div>
+    <div class="section message">
+        <p>본문은 <span class="bible-verse">신명기 20:5–8</span>에 나오는 말씀으로, 단순한 병력 관리 규정이 아니라 하나님의 전쟁 이해, 인간에 대한 배려, 공동체의 영적 원리를 깊이 드러내는 말씀입니다.</p>
+
+        <div class="list-item">
+            <div class="list-title">1️⃣ 이 전쟁은 "총동원령"이 아니다</div>
+            <p>먼저 중요한 전제부터 짚어야 합니다.</p>
+            <p>이스라엘의 전쟁은 👉 <span class="highlight">국가 생존을 위한 무차별 동원이 아니라 하나님이 주도하시는 '거룩한 전쟁'</span>이었습니다.</p>
+            <p>그래서 하나님은 "많이 모이면 이긴다" "강한 사람이 필요하다" 라는 논리가 아니라, <span class="emphasis">"누가 이 전쟁에 '합당한 상태'로 서 있는가"</span>를 보십니다.</p>
+        </div>
+
+        <div class="list-item">
+            <div class="list-title">2️⃣ 세 가지 '삶의 미완성 상태'에 대한 배려</div>
+            <p><strong>① 집을 짓고 낙성식을 못 한 사람</strong></p>
+            <p class="bible-verse">"'새 집을 짓고서 낙성식을 하지 못한 사람이 있습니까?"</p>
+            <p>이것은 단순한 재산 문제가 아닙니다.</p>
+            <ul>
+                <li><strong>집 = 삶의 터전</strong></li>
+                <li><strong>낙성식 = 하나님의 은혜에 대한 감사와 헌신의 고백</strong></li>
+            </ul>
+            <p>👉 아직 <span class="highlight">삶의 기초가 하나님 앞에서 완성되지 않은 상태</span>입니다.</p>
+            <p>하나님은 "아직 네 삶을 누리고 하나님께 감사도 못 했는데 전쟁터에서 끝나게 하지 않겠다"라고 말씀하시는 것입니다.</p>
+
+            <p><strong>② 포도원을 가꾸었으나 열매를 맛보지 못한 사람</strong></p>
+            <p class="bible-verse">"포도원을 가꾸어 놓고 거기서 난 열매를 먹어 보지 못한 사람이 있습니까?"</p>
+            <p>포도원은 성경에서 자주 등장하는 상징인데 이 포도원은</p>
+            <ul>
+                <li><strong>노동의 결실, 기다림의 시간, 하나님이 주시는 기쁨의 열매</strong></li>
+            </ul>
+            <p>👉 순종과 수고는 했지만, 아직 '기쁨'을 누리지 못한 상태</p>
+            <p>하나님은 "수고만 하고 끝나는 신앙" 을 원하지 않으십니다.</p>
+            <p>마치 교회의 여러가지 봉사와 일을 하고 있지만 그 가운데에서 온전한 주님의 기쁨을 누리지 못한다면 먼저 포도원의 소산을 먹고 누리길 원하시는 것입니다.</p>
+            <p>그래서 전쟁보다 먼저👉 <span class="highlight">'은혜를 맛보는 경험'</span>을 허락하시는 것입니다.</p>
+
+            <p><strong>③ 약혼했으나 결혼하지 못한 사람</strong></p>
+            <p class="bible-verse">"여자와 약혼을 하고서 그 여자를 맞아들이지 못한 사람이 있습니까?"</p>
+            <p>이 경우는 매우 현실적이면서도 깊습니다.</p>
+            <p>위의 말씀은 "결혼도 못 해봤는데 전쟁 나가지 마라" "신혼 즐기라고 빼주는 배려"라고 여기시면 오해입니다</p>
+            <p>하나님은 <span class="emphasis">'언약을 시작만 해 놓고, 아직 그 언약 안에 제대로 살아보지도 못한 사람'을 전쟁터로 내보내지 않으신다</span>. 라는 의미입니다.</p>
+            <ul>
+                <li><strong>약혼 = 언약의 시작이지만 결혼 = 언약의 완성입니다.</strong></li>
+            </ul>
+            <p>👉 아직 <span class="highlight">관계의 책임과 기쁨이 완성되지 않은 상태</span>를 말하고 있는 것입니다.</p>
+            <p>하나님은 "언약을 시작만 해 놓고 그 언약을 누리지 못한 채 죽게 하지 않겠다" 라고 하십니다.</p>
+            <p>이것은 👉 <span class="highlight">가정을 귀히 여기시고 관계의 완성을 중요하게 보시는 시선</span>입니다.</p>
+            <p>예를 든다면</p>
+            <ul>
+                <li><strong>교회에 '등록만' 된 신앙</strong>: 공동체에 속하긴 했지만 아직 관계 속으로 깊이 들어가지 못한 상태</li>
+                <li><strong>하나님과의 언약도 마찬가지</strong>: 믿는다고 고백은 했지만 그 언약 안에서의 안정감과 친밀함은 아직 경험하지 못한 상태라고 할 수 있겠습니다.</li>
+            </ul>
+        </div>
+
+        <div class="list-item">
+            <div class="list-title">3️⃣ 네 번째 기준: 두려움 (가장 중요한 영적 기준)</div>
+            <p class="bible-verse">"두려워하며 겁을 내는 사람이 있습니까?"</p>
+            <p>이 항목은 앞의 세 가지와 성격이 다릅니다.</p>
+            <p>앞의 세 가지는 개인의 삶에 대한 배려라고 하면</p>
+            <p>이 네 번째는 <span class="highlight">공동체 전체를 위한 영적 기준</span>입니다.</p>
+            <p>왜냐하면 두려움은 전염되기 때문입니다.</p>
+            <p class="bible-verse">"그의 형제들의 간담이 그의 간담처럼 녹아 버릴까 하노라"</p>
+            <p>하나님의 전쟁에서 가장 위험한 것은</p>
+            <ul>
+                <li><span class="emphasis">우리가 가진 환경이나 세력이 아니라 믿음이 없는 두려워 하는 마음</span>입니다.</li>
+            </ul>
+            <p>그래서 하나님은 <span class="highlight">"용기 없는 한 사람이 온 공동체의 믿음을 무너뜨리는 것을 허락하지 않겠다"</span>라고 말씀 하시는 것입니다.</p>
+        </div>
+
+        <div class="list-item">
+            <div class="list-title">4️⃣ 이 모든 기준의 공통점</div>
+            <p>이 네 가지를 관통하는 공통 원리는 이것입니다.</p>
+            <p><span class="emphasis">하나님은 '전쟁보다 사람을 먼저 보신다'</span>는 것입니다.</p>
+            <p>그리고 더 깊이 살펴보면,</p>
+            <ul>
+                <li>삶이 정리되지 않은 사람</li>
+                <li>은혜를 누리지 못한 사람</li>
+                <li>관계가 완성되지 않은 사람</li>
+                <li>믿음이 준비되지 않은 사람</li>
+            </ul>
+            <p>👉 이런 상태에서의 헌신은 <span class="highlight">하나님이 기뻐하시는 헌신이 아니다</span>라는 메시지입니다.</p>
+        </div>
+
+        <div class="list-item">
+            <div class="list-title">5️⃣ 오늘날 우리에게 주는 영적 적용</div>
+            <p>이 말씀은 단지 "전쟁에 나가지 말라"가 아니라,</p>
+            <p><span class="emphasis">"하나님의 부르심 앞에 설 때, 어떤 상태로 서 있는가"</span>를 묻습니다.</p>
+            <ul>
+                <li>직분을 맡기 전에, 사명을 감당하기 전에, 중요한 결단의 자리에서</li>
+            </ul>
+            <p>하나님은 이렇게 묻습니다.</p>
+            <p>"너는 지금 두려움이 아니라 믿음으로 서 있느냐?" "도망치지 않기 위해 억지로 나와 있는 것이라면 집으로 돌아가라!" 라고 말씀하십니다</p>
+            <p>다시 말하자면 너의 <span class="highlight">"온 마음이 나에게 향해 있느냐?"</span>라고 묻고 계시는 것입니다.</p>
+        </div>
+
+        <p class="emphasis" style="text-align:center;margin-top:20px;">
+            <span class="icon">✨</span> <span class="list-title">한 문장으로 정리하면</span>
+        </p>
+        <blockquote style="border-left:5px solid #007bff;padding-left:10px;margin:15px 0;">
+            <p>신명기 20장의 전쟁 기준은 <span class="emphasis">'싸울 수 있는 자'를 가르는 기준이 아니라, '하나님 앞에 준비된 자'를 가르는 기준</span>인 것 입이다.</p>
+        </blockquote>
+    </div>
+
+    <div class="sub-title" id="s2">
+        <span class="icon">2️⃣</span> 전쟁 기준의 영적 의미 (오늘 우리에게)
+    </div>
+    <div class="section path">
+        <p>성경의 전쟁은 단순한 칼과 방패의 싸움이 아니라 👉 <span class="highlight">하나님의 일에 참여하는 자의 영적 상태</span>를 보여줍니다.</p>
+        <p>영적 전쟁에 나아가는 사람의 조건은 하나님께 향한 마음과 순종 그리고 그분을 의지하고 따를 수 있는 믿음과 겸손한 마음일 것입니다.</p>
+    </div>
+
+    <div class="sub-title" id="s3">
+        <span class="icon">3️⃣</span> 세상에는 정년이 있지만, 하나님의 부르심에는 나이 제한이 없다
+    </div>
+    <div class="section generation">
+        <div class="list-item">
+            <div class="list-title">1️⃣ 모세 – 80세에 부르심</div>
+            <p class="bible-verse">"그들이 파라오에게 말할 때에 모세는 팔십 세였고 아론은 팔십삼 세였다." (출애굽기 7:7)</p>
+            <p>모세는 인생의 황혼기였고 광야에서 잊혀진 사람이었지만 그러나 하나님의 때에는 가장 준비된 사람입니다.</p>
+            <p>하나님은 능력으로 가득 찬 40세의 모세가 아니라 <span class="highlight">자기 확신이 비워진 80세의 모세가 하나님을 의지하고 따르기에 가장 적합하셨기 때문</span>입니다.</p>
+        </div>
+
+        <div class="list-item">
+            <div class="list-title">2️⃣ 갈렙 – 85세의 고백</div>
+            <p class="bible-verse">"지금 나는 여든다섯 살입니다. 나는 오늘도 여전히 모세께서 나를 보내셨던 날처럼 강건합니다. 전투를 하는 데에든 출입하는 데에든, 나의 힘은 그때나 지금이나 동일합니다. 그러니 이제 여호와께서 그날 말씀하신 저 산지를 나에게 주십시오." (여호수아 14:10–12)</p>
+            <p>📌 갈렙은 내가 이제 나이가 많아서 쉬어야 겠다고 말하지 않습니다. → <span class="highlight">"여호와께서 나와 함께 하시면"</span> 말씀하신 대로 내가 그들을 쫓아내겠습니다. 라고 <span class="emphasis">함께 하는 나의 하나님을 의지</span>하였습니다.</p>
+        </div>
+
+        <div class="list-item">
+            <div class="list-title">3️⃣ 안나 – 노년의 사명</div>
+            <p class="bible-verse">"그 후 과부가 되어 팔십사 세가 되기까지 성전을 떠나지 않고, 밤낮으로 금식하고 간구하며 하나님을 섬겼다." (누가복음 2:36–38)</p>
+            <p>그녀는 <span class="highlight">성전에서 말년의 시간 전체를 메시아 증언자로 사용</span> 받았습니다.</p>
+        </div>
+
+        <div class="list-item">
+            <div class="list-title">4️⃣ 예수님의 비유 – 포도원 품꾼</div>
+            <p class="bible-verse">"제십일 시쯤에 고용된 사람들이 와서, 각각 한 데나리온씩을 받았습니다." (마태복음 20:1–16)</p>
+            <p>📌 하나님의 나라에서는 <span class="emphasis">언제 부름 받고 왔는가 보다 주님의 부르심에 응답했는가가 중요</span>합니다.</p>
+        </div>
+    </div>
+
+    <div class="sub-title" id="s4">
+        <span class="icon">4️⃣</span> 하나님의 부르심에 합당한 자세
+    </div>
+    <div class="section prayer">
+        <div class="list-item">
+            <div class="list-title">1️⃣ "나는 늦었다"는 생각을 내려놓기</div>
+            <p>👉 나이는 <span class="highlight">하나님의 한계가 아니라 → 사람이 만든 제한</span>입니다.</p>
+        </div>
+
+        <div class="list-item">
+            <div class="list-title">2️⃣ 능력보다 '가용성(availability)'</div>
+            <p class="bible-verse">그때 나는 주님께서 말씀하시는 음성을 들었다. "내가 누구를 보내랴? 누가 우리를 위해 가랴?" 내가 아뢰었다. "제가 여기 있습니다. 저를 보내 주십시오." (이사야 6:8)</p>
+        </div>
+
+        <div class="list-item">
+            <div class="list-title">3️⃣ 전쟁에 나가는 자의 마음</div>
+            <p class="bible-verse">"강해져라. 그리고 용기를 내라. 두려워하지도 말고 겁내지도 마라." (여호수아 1:9)</p>
+            <p>전쟁을 앞두고 여호수아가 백성들에게 "강해져라. 용기를 내라. 두려워하지도 말고 겁내지 마라" 라고 명령합니다. 이것이 단 시간에 가능한 이유는 단 한가지 <span class="highlight">"네가 어디를 가든지 여호와 너의 하나님이 너와 함께할 것이다." 라는 믿음의 확신이 백성을 변케하기 때문</span>입니다.</p>
+        </div>
+
+        <p class="emphasis" style="text-align:center;margin-top:20px;">
+            <span class="icon">🔚</span> <span class="list-title">정리의 한 문장</span>
+        </p>
+        <blockquote style="border-left:5px solid #6f42c1;padding-left:10px;margin:15px 0;">
+            <p>세상은 '언제까지 일할 수 있는가'를 묻지만,</p>
+            <p>하나님은 <span class="emphasis">'지금 누구를 신뢰하는가'</span>를 묻고 계십니다.</p>
+            <p>전쟁에 나아갈 기준은 젊음이나 경력이 아니라</p>
+            <p>👉 <span class="highlight">하나님께로 전적으로 향한 마음이 있는가</span>입니다.</p>
+        </blockquote>
+    </div>
+
+    <div class="footer">
+        부산교회 2구역
+    </div>
+
+</div>
+
+<script>
+/* Canvas particles */
+(function(){
+    const cv=document.getElementById('bg-canvas');
+    const ctx=cv.getContext('2d');
+    let W,H,sparks=[],orbs=[];
+    function resize(){W=cv.width=window.innerWidth;H=cv.height=window.innerHeight;}
+    window.addEventListener('resize',resize);resize();
+    function mkS(){return{x:Math.random()*W,y:Math.random()*H+H*.3,vx:(Math.random()-.5)*.32,vy:-(Math.random()*.5+.22),r:Math.random()*1.3+.4,a:Math.random()*.5+.18,life:1,decay:Math.random()*.0032+.0016,col:Math.random()<.65?'#c8952a':'#e8b84b'};}
+    function mkO(){return{x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.065,vy:(Math.random()-.5)*.065,r:Math.random()*130+45,a:Math.random()*.035+.008,col:Math.random()<.5?'#c8952a':'#0d1120'};}
+    for(let i=0;i<65;i++)sparks.push(mkS());
+    for(let i=0;i<5;i++)orbs.push(mkO());
+    let mx=W/2,my=H/2;
+    document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+    function loop(){
+        ctx.clearRect(0,0,W,H);
+        orbs.forEach(o=>{o.x+=o.vx;o.y+=o.vy;if(o.x<-o.r||o.x>W+o.r||o.y<-o.r||o.y>H+o.r)Object.assign(o,mkO());const g=ctx.createRadialGradient(o.x,o.y,0,o.x,o.y,o.r);g.addColorStop(0,o.col);g.addColorStop(1,'transparent');ctx.save();ctx.globalAlpha=o.a;ctx.fillStyle=g;ctx.beginPath();ctx.arc(o.x,o.y,o.r,0,Math.PI*2);ctx.fill();ctx.restore();});
+        sparks.forEach((s,i)=>{s.x+=s.vx;s.y+=s.vy;s.life-=s.decay;if(s.life<=0)sparks[i]=mkS();ctx.save();ctx.globalAlpha=s.a*s.life;ctx.fillStyle=s.col;ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fill();ctx.restore();});
+        ctx.save();const cg=ctx.createRadialGradient(mx,my,0,mx,my,120);cg.addColorStop(0,'rgba(200,149,42,0.04)');cg.addColorStop(1,'transparent');ctx.fillStyle=cg;ctx.fillRect(0,0,W,H);ctx.restore();
+        requestAnimationFrame(loop);
+    }
+    loop();
+})();
+
+/* Progress + nav */
+window.addEventListener('scroll',()=>{
+    const st=window.scrollY,dh=document.documentElement.scrollHeight-window.innerHeight;
+    document.getElementById('pbar').style.width=(st/dh*100)+'%';
+    const ids=['hero','s1','s2','s3','s4'];
+    let cur=0;
+    ids.forEach((id,i)=>{const el=document.getElementById(id);if(el&&el.getBoundingClientRect().top<=90)cur=i;});
+    document.querySelectorAll('.nav-btn').forEach((b,i)=>b.classList.toggle('active',i===cur));
+});
+
+function goTo(h){const el=document.querySelector(h);if(el)el.scrollIntoView({behavior:'smooth'});}
+
+/* Scroll reveal */
+const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});},{threshold:0.07});
+document.querySelectorAll('.sub-title,.section').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

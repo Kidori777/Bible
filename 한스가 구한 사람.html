@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>한 알의 밀 — 한스의 이야기</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;900&family=Cinzel:wght@400;600;900&family=Nanum+Myeongjo:wght@400;700;800&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden;background:#020508;}
+body{font-family:'Noto Serif KR',serif;color:#e8dcc8;cursor:none;user-select:none;}
+
+/* ══ 캔버스 레이어 ══ */
+#sea-canvas{position:fixed;inset:0;z-index:0;}
+#lantern-canvas{position:fixed;inset:0;z-index:1;pointer-events:none;}
+
+/* ══ 커서 — 랜턴 ══ */
+#cursor-lantern{
+  position:fixed;pointer-events:none;z-index:9999;
+  transform:translate(-50%,-100%);
+  filter:drop-shadow(0 0 12px rgba(255,200,80,0.9));
+  transition:filter 0.2s;
+}
+
+/* ══ 스토리 오버레이 ══ */
+#story-layer{
+  position:fixed;inset:0;z-index:10;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  pointer-events:none;
+}
+
+/* ══ 오프닝 화면 ══ */
+#opening{
+  position:fixed;inset:0;z-index:50;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  background:rgba(2,5,8,0.92);
+  gap:20px;
+  transition:opacity 0.8s;
+}
+#opening h1{
+  font-family:'Cinzel',serif;
+  font-size:clamp(32px,7vw,80px);
+  font-weight:600;color:#fff;
+  letter-spacing:0.06em;text-align:center;line-height:1.1;
+  text-shadow:0 0 60px rgba(255,180,40,0.4);
+}
+#opening p{
+  font-family:'Noto Serif KR',serif;
+  font-size:clamp(12px,1.8vw,16px);
+  color:rgba(220,210,180,0.55);text-align:center;
+  line-height:1.9;max-width:400px;word-break:keep-all;
+}
+#opening-btn{
+  margin-top:8px;padding:12px 44px;
+  border:1px solid rgba(255,180,40,0.4);
+  background:rgba(255,150,20,0.08);
+  color:rgba(255,200,100,0.85);
+  font-family:'Noto Serif KR',serif;font-size:15px;
+  cursor:pointer;letter-spacing:0.12em;border-radius:2px;
+  transition:all 0.2s;
+}
+#opening-btn:hover{background:rgba(255,150,20,0.2);border-color:rgba(255,180,40,0.8);}
+
+/* ══ 씬 카드 — 이야기 텍스트 ══ */
+.scene-card{
+  position:fixed;
+  z-index:30;
+  background:rgba(4,8,14,0.95);
+  max-height:80vh;
+  overflow-y:auto;
+  border:1px solid rgba(180,150,80,0.2);
+  padding:clamp(20px,3vw,36px) clamp(20px,3.5vw,44px);
+  max-width:min(560px,88vw);
+  opacity:0;
+  transition:opacity 0.8s ease,transform 0.8s ease;
+  transform:translateY(12px);
+  backdrop-filter:blur(3px);
+  pointer-events:none;
+}
+.scene-card.show{opacity:1;transform:translateX(-50%) translateY(0) !important;pointer-events:all;}
+.scene-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(to right,transparent,rgba(255,180,40,0.5),transparent);
+}
+.sc-tag{
+  font-family:'Special Elite',serif;font-size:9px;
+  letter-spacing:0.5em;text-transform:uppercase;
+  color:rgba(255,180,40,0.5);margin-bottom:10px;display:block;
+}
+.sc-text{
+  font-family:'Nanum Myeongjo',serif;
+  font-size:clamp(14px,2vw,18px);font-weight:400;
+  color:rgba(230,220,195,0.88);line-height:1.9;
+  word-break:keep-all;margin-bottom:0.7em;
+}
+.sc-text:last-child{margin-bottom:0;}
+.sc-text strong{color:#fff;font-weight:700;}
+.sc-btn{
+  margin-top:14px;display:inline-block;
+  font-family:'Special Elite',serif;font-size:9px;
+  letter-spacing:0.4em;text-transform:uppercase;
+  color:rgba(255,180,40,0.5);cursor:pointer;
+  animation:scBlink 1.5s infinite;border:none;background:none;
+  pointer-events:all;position:relative;z-index:35;
+}
+.sc-btn:hover{color:rgba(255,180,40,0.9);}
+@keyframes scBlink{0%,100%{opacity:0.3}50%{opacity:1}}
+
+/* ══ 대화 박스 — 한스/어머니 ══ */
+.dialogue-box{
+  border-left:3px solid rgba(255,180,40,0.4);
+  padding:12px 0 12px 18px;
+  margin:12px 0;
+}
+.dlg-who{
+  font-family:'Special Elite',serif;font-size:8px;
+  letter-spacing:0.35em;text-transform:uppercase;
+  color:rgba(255,180,40,0.55);margin-bottom:6px;display:block;
+}
+.dlg-text{
+  font-family:'Nanum Myeongjo',serif;
+  font-size:clamp(14px,2vw,17px);font-weight:700;
+  color:#f5f0e0;line-height:1.8;word-break:keep-all;
+}
+
+/* ══ 반전 장면 — 특별 스타일 ══ */
+#scene-reveal{
+  position:fixed;inset:0;z-index:40;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  background:rgba(2,5,8,0);
+  opacity:0;pointer-events:none;
+  transition:opacity 1s,background 1.5s;
+  text-align:center;padding:32px;
+}
+#scene-reveal.show{opacity:1;pointer-events:all;}
+#scene-reveal.lit{background:rgba(20,10,4,0.85);}
+#reveal-shout{
+  font-family:'Cinzel',serif;
+  font-size:clamp(22px,5vw,60px);
+  font-weight:600;color:#fff;
+  line-height:1.25;word-break:keep-all;
+  text-shadow:0 0 60px rgba(255,200,60,0.8);
+  margin-bottom:20px;
+  opacity:0;transform:scale(0.85);
+  transition:opacity 1s 0.5s,transform 1s 0.5s;
+}
+#scene-reveal.show #reveal-shout{opacity:1;transform:scale(1);}
+#reveal-sub{
+  font-family:'Noto Serif KR',serif;font-size:clamp(13px,1.8vw,17px);
+  color:rgba(220,200,150,0.75);line-height:2;word-break:keep-all;
+  max-width:480px;margin:0 auto 24px;
+  opacity:0;transition:opacity 1s 1.2s;
+}
+#scene-reveal.show #reveal-sub{opacity:1;}
+#reveal-next{
+  font-family:'Special Elite',serif;font-size:9px;
+  letter-spacing:0.4em;text-transform:uppercase;
+  color:rgba(255,180,40,0.45);cursor:pointer;
+  animation:scBlink 1.5s infinite;
+  opacity:0;transition:opacity 0.5s 2s;
+}
+#scene-reveal.show #reveal-next{opacity:1;}
+
+/* ══ 밀알 싹 — 말씀 섹션 ══ */
+#wheat-section{
+  position:fixed;inset:0;z-index:45;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  background:rgba(4,10,6,0.96);
+  opacity:0;pointer-events:none;
+  transition:opacity 0.8s;
+  overflow-y:auto;padding:40px 24px 80px;
+}
+#wheat-section.show{opacity:1;pointer-events:all;}
+
+.wheat-title{
+  font-family:'Cinzel',serif;
+  font-size:clamp(24px,5vw,56px);
+  font-weight:600;color:#fff;
+  letter-spacing:0.05em;text-align:center;
+  text-shadow:0 0 40px rgba(100,200,60,0.4);
+  margin-bottom:12px;
+}
+.wheat-verse{
+  font-family:'Nanum Myeongjo',serif;
+  font-size:clamp(16px,2.5vw,24px);font-weight:800;
+  color:#f0e8c0;line-height:1.75;text-align:center;
+  max-width:560px;margin:16px auto 8px;word-break:keep-all;
+}
+.wheat-ref{
+  font-family:'Special Elite',serif;font-size:9px;
+  letter-spacing:0.45em;text-transform:uppercase;
+  color:rgba(180,220,100,0.55);text-align:center;margin-bottom:32px;
+}
+
+/* 밀알 SVG 애니메이션 */
+#wheat-svg-wrap{
+  margin:8px auto 32px;
+  display:flex;justify-content:center;
+}
+
+.wheat-body{
+  max-width:600px;width:100%;
+  background:rgba(10,20,8,0.7);
+  border:1px solid rgba(100,160,40,0.2);
+  padding:28px 32px;
+  margin:0 auto 20px;
+}
+.wheat-body p{
+  font-family:'Noto Serif KR',serif;font-size:15px;
+  line-height:2.2;color:rgba(210,225,190,0.78);
+  word-break:keep-all;margin-bottom:0.9em;
+}
+.wheat-body p strong{color:#fff;font-weight:600;}
+.wheat-body p:last-child{margin-bottom:0;}
+
+/* 진행 표시 */
+#progress-dots{
+  position:fixed;right:20px;top:50%;transform:translateY(-50%);
+  z-index:20;display:flex;flex-direction:column;gap:8px;
+  pointer-events:none;
+}
+.pdot{
+  width:6px;height:6px;border-radius:50%;
+  background:rgba(255,180,40,0.2);
+  border:1px solid rgba(255,180,40,0.3);
+  transition:all 0.4s;
+}
+.pdot.done{background:rgba(255,180,40,0.7);box-shadow:0 0 6px rgba(255,180,40,0.5);}
+
+/* 키 힌트 */
+#key-hint{
+  position:fixed;bottom:16px;left:50%;transform:translateX(-50%);
+  z-index:35;font-family:'Special Elite',serif;font-size:9px;
+  letter-spacing:0.4em;text-transform:uppercase;
+  color:rgba(255,180,40,0.3);pointer-events:none;
+  text-align:center;
+}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(180,150,80,0.3)}
+</style>
+</head>
+<body>
+
+<canvas id="sea-canvas"></canvas>
+<canvas id="lantern-canvas"></canvas>
+
+<div id="cursor-lantern">
+  <svg width="28" height="44" viewBox="0 0 28 44" fill="none">
+    <!-- 랜턴 손잡이 -->
+    <path d="M14 0 Q14 6 14 8" stroke="rgba(200,160,60,0.7)" stroke-width="1.5" stroke-linecap="round"/>
+    <!-- 랜턴 몸체 -->
+    <rect x="5" y="8" width="18" height="24" rx="3" fill="rgba(40,25,5,0.9)" stroke="rgba(200,160,60,0.6)" stroke-width="1.2"/>
+    <!-- 랜턴 빛 -->
+    <rect x="8" y="11" width="12" height="18" rx="2" fill="rgba(255,210,80,0.85)"/>
+    <!-- 광선 -->
+    <ellipse cx="14" cy="36" rx="10" ry="6" fill="rgba(255,200,60,0.15)"/>
+    <!-- 바닥 -->
+    <rect x="4" y="30" width="20" height="4" rx="2" fill="rgba(160,120,40,0.8)" stroke="rgba(200,160,60,0.4)" stroke-width="0.8"/>
+  </svg>
+</div>
+
+<!-- 오프닝 -->
+<div id="opening">
+  <h1>한 알의 밀</h1>
+  <p>네덜란드 바닷가 마을, 폭풍이 몰아치는 밤<br>열여섯 살 한스의 이야기</p>
+  <button id="opening-btn" onclick="startStory()">▶ 랜턴을 들고 어둠 속으로</button>
+</div>
+
+<!-- 진행 점 -->
+<div id="progress-dots">
+  <div class="pdot" id="pd0"></div>
+  <div class="pdot" id="pd1"></div>
+  <div class="pdot" id="pd2"></div>
+  <div class="pdot" id="pd3"></div>
+  <div class="pdot" id="pd4"></div>
+  <div class="pdot" id="pd5"></div>
+</div>
+
+<!-- 키 힌트 -->
+<div id="key-hint">마우스를 움직여 어둠을 밝히세요</div>
+
+<!-- 씬 1: 폭풍 -->
+<div class="scene-card" id="sc1" style="top:8vh;left:50%;transform:translateX(-50%) translateY(12px);max-width:min(600px,90vw);">
+  <span class="sc-tag">Scene 01 — The Storm · 폭풍</span>
+  <p class="sc-text">몇 해 전 네덜란드의 작은 바닷가 마을에서 있었던 일이다.</p>
+  <p class="sc-text">어느 날 밤의 일이었다. 바람이 거세게 불고 구름이 밀려오더니 곧이어 사나운 폭풍이 고기잡이 배 한 척을 에워쌌다. 위험에 처한 사람들은 급히 구조신호를 타전했다.</p>
+  <button class="sc-btn" onclick="nextScene(2)">▼ 계속</button>
+</div>
+
+<!-- 씬 2: 구조대 -->
+<div class="scene-card" id="sc2" style="top:8vh;left:50%;transform:translateX(-50%) translateY(12px);max-width:min(600px,90vw);">
+  <span class="sc-tag">Scene 02 — Rescue · 구조</span>
+  <p class="sc-text">구조대 대장이 경보신호를 울리자 주민 모두가 바닷가 마을 광장에 모였다. 구조대가 노를 저어 거센 파도와 싸우며 앞으로 나아가는 동안 주민들은 랜턴으로 바다를 비추며 해변에서 초조하게 기다렸다.</p>
+  <p class="sc-text">한 시간 뒤 구조대원들의 배가 돌아왔다. 인원이 넘쳐 <strong>한 남자를 남겨 두어야</strong> 했다는 것이었다. 구조대 대장은 그 외로운 생존자를 구하기 위한 다른 자원봉사자를 찾았다.</p>
+  <button class="sc-btn" onclick="nextScene(3)">▼ 계속</button>
+</div>
+
+<!-- 씬 3: 한스의 결단 -->
+<div class="scene-card" id="sc3" style="top:8vh;left:50%;transform:translateX(-50%) translateY(12px);max-width:min(600px,90vw);">
+  <span class="sc-tag">Scene 03 — Decision · 결단</span>
+  <p class="sc-text">이때 열여섯 살 먹은 <strong>한스</strong>가 앞으로 걸어 나왔다.</p>
+  <div class="dialogue-box">
+    <span class="dlg-who">어머니</span>
+    <p class="dlg-text">"제발 가지마라. 네 아버지도 십 년 전에 배가 난파되어 죽었지 않았니... 네 형 파울도 며칠 전에 바다에서 실종이 됐고. 내게 남은 것은 한스 너 뿐이다."</p>
+  </div>
+  <div class="dialogue-box">
+    <span class="dlg-who">한스</span>
+    <p class="dlg-text">"어머니, 전 가야만 해요. 모두가 '난 갈 수 없어 다른 사람이 일을 해야만 돼' 하고 말한다면 어떻게 되겠어요? 남을 위해 자신을 희생하라는 부름이 왔을 때는 누구든지 그렇게 해야만 해요."</p>
+  </div>
+  <p class="sc-text">한스는 어머니를 포옹하고 나서 구조대에 합류했다. 그리고는 어둠 속으로 사라졌다.</p>
+  <button class="sc-btn" onclick="nextScene(4)">▼ 한 시간이 지났다...</button>
+</div>
+
+<!-- 씬 4: 기다림 -->
+<div class="scene-card" id="sc4" style="top:8vh;left:50%;transform:translateX(-50%) translateY(12px);max-width:min(600px,90vw);">
+  <span class="sc-tag">Scene 04 — Waiting · 기다림</span>
+  <p class="sc-text">다시 한 시간이 지났다.</p>
+  <p class="sc-text"><strong>한스의 어머니에게는 영원처럼 길게 느껴지는 시간이었다.</strong></p>
+  <p class="sc-text">마침내 구조원들이 탄 배가 다시 안개를 뚫고 돌아왔다. 뱃머리에는 한스가 서 있었다.</p>
+  <p class="sc-text">마을 사람들이 소리쳐 물었다.</p>
+  <div class="dialogue-box">
+    <span class="dlg-who">주민들</span>
+    <p class="dlg-text">"실종자를 구조했나?"</p>
+  </div>
+  <button class="sc-btn" onclick="showReveal()">▼ 한스의 대답...</button>
+</div>
+
+<!-- 반전 장면 -->
+<div id="scene-reveal">
+  <div id="reveal-shout">
+    "내 구조했어요.<br>
+    저의 엄마에게 말씀해 주세요.<br>
+    실종자가 바로<br>
+    <span style="color:rgba(255,200,60,0.95);">우리 형 파울이였다구요!</span>"
+  </div>
+  <p id="reveal-sub">지친 몸을 가누면서 한스가 흥분한 목소리로 소리쳤다.<br>— 댄 클라크</p>
+  <button id="reveal-next" onclick="showWheat()">▼ 말씀으로</button>
+</div>
+
+<!-- 밀알 말씀 섹션 -->
+<div id="wheat-section">
+  <div class="wheat-title">한 알의 밀</div>
+
+  <!-- 밀알 싹트는 SVG 애니메이션 -->
+  <div id="wheat-svg-wrap">
+    <svg width="200" height="140" viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- 흙 -->
+      <ellipse cx="100" cy="110" rx="80" ry="16" fill="rgba(40,25,8,0.8)"/>
+      <!-- 흙 결 -->
+      <path d="M30 110 Q100 105 170 110" stroke="rgba(80,50,20,0.4)" stroke-width="1"/>
+      <!-- 줄기 -->
+      <path d="M100 110 Q98 85 100 60" stroke="#6ab820" stroke-width="2.5" stroke-linecap="round">
+        <animate attributeName="stroke-dasharray" from="0 200" to="200 0" dur="2s" begin="0.5s" fill="freeze"/>
+      </path>
+      <!-- 왼쪽 잎 -->
+      <path d="M100 85 Q80 70 65 60" stroke="#7acc28" stroke-width="2" stroke-linecap="round" fill="none" stroke-dasharray="0 80">
+        <animate attributeName="stroke-dasharray" from="0 80" to="80 0" dur="1.2s" begin="1.5s" fill="freeze"/>
+      </path>
+      <!-- 오른쪽 잎 -->
+      <path d="M100 75 Q120 60 135 50" stroke="#7acc28" stroke-width="2" stroke-linecap="round" fill="none" stroke-dasharray="0 80">
+        <animate attributeName="stroke-dasharray" from="0 80" to="80 0" dur="1.2s" begin="1.8s" fill="freeze"/>
+      </path>
+      <!-- 이삭 -->
+      <ellipse cx="100" cy="45" rx="6" ry="16" fill="#c8a030" opacity="0">
+        <animate attributeName="opacity" from="0" to="1" dur="0.8s" begin="2.3s" fill="freeze"/>
+      </ellipse>
+      <!-- 이삭 낟알들 -->
+      <ellipse cx="100" cy="36" rx="4" ry="6" fill="#e0b840" opacity="0">
+        <animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="2.6s" fill="freeze"/>
+      </ellipse>
+      <ellipse cx="95" cy="42" rx="4" ry="5" fill="#d4a830" opacity="0">
+        <animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="2.8s" fill="freeze"/>
+      </ellipse>
+      <ellipse cx="105" cy="42" rx="4" ry="5" fill="#d4a830" opacity="0">
+        <animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="3s" fill="freeze"/>
+      </ellipse>
+      <!-- 빛 글로우 -->
+      <ellipse cx="100" cy="45" rx="25" ry="30" fill="rgba(200,180,60,0.08)" opacity="0">
+        <animate attributeName="opacity" from="0" to="1" dur="1s" begin="2.5s" fill="freeze"/>
+      </ellipse>
+      <!-- 밀알 (땅 속) -->
+      <ellipse cx="100" cy="118" rx="7" ry="5" fill="rgba(180,140,60,0.6)"/>
+    </svg>
+  </div>
+
+  <p class="wheat-verse">"한 알의 밀이 땅에 떨어져 죽지 않으면 한 알 그대로 남아 있지만, 죽으면 많은 열매를 맺습니다."</p>
+  <p class="wheat-ref">요한복음 12장 24절 · John 12:24</p>
+
+  <div class="wheat-body">
+    <p>예수님은 이 땅에 오셔서 육신의 몸을 입으시고 자신의 생명을 우리들을 위하여 목숨을 버리시고 희생하심으로 우리에게 생명주는 영으로 그분의 생명의 풍성함을 많은 열매들로 분배하셨습니다.</p>
+    <p>이 한 알의 밀은 죽어야 많은 열매를 맺게 되는데 어디에서 죽어야 하면 <strong>땅에 떨어져 죽어야</strong> 한다는 것입니다. 이 땅은 우리가 겪어야 하고 짊어져야 할 십자가의 삶입니다. 이 땅은 나의 육체의 즐거움을 거절하고 혼 생명을 잃어버리는 장소입니다.</p>
+    <p>이 밀알은 구름 속에 내려앉아 따스한 햇볕을 받으며 자라나 많은 열매를 무수히 하늘 아래로 떨어뜨리는 것이 아니라 <strong>땅에 떨어져 죽어야만</strong> 많은 열매를 맺게 된다는 것입니다.</p>
+    <p>나 자신이 이 땅속에 떨어져 죽으면 험한 파도와 같은 어려움과 어둡고 암담한 현실이 때로 절망의 늪으로 빠져 들 듯이 두렵고 참담하기도 하겠지만 우리에게 나타나는 생명의 열매는 바로 <strong>죽음의 역사를 뚫고 부활하는 한 줄기 빛의 새싹처럼</strong> 나의 자랑과 영광이 아닌 주님의 생명과 열매를 풍성히 맺게 될 것입니다.</p>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+//  캔버스 세팅
+// ══════════════════════════════════════════════
+const seaC   = document.getElementById('sea-canvas');
+const seaCtx = seaC.getContext('2d');
+const lanC   = document.getElementById('lantern-canvas');
+const lanCtx = lanC.getContext('2d');
+let W=0, H=0;
+function resize(){ W=seaC.width=lanC.width=innerWidth; H=seaC.height=lanC.height=innerHeight; }
+resize();
+window.addEventListener('resize', resize);
+
+// ══════════════════════════════════════════════
+//  마우스
+// ══════════════════════════════════════════════
+let mx=W/2, my=H/2, active=false;
+const cur = document.getElementById('cursor-lantern');
+window.addEventListener('mousemove', e=>{
+  mx=e.clientX; my=e.clientY;
+  cur.style.left=mx+'px'; cur.style.top=my+'px';
+});
+window.addEventListener('touchmove', e=>{
+  mx=e.touches[0].clientX; my=e.touches[0].clientY;
+},{passive:true});
+
+// ══════════════════════════════════════════════
+//  파도 데이터
+// ══════════════════════════════════════════════
+const waves=[];
+for(let i=0;i<6;i++){
+  waves.push({
+    y: H*(0.45+i*0.1),
+    amp: 18+Math.random()*24,
+    freq: 0.006+Math.random()*0.006,
+    speed: 0.4+Math.random()*0.5,
+    phase: Math.random()*Math.PI*2,
+    color: `rgba(${8+i*3},${20+i*5},${40+i*8},${0.7+i*0.05})`
+  });
+}
+
+// 비/눈보라 파티클
+const rain=[];
+for(let i=0;i<200;i++){
+  rain.push({
+    x:Math.random()*2000, y:Math.random()*1000,
+    vx:-2-Math.random()*3, vy:8+Math.random()*6,
+    len:8+Math.random()*14, opacity:0.1+Math.random()*0.2
+  });
+}
+
+// ══════════════════════════════════════════════
+//  씬 시스템
+// ══════════════════════════════════════════════
+let currentScene=0;
+let storyActive=false;
+
+function startStory(){
+  document.getElementById('opening').style.opacity='0';
+  setTimeout(()=>{ document.getElementById('opening').style.display='none'; },800);
+  storyActive=true;
+  active=true;
+  setTimeout(()=>nextScene(1), 600);
+}
+
+function nextScene(n){
+  // 이전 씬 숨기기
+  if(currentScene>0){
+    const prev=document.getElementById('sc'+currentScene);
+    if(prev){ prev.classList.remove('show'); }
+  }
+  currentScene=n;
+  const card=document.getElementById('sc'+n);
+  if(card){ setTimeout(()=>card.classList.add('show'),200); }
+  document.getElementById('pd'+(n-1))?.classList.add('done');
+}
+
+function showReveal(){
+  const sc4=document.getElementById('sc4');
+  if(sc4) sc4.classList.remove('show');
+
+  // 번개 효과
+  flashLightning();
+
+  setTimeout(()=>{
+    const rev=document.getElementById('scene-reveal');
+    rev.classList.add('show');
+    setTimeout(()=>rev.classList.add('lit'),400);
+    document.getElementById('pd4')?.classList.add('done');
+    // 파도 잦아드는 효과
+    calmSea=true;
+  },600);
+}
+
+function showWheat(){
+  document.getElementById('scene-reveal').style.opacity='0';
+  setTimeout(()=>{
+    document.getElementById('scene-reveal').style.display='none';
+    const ws=document.getElementById('wheat-section');
+    ws.classList.add('show');
+    document.getElementById('pd5')?.classList.add('done');
+    document.getElementById('key-hint').style.opacity='0';
+  },600);
+}
+
+let calmSea=false;
+
+// ══════════════════════════════════════════════
+//  번개
+// ══════════════════════════════════════════════
+let lightningAlpha=0;
+function flashLightning(){
+  lightningAlpha=1;
+  setTimeout(()=>lightningAlpha=0, 120);
+  setTimeout(()=>{lightningAlpha=0.7; setTimeout(()=>lightningAlpha=0,80);},200);
+}
+
+// ══════════════════════════════════════════════
+//  바다 그리기
+// ══════════════════════════════════════════════
+let T=0;
+function drawSea(){
+  seaCtx.clearRect(0,0,W,H);
+
+  // 폭풍 하늘
+  const calmRatio = calmSea ? Math.min((T-calmStart)*0.008,1) : 0;
+  const skyDark = 1-calmRatio*0.6;
+
+  const sky=seaCtx.createLinearGradient(0,0,0,H*0.55);
+  sky.addColorStop(0,`rgba(${Math.round(4*skyDark)},${Math.round(6*skyDark)},${Math.round(12*skyDark)},1)`);
+  sky.addColorStop(0.6,`rgba(${Math.round(8*skyDark+calmRatio*20)},${Math.round(14*skyDark+calmRatio*10)},${Math.round(28*skyDark)},1)`);
+  sky.addColorStop(1,`rgba(${Math.round(10+calmRatio*20)},${Math.round(20+calmRatio*15)},${Math.round(40)},1)`);
+  seaCtx.fillStyle=sky;
+  seaCtx.fillRect(0,0,W,H*0.55);
+
+  // 구름
+  if(!calmSea){
+    for(let c=0;c<5;c++){
+      const cx=((c*W/4+T*15)%(W+200))-100;
+      const cy=H*0.08+c*H*0.07+Math.sin(T*0.3+c)*15;
+      seaCtx.beginPath();
+      seaCtx.ellipse(cx,cy,80+c*20,25+c*8,0,0,Math.PI*2);
+      seaCtx.fillStyle=`rgba(10,14,24,${0.6+c*0.05})`;
+      seaCtx.fill();
+    }
+  }
+
+  // 번개
+  if(lightningAlpha>0){
+    seaCtx.fillStyle=`rgba(220,230,255,${lightningAlpha*0.3})`;
+    seaCtx.fillRect(0,0,W,H);
+  }
+
+  // 파도
+  const calm=calmSea?Math.min((T-calmStart)*0.005,1):0;
+  waves.forEach((w,i)=>{
+    seaCtx.beginPath();
+    for(let x=0;x<=W;x+=4){
+      const ampNow=w.amp*(1-calm*0.75);
+      const y=w.y+Math.sin(x*w.freq+T*w.speed+w.phase)*ampNow
+                 +Math.sin(x*w.freq*1.7+T*w.speed*0.6)*ampNow*0.4;
+      x===0?seaCtx.moveTo(x,y):seaCtx.lineTo(x,y);
+    }
+    seaCtx.lineTo(W,H); seaCtx.lineTo(0,H); seaCtx.closePath();
+    const wg=seaCtx.createLinearGradient(0,w.y-w.amp,0,H);
+    const base1=`rgba(${8+i*4},${20+i*6},${50+i*10},`;
+    const base2=`rgba(${4+i*2},${12+i*4},${30+i*6},`;
+    wg.addColorStop(0,base1+(0.7+calm*0.1)+')');
+    wg.addColorStop(1,base2+'0.95)');
+    seaCtx.fillStyle=wg;
+    seaCtx.fill();
+    // 파도 거품
+    if(i<3&&!calmSea){
+      for(let x=0;x<W;x+=60+Math.random()*40){
+        const wy=w.y+Math.sin(x*w.freq+T*w.speed+w.phase)*w.amp;
+        seaCtx.beginPath();
+        seaCtx.arc(x+Math.random()*20,wy,1.5+Math.random()*2,0,Math.PI*2);
+        seaCtx.fillStyle='rgba(200,220,240,0.18)';
+        seaCtx.fill();
+      }
+    }
+  });
+
+  // 비
+  if(!calmSea){
+    rain.forEach(r=>{
+      r.x+=r.vx; r.y+=r.vy;
+      if(r.x<0) r.x=W+50;
+      if(r.y>H){ r.y=-20; r.x=Math.random()*W+200; }
+      seaCtx.beginPath();
+      seaCtx.moveTo(r.x,r.y);
+      seaCtx.lineTo(r.x+r.vx*r.len/r.vy,r.y+r.len);
+      seaCtx.strokeStyle=`rgba(180,200,230,${r.opacity})`;
+      seaCtx.lineWidth=0.7; seaCtx.stroke();
+    });
+  }
+
+  // 고요해지면 별
+  if(calmSea&&calm>0.5){
+    for(let s=0;s<40;s++){
+      const sx=((s*137)%W);
+      const sy=((s*97)%(H*0.4));
+      const twinkle=Math.sin(T*2+s)*0.3+0.7;
+      seaCtx.beginPath();
+      seaCtx.arc(sx,sy,0.8,0,Math.PI*2);
+      seaCtx.fillStyle=`rgba(220,230,255,${(calm-0.5)*2*twinkle*0.7})`;
+      seaCtx.fill();
+    }
+  }
+}
+
+// ══════════════════════════════════════════════
+//  랜턴 빛 그리기
+// ══════════════════════════════════════════════
+function drawLantern(){
+  lanCtx.clearRect(0,0,W,H);
+  if(!storyActive) return;
+
+  // 어둠 마스크
+  lanCtx.fillStyle='rgba(2,5,8,0.82)';
+  lanCtx.fillRect(0,0,W,H);
+
+  // 랜턴 빛 구멍
+  const radius=120+Math.sin(T*3)*8;
+  const lg=lanCtx.createRadialGradient(mx,my,0,mx,my,radius);
+  lg.addColorStop(0,'rgba(2,5,8,0)');
+  lg.addColorStop(0.6,'rgba(2,5,8,0)');
+  lg.addColorStop(0.85,'rgba(2,5,8,0.4)');
+  lg.addColorStop(1,'rgba(2,5,8,0.82)');
+
+  lanCtx.globalCompositeOperation='destination-out';
+  lanCtx.fillStyle=lg;
+  lanCtx.beginPath();
+  lanCtx.arc(mx,my,radius,0,Math.PI*2);
+  lanCtx.fill();
+  lanCtx.globalCompositeOperation='source-over';
+
+  // 랜턴 따뜻한 색조
+  const wg=lanCtx.createRadialGradient(mx,my,0,mx,my,radius*0.9);
+  wg.addColorStop(0,'rgba(255,180,40,0.06)');
+  wg.addColorStop(0.5,'rgba(255,140,20,0.03)');
+  wg.addColorStop(1,'rgba(255,100,10,0)');
+  lanCtx.fillStyle=wg;
+  lanCtx.beginPath();
+  lanCtx.arc(mx,my,radius*0.9,0,Math.PI*2);
+  lanCtx.fill();
+
+  // 씬이 없으면 전체 어둠 해제
+  if(calmSea){
+    lanCtx.clearRect(0,0,W,H);
+  }
+}
+
+// ══════════════════════════════════════════════
+//  메인 루프
+// ══════════════════════════════════════════════
+let calmStart=0;
+function loop(){
+  if(calmSea && calmStart===0) calmStart=T;
+  drawSea();
+  drawLantern();
+  T+=0.016;
+  requestAnimationFrame(loop);
+}
+loop();
+</script>
+</body>
+</html>

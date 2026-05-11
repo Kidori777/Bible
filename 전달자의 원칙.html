@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>전달자의 원칙</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,500;0,700;1,300;1,500&family=Noto+Sans+KR:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+
+        /* ═══════════════════════════════
+           기본 설정
+        ═══════════════════════════════ */
+        :root {
+            --bg:           #1c1c22;
+            --bg-card:      #22222a;
+            --surface:      #28282f;
+            --border:       rgba(255,255,255,0.10);
+            --border-glow:  rgba(255,255,255,0.20);
+            --text-primary: #f0ece4;
+            --text-body:    #c8c0b4;
+            --text-dim:     #7a7268;
+            --white:        #f8f5ef;
+
+            /* 원칙별 액센트 */
+            --c1: #c8a86e;   /* 소유  — 황금 */
+            --c2: #7ab8a0;   /* 투명  — 청록 */
+            --c3: #9ab0cc;   /* 연합  — 청색 */
+            --c4: #c0a0d4;   /* 반사  — 보라 */
+            --c5: #c8a86e;   /* 신실  — 황금 */
+            --c6: #7ab8a0;   /* 예비  — 청록 */
+            --c7: #9ab0cc;   /* 상대  — 청색 */
+            --c8: #c0a0d4;   /* 손   — 보라 */
+            --c9: #c8a86e;   /* 소멸  — 황금 */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Noto Serif KR', 'Malgun Gothic', Georgia, serif;
+            background-color: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.85;
+            min-height: 100vh;
+        }
+
+        /* 미세한 그레인 텍스처 */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        /* ═══════════════════════════════
+           히어로 헤더
+        ═══════════════════════════════ */
+        .hero {
+            position: relative;
+            text-align: center;
+            padding: 100px 24px 80px;
+            overflow: hidden;
+        }
+
+        /* 배경 빛 번짐 */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -60px; left: 50%;
+            transform: translateX(-50%);
+            width: 600px; height: 400px;
+            background: radial-gradient(ellipse, rgba(200,168,110,0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-eyebrow {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 12px;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            margin-bottom: 28px;
+            opacity: 0;
+            animation: rise 0.9s ease 0.1s forwards;
+        }
+
+        .hero-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(44px, 9vw, 80px);
+            font-weight: 300;
+            color: var(--white);
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            margin-bottom: 10px;
+            opacity: 0;
+            animation: rise 1s ease 0.25s forwards;
+        }
+
+        .hero-title em {
+            font-family: 'Noto Serif KR', serif;
+            font-style: normal;
+            font-weight: 700;
+            color: var(--c1);
+        }
+
+        .hero-subtitle {
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 13px;
+            font-weight: 300;
+            color: var(--text-dim);
+            letter-spacing: 0.15em;
+            margin-top: 20px;
+            opacity: 0;
+            animation: rise 0.9s ease 0.45s forwards;
+        }
+
+        /* 가는 구분선 */
+        .hero-rule {
+            width: 1px;
+            height: 60px;
+            background: linear-gradient(to bottom, transparent, var(--c1), transparent);
+            margin: 36px auto 0;
+            opacity: 0;
+            animation: rise 0.9s ease 0.6s forwards;
+        }
+
+        /* ═══════════════════════════════
+           원칙 목차 (번호 네비게이션)
+        ═══════════════════════════════ */
+        .toc {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            padding: 0 24px 64px;
+            opacity: 0;
+            animation: rise 0.8s ease 0.8s forwards;
+        }
+
+        .toc-item {
+            width: 34px; height: 34px;
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 13px;
+            color: var(--text-dim);
+            text-decoration: none;
+            transition: border-color 0.3s, color 0.3s;
+        }
+
+        .toc-item:hover {
+            border-color: var(--c1);
+            color: var(--c1);
+        }
+
+        /* ═══════════════════════════════
+           원칙 카드
+        ═══════════════════════════════ */
+        .principles {
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 0 20px 60px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .card {
+            position: relative;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            padding: 44px 48px;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(28px);
+            transition: border-color 0.4s, box-shadow 0.4s;
+        }
+
+        .card.visible {
+            animation: cardIn 0.7s ease forwards;
+        }
+
+        .card:hover {
+            border-color: var(--border-glow);
+            box-shadow: 0 0 40px rgba(0,0,0,0.4);
+        }
+
+        /* 왼쪽 컬러 수직 선 */
+        .card::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 20%; bottom: 20%;
+            width: 2px;
+            border-radius: 2px;
+            background: var(--accent);
+            opacity: 0.5;
+            transition: opacity 0.3s, top 0.3s, bottom 0.3s;
+        }
+
+        .card:hover::before {
+            opacity: 1;
+            top: 10%; bottom: 10%;
+        }
+
+        /* 배경 빛 점 (오른쪽 상단) */
+        .card::after {
+            content: '';
+            position: absolute;
+            top: -80px; right: -80px;
+            width: 240px; height: 240px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+            opacity: 0.04;
+            transition: opacity 0.4s;
+            pointer-events: none;
+        }
+
+        .card:hover::after { opacity: 0.08; }
+
+        /* 번호 */
+        .card-number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 11px;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 10px;
+            display: block;
+            opacity: 0.7;
+        }
+
+        /* 카드 제목 */
+        .card-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(20px, 3.5vw, 26px);
+            font-weight: 500;
+            color: var(--white);
+            line-height: 1.3;
+            margin-bottom: 28px;
+            letter-spacing: -0.01em;
+        }
+
+        .card-title .tag {
+            display: block;
+            font-size: 12px;
+            font-style: italic;
+            font-weight: 300;
+            color: var(--accent);
+            letter-spacing: 0.1em;
+            margin-top: 4px;
+            opacity: 0.8;
+        }
+
+        /* 성경 말씀 블록 */
+        .verse {
+            position: relative;
+            margin: 0 0 28px;
+            padding: 20px 22px 20px 28px;
+            background: rgba(255,255,255,0.025);
+            border-radius: 1px;
+            border-left: 1px solid var(--accent);
+        }
+
+        .verse-ref {
+            display: block;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 10.5px;
+            font-weight: 300;
+            letter-spacing: 0.12em;
+            color: var(--accent);
+            margin-bottom: 10px;
+            opacity: 0.75;
+        }
+
+        .verse-text {
+            font-size: 14.5px;
+            font-style: italic;
+            color: rgba(240,236,228,0.92);
+            line-height: 1.8;
+        }
+
+        /* 본문 단락 */
+        .card p {
+            font-size: 15px;
+            color: #c8c0b4;
+            margin-bottom: 14px;
+            line-height: 1.85;
+        }
+
+        .card p:last-child { margin-bottom: 0; }
+
+        /* 핵심 강조문 */
+        .highlight {
+            display: block;
+            margin: 20px 0;
+            padding: 16px 20px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 1px;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            line-height: 1.7;
+        }
+
+        .highlight::before {
+            content: '→  ';
+            color: var(--accent);
+            font-weight: 400;
+        }
+
+        /* 두 번째 성경 말씀 (신실함 원칙) */
+        .verse + .verse {
+            margin-top: -14px;
+        }
+
+        /* ═══════════════════════════════
+           푸터
+        ═══════════════════════════════ */
+        footer {
+            text-align: center;
+            padding: 48px 24px 64px;
+            opacity: 0;
+            animation: rise 0.8s ease 1s forwards;
+        }
+
+        .footer-rule {
+            width: 1px;
+            height: 50px;
+            background: linear-gradient(to bottom, var(--c1), transparent);
+            margin: 0 auto 20px;
+        }
+
+        .footer-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 13px;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--text-dim);
+        }
+
+        /* ═══════════════════════════════
+           애니메이션
+        ═══════════════════════════════ */
+        @keyframes rise {
+            from { opacity: 0; transform: translateY(18px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(28px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ═══════════════════════════════
+           반응형
+        ═══════════════════════════════ */
+        @media (max-width: 560px) {
+            .card { padding: 32px 22px; }
+            .hero { padding: 72px 20px 56px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ── 헤더 ── -->
+<header class="hero">
+    <p class="hero-eyebrow">말씀 개요 · 부산교회 2구역</p>
+    <h1 class="hero-title">전달자의<br><em>원칙</em></h1>
+    <p class="hero-subtitle">그분은 증가하셔야 하고, 나는 감소되어야 합니다</p>
+    <div class="hero-rule"></div>
+</header>
+
+<!-- ── 목차 ── -->
+<nav class="toc" aria-label="원칙 목차">
+    <a class="toc-item" href="#p1">1</a>
+    <a class="toc-item" href="#p2">2</a>
+    <a class="toc-item" href="#p3">3</a>
+    <a class="toc-item" href="#p4">4</a>
+    <a class="toc-item" href="#p5">5</a>
+    <a class="toc-item" href="#p6">6</a>
+    <a class="toc-item" href="#p7">7</a>
+    <a class="toc-item" href="#p8">8</a>
+    <a class="toc-item" href="#p9">9</a>
+</nav>
+
+<!-- ── 원칙 목록 ── -->
+<main class="principles">
+
+    <!-- 1 -->
+    <article class="card" id="p1" style="--accent: var(--c1)">
+        <span class="card-number">원칙 01</span>
+        <h2 class="card-title">
+            전달자는 '머무르지 않는다'
+            <span class="tag">— 소유의 원칙</span>
+        </h2>
+        <div class="verse">
+            <span class="verse-ref">📖 요한복음 3:30</span>
+            <p class="verse-text">"그분은 증가하셔야 하고, 나는 감소되어야 합니다."</p>
+        </div>
+        <p>전달자는 메시지를 가져오지만 메시지를 소유하지 않습니다.</p>
+        <p>이는 주님께 받은 메시지는 내가 소유하여 변질시켜야 되는 것이 아니라 그대로 전달되어야 한다는 것입니다.</p>
+        <p>내가 받은 계시가 되는 것이 아니라 나를 통과하신 말씀이 전달되어져야 하는 것입니다.</p>
+        <span class="highlight">말씀이 그 안에 머무르면 그 순간 전달자는 우상화의 출발점이 됩니다.</span>
+    </article>
+
+    <!-- 2 -->
+    <article class="card" id="p2" style="--accent: var(--c2)">
+        <span class="card-number">원칙 02</span>
+        <h2 class="card-title">
+            전달자는 자신을 '보이지 않게' 한다
+            <span class="tag">— 투명성의 원칙</span>
+        </h2>
+        <div class="verse">
+            <span class="verse-ref">📖 요한복음 1:23</span>
+            <p class="verse-text">"요한이 말하였다. '나는 신언자 이사야가 말한 것처럼 주님의 길을 곧게 하십시오라고 광야에서 외치는 자의 음성입니다.'"</p>
+        </div>
+        <p>침례 요한은 전달자로서 목소리이지 얼굴이 아닙니다.</p>
+        <p>전달이 끝나면, 나는 사라지는 것이 원칙입니다.</p>
+    </article>
+
+    <!-- 3 -->
+    <article class="card" id="p3" style="--accent: var(--c3)">
+        <span class="card-number">원칙 03</span>
+        <h2 class="card-title">
+            전달자는 머리와 몸을 분리하지 않는다
+            <span class="tag">— 연합의 원칙</span>
+        </h2>
+        <div class="verse">
+            <span class="verse-ref">📖 에베소서 4:15–16</span>
+            <p class="verse-text">"곧 머리이신 분 안으로 자라야 합니다. 그분으로부터 온몸은 그 풍성한 공급을 해 주는 각 마디를 통하여, 그리고 각 지체가 분량에 따라 기능을 발휘하는 것을 통하여 함께 결합되고 함께 짜입니다."</p>
+        </div>
+        <p>전달자는 머리로부터 직접 받지만 몸을 우회하여 나타나지 않습니다.</p>
+        <span class="highlight">개인 계시로 집단을 지배하는 것은 전달이 아니라 탈선입니다.</span>
+        <p>전달자는 머리에게서 받아 몸 안으로 흘려보내는 것이 원칙입니다.</p>
+    </article>
+
+    <!-- 4 -->
+    <article class="card" id="p4" style="--accent: var(--c4)">
+        <span class="card-number">원칙 04</span>
+        <h2 class="card-title">
+            전달자는 자기 빛을 만들지 않는다
+            <span class="tag">— 반사 원칙</span>
+        </h2>
+        <div class="verse">
+            <span class="verse-ref">📖 요한복음 1:8</span>
+            <p class="verse-text">"그는 그 빛이 아니었고, 그 빛에 관하여 증언하러 왔을 뿐이었다."</p>
+        </div>
+        <p>전달자는 빛이 아닙니다. 빛을 스스로 증명하려 할수록 참빛은 흐려질 것입니다.</p>
+        <span class="highlight">전달자가 스스로 빛나려는 순간 그는 떠돌이 별이 되어 버립니다.</span>
+        <p>전달자는 나의 색깔을 나타내는 것이 아니라 그리스도의 빛을 반사하는 것이 원칙입니다.</p>
+    </article>
+
+    <!-- 5 -->
+    <article class="card" id="p5" style="--accent: var(--c5)">
+        <span class="card-number">원칙 05</span>
+        <h2 class="card-title">
+            전달자는 신실함이 우선된다
+            <span class="tag">— 신실함의 원칙</span>
+        </h2>
+        <div class="verse">
+            <span class="verse-ref">📖 고린도전서 4:2</span>
+            <p class="verse-text">"여기에서 청지기들에게 무엇보다도 요구되는 것은 신실한 사람으로 발견되는 것입니다."</p>
+        </div>
+        <p>전달자는 전달하는 자이기에 맡긴 것을 그대로 지켜야 합니다.</p>
+        <span class="highlight">신실한 자는 "무언가를 더한 사람"이 아니라 아무것도 망치지 않은 사람입니다.</span>
+        <div class="verse">
+            <span class="verse-ref">📖 디모데전서 6:20</span>
+            <p class="verse-text">"디모데여, 그대에게 맡긴 것을 지키며,"</p>
+        </div>
+        <p>전달자는 맡긴 것을 신실하게 지켜야 하는 원칙이 있습니다.</p>
+    </article>
+
+    <!-- 6 -->
+    <article class="card" id="p6" style="--accent: var(--c6)">
+        <span class="card-number">원칙 06</span>
+        <h2 class="card-title">
+            전달자는 길을 만들지 않고 '길을 비운다'
+            <span class="tag">— 예비의 원칙</span>
+        </h2>
+        <div class="verse">
+            <span class="verse-ref">📖 이사야 40:3</span>
+            <p class="verse-text">"광야에서 외치는 사람의 음성이라. 여호와의 길을 훤히 내어라. 사막에 우리 하나님을 위한 큰길을 곧게 하여라."</p>
+        </div>
+        <p>예비하는 것은 없는 것을 창조하는 것이 아닙니다.</p>
+        <p>전달자는 무언가를 세우는 사람이 아니라 막힌 것을 제거하는 사람입니다.</p>
+        <p>내 해석, 내 열심, 내 성공 주님의 길에 막힌 상자들을 치우고 비워서 주님의 길을 예비하는 역할입니다.</p>
+        <p>전달자는 여호와의 길에 무엇인가를 추가하지 말고 장애물을 제거하며 치우는 것이 원칙입니다.</p>
+    </article>
+
+    <!-- 7 -->
+    <article class="card" id="p7" style="--accent: var(--c7)">
+        <span class="card-number">원칙 07</span>
+        <h2 class="card-title">
+            전달자는 자신을 '기준'으로 삼지 않는다
+            <span class="tag">— 상대성의 원칙</span>
+        </h2>
+        <div class="verse">
+            <span class="verse-ref">📖 고린도후서 10:12</span>
+            <p class="verse-text">"우리는 우리 자신을, 자기를 내세우는 어떤 사람들과 같은 부류로 여기거나 비교하려고 하지 않습니다. 그들은 그들 스스로 그들 자신을 평가하고 그들 스스로 서로를 비교하니, 지각이 없는 사람들입니다."</p>
+        </div>
+        <p>전달자는 기준이 아닙니다. 항상 빛을 가리키는 손가락이며 사람들이 나를 따라오면 이미 전달은 끝났습니다.</p>
+        <p>전달자는 나를 보지 말고 그분의 빛을 보게 하여야 합니다.</p>
+    </article>
+
+    <!-- 8 -->
+    <article class="card" id="p8" style="--accent: var(--c8)">
+        <span class="card-number">원칙 08</span>
+        <h2 class="card-title">
+            전달자는 붙잡혀 있어야 한다
+            <span class="tag">— 손의 원칙 (계시록 핵심)</span>
+        </h2>
+        <div class="verse">
+            <span class="verse-ref">📖 요한계시록 1:16</span>
+            <p class="verse-text">"그분의 오른손에는 일곱 별이 있고,"</p>
+        </div>
+        <p>전달자는 자율적 존재가 아닙니다. 주님의 붙잡힘을 잃으면 즉시 추락할 수밖에 없는 자입니다.</p>
+        <p>붙잡힘은 보호이자 구속이 필요로 하는 존재입니다.</p>
+        <p>전달자는 자유롭게 사는 삶이 아니라 주님의 붙잡힘 아래 있어야 함을 원칙으로 합니다.</p>
+    </article>
+
+    <!-- 9 -->
+    <article class="card" id="p9" style="--accent: var(--c9)">
+        <span class="card-number">원칙 09</span>
+        <h2 class="card-title">
+            전달자는 반드시 사라진다
+            <span class="tag">— 소멸의 원칙</span>
+        </h2>
+        <div class="verse">
+            <span class="verse-ref">📖 누가복음 17:10</span>
+            <p class="verse-text">"이와 같이 여러분도 명령을 받은 대로 다 하고 나서 '우리는 무익한 노예들입니다. 마땅히 해야 할 일을 하였을 뿐입니다.'라고 말하십시오."</p>
+        </div>
+        <p>전달자의 자리는 존경의 자리가 아니라 두려움의 자리이자 동시에 가장 가까이서 주님의 발자국을 보는 자리입니다.</p>
+    </article>
+
+</main>
+
+<!-- ── 푸터 ── -->
+<footer>
+    <div class="footer-rule"></div>
+    <p class="footer-text">부산교회 2구역</p>
+</footer>
+
+<script>
+    // 스크롤 시 카드 등장
+    const cards = document.querySelectorAll('.card');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, i) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => {
+                    entry.target.classList.add('visible');
+                }, 80);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.12 });
+
+    cards.forEach(card => observer.observe(card));
+</script>
+
+</body>
+</html>

@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>토마스 칼라일의 좌절과 재기</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700;900&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #1c1a17;
+            --ink-soft: #3a3630;
+            --ink-muted: #7a7060;
+            --parchment: #f7f3ec;
+            --paper: #faf8f4;
+            --warm-white: #fefcf8;
+            --stone: #e8e2d8;
+            --stone-dark: #cdc5b8;
+            --gold: #b8976a;
+            --gold-light: #d4b896;
+            --gold-pale: #f0e6d3;
+            --rust: #8b4a2f;
+            --sage: #6b7c6a;
+            --sage-pale: #e8ede8;
+            --blue-deep: #2c3d5a;
+            --blue-muted: #4a6080;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--parchment);
+            color: var(--ink);
+            font-family: 'Noto Serif KR', 'Lora', serif;
+            line-height: 1.9;
+            overflow-x: hidden;
+        }
+
+        /* ─── 종이 질감 ─── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        /* ─── 페이지 레이아웃 ─── */
+        .page {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 80px 40px 120px;
+        }
+
+        /* ─── 히어로 ─── */
+        .hero {
+            padding: 100px 40px 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(180deg, var(--warm-white) 0%, var(--parchment) 100%);
+            border-bottom: 1px solid var(--stone);
+        }
+
+        /* 물 번짐 / 수채화 배경 */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -40px; left: 50%;
+            transform: translateX(-50%);
+            width: 600px; height: 400px;
+            background:
+                radial-gradient(ellipse 60% 50% at 50% 40%, rgba(184,151,106,0.08) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 30% at 30% 60%, rgba(107,124,106,0.06) 0%, transparent 60%),
+                radial-gradient(ellipse 50% 40% at 70% 30%, rgba(44,61,90,0.04) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .hero-eyebrow {
+            display: inline-block;
+            font-family: 'Lora', serif;
+            font-size: 11px;
+            font-style: normal;
+            letter-spacing: 3px;
+            color: var(--gold);
+            margin-bottom: 28px;
+            opacity: 0;
+            animation: gentle-rise 1.2s 0.2s ease forwards;
+        }
+
+        .hero-title {
+            font-family: 'Noto Serif KR', serif;
+            font-size: clamp(28px, 5vw, 46px);
+            font-weight: 700;
+            color: var(--ink);
+            line-height: 1.25;
+            letter-spacing: -0.5px;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: gentle-rise 1.2s 0.5s ease forwards;
+        }
+
+        .hero-rule {
+            width: 40px; height: 1px;
+            background: var(--gold);
+            margin: 28px auto;
+            opacity: 0;
+            animation: gentle-rise 1.2s 0.8s ease forwards;
+        }
+
+        .hero-intro {
+            font-size: 14px;
+            color: var(--ink-muted);
+            font-style: normal;
+            letter-spacing: 1.5px;
+            opacity: 0;
+            animation: gentle-rise 1.2s 1s ease forwards;
+        }
+
+        @keyframes gentle-rise {
+            from { opacity: 0; transform: translateY(12px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ─── 섹션 공통 ─── */
+        .section {
+            padding: 72px 40px;
+            position: relative;
+        }
+
+        /* 왼쪽 수직선 */
+        .section::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 72px; bottom: 72px;
+            width: 1px;
+            background: linear-gradient(180deg, transparent, var(--stone-dark), transparent);
+        }
+
+        .section-tag {
+            font-family: 'Lora', serif;
+            font-style: normal;
+            font-size: 11px;
+            letter-spacing: 2.5px;
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+
+        .section-title {
+            font-family: 'Noto Serif KR', serif;
+            font-size: clamp(20px, 3vw, 28px);
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 32px;
+            line-height: 1.3;
+        }
+
+        .section p {
+            font-size: 15px;
+            color: var(--ink-soft);
+            line-height: 2;
+            margin-bottom: 22px;
+        }
+
+        .section p:last-child { margin-bottom: 0; }
+
+        strong {
+            color: var(--rust);
+            font-weight: 600;
+        }
+
+        em {
+            font-style: normal;
+            color: var(--ink-muted);
+        }
+
+        /* ─── 인용구 ─── */
+        .quote-block {
+            margin: 36px 0;
+            padding: 28px 32px;
+            background: var(--warm-white);
+            border-left: 2px solid var(--gold);
+            border-radius: 0 6px 6px 0;
+            position: relative;
+        }
+
+        .quote-block::before {
+            content: '\201C';
+            position: absolute;
+            top: -10px; left: 20px;
+            font-size: 72px;
+            color: var(--gold-pale);
+            font-family: 'Lora', serif;
+            line-height: 1;
+            pointer-events: none;
+        }
+
+        .quote-block p {
+            font-size: 15px;
+            color: var(--ink-soft);
+            font-style: normal;
+            line-height: 1.9;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .quote-block small {
+            display: block;
+            text-align: right;
+            margin-top: 14px;
+            font-size: 12px;
+            color: var(--gold);
+            letter-spacing: 1px;
+            font-style: normal;
+        }
+
+        /* ─── 구분선 ─── */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 0 40px;
+            margin: 0;
+        }
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--stone-dark));
+        }
+        .divider::after {
+            background: linear-gradient(90deg, var(--stone-dark), transparent);
+        }
+        .divider-symbol {
+            color: var(--gold);
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        /* ─── 칼라일 섹션 (따뜻한 양피지) ─── */
+        .section-carlyle {
+            background: var(--warm-white);
+        }
+
+        /* ─── 느헤미야 섹션 (차분한 회청색) ─── */
+        .section-nehemiah {
+            background: linear-gradient(160deg, #f5f7fa 0%, var(--warm-white) 100%);
+        }
+
+        /* ─── 사명 섹션 (세이지 팔레트) ─── */
+        .section-mission {
+            background: var(--sage-pale);
+        }
+        .section-mission .section-title { color: var(--sage); }
+        .section-mission .section-tag { color: var(--sage); }
+        .section-mission::before {
+            background: linear-gradient(180deg, transparent, var(--sage), transparent);
+            opacity: 0.3;
+        }
+
+        /* ─── 핵심 메시지 카드 ─── */
+        .key-message {
+            background: linear-gradient(135deg, var(--blue-deep), #1e2e48);
+            color: #fff;
+            border-radius: 12px;
+            padding: 36px 36px;
+            margin: 32px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .key-message::before {
+            content: '';
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 160px; height: 160px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.03);
+        }
+        .key-message::after {
+            content: '';
+            position: absolute;
+            bottom: -60px; left: -20px;
+            width: 200px; height: 200px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.02);
+        }
+        .key-message p {
+            color: rgba(255,255,255,0.9);
+            font-size: 15px;
+            line-height: 1.9;
+            position: relative;
+            z-index: 1;
+            margin: 0;
+        }
+        .key-message strong {
+            color: var(--gold-light);
+        }
+
+        /* ─── 참고 ─── */
+        .reference-block {
+            background: var(--paper);
+            border: 1px solid var(--stone);
+            border-radius: 8px;
+            padding: 28px 32px;
+            margin-top: 60px;
+        }
+        .reference-block h3 {
+            font-size: 13px;
+            color: var(--ink-muted);
+            letter-spacing: 2px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            font-family: 'Noto Serif KR', serif;
+        }
+        .reference-block p {
+            font-size: 13px;
+            color: var(--ink-muted);
+            line-height: 1.85;
+        }
+
+        /* ─── 클로징 ─── */
+        .closing {
+            text-align: center;
+            padding: 80px 40px 100px;
+            background: linear-gradient(180deg, var(--parchment) 0%, var(--warm-white) 100%);
+            border-top: 1px solid var(--stone);
+        }
+        .closing-icon {
+            font-size: 28px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+        .closing-question {
+            font-family: 'Noto Serif KR', serif;
+            font-size: clamp(18px, 3vw, 26px);
+            font-weight: 700;
+            color: var(--ink);
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+        .closing-answer {
+            font-size: 14px;
+            color: var(--ink-muted);
+            font-style: normal;
+            max-width: 480px;
+            margin: 0 auto 40px;
+            line-height: 1.9;
+        }
+        .closing-rule {
+            width: 40px; height: 1px;
+            background: var(--gold);
+            margin: 40px auto 0;
+        }
+
+        /* ─── 스크롤 reveal ─── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(18px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .reveal.on {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ─── 반응형 ─── */
+        @media (max-width: 600px) {
+            .hero { padding: 72px 24px 60px; }
+            .section { padding: 56px 24px; }
+            .divider { padding: 0 24px; }
+            .closing { padding: 60px 24px 80px; }
+            .quote-block { padding: 22px 22px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ═══ HERO ═══ -->
+<header class="hero">
+    <div class="hero-eyebrow">좌절과 재기 · 묵상</div>
+    <h1 class="hero-title">토마스 칼라일의<br>도전과 회복</h1>
+    <div class="hero-rule"></div>
+    <p class="hero-intro">가치 있는 일에는 가치 있는 도전이 필요하다</p>
+</header>
+
+<!-- ═══ 칼라일 ═══ -->
+<section class="section section-carlyle reveal">
+    <div class="section-tag">토마스 칼라일</div>
+    <h2 class="section-title">좌절과 재기</h2>
+
+    <p>
+        유명한 영국 사상가 <strong>토마스 칼라일</strong>은 평생의 염원이었던 『프랑스 혁명사』를 쓰기로 결심합니다. 그는 이 책을 통해 유럽에 더 이상 피비린내 나는 전쟁이 없기를, 그리고 인간적인 민주주의와 건강한 문화가 꽃피우기를 바랐습니다. 이 원대한 목표를 위해 거의 10년에 걸쳐 정성을 다해 원고를 집필했습니다.
+    </p>
+    <p>
+        마침내 원고가 완성될 무렵, 그는 절친한 철학자 친구인 존 스튜어트 밀에게 마지막 검토를 맡겼습니다. 밀은 서재에서 원고를 읽다가 너무 피곤해 잠이 들었고, 다음 날 아침 하녀가 방에 흐트러진 원고지를 쓰레기로 착각해 모두 불 속에 넣어 버렸습니다. 칼라일의 길고 긴 노력과 수고는 한순간에 물거품이 되었고, 그는 깊은 낙담에 빠져 몇 달 동안 삶의 의욕을 완전히 잃고 말았습니다.
+    </p>
+    <p>
+        그러던 어느 비 오는 날, 멍하니 창밖을 바라보던 칼라일의 눈에 새집을 짓는 인부들이 들어왔습니다. 그들은 벽돌이 조금이라도 맞지 않으면 주저 없이 허물고 다시 쌓기를 반복하며 차근차근 집을 지어갔습니다. 그 광경을 보던 칼라일은 무릎을 치며 외쳤습니다.
+    </p>
+
+    <div class="quote-block">
+        <p>한 채의 집을 짓기 위해서도 저토록 정성스러운 노력과 정성이 필요한데, 유럽의 역사를 다시 일으켜 세우기 위한 일에 내가 다시 땀을 흘리지 못할 이유가 어디 있을까?</p>
+    </div>
+
+    <p>
+        그는 다시 펜을 잡고 원고를 쓰기 시작했습니다. <strong>가치 있는 일에는 가치 있는 도전이 필요하다</strong>는 깨달음을 얻은 것입니다.
+    </p>
+</section>
+
+<div class="divider"><span class="divider-symbol">✦</span></div>
+
+<!-- ═══ 느헤미야 ═══ -->
+<section class="section section-nehemiah reveal">
+    <div class="section-tag">느헤미야서</div>
+    <h2 class="section-title">느헤미야의 도전과 교훈</h2>
+
+    <p>
+        이러한 교훈은 성경 속 느헤미야의 이야기에도 그대로 적용됩니다. 무너진 예루살렘 성벽을 보며 느헤미야는 깊은 수치심을 느꼈고, 이는 성벽을 다시 건축하겠다는 강한 동기로 이어졌습니다. 그는 백성들에게 하나님의 선한 손길이 함께하고 있음을 확신시키며 "우리가 일어나 건축합시다"라고 외쳤습니다. 이 선포에 백성들은 마음을 합해 힘을 얻었고, 마침내 무너진 성벽을 다시 세울 수 있었습니다.
+    </p>
+
+    <div class="quote-block">
+        <p>그 후 나는 그들에게 말하였다. "우리가 처한 심각한 상태는 여러분이 보시는 바와 같습니다. 예루살렘은 폐허가 되었고 문들은 불에 탔습니다. 자, 우리가 더 이상 수치를 당하지 않도록 예루살렘 성벽을 건축합시다." 나는 내 하나님의 선한 손이 내 위에 있었다는 것과 왕이 나에게 한 말에 대해 그들에게 이야기해 주었다. 그러자 그들은 "우리가 일어나 건축합시다."라고 말하였고, 그 선한 일을 위하여 그들의 손을 힘 있게 하였다.</p>
+        <small>— 느헤미야 2장 17~18절</small>
+    </div>
+</section>
+
+<div class="divider"><span class="divider-symbol">✦</span></div>
+
+<!-- ═══ 사명 ═══ -->
+<section class="section section-mission reveal">
+    <div class="section-tag">우리의 사명</div>
+    <h2 class="section-title">사명과 축복</h2>
+
+    <p>
+        이처럼, 우리에게 주어진 선한 일, 특히 복음을 전하는 일은 하나님이 우리에게 주신 시대적 사명입니다. 우리가 이 일에 함께 일어나 도전할 때, 하나님께서는 우리의 손에 힘을 주실 것입니다.
+    </p>
+
+    <div class="key-message">
+        <p><strong>하나님의 선한 손길과 능력의 힘은 함께 일어나 성벽을 건축하는 자들에게만 주어지는 특별한 축복</strong>인 것입니다.</p>
+    </div>
+
+    <p>
+        우리 앞에 놓인 '선한 일'은 무엇인가요? 함께 힘을 모아 그 일을 이룰 때, 우리는 하나님의 역사를 경험하게 될 것입니다.
+    </p>
+
+    <div class="quote-block">
+        <p>선을 행하다가 낙심하지 맙시다. 왜냐하면 우리가 포기하지 않는다면, 제때에 거두게 될 것이기 때문입니다.</p>
+        <small>— 갈라디아서 6장 9절</small>
+    </div>
+
+    <!-- 참고 -->
+    <div class="reference-block">
+        <h3>참고 · 『프랑스 혁명사』</h3>
+        <p>
+            토마스 칼라일의 『프랑스 혁명사(The French Revolution: A History)』는 1837년에 출간된 역사서로, 단순한 사건 나열을 넘어 문학적 열정과 철학적 통찰이 담긴 명작으로 평가받습니다. 이 책은 "역사책이 마치 드라마처럼 읽힌다"는 평가와 함께 역사 저술의 새로운 지평을 열었다는 찬사를 받으며, 인간과 문명의 근본을 묻는 문학적 걸작으로 남아 있습니다.
+        </p>
+    </div>
+</section>
+
+<!-- ═══ CLOSING ═══ -->
+<footer class="closing reveal">
+    <div class="closing-icon">🕊</div>
+    <p class="closing-question">우리 앞에 놓인<br>'선한 일'은 무엇인가요?</p>
+    <p class="closing-answer">함께 힘을 모아 그 일을 이룰 때,<br>우리는 하나님의 역사를 경험하게 될 것입니다.</p>
+    <div class="closing-rule"></div>
+</footer>
+
+<script>
+    const reveals = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                e.target.classList.add('on');
+                io.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => io.observe(el));
+</script>
+</body>
+</html>

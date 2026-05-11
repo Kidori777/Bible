@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>페니실린의 기적, 그리고 복음의 비밀</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300;1,600&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #0f0e0a;
+            --parchment: #f5f0e8;
+            --amber: #c8922a;
+            --amber-glow: #e8b84b;
+            --moss: #2e4a35;
+            --moss-light: #4a7a55;
+            --sepia: #8b6914;
+            --cream: #fdf8ef;
+            --rust: #7a3420;
+            --mold-green: #3d6b4a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: #0a0907;
+            color: var(--parchment);
+            font-family: 'Noto Serif KR', serif;
+            font-weight: 300;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* ── 배경 곰팡이/세포 패턴 ── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 10% 20%, rgba(46,74,53,0.18) 0%, transparent 50%),
+                radial-gradient(ellipse at 85% 70%, rgba(46,74,53,0.12) 0%, transparent 45%),
+                radial-gradient(ellipse at 50% 50%, rgba(200,146,42,0.04) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* 세포막 텍스처 SVG */
+        .bg-cells {
+            position: fixed;
+            inset: 0;
+            opacity: 0.06;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .bg-cells svg { width: 100%; height: 100%; }
+
+        /* ── 헤더 ── */
+        header {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 60px 30px;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .header-eyebrow {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 1rem;
+            letter-spacing: 0.3em;
+            color: var(--amber);
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeUp 1s ease 0.3s forwards;
+        }
+
+        .petri-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(200,146,42,0.15);
+            animation: pulse-ring 8s ease-in-out infinite;
+        }
+        .petri-ring:nth-child(1) { width: 400px; height: 400px; animation-delay: 0s; }
+        .petri-ring:nth-child(2) { width: 600px; height: 600px; animation-delay: 1.5s; }
+        .petri-ring:nth-child(3) { width: 800px; height: 800px; animation-delay: 3s; }
+        .petri-ring:nth-child(4) { width: 1000px; height: 1000px; animation-delay: 4.5s; }
+        @keyframes pulse-ring {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.08; transform: scale(1.03); }
+        }
+
+        .mold-spot {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 40% 40%, rgba(61,107,74,0.5), rgba(46,74,53,0.2) 60%, transparent);
+            filter: blur(1px);
+        }
+        .mold-spot.s1 { width: 180px; height: 160px; top: 15%; left: 8%; animation: float 12s ease-in-out infinite; }
+        .mold-spot.s2 { width: 120px; height: 130px; top: 60%; right: 10%; animation: float 15s ease-in-out infinite 2s; }
+        .mold-spot.s3 { width: 80px; height: 80px; bottom: 20%; left: 20%; animation: float 10s ease-in-out infinite 4s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-15px) scale(1.05); }
+        }
+
+        header h1 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            font-size: clamp(2.4rem, 6vw, 4.5rem);
+            line-height: 1.15;
+            color: var(--parchment);
+            letter-spacing: -0.02em;
+            max-width: 700px;
+            position: relative;
+            z-index: 2;
+            opacity: 0;
+            animation: fadeUp 1s ease 0.6s forwards;
+        }
+
+        header h1 .accent-word {
+            color: var(--amber-glow);
+            display: block;
+        }
+
+        .header-divider {
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--amber), transparent);
+            margin: 30px auto;
+            opacity: 0;
+            animation: fadeIn 1s ease 1.2s forwards;
+        }
+
+        .header-sub {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            color: rgba(245,240,232,0.6);
+            letter-spacing: 0.1em;
+            opacity: 0;
+            animation: fadeUp 1s ease 1.4s forwards;
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            opacity: 0;
+            animation: fadeIn 1s ease 2s forwards;
+        }
+        .scroll-hint span {
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            color: rgba(200,146,42,0.6);
+            text-transform: uppercase;
+        }
+        .scroll-arrow {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--amber), transparent);
+            animation: scroll-pulse 2s ease-in-out infinite;
+        }
+        @keyframes scroll-pulse {
+            0%, 100% { opacity: 0.4; transform: scaleY(1); }
+            50% { opacity: 1; transform: scaleY(1.2); }
+        }
+
+        /* ── 본문 컨테이너 ── */
+        .content {
+            position: relative;
+            z-index: 1;
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 0 24px 100px;
+        }
+
+        /* ── 섹션 레이블 ── */
+        .section-label {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 0.85rem;
+            letter-spacing: 0.3em;
+            color: var(--amber);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(200,146,42,0.4), transparent);
+        }
+
+        /* ── 본문 텍스트 ── */
+        .prose {
+            font-size: 1rem;
+            line-height: 2;
+            color: rgba(245,240,232,0.85);
+            margin-bottom: 1.8rem;
+        }
+
+        .prose strong, .highlight {
+            color: var(--amber-glow);
+            font-weight: 600;
+        }
+
+        /* ── 실험 카드 (페트리 접시 스타일) ── */
+        .petri-card {
+            position: relative;
+            background: rgba(15,14,10,0.7);
+            border: 1px solid rgba(200,146,42,0.2);
+            border-radius: 4px;
+            padding: 36px;
+            margin: 40px 0;
+            overflow: hidden;
+            transition: border-color 0.4s;
+        }
+        .petri-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at top left, rgba(61,107,74,0.12), transparent 60%);
+            pointer-events: none;
+        }
+        .petri-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--amber), transparent);
+        }
+        .petri-card:hover {
+            border-color: rgba(200,146,42,0.45);
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .card-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            color: var(--amber-glow);
+            margin-bottom: 18px;
+            font-weight: 700;
+        }
+
+        /* ── 섹션 헤더 ── */
+        .chapter-header {
+            margin: 80px 0 40px;
+            text-align: center;
+        }
+        .chapter-number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 5rem;
+            font-weight: 300;
+            color: rgba(200,146,42,0.1);
+            line-height: 1;
+            letter-spacing: -0.04em;
+        }
+        .chapter-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.6rem, 4vw, 2.4rem);
+            font-weight: 700;
+            color: var(--parchment);
+            margin-top: -20px;
+            position: relative;
+        }
+        .chapter-title::after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 2px;
+            background: var(--amber);
+            margin: 18px auto 0;
+        }
+
+        /* ── 진리 카드 ── */
+        .truth-block {
+            margin: 50px 0;
+            display: grid;
+            grid-template-columns: 56px 1fr;
+            gap: 0 24px;
+        }
+        .truth-number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 4rem;
+            font-weight: 300;
+            color: rgba(200,146,42,0.25);
+            line-height: 1;
+            text-align: right;
+            padding-top: 4px;
+        }
+        .truth-content {}
+        .truth-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--amber-glow);
+            margin-bottom: 14px;
+        }
+
+        /* ── 성경 말씀 ── */
+        .scripture-wrap {
+            position: relative;
+            margin: 24px 0 20px;
+            padding: 26px 28px 26px 36px;
+            background: rgba(10, 8, 4, 0.6);
+            border-left: 3px solid var(--amber);
+            border-radius: 0 4px 4px 0;
+        }
+        .scripture-wrap::before {
+            content: '"';
+            position: absolute;
+            top: -20px; left: 20px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 5rem;
+            color: rgba(200,146,42,0.2);
+            line-height: 1;
+        }
+        .scripture-text {
+            font-family: 'Noto Serif KR', serif;
+            font-weight: 600;
+            font-size: 0.98rem;
+            line-height: 2;
+            color: rgba(245,240,232,0.92);
+            position: relative;
+            z-index: 1;
+        }
+        .scripture-ref {
+            display: block;
+            margin-top: 12px;
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 0.9rem;
+            color: var(--amber);
+            letter-spacing: 0.05em;
+        }
+
+        /* ── 분리선 ── */
+        .ornament-divider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 70px 0;
+        }
+        .ornament-divider::before,
+        .ornament-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(200,146,42,0.35));
+        }
+        .ornament-divider::after {
+            background: linear-gradient(90deg, rgba(200,146,42,0.35), transparent);
+        }
+        .ornament-center {
+            color: var(--amber);
+            font-size: 1.1rem;
+            opacity: 0.6;
+        }
+
+        /* ── 클로징 카드 ── */
+        .closing-card {
+            position: relative;
+            background: linear-gradient(135deg, rgba(46,74,53,0.25) 0%, rgba(15,14,10,0.8) 60%);
+            border: 1px solid rgba(200,146,42,0.3);
+            border-radius: 4px;
+            padding: 44px;
+            margin: 40px 0;
+            text-align: center;
+            overflow: hidden;
+        }
+        .closing-card::before {
+            content: '';
+            position: absolute;
+            top: -60px; right: -60px;
+            width: 200px; height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(200,146,42,0.08), transparent 70%);
+        }
+        .closing-card::after {
+            content: '';
+            position: absolute;
+            bottom: -40px; left: -40px;
+            width: 150px; height: 150px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(61,107,74,0.12), transparent 70%);
+        }
+
+        /* ── 풋터 ── */
+        footer {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 40px 24px;
+            border-top: 1px solid rgba(200,146,42,0.15);
+        }
+        .footer-cross {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        .footer-church {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            letter-spacing: 0.2em;
+            color: rgba(245,240,232,0.5);
+        }
+
+        /* ── 애니메이션 ── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Intersection Observer 애니메이션 */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+
+        /* ── 반응형 ── */
+        @media (max-width: 600px) {
+            .truth-block {
+                grid-template-columns: 1fr;
+            }
+            .truth-number {
+                text-align: left;
+                font-size: 2.5rem;
+                margin-bottom: -12px;
+            }
+            .petri-card, .closing-card { padding: 24px 20px; }
+            .scripture-wrap { padding: 20px 20px 20px 24px; }
+        }
+
+        /* ── 연도 배지 ── */
+        .year-badge {
+            display: inline-block;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.8rem;
+            letter-spacing: 0.15em;
+            color: var(--amber);
+            border: 1px solid rgba(200,146,42,0.4);
+            padding: 3px 12px;
+            border-radius: 2px;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 배경 세포 패턴 -->
+<div class="bg-cells">
+    <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <!-- 세포 링 패턴들 -->
+        <g fill="none" stroke="#4a7a55" stroke-width="0.5" opacity="0.8">
+            <circle cx="200" cy="150" r="80"/><circle cx="200" cy="150" r="55"/><circle cx="200" cy="150" r="25"/>
+            <circle cx="420" cy="320" r="60"/><circle cx="420" cy="320" r="40"/>
+            <circle cx="1200" cy="200" r="100"/><circle cx="1200" cy="200" r="70"/><circle cx="1200" cy="200" r="35"/>
+            <circle cx="900" cy="500" r="75"/><circle cx="900" cy="500" r="50"/><circle cx="900" cy="500" r="20"/>
+            <circle cx="1300" cy="700" r="90"/><circle cx="1300" cy="700" r="60"/>
+            <circle cx="100" cy="700" r="65"/><circle cx="100" cy="700" r="40"/>
+            <circle cx="650" cy="800" r="50"/><circle cx="650" cy="800" r="30"/>
+            <circle cx="750" cy="120" r="45"/><circle cx="750" cy="120" r="25"/>
+        </g>
+        <!-- 균사 선 -->
+        <g stroke="#3d6b4a" stroke-width="0.4" opacity="0.6">
+            <path d="M200,150 Q300,200 420,320 Q500,400 650,380"/>
+            <path d="M420,320 Q600,250 750,120 Q900,50 1000,100"/>
+            <path d="M900,500 Q1050,450 1200,200"/>
+            <path d="M900,500 Q1000,650 1300,700"/>
+            <path d="M100,700 Q350,600 420,320"/>
+            <path d="M650,800 Q750,700 900,500"/>
+        </g>
+    </svg>
+</div>
+
+<!-- ── 헤더 ── -->
+<header>
+    <div class="petri-ring"></div>
+    <div class="petri-ring"></div>
+    <div class="petri-ring"></div>
+    <div class="petri-ring"></div>
+    <div class="mold-spot s1"></div>
+    <div class="mold-spot s2"></div>
+    <div class="mold-spot s3"></div>
+
+    <p class="header-eyebrow">과학과 섭리의 교차점</p>
+    <h1>
+        페니실린의 기적,
+        <span class="accent-word">그리고 복음의 비밀</span>
+    </h1>
+    <div class="header-divider"></div>
+    <p class="header-sub">1928년 런던 · 세인트 메리 병원 · 페트리 접시 하나</p>
+
+    <div class="scroll-hint">
+        <span>아래로</span>
+        <div class="scroll-arrow"></div>
+    </div>
+</header>
+
+<!-- ── 본문 ── -->
+<main class="content">
+
+    <!-- 도입 -->
+    <div class="section-label reveal">서문</div>
+    <p class="prose reveal reveal-delay-1">
+        19세기 후반까지 폐렴, 결핵, 장티푸스 같은 감염병은 치명적이었고, 치료 수단은 거의 없었습니다. 루이 파스퇴르와 로베르트 코흐에 의해 세균학이 확립되었지만, 실제로 세균을 안전하게 죽이는 약물은 존재하지 않았죠. 당시에는 수은, 비소, 페놀 등 독성이 강한 물질을 사용하려 했지만, 이는 환자에게도 치명적이었습니다.
+    </p>
+
+    <!-- 플레밍 카드 -->
+    <div class="petri-card reveal reveal-delay-2">
+        <span class="card-icon">🧫</span>
+        <div class="year-badge">1928년 9월</div>
+        <div class="card-title">플레밍의 우연한 발견</div>
+        <p class="prose" style="margin-bottom:1.2rem;">
+            알렉산더 플레밍은 런던 세인트 메리 병원에서 황색포도상구균을 연구하고 있었습니다. 세균 감염을 막을 방법을 찾기 위해 실험을 거듭했죠. 당시에는 멸균 관리가 지금처럼 철저하지 않았고, 실험실 벤치 위에는 여러 개의 세균 배양 접시가 쌓여 있었습니다.
+        </p>
+        <p class="prose" style="margin-bottom:1.2rem;">
+            1928년 9월 초, 플레밍은 2주간의 여름 휴가를 떠나며 페트리 접시들을 그대로 두고 갔습니다. 그 사이 런던의 열린 창문을 통해 공기 중의 곰팡이 포자가 접시 일부에 떨어졌습니다.
+        </p>
+        <p class="prose" style="margin-bottom:0;">
+            플레밍이 돌아와 접시들을 관찰했을 때, 놀라운 현상을 발견했습니다. 일부 접시의 곰팡이 주변에는 <strong>세균이 자라지 않고 투명하게 녹아 있는 영역</strong>이 있었던 것입니다. 그는 메모장에 이렇게 기록했습니다. "곰팡이가 세균의 성장을 억제하고 있다. 주위에 '세균의 사멸지대'가 형성되었다."
+        </p>
+    </div>
+
+    <p class="prose reveal">
+        플레밍은 이 곰팡이를 분리 배양해 <strong>Penicillium notatum</strong>이라는 종임을 밝혀냈습니다. 이 곰팡이가 분비하는 물질이 세균의 세포벽을 파괴해 증식을 억제한다는 사실도 확인했죠. 무엇보다 중요한 점은, 이 물질이 인체 세포에는 큰 독성을 보이지 않았다는 것입니다.
+    </p>
+    <p class="prose reveal reveal-delay-1">
+        플레밍은 1929년, 이 물질을 <strong>"페니실린(penicillin)"</strong>이라 명명하며 학술지에 논문을 발표했습니다.
+    </p>
+    <p class="prose reveal reveal-delay-2">
+        그리고 10여 년 후, 영국 옥스퍼드 대학의 하워드 플로리, 에른스트 체인, 노먼 히트리가 플레밍의 논문을 다시 주목했습니다. 이들은 페니실린을 약으로 개발하기 위해 추출하고 동물 실험을 거쳐 효과를 확인했죠. 1941년, 중증 감염으로 죽어가던 한 경찰관에게 최초로 페니실린을 투여하자 증상이 급격히 호전되었지만, 약의 양이 부족해 결국 사망했습니다. 이 사건은 "충분히 만들 수만 있다면 수많은 생명을 구할 수 있다"는 확신을 심어주었습니다.
+    </p>
+
+    <!-- 대량생산 카드 -->
+    <div class="petri-card reveal">
+        <p class="prose" style="margin-bottom:1.2rem;">
+            제2차 세계대전 중, 페니실린의 대량 생산은 국가적 과제가 되었습니다. 1941년 미국으로 건너간 플로리와 히트리는 제약 회사와 협력했고, 미국 연구진은 우연히 더 강력한 균주인 <strong>펜실리움 크리소게눔</strong>을 찾아냈습니다. 산업 발효 기술을 응용해 페니실린의 대량 생산이 가능해졌죠.
+        </p>
+        <p class="prose" style="margin-bottom:0;">
+            1944년 노르망디 상륙작전 때 페니실린은 대규모로 투입되어 수많은 군인의 생명을 구했고, 전쟁 후 민간에도 보급되어 인류에게 큰 혁명을 가져왔습니다. 1945년, 플레밍, 플로리, 체인 세 사람은 노벨 생리·의학상을 공동 수상했습니다.
+        </p>
+    </div>
+
+    <div class="ornament-divider reveal">
+        <span class="ornament-center">✦</span>
+    </div>
+
+    <!-- 영적 진리 섹션 -->
+    <div class="chapter-header reveal">
+        <div class="chapter-number">II</div>
+        <h2 class="chapter-title">페니실린의 이야기에서 발견하는 영적 진리</h2>
+    </div>
+
+    <!-- 진리 1 -->
+    <div class="truth-block reveal">
+        <div class="truth-number">1</div>
+        <div class="truth-content">
+            <div class="truth-title">우연이 아닌 섭리</div>
+            <p class="prose">페니실린의 발견은 사람의 눈에는 우연처럼 보였지만, 하나님께서는 이미 인류의 고통을 덜어줄 길을 예비해 두셨던 것입니다.</p>
+            <div class="scripture-wrap">
+                <p class="scripture-text">
+                    하나님 아버지는 우리가 사랑 안에서 하나님 앞에 거룩하고 흠이 없게 되도록 창세전에 그리스도 안에서 우리를 선택하셨으며 그분의 뜻의 선한 기쁨을 따라 예수 그리스도를 통하여 우리가 아들의 자격을 얻어 하나님 자신께 이르도록 우리를 미리 정하셨습니다.
+                    <span class="scripture-ref">— 에베소서 1장 4~5절</span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 진리 2 -->
+    <div class="truth-block reveal">
+        <div class="truth-number">2</div>
+        <div class="truth-content">
+            <div class="truth-title">감추어진 보화</div>
+            <p class="prose">아무 보잘것없는 곰팡이 한 포자가 세상을 바꾸었듯이, 주님은 말씀하셨습니다.</p>
+            <div class="scripture-wrap">
+                <p class="scripture-text">
+                    천국은 마치 밭에 감추어진 보물과 같습니다. 어떤 사람이 그 보물을 발견하고는 숨겨 두었습니다. 그리고 기뻐하며 가서, 자기의 모든 소유를 팔아 그 밭을 삽니다.
+                    <span class="scripture-ref">— 마태복음 13장 44절</span>
+                </p>
+            </div>
+            <p class="prose">여러분이 전하는 복음의 작은 발걸음 속에는 감추어진 천국이 나타나는 것입니다.</p>
+        </div>
+    </div>
+
+    <!-- 진리 3 -->
+    <div class="truth-block reveal">
+        <div class="truth-number">3</div>
+        <div class="truth-content">
+            <div class="truth-title">인간의 한계와 하나님의 은혜</div>
+            <p class="prose">플레밍은 곰팡이를 발견했지만, 혼자서는 약으로 만들 수 없었습니다. 10여 년 뒤 여러 과학자들이 함께 힘써야 비로소 사람을 살리는 약이 될 수 있었죠. 이는 한 사람의 능력이 아니라, 하나님의 은혜와 공동체의 협력이 이룬 결실입니다.</p>
+            <div class="scripture-wrap">
+                <p class="scripture-text">
+                    그분으로부터 온몸은 그 풍성한 공급을 해 주는 각 마디를 통하여, 그리고 각 지체가 분량에 따라 기능을 발휘하는 것을 통하여 함께 결합되고 함께 짜입니다. 그래서 몸이 자람으로써 사랑 안에서 스스로 건축되는 것입니다.
+                    <span class="scripture-ref">— 에베소서 4장 16절</span>
+                </p>
+            </div>
+            <p class="prose">우리는 함께 복음을 전하는 자로 함께 서야 합니다. 개인의 능력이 아닌 함께 협력하고 서로 연결 되어질 때 비로소 하나님의 복음의 역사가 온전하게 완성될 것입니다.</p>
+        </div>
+    </div>
+
+    <!-- 진리 4 -->
+    <div class="truth-block reveal">
+        <div class="truth-number">4</div>
+        <div class="truth-content">
+            <div class="truth-title">구원의 상징으로서의 항생제</div>
+            <p class="prose">감염병이 사람을 죽음으로 몰아넣었지만 항생제는 그 위협에서 해방을 주었습니다. 마찬가지로 죄는 우리를 영원한 죽음으로 끌고 가지만, 예수 그리스도의 십자가는 우리에게 자유와 생명을 주셨습니다.</p>
+            <div class="scripture-wrap">
+                <p class="scripture-text">
+                    그러므로 다른 이에게서는 구원을 받을 수 없습니다. 왜냐하면 우리가 의지하여 구원받을 수 있는 다른 이름을 하늘 아래 사람들 가운데 주신 적이 없기 때문입니다.
+                    <span class="scripture-ref">— 사도행전 4장 12절</span>
+                </p>
+            </div>
+            <p class="prose">페니실린이 인류를 살린 약이었다면, <strong>예수 그리스도는 그의 이름을 부르고 믿는 모든 이에게 영원한 생명을 주시는 구원자</strong>인 것입니다.</p>
+        </div>
+    </div>
+
+    <div class="ornament-divider reveal">
+        <span class="ornament-center">✦</span>
+    </div>
+
+    <!-- 클로징 -->
+    <div class="closing-card reveal">
+        <p class="prose" style="margin-bottom:1.4rem; position:relative; z-index:1;">
+            2026년 한국교회는 다음 세대인 35세 이하 젊은 청년 3천 명이 침례를 받기를 기도하며, 주일인원 10% 증가라는 목표를 위해 한마음 한뜻으로 나아가고 있습니다.
+        </p>
+        <p class="prose" style="margin-bottom:1.4rem; position:relative; z-index:1;">
+            이에 부산교회는 하반기 복음 절기를 통해 복음의 구조를 세우고 매주 전체 복음 실행을 통해 다음 말씀이 우리의 삶이 되길 바랍니다.
+        </p>
+        <div class="scripture-wrap" style="text-align:left; position:relative; z-index:1;">
+            <p class="scripture-text">
+                그러므로 여러분은 가서, 모든 민족을 나의 제자로 삼아, 아버지와 아들과 성령의 이름 안으로 침례를 주고,
+                <span class="scripture-ref">— 마태복음 28장 19절</span>
+            </p>
+        </div>
+        <p class="prose" style="margin-top:20px; position:relative; z-index:1;">
+            의의 예복을 입고 혼인 잔치에 참여하는 축복을 함께 누리길 원합니다. 부산교회는 주님의 시대적 사명에 따라 복음의 구조를 세우고 함께 나아가려고 합니다. 주님께 열심을 내고 회개하는 분들과 주님의 잔치상에서 함께 먹고 누리길 원합니다.
+        </p>
+    </div>
+
+</main>
+
+<!-- ── 풋터 ── -->
+<footer>
+    <div class="footer-cross">✝</div>
+    <div class="footer-church">부산교회</div>
+</footer>
+
+<script>
+    // Intersection Observer로 스크롤 reveal
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

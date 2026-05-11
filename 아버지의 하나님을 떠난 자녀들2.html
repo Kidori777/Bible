@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>아버지의 하나님을 떠난 자녀들 | 고품격 웹 아티클</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #07080e;
+            --accent-gold: #c4942a;
+            --accent-red: #c0292b;
+            --accent-teal: #1a8c7a;
+            --text-main: #f5f1ea;
+            --text-dim: #a0a0a0;
+            --card-bg: rgba(255, 255, 255, 0.03);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Noto Serif KR', serif;
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        /* 배경 파티클용 캔버스 */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* 사이드 네비게이션 (데스크톱) */
+        nav#side-nav {
+            position: fixed;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        nav#side-nav a {
+            width: 12px;
+            height: 12px;
+            border: 1px solid var(--accent-gold);
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+        nav#side-nav a:hover, nav#side-nav a.active {
+            background-color: var(--accent-gold);
+            box-shadow: 0 0 10px var(--accent-gold);
+        }
+
+        /* 레이아웃 */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            padding: 120px 0;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease-out;
+        }
+        section.reveal {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 서사적 도입부 */
+        header {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: radial-gradient(circle, rgba(196,148,42,0.1) 0%, rgba(7,8,14,1) 70%);
+        }
+        .main-title {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 8rem;
+            color: var(--accent-gold);
+            line-height: 1;
+            margin-bottom: 20px;
+            letter-spacing: 5px;
+        }
+        .main-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-main);
+            letter-spacing: 10px;
+            text-transform: uppercase;
+        }
+        .intro-text {
+            margin-top: 40px;
+            max-width: 600px;
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        /* 섹션별 스타일링 */
+        .section-header {
+            margin-bottom: 60px;
+            border-bottom: 1px solid rgba(196,148,42,0.3);
+            padding-bottom: 20px;
+        }
+        .big-number {
+            font-family: 'Bebas Neue';
+            font-size: 6rem;
+            color: rgba(196,148,42,0.1);
+            position: absolute;
+            margin-top: -60px;
+            z-index: -1;
+        }
+        h2 { font-size: 2.5rem; color: var(--accent-gold); }
+        h3 { font-size: 1.4rem; margin: 30px 0 15px; color: var(--accent-teal); border-left: 4px solid var(--accent-teal); padding-left: 15px; }
+
+        /* 성경 구절 박스 */
+        .scripture-box {
+            background: var(--card-bg);
+            border: 1px dashed var(--accent-gold);
+            padding: 30px;
+            margin: 30px 0;
+            position: relative;
+            font-weight: 500;
+        }
+        .scripture-box::before {
+            content: '“';
+            font-size: 4rem;
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            color: var(--accent-gold);
+            opacity: 0.5;
+        }
+        .ref { display: block; margin-top: 15px; color: var(--accent-gold); font-size: 0.9rem; text-align: right; }
+
+        /* 경고 박스 */
+        .warning-glow {
+            border: 1px solid var(--accent-red);
+            background: rgba(192, 41, 43, 0.05);
+            padding: 20px;
+            border-radius: 4px;
+            box-shadow: 0 0 20px rgba(192, 41, 43, 0.1);
+            margin: 20px 0;
+        }
+        .warning-glow i { color: var(--accent-red); margin-right: 10px; }
+
+        /* 7가지 리스트 스타일 */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+        .card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-top: 3px solid var(--accent-gold);
+            transition: 0.3s;
+        }
+        .card:hover { background: rgba(255,255,255,0.08); transform: translateY(-5px); }
+        .card.sin { border-top-color: var(--accent-red); }
+        .card.principle { border-top-color: var(--accent-teal); }
+
+        .conclusion-footer {
+            text-align: center;
+            background: linear-gradient(to bottom, transparent, rgba(196,148,42,0.1));
+            padding: 100px 20px;
+            margin-top: 100px;
+        }
+        .final-msg {
+            font-size: 2rem;
+            color: var(--accent-gold);
+            margin-bottom: 20px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            letter-spacing: 2px;
+        }
+
+        /* 리스트 공통 */
+        ul { list-style: none; margin-left: 5px; }
+        li { position: relative; padding-left: 20px; margin-bottom: 10px; }
+        li::before { content: '•'; position: absolute; left: 0; color: var(--accent-gold); }
+
+        @media (max-width: 768px) {
+            .main-title { font-size: 4rem; }
+            nav#side-nav { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="particle-canvas"></canvas>
+
+<nav id="side-nav">
+    <a href="#intro" class="active"></a>
+    <a href="#section1"></a>
+    <a href="#section2"></a>
+    <a href="#section3"></a>
+    <a href="#section4"></a>
+    <a href="#caution"></a>
+    <a href="#solution"></a>
+</nav>
+
+<header id="intro">
+    <div class="main-subtitle">Historical & Spiritual Insight</div>
+    <h1 class="main-title">FATHER'S GOD</h1>
+    <div class="intro-text">
+        "옛날 옛적, 거룩한 불꽃을 지켰던 아버지들의 발자취 뒤로<br>
+        그 빛을 잃어버린 자녀들의 그림자가 드리워졌습니다."
+    </div>
+</header>
+
+<div class="container">
+    <section id="section1">
+        <div class="big-number">01</div>
+        <div class="section-header">
+            <h2>엘리 제사장과 두 아들</h2>
+            <p>📖 사무엘상 1–4장</p>
+        </div>
+        
+        <h3>① 엘리의 직분과 위치</h3>
+        <p>엘리는 단순한 신앙인이 아니었습니다. 그는 이스라엘의 <strong>대제사장</strong>이자 <strong>사사(재판관)</strong>였으며, 하나님의 율법을 수호해야 할 최종 책임자였습니다. 그는 하나님을 지적으로는 알고 있었으나, 그 지식이 삶의 거룩으로 이어지지는 못했습니다.</p>
+
+        <h3>② 홉니와 비느하스의 거부</h3>
+        <div class="scripture-box">
+            엘리의 아들들은 불량배였다. 그들은 여호와를 알지 못하였고
+            <span class="ref">삼상 2:12</span>
+        </div>
+        <ul>
+            <li>직분은 세습했으나 하나님을 두려워하지 않음</li>
+            <li>제사를 멸시하고 제물을 강탈하며 배를 채움</li>
+            <li>회막에서 음행하며 하나님의 임재를 모독함</li>
+        </ul>
+
+        <h3>③ 치명적 문제: 방임</h3>
+        <p>엘리는 아들들의 죄를 알고도 "어찌하여 그러느냐"는 말로만 책망했을 뿐, 그들의 죄를 멈추게 하거나 직분을 박탈하지 않았습니다. 그는 <strong>하나님보다 아들들을 더 존중했습니다.</strong></p>
+
+        <div class="warning-glow">
+            <i class="fas fa-bell"></i> <strong>경고:</strong> 거룩을 아는 자가 거룩을 훼손하면 하나님은 반드시 다루신다.
+        </div>
+    </section>
+
+    <section id="section2">
+        <div class="big-number">02</div>
+        <div class="section-header">
+            <h2>사무엘과 그의 아들들</h2>
+            <p>📖 사무엘상 8장</p>
+        </div>
+        <h3>① 완벽한 신앙인 사무엘</h3>
+        <p>사무엘은 어려서부터 하나님 앞에 섰으며, 그의 말이 하나도 땅에 떨어지지 않을 만큼 신실한 선지자였습니다.</p>
+
+        <h3>② 아들들의 일탈</h3>
+        <div class="scripture-box">
+            그런데 사무엘의 아들들은 사무엘의 길을 따르지 않았다. 그들은 부당한 이득을 얻으려고 바른길에서 벗어났으며 뇌물을 받고 정의를 왜곡하였다.
+            <span class="ref">삼상 8:3</span>
+        </div>
+
+        <h3>③ 원인: 부재와 전수의 실패</h3>
+        <p>엘리의 문제가 방임이었다면, 사무엘의 문제는 사역으로 인한 <strong>가정 내 부재</strong>였습니다. 자녀들에게 하나님은 '아버지의 하나님'일 뿐, '나의 하나님'이 되지 못했습니다.</p>
+
+        <div class="warning-glow">
+            <i class="fas fa-bell"></i> <strong>경고:</strong> 위대한 신앙인은 될 수 있어도 믿음은 자동으로 전수되지 않는다.
+        </div>
+    </section>
+
+    <section id="section3">
+        <div class="big-number">03</div>
+        <div class="section-header">
+            <h2>다윗과 그의 아들들</h2>
+            <p>📖 사무엘기하, 열왕기상</p>
+        </div>
+        <h3>① 치명적 약점: 죄 이후의 침묵</h3>
+        <p>하나님의 마음에 합한 자였던 다윗이었으나, 밧세바 사건 이후 그의 가정은 죄에 대한 소극적 태도와 침묵에 휩싸였습니다.</p>
+
+        <h3>② 아들들의 타락</h3>
+        <ul>
+            <li><strong>암논:</strong> 욕망 절제 실패 및 근친상간 (아버지의 침묵 아래 죄를 경히 여김)</li>
+            <li><strong>압살롬:</strong> 정의가 무너진 가정에서 분노를 품고 반역</li>
+            <li><strong>아도니야:</strong> 훈련 없는 자유 속에서 교만하여 왕권을 야욕함</li>
+        </ul>
+
+        <div class="warning-glow">
+            <i class="fas fa-bell"></i> <strong>경고:</strong> 부모의 죄보다 더 위험한 것은 죄에 대한 침묵이다.
+        </div>
+    </section>
+
+    <section id="section4">
+        <div class="big-number">04</div>
+        <div class="section-header">
+            <h2>히스기야와 므낫세</h2>
+            <p>📖 열왕기하, 역대하</p>
+        </div>
+        <p>히스기야는 전무후무한 신앙의 왕이었으나, 그의 말년의 교만과 신앙의 '제도화'는 아들 므낫세에게 생명력 없는 전통만을 물려주었습니다. 이는 결국 유다 멸망의 씨앗이 되는 비극을 초래했습니다.</p>
+    </section>
+
+    <section id="caution">
+        <div class="section-header" style="text-align: center;">
+            <h2 style="color: var(--accent-red);"><i class="fas fa-exclamation-triangle"></i> 부모가 경계해야 할 양육의 죄 7가지</h2>
+        </div>
+        <div class="grid-container">
+            <div class="card sin">
+                <h4>1. 책망하지 않는 사랑</h4>
+                <p>관계가 깨질까 봐 죄에 눈을 감는 태도. 자녀는 이를 "괜찮다"는 메시지로 오해합니다.</p>
+            </div>
+            <div class="card sin">
+                <h4>2. 신앙을 '보여주기만' 함</h4>
+                <p>예배의 형식은 있으나 하나님과 동행하는 삶의 고민을 나누지 않는 부재.</p>
+            </div>
+            <div class="card sin">
+                <h4>3. 죄에 대한 침묵</h4>
+                <p>부모의 실패를 숨기고 회개하지 않는 위선은 자녀에게 가장 큰 혼란을 줍니다.</p>
+            </div>
+            <div class="card sin">
+                <h4>4. 거룩보다 체면 중시</h4>
+                <p>하나님의 시선보다 사람의 평가를 우선시할 때 자녀의 영혼을 잃습니다.</p>
+            </div>
+            <div class="card sin">
+                <h4>5. 제도와 전통으로 남김</h4>
+                <p>신앙이 '선택'이 아닌 '의무'가 될 때, 자녀는 생명력을 잃고 타락합니다.</p>
+            </div>
+            <div class="card sin">
+                <h4>6. 훈련 없는 자유</h4>
+                <p>기준과 책임이 없는 허용은 결국 방종으로 이어집니다.</p>
+            </div>
+            <div class="card sin">
+                <h4>7. 안일한 신앙</h4>
+                <p>하나님의 심판을 가볍게 여기는 태도는 자녀를 거룩에서 멀어지게 합니다.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="solution">
+        <div class="section-header" style="text-align: center;">
+            <h2 style="color: var(--accent-teal);"><i class="fas fa-seedling"></i> 자녀를 살리는 양육 7원칙</h2>
+        </div>
+        <div class="grid-container">
+            <div class="card principle">
+                <h4>1. 사랑으로 책망하라</h4>
+                <p>목적은 상처가 아닌 방향 전환입니다. 벌보다 회복의 길을 제시하십시오.</p>
+            </div>
+            <div class="card principle">
+                <h4>2. 함께 살아내라</h4>
+                <p>기도 제목을 나누고 부모가 하나님을 의뢰하는 뒷모습을 보여주십시오.</p>
+            </div>
+            <div class="card principle">
+                <h4>3. 실패를 회개로 가르쳐라</h4>
+                <p>완벽한 부모보다 자녀 앞에서 사과하고 회개하는 부모가 자녀를 살립니다.</p>
+            </div>
+            <div class="card principle">
+                <h4>4. 진리를 택하라</h4>
+                <p>가정의 평안이 깨질까 두려워하지 말고 하나님께 순종하는 본을 보이십시오.</p>
+            </div>
+            <div class="card principle">
+                <h4>5. 선택을 이끌어라</h4>
+                <p>강요 대신 질문을 통해 자녀가 스스로 하나님을 선택하게 도우십시오.</p>
+            </div>
+            <div class="card principle">
+                <h4>6. 책임을 훈련하라</h4>
+                <p>자유에는 반드시 멍에가 따름을 가르쳐 자유를 감당할 힘을 길러주십시오.</p>
+            </div>
+            <div class="card principle">
+                <h4>7. 거룩한 사랑을 가르쳐라</h4>
+                <p>하나님은 따뜻한 분인 동시에 소멸하는 불이심을 균형 있게 전달하십시오.</p>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div class="conclusion-footer">
+    <div class="final-msg">"자녀를 살리는 양육은 완벽함이 아니라,<br>진리 안에서 끝까지 책임지는 사랑입니다."</div>
+    <p>경건한 가정이 무너질 때, 원인은 대개 ‘큰 악’이 아니라 작게 용납된 양육의 죄들입니다.</p>
+</div>
+
+<footer>
+    부산교회 2구역
+</footer>
+
+<script>
+    // 1. 파티클 효과 (Canvas Particle System)
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 2;
+            this.speedX = Math.random() * 0.5 - 0.25;
+            this.speedY = Math.random() * 0.5 - 0.25;
+            this.opacity = Math.random();
+        }
+        update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+            if (this.x > canvas.width) this.x = 0;
+            if (this.x < 0) this.x = canvas.width;
+            if (this.y > canvas.height) this.y = 0;
+            if (this.y < 0) this.y = canvas.height;
+        }
+        draw() {
+            ctx.fillStyle = `rgba(196, 148, 42, ${this.opacity})`;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    function initParticles() {
+        for (let i = 0; i < 100; i++) {
+            particles.push(new Particle());
+        }
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+            p.update();
+            p.draw();
+        });
+        requestAnimationFrame(animate);
+    }
+    initParticles();
+    animate();
+
+    // 2. Reveal 애니메이션 (Intersection Observer)
+    const observerOptions = { threshold: 0.1 };
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('reveal');
+                // 네비게이션 활성화
+                const id = entry.target.getAttribute('id');
+                document.querySelectorAll('#side-nav a').forEach(a => {
+                    a.classList.toggle('active', a.getAttribute('href') === `#${id}`);
+                });
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('section, header').forEach(el => observer.observe(el));
+
+    // 3. 부드러운 스크롤
+    document.querySelectorAll('#side-nav a').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

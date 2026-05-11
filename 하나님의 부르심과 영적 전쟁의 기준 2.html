@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>하나님의 부르심과 영적 전쟁의 기준</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;700;900&family=Bebas+Neue&family=Tenor+Sans&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #060810;
+  --bg2:      #0c1020;
+  --steel:    #1a2540;
+  --gold:     #c8952a;
+  --gold-lt:  #e8b84b;
+  --gold-pale:#f5e4b8;
+  --crimson:  #8b1a1a;
+  --crimson-lt:#c0392b;
+  --ice:      #5ba4cf;
+  --ice-pale: #d0eaf8;
+  --parchment:#f2ead8;
+  --smoke:    rgba(200,149,42,0.08);
+  --rule:     rgba(200,149,42,0.2);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--parchment);
+  font-family:'Noto Serif KR',serif;
+  overflow-x:hidden;
+  cursor:default;
+}
+
+/* ══ CANVAS BACKGROUND ══ */
+#bg-canvas{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  z-index:0;pointer-events:none;
+}
+
+/* ══ PROGRESS BAR ══ */
+#pbar{
+  position:fixed;top:0;left:0;height:2px;width:0%;
+  background:linear-gradient(90deg,var(--crimson),var(--gold),var(--gold-lt));
+  z-index:999;transition:width .1s linear;
+}
+
+/* ══ NAV ══ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;justify-content:center;gap:4px;
+  padding:14px 20px 10px;
+  background:linear-gradient(to bottom,rgba(6,8,16,.95),transparent);
+  backdrop-filter:blur(6px);
+}
+.nav-btn{
+  font-family:'Tenor Sans',sans-serif;
+  font-size:9px;letter-spacing:.3em;text-transform:uppercase;
+  color:rgba(242,234,216,.45);
+  background:none;border:none;cursor:pointer;
+  padding:6px 14px;border-radius:2px;
+  transition:color .3s,background .3s;
+  white-space:nowrap;
+}
+.nav-btn:hover,.nav-btn.active{
+  color:var(--gold-lt);
+  background:rgba(200,149,42,.12);
+}
+
+/* ══ HERO ══ */
+.hero{
+  min-height:100vh;
+  display:flex;flex-direction:column;
+  justify-content:center;align-items:center;
+  text-align:center;
+  position:relative;z-index:1;
+  padding:100px 32px 80px;
+  overflow:hidden;
+}
+
+/* Shield SVG animated */
+.shield-wrap{
+  position:relative;width:160px;height:160px;
+  margin-bottom:44px;
+}
+.shield-svg{
+  width:100%;height:100%;
+  filter:drop-shadow(0 0 24px rgba(200,149,42,.5));
+  animation:shieldPulse 3s ease-in-out infinite;
+}
+@keyframes shieldPulse{
+  0%,100%{filter:drop-shadow(0 0 18px rgba(200,149,42,.4));}
+  50%{filter:drop-shadow(0 0 40px rgba(200,149,42,.8));}
+}
+.shield-ring{
+  position:absolute;inset:-20px;border-radius:50%;
+  border:1px solid rgba(200,149,42,.2);
+  animation:ringExpand 3s ease-out infinite;
+}
+.shield-ring:nth-child(2){animation-delay:1s;inset:-40px;}
+.shield-ring:nth-child(3){animation-delay:2s;inset:-60px;}
+@keyframes ringExpand{
+  0%{opacity:.6;transform:scale(.9);}
+  100%{opacity:0;transform:scale(1.3);}
+}
+
+.hero-eyebrow{
+  font-family:'Tenor Sans',sans-serif;
+  font-size:11px;letter-spacing:.45em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:24px;
+  opacity:0;animation:fadeUp .8s ease .3s forwards;
+}
+.hero-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(52px,13vw,130px);
+  line-height:.95;letter-spacing:.02em;
+  color:var(--parchment);margin-bottom:16px;
+  opacity:0;animation:fadeUp .8s ease .6s forwards;
+}
+.hero-title .red{color:var(--crimson-lt);}
+.hero-title .gld{color:var(--gold-lt);}
+.hero-sub{
+  font-size:clamp(13px,2vw,16px);font-weight:300;
+  line-height:1.9;color:rgba(242,234,216,.55);
+  max-width:480px;margin:0 auto 40px;
+  opacity:0;animation:fadeUp .8s ease .9s forwards;
+}
+.hero-ref{
+  font-family:'Tenor Sans',sans-serif;
+  font-size:10px;letter-spacing:.35em;text-transform:uppercase;
+  color:var(--gold);opacity:0;
+  animation:fadeIn .8s ease 1.2s forwards;
+}
+
+.scroll-dn{
+  position:absolute;bottom:36px;left:50%;
+  transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  opacity:0;animation:fadeIn 1s ease 2s forwards;
+}
+.scroll-dn span{
+  font-family:'Tenor Sans',sans-serif;font-size:9px;
+  letter-spacing:.4em;text-transform:uppercase;color:rgba(200,149,42,.5);
+}
+.chevron{
+  width:18px;height:18px;
+  border-right:1.5px solid var(--gold);
+  border-bottom:1.5px solid var(--gold);
+  transform:rotate(45deg);opacity:.5;
+  animation:chevBounce 1.5s ease-in-out infinite;
+}
+@keyframes chevBounce{
+  0%,100%{transform:rotate(45deg) translate(0,0);}
+  50%{transform:rotate(45deg) translate(3px,3px);}
+}
+
+/* ══ SECTION WRAPPER ══ */
+.sec{
+  position:relative;z-index:1;
+  max-width:860px;margin:0 auto;
+  padding:80px 32px 40px;
+}
+
+/* ══ SECTION HEADING ══ */
+.sec-eyebrow{
+  font-family:'Tenor Sans',sans-serif;
+  font-size:10px;letter-spacing:.45em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:14px;
+  opacity:0;transform:translateX(-16px);
+  transition:opacity .7s ease,transform .7s ease;
+}
+.sec-eyebrow.vis{opacity:1;transform:translateX(0);}
+.sec-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(34px,7vw,68px);
+  line-height:1.0;letter-spacing:.02em;
+  margin-bottom:32px;
+  opacity:0;transform:translateY(20px);
+  transition:opacity .7s ease .1s,transform .7s ease .1s;
+}
+.sec-title.vis{opacity:1;transform:translateY(0);}
+.sec-title.gold{color:var(--gold-lt);}
+.sec-title.ice{color:var(--ice);}
+.sec-title.crimson{color:#e07070;}
+
+/* ══ ACCORDION —신명기 조건들 ══ */
+.accordion{margin-top:8px;}
+.acc-item{
+  border:1px solid var(--rule);
+  border-radius:3px;
+  margin-bottom:10px;
+  overflow:hidden;
+  opacity:0;transform:translateY(16px);
+  transition:opacity .6s ease,transform .6s ease,border-color .3s;
+}
+.acc-item.vis{opacity:1;transform:translateY(0);}
+.acc-item:nth-child(2){transition-delay:.08s;}
+.acc-item:nth-child(3){transition-delay:.16s;}
+.acc-item:nth-child(4){transition-delay:.24s;}
+.acc-item:hover{border-color:rgba(200,149,42,.5);}
+.acc-item.open{border-color:var(--gold);}
+
+.acc-head{
+  width:100%;display:flex;align-items:center;gap:16px;
+  padding:18px 22px;background:rgba(255,255,255,.03);
+  cursor:pointer;border:none;text-align:left;
+  transition:background .3s;
+}
+.acc-head:hover{background:rgba(200,149,42,.06);}
+.acc-item.open .acc-head{background:rgba(200,149,42,.08);}
+
+.acc-num{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:28px;color:var(--gold);
+  opacity:.4;line-height:1;flex-shrink:0;
+  transition:opacity .3s;
+}
+.acc-item.open .acc-num{opacity:1;}
+
+.acc-label{flex:1;}
+.acc-title-text{
+  font-family:'Noto Serif KR',serif;
+  font-size:clamp(14px,2.5vw,17px);font-weight:700;
+  color:var(--parchment);margin-bottom:3px;
+}
+.acc-sub{
+  font-family:'Tenor Sans',sans-serif;
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(200,149,42,.6);
+}
+.acc-arrow{
+  width:20px;height:20px;flex-shrink:0;
+  border-right:1.5px solid var(--gold);
+  border-bottom:1.5px solid var(--gold);
+  transform:rotate(45deg);opacity:.4;
+  transition:transform .35s ease,opacity .3s;
+}
+.acc-item.open .acc-arrow{transform:rotate(-135deg);opacity:1;}
+
+.acc-body{
+  max-height:0;overflow:hidden;
+  transition:max-height .45s cubic-bezier(.4,0,.2,1);
+}
+.acc-item.open .acc-body{max-height:1200px;}
+
+.acc-content{
+  padding:4px 22px 24px 66px;
+  font-size:clamp(14px,2vw,15.5px);line-height:2.0;
+  font-weight:300;color:rgba(242,234,216,.78);
+}
+.acc-content p{margin-bottom:14px;}
+.acc-content p:last-child{margin-bottom:0;}
+
+/* ══ VERSE BLOCK ══ */
+.vb{
+  margin:16px 0;padding:18px 20px 18px 24px;
+  border-left:2px solid var(--gold);
+  background:rgba(200,149,42,.06);
+  border-radius:0 4px 4px 0;
+  font-size:clamp(14px,2vw,16px);
+  line-height:1.85;color:var(--parchment);font-weight:400;
+}
+.vb .vr{
+  display:block;margin-top:10px;
+  font-family:'Tenor Sans',sans-serif;
+  font-size:10px;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--gold);
+}
+.vb.ice-vb{border-left-color:var(--ice);background:rgba(91,164,207,.06);}
+.vb.red-vb{border-left-color:#e07070;background:rgba(192,57,43,.06);}
+
+/* ══ HIGHLIGHT ══ */
+.hi-gold{color:var(--gold-lt);font-weight:600;}
+.hi-ice{color:var(--ice);font-weight:600;}
+.hi-red{color:#e07070;font-weight:600;}
+
+/* ══ SUMMARY CARD ══ */
+.summary-card{
+  margin:40px 0;padding:32px 36px;
+  border:1px solid var(--rule);
+  background:rgba(200,149,42,.04);
+  border-radius:4px;position:relative;
+  opacity:0;transform:translateY(20px);
+  transition:opacity .8s ease,transform .8s ease;
+}
+.summary-card.vis{opacity:1;transform:translateY(0);}
+.summary-card::before{
+  content:'"';
+  position:absolute;top:8px;left:20px;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:72px;color:var(--gold);opacity:.15;line-height:1;
+}
+.summary-text{
+  font-size:clamp(15px,2.3vw,18px);
+  line-height:1.85;color:var(--parchment);font-weight:400;
+  position:relative;
+}
+.summary-ref{
+  margin-top:14px;
+  font-family:'Tenor Sans',sans-serif;
+  font-size:10px;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--gold);
+}
+
+/* ══ FULL-WIDTH DIVIDER BAND ══ */
+.band{
+  position:relative;z-index:1;
+  padding:60px 32px;text-align:center;
+  background:linear-gradient(135deg,rgba(139,26,26,.35),rgba(200,149,42,.12));
+  border-top:1px solid rgba(139,26,26,.3);
+  border-bottom:1px solid rgba(139,26,26,.3);
+  overflow:hidden;
+  opacity:0;transform:translateY(24px);
+  transition:opacity .9s ease,transform .9s ease;
+}
+.band.vis{opacity:1;transform:translateY(0);}
+.band::before{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(
+    -45deg,transparent,transparent 28px,
+    rgba(255,255,255,.015) 28px,rgba(255,255,255,.015) 29px
+  );
+}
+.band-text{
+  position:relative;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(22px,5vw,44px);
+  letter-spacing:.04em;color:var(--parchment);
+  line-height:1.3;
+}
+.band-text .gld{color:var(--gold-lt);}
+
+/* ══ TIMELINE — 부르심의 증인들 ══ */
+.timeline{
+  position:relative;padding-left:48px;margin-top:16px;
+}
+.timeline::before{
+  content:'';position:absolute;left:14px;top:0;bottom:0;
+  width:2px;
+  background:linear-gradient(to bottom,var(--crimson-lt),var(--gold),var(--ice));
+}
+.tl-item{
+  position:relative;margin-bottom:48px;
+  opacity:0;transform:translateX(20px);
+  transition:opacity .7s ease,transform .7s ease;
+}
+.tl-item.vis{opacity:1;transform:translateX(0);}
+.tl-item:nth-child(2){transition-delay:.1s;}
+.tl-item:nth-child(3){transition-delay:.2s;}
+.tl-item:nth-child(4){transition-delay:.3s;}
+
+.tl-dot{
+  position:absolute;left:-42px;top:4px;
+  width:16px;height:16px;border-radius:50%;
+  border:2px solid var(--gold);
+  background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+}
+.tl-dot::after{
+  content:'';width:6px;height:6px;border-radius:50%;
+  background:var(--gold);
+}
+
+/* Age counter badge */
+.age-badge{
+  display:inline-block;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(42px,9vw,88px);
+  color:var(--gold);line-height:1;
+  margin-bottom:6px;
+  opacity:.15;
+  transition:opacity .5s ease,color .3s;
+}
+.tl-item.vis .age-badge{opacity:1;}
+
+.tl-name{
+  font-family:'Noto Serif KR',serif;
+  font-size:clamp(18px,3.5vw,26px);font-weight:700;
+  color:var(--parchment);margin-bottom:10px;
+}
+.tl-body{
+  font-size:clamp(14px,2vw,15.5px);line-height:2.0;
+  font-weight:300;color:rgba(242,234,216,.72);
+}
+.tl-body p{margin-bottom:12px;}
+
+/* ══ CONDITIONS GRID ══ */
+.cond-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:14px;margin:24px 0;
+}
+@media(max-width:560px){.cond-grid{grid-template-columns:1fr;}}
+.cond-card{
+  padding:20px 18px;
+  border:1px solid var(--rule);
+  border-radius:3px;
+  background:rgba(255,255,255,.02);
+  transition:border-color .3s,background .3s,transform .3s;
+  cursor:default;
+  opacity:0;transform:translateY(16px);
+  transition:opacity .6s ease,transform .6s ease,border-color .25s,background .25s;
+}
+.cond-card.vis{opacity:1;transform:translateY(0);}
+.cond-card:nth-child(2){transition-delay:.08s;}
+.cond-card:nth-child(3){transition-delay:.16s;}
+.cond-card:nth-child(4){transition-delay:.24s;}
+.cond-card:hover{
+  border-color:rgba(200,149,42,.6);
+  background:rgba(200,149,42,.05);
+  transform:translateY(-3px) !important;
+}
+.cond-icon{font-size:28px;margin-bottom:10px;}
+.cond-title{
+  font-size:clamp(13px,2vw,15px);font-weight:700;
+  color:var(--gold-lt);margin-bottom:8px;
+}
+.cond-desc{
+  font-size:clamp(12.5px,1.8vw,14px);line-height:1.8;
+  color:rgba(242,234,216,.6);font-weight:300;
+}
+
+/* ══ FINAL CTA ══ */
+.final-cta{
+  position:relative;z-index:1;
+  padding:80px 32px 100px;
+  max-width:860px;margin:0 auto;
+  text-align:center;
+  opacity:0;transform:translateY(28px);
+  transition:opacity .9s ease,transform .9s ease;
+}
+.final-cta.vis{opacity:1;transform:translateY(0);}
+.final-cta::before{
+  content:'';display:block;
+  width:1px;height:60px;
+  background:linear-gradient(to bottom,transparent,var(--gold));
+  margin:0 auto 40px;
+}
+.cta-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(28px,6vw,56px);
+  line-height:1.1;letter-spacing:.03em;
+  color:var(--parchment);margin-bottom:28px;
+}
+.cta-verse{
+  font-size:clamp(14px,2.1vw,17px);
+  line-height:1.95;font-weight:300;
+  color:rgba(242,234,216,.75);
+  max-width:560px;margin:0 auto 20px;
+}
+.cta-ref{
+  font-family:'Tenor Sans',sans-serif;
+  font-size:10px;letter-spacing:.35em;text-transform:uppercase;
+  color:var(--gold);
+}
+.cta-shout{
+  margin-top:48px;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(20px,4.5vw,40px);
+  letter-spacing:.08em;
+  color:var(--gold-lt);
+  line-height:1.5;
+}
+.cta-shout span{color:var(--parchment);}
+
+/* ══ FOOTER ══ */
+footer{
+  position:relative;z-index:1;
+  border-top:1px solid var(--rule);
+  padding:36px 32px 48px;
+  text-align:center;
+}
+.foot-church{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:24px;letter-spacing:.06em;
+  color:var(--gold);margin-bottom:6px;
+}
+.foot-sub{
+  font-family:'Tenor Sans',sans-serif;
+  font-size:10px;letter-spacing:.35em;text-transform:uppercase;
+  color:rgba(242,234,216,.3);
+}
+
+/* ══ MOBILE NAV ══ */
+@media(max-width:560px){
+  nav{gap:2px;padding:10px 8px 8px;}
+  .nav-btn{font-size:8px;padding:5px 8px;letter-spacing:.2em;}
+}
+
+/* ══ ANIMATIONS ══ */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(22px);}
+  to{opacity:1;transform:translateY(0);}
+}
+@keyframes fadeIn{
+  from{opacity:0;}to{opacity:1;}
+}
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+<div id="pbar"></div>
+
+<!-- NAV -->
+<nav>
+  <button class="nav-btn active" onclick="scrollTo('#hero')">부르심</button>
+  <button class="nav-btn" onclick="scrollTo('#s1')">전쟁기준</button>
+  <button class="nav-btn" onclick="scrollTo('#s2')">영적의미</button>
+  <button class="nav-btn" onclick="scrollTo('#s3')">증인들</button>
+  <button class="nav-btn" onclick="scrollTo('#s4')">자세</button>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="hero" id="hero">
+  <div class="shield-wrap">
+    <div class="shield-ring"></div>
+    <div class="shield-ring"></div>
+    <div class="shield-ring"></div>
+    <svg class="shield-svg" viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M50 4L8 20V60C8 84 50 116 50 116C50 116 92 84 92 60V20L50 4Z"
+        fill="rgba(200,149,42,0.08)" stroke="rgba(200,149,42,0.7)" stroke-width="1.5"/>
+      <path d="M50 14L18 27V60C18 78 50 106 50 106C50 106 82 78 82 60V27L50 14Z"
+        fill="rgba(200,149,42,0.05)" stroke="rgba(200,149,42,0.3)" stroke-width="1"/>
+      <!-- cross inside shield -->
+      <line x1="50" y1="36" x2="50" y2="84" stroke="rgba(200,149,42,0.6)" stroke-width="1.5"/>
+      <line x1="28" y1="58" x2="72" y2="58" stroke="rgba(200,149,42,0.6)" stroke-width="1.5"/>
+    </svg>
+  </div>
+
+  <p class="hero-eyebrow">부산교회 2구역 &nbsp;·&nbsp; 신명기 20장</p>
+  <h1 class="hero-title">
+    하나님의<br>
+    <span class="red">부르심</span>과<br>
+    <span class="gld">영적 전쟁</span>
+  </h1>
+  <p class="hero-sub">
+    세상에는 정년이 있지만,<br>
+    하나님의 부르심에는 나이 제한이 없습니다.
+  </p>
+  <p class="hero-ref">신명기 20:5–8 &nbsp;·&nbsp; 여호수아 1:9 &nbsp;·&nbsp; 이사야 6:8</p>
+
+  <div class="scroll-dn">
+    <span>아래로</span>
+    <div class="chevron"></div>
+  </div>
+</section>
+
+<!-- ══ SECTION 1: 전쟁 기준 ══ -->
+<section id="s1">
+  <div class="sec">
+    <p class="sec-eyebrow">Section 01</p>
+    <h2 class="sec-title gold">전쟁에 나아갈<br>기준이란</h2>
+
+    <div class="acc-content" style="padding-left:0;margin-bottom:32px;opacity:1;transform:none;">
+      <p>신명기 20장의 말씀은 단순한 군사 규정이 아닙니다. 이스라엘의 전쟁은 국가 생존을 위한 무차별 동원이 아니라 <span class="hi-gold">하나님이 주도하시는 거룩한 전쟁</span>이었습니다. 그래서 하나님은 "많이 모이면 이긴다"가 아니라, <span class="hi-gold">"누가 이 전쟁에 합당한 상태로 서 있는가"</span>를 보십니다.</p>
+    </div>
+
+    <!-- Accordion -->
+    <div class="accordion">
+
+      <div class="acc-item">
+        <button class="acc-head" onclick="toggleAcc(this)">
+          <span class="acc-num">01</span>
+          <div class="acc-label">
+            <div class="acc-title-text">집을 짓고 낙성식을 못 한 사람</div>
+            <div class="acc-sub">삶의 기초가 완성되지 않은 상태</div>
+          </div>
+          <div class="acc-arrow"></div>
+        </button>
+        <div class="acc-body">
+          <div class="acc-content">
+            <div class="vb">"새 집을 짓고서 낙성식을 하지 못한 사람이 있습니까?"</div>
+            <p>이것은 단순한 재산 문제가 아닙니다. <span class="hi-gold">집은 삶의 터전</span>이며, <span class="hi-gold">낙성식은 하나님의 은혜에 대한 감사와 헌신의 고백</span>입니다.</p>
+            <p>하나님은 "아직 네 삶을 누리고 하나님께 감사도 못 했는데 전쟁터에서 끝나게 하지 않겠다"라고 말씀하시는 것입니다. 아직 삶의 기초가 하나님 앞에서 완성되지 않은 상태입니다.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-head" onclick="toggleAcc(this)">
+          <span class="acc-num">02</span>
+          <div class="acc-label">
+            <div class="acc-title-text">포도원을 가꾸었으나 열매를 못 먹은 사람</div>
+            <div class="acc-sub">은혜를 맛보지 못한 상태</div>
+          </div>
+          <div class="acc-arrow"></div>
+        </button>
+        <div class="acc-body">
+          <div class="acc-content">
+            <div class="vb">"포도원을 가꾸어 놓고 거기서 난 열매를 먹어 보지 못한 사람이 있습니까?"</div>
+            <p>포도원은 <span class="hi-gold">노동의 결실, 기다림의 시간, 하나님이 주시는 기쁨의 열매</span>입니다. 순종과 수고는 했지만 아직 '기쁨'을 누리지 못한 상태입니다.</p>
+            <p>교회에서 여러 봉사를 하고 있지만 그 가운데 온전한 주님의 기쁨을 누리지 못한다면, 하나님은 먼저 포도원의 소산을 먹고 누리길 원하십니다. 하나님은 "수고만 하고 끝나는 신앙"을 원하지 않으십니다.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-head" onclick="toggleAcc(this)">
+          <span class="acc-num">03</span>
+          <div class="acc-label">
+            <div class="acc-title-text">약혼했으나 결혼하지 못한 사람</div>
+            <div class="acc-sub">언약의 관계가 완성되지 않은 상태</div>
+          </div>
+          <div class="acc-arrow"></div>
+        </button>
+        <div class="acc-body">
+          <div class="acc-content">
+            <div class="vb">"여자와 약혼을 하고서 그 여자를 맞아들이지 못한 사람이 있습니까?"</div>
+            <p>하나님은 <span class="hi-gold">'언약을 시작만 해 놓고, 아직 그 언약 안에 제대로 살아보지 못한 사람'</span>을 전쟁터로 내보내지 않으십니다. 약혼은 언약의 시작이지만 결혼은 언약의 완성입니다.</p>
+            <p>이것은 오늘날 우리에게 이렇게 적용됩니다. 교회에 등록만 된 신앙처럼 공동체에 속하긴 했지만 관계 속으로 깊이 들어가지 못한 상태, 하나님과의 언약도 믿는다고 고백은 했지만 그 언약 안에서의 <span class="hi-gold">안정감과 친밀함은 아직 경험하지 못한 상태</span>를 말합니다.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-head" onclick="toggleAcc(this)">
+          <span class="acc-num">04</span>
+          <div class="acc-label">
+            <div class="acc-title-text">두려워하며 겁을 내는 사람</div>
+            <div class="acc-sub">가장 중요한 영적 기준</div>
+          </div>
+          <div class="acc-arrow"></div>
+        </button>
+        <div class="acc-body">
+          <div class="acc-content">
+            <div class="vb red-vb">"두려워하며 겁을 내는 사람이 있습니까?"<br><br>"그의 형제들의 간담이 그의 간담처럼 녹아 버릴까 하노라"</div>
+            <p>이 항목은 앞의 세 가지와 성격이 다릅니다. 앞의 세 가지는 개인의 삶에 대한 배려라면, 이 네 번째는 <span class="hi-red">공동체 전체를 위한 영적 기준</span>입니다.</p>
+            <p>왜냐하면 두려움은 전염되기 때문입니다. 하나님의 전쟁에서 가장 위험한 것은 우리가 가진 환경이나 세력이 아니라 <span class="hi-red">믿음이 없는 두려워하는 마음</span>입니다.</p>
+            <p>그래서 하나님은 "용기 없는 한 사람이 온 공동체의 믿음을 무너뜨리는 것을 허락하지 않겠다"라고 말씀하시는 것입니다.</p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /accordion -->
+
+    <div class="summary-card" style="margin-top:40px;">
+      <p class="summary-text">신명기 20장의 전쟁 기준은 <span class="hi-gold">'싸울 수 있는 자'를 가르는 기준이 아니라, '하나님 앞에 준비된 자'를 가르는 기준</span>인 것입니다.</p>
+      <p class="summary-ref">신명기 20:5–8 요약</p>
+    </div>
+
+    <!-- 4가지 공통점 grid -->
+    <p class="sec-eyebrow" style="margin-top:56px;">네 가지 기준의 공통점</p>
+    <div class="cond-grid">
+      <div class="cond-card">
+        <div class="cond-icon">🏠</div>
+        <div class="cond-title">삶이 정리되지 않은 사람</div>
+        <div class="cond-desc">기초가 하나님 앞에서 아직 완성되지 않은 상태</div>
+      </div>
+      <div class="cond-card">
+        <div class="cond-icon">🍇</div>
+        <div class="cond-title">은혜를 누리지 못한 사람</div>
+        <div class="cond-desc">수고는 했으나 기쁨의 열매를 맛보지 못한 상태</div>
+      </div>
+      <div class="cond-card">
+        <div class="cond-icon">🤝</div>
+        <div class="cond-title">관계가 완성되지 않은 사람</div>
+        <div class="cond-desc">언약을 시작했으나 그 안에서 아직 살지 못한 상태</div>
+      </div>
+      <div class="cond-card">
+        <div class="cond-icon">🛡️</div>
+        <div class="cond-title">믿음이 준비되지 않은 사람</div>
+        <div class="cond-desc">두려움이 믿음보다 큰 상태로 서 있는 경우</div>
+      </div>
+    </div>
+    <div class="acc-content" style="padding-left:0;opacity:1;transform:none;margin-top:16px;">
+      <p>이런 상태에서의 헌신은 <span class="hi-gold">하나님이 기뻐하시는 헌신이 아니다</span>라는 메시지입니다. 하나님은 '전쟁보다 사람을 먼저 보신다'는 것이 이 모든 기준의 공통 원리입니다.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ BAND ══ -->
+<div class="band" id="s2">
+  <p class="band-text">
+    하나님의 부르심 앞에 설 때,<br>
+    <span class="gld">"너는 지금 두려움이 아니라<br>믿음으로 서 있느냐?"</span>
+  </p>
+</div>
+
+<!-- ══ SECTION 2: 영적 의미 ══ -->
+<section>
+  <div class="sec">
+    <p class="sec-eyebrow">Section 02</p>
+    <h2 class="sec-title ice">전쟁 기준의<br>영적 의미</h2>
+
+    <div class="acc-content" style="padding-left:0;opacity:1;transform:none;">
+      <p>성경의 전쟁은 단순한 칼과 방패의 싸움이 아니라 <span class="hi-ice">하나님의 일에 참여하는 자의 영적 상태</span>를 보여줍니다.</p>
+    </div>
+
+    <div class="vb ice-vb">
+      영적 전쟁에 나아가는 사람의 조건은 하나님께 향한 마음과 순종,<br>
+      그분을 의지하고 따를 수 있는 믿음과 겸손한 마음입니다.
+    </div>
+
+    <div class="summary-card">
+      <p class="summary-text">하나님은 "너의 <span class="hi-ice">온 마음이 나에게 향해 있느냐?"</span>고 묻고 계십니다. 직분을 맡기 전에, 사명을 감당하기 전에, 중요한 결단의 자리에서 — 먼저 그분께 온전히 향한 마음이 있는지 점검하십시오.</p>
+      <p class="summary-ref">오늘 우리에게 주는 영적 적용</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SECTION 3: 증인들 ══ -->
+<section id="s3">
+  <div class="sec">
+    <p class="sec-eyebrow">Section 03</p>
+    <h2 class="sec-title gold">세상에는 정년이 있지만<br>하나님의 부르심에는<br>나이 제한이 없다</h2>
+
+    <div class="timeline">
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="age-badge">80</div>
+        <div class="tl-name">모세 — 80세에 부르심</div>
+        <div class="tl-body">
+          <div class="vb">"그들이 파라오에게 말할 때에 모세는 팔십 세였고 아론은 팔십삼 세였다."<span class="vr">출애굽기 7:7</span></div>
+          <p>모세는 인생의 황혼기였고 광야에서 잊혀진 사람이었습니다. 그러나 하나님의 때에는 가장 준비된 사람이었습니다.</p>
+          <p>하나님은 능력으로 가득 찬 40세의 모세가 아니라, <span class="hi-gold">자기 확신이 비워진 80세의 모세</span>가 하나님을 의지하고 따르기에 가장 적합하셨기 때문입니다.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="age-badge">85</div>
+        <div class="tl-name">갈렙 — 85세의 고백</div>
+        <div class="tl-body">
+          <div class="vb">"지금 나는 여든다섯 살입니다. 나는 오늘도 여전히 모세께서 나를 보내셨던 날처럼 강건합니다… 이제 여호와께서 그날 말씀하신 저 산지를 나에게 주십시오."<span class="vr">여호수아 14:10–12</span></div>
+          <p>갈렙은 "나이가 많아서 쉬어야겠다"고 말하지 않습니다. <span class="hi-gold">"여호와께서 나와 함께 하시면"</span> 내가 그들을 쫓아내겠다고 — 함께 하시는 하나님을 의지하였습니다.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="age-badge">84</div>
+        <div class="tl-name">안나 — 84세의 사명</div>
+        <div class="tl-body">
+          <div class="vb">"그 후 과부가 되어 팔십사 세가 되기까지 성전을 떠나지 않고, 밤낮으로 금식하고 간구하며 하나님을 섬겼다."<span class="vr">누가복음 2:36–38</span></div>
+          <p>그녀는 <span class="hi-gold">성전에서 말년의 시간 전체를 메시아 증언자로</span> 사용 받았습니다. 나이는 하나님의 한계가 아니었습니다.</p>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="age-badge" style="font-size:clamp(28px,6vw,58px);opacity:.15;transition:opacity .5s ease;">제11시</div>
+        <div class="tl-name">포도원 품꾼 — 예수님의 비유</div>
+        <div class="tl-body">
+          <div class="vb">"제십일 시쯤에 고용된 사람들이 와서, 각각 한 데나리온씩을 받았습니다."<span class="vr">마태복음 20:1–16</span></div>
+          <p>하나님의 나라에서는 <span class="hi-gold">언제 부름 받고 왔는가 보다 주님의 부르심에 응답했는가</span>가 중요합니다. 늦게 부름받은 자도 동일한 은혜를 받습니다.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ SECTION 4: 자세 ══ -->
+<section id="s4">
+  <div class="sec">
+    <p class="sec-eyebrow">Section 04</p>
+    <h2 class="sec-title crimson">하나님의 부르심에<br>합당한 자세</h2>
+
+    <div class="accordion">
+
+      <div class="acc-item">
+        <button class="acc-head" onclick="toggleAcc(this)">
+          <span class="acc-num">A</span>
+          <div class="acc-label">
+            <div class="acc-title-text">"나는 늦었다"는 생각을 내려놓기</div>
+            <div class="acc-sub">나이는 사람이 만든 제한</div>
+          </div>
+          <div class="acc-arrow"></div>
+        </button>
+        <div class="acc-body">
+          <div class="acc-content">
+            <p>나이는 <span class="hi-gold">하나님의 한계가 아니라, 사람이 만든 제한</span>입니다. 모세, 갈렙, 안나의 이야기는 모두 같은 진리를 말합니다 — 하나님의 시간표는 세상의 정년표가 아닙니다.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-head" onclick="toggleAcc(this)">
+          <span class="acc-num">B</span>
+          <div class="acc-label">
+            <div class="acc-title-text">능력보다 '가용성(availability)'</div>
+            <div class="acc-sub">이사야 6:8</div>
+          </div>
+          <div class="acc-arrow"></div>
+        </button>
+        <div class="acc-body">
+          <div class="acc-content">
+            <div class="vb">"내가 누구를 보내랴? 누가 우리를 위해 가랴?" 내가 아뢰었다. "제가 여기 있습니다. 저를 보내 주십시오."<span class="vr">이사야 6:8</span></div>
+            <p>하나님이 찾으시는 것은 탁월한 능력이 아닙니다. <span class="hi-gold">"제가 여기 있습니다"</span>라고 응답할 수 있는 준비된 마음입니다.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-head" onclick="toggleAcc(this)">
+          <span class="acc-num">C</span>
+          <div class="acc-label">
+            <div class="acc-title-text">전쟁에 나가는 자의 마음</div>
+            <div class="acc-sub">여호수아 1:9</div>
+          </div>
+          <div class="acc-arrow"></div>
+        </button>
+        <div class="acc-body">
+          <div class="acc-content">
+            <div class="vb">"강해져라. 그리고 용기를 내라. 두려워하지도 말고 겁내지도 마라."<span class="vr">여호수아 1:9</span></div>
+            <p>"강해져라. 용기를 내라. 두려워하지도 말고 겁내지 마라." 이것이 단 시간에 가능한 이유는 단 한 가지입니다. <span class="hi-gold">"네가 어디를 가든지 여호와 너의 하나님이 너와 함께할 것이다"</span>라는 믿음의 확신이 백성을 변케하기 때문입니다.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ FINAL CTA ══ -->
+<div class="final-cta">
+  <h2 class="cta-title">세상은 '언제까지'를 묻지만<br>하나님은 '지금 누구를'을 묻습니다</h2>
+  <p class="cta-verse">
+    전쟁에 나아갈 기준은 젊음이나 경력이 아니라<br>
+    하나님께로 전적으로 향한 마음이 있는가입니다.
+  </p>
+  <p class="cta-ref">신명기 20장의 최종 메시지</p>
+
+  <div class="vb" style="max-width:560px;margin:40px auto 0;text-align:left;">
+    "제가 여기 있습니다. 저를 보내 주십시오."
+    <span class="vr">이사야 6:8</span>
+  </div>
+
+  <p class="cta-shout">
+    <span>지금</span> 이 자리에서<br>
+    <span>당신을</span> 부르십니다
+  </p>
+</div>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="foot-church">부산교회 2구역</div>
+  <div class="foot-sub">&nbsp;·&nbsp;주님은 지금 당신을 부르고 계십니다.</div>
+</footer>
+
+<script>
+/* ─── Canvas particle system ─── */
+(function(){
+  const cv = document.getElementById('bg-canvas');
+  const ctx = cv.getContext('2d');
+  let W,H,particles=[];
+
+  function resize(){
+    W = cv.width  = window.innerWidth;
+    H = cv.height = window.innerHeight;
+  }
+  window.addEventListener('resize',resize);
+  resize();
+
+  // Two particle types: drifting sparks + large slow orbs
+  class Particle{
+    constructor(type){
+      this.type = type;
+      this.reset();
+    }
+    reset(){
+      if(this.type==='spark'){
+        this.x = Math.random()*W;
+        this.y = Math.random()*H + H;
+        this.vx = (Math.random()-.5)*.4;
+        this.vy = -(Math.random()*.6+.3);
+        this.r  = Math.random()*1.5+.5;
+        this.alpha = Math.random()*.6+.2;
+        this.life = 1; this.decay = Math.random()*.004+.002;
+        this.color = Math.random()<.7 ? '#c8952a' : '#e8b84b';
+      } else {
+        this.x = Math.random()*W;
+        this.y = Math.random()*H;
+        this.vx = (Math.random()-.5)*.08;
+        this.vy = (Math.random()-.5)*.08;
+        this.r  = Math.random()*120+40;
+        this.alpha = Math.random()*.04+.01;
+        this.color = Math.random()<.5 ? '#c8952a' : '#1a2540';
+      }
+    }
+    update(){
+      this.x+=this.vx; this.y+=this.vy;
+      if(this.type==='spark'){
+        this.life-=this.decay;
+        if(this.life<=0) this.reset();
+      } else {
+        if(this.x<-this.r||this.x>W+this.r||this.y<-this.r||this.y>H+this.r){
+          this.reset();
+        }
+      }
+    }
+    draw(){
+      ctx.save();
+      ctx.globalAlpha = this.type==='spark'
+        ? this.alpha*this.life
+        : this.alpha;
+      if(this.type==='spark'){
+        ctx.beginPath();
+        ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
+        ctx.fillStyle=this.color;
+        ctx.fill();
+      } else {
+        const g=ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.r);
+        g.addColorStop(0,this.color);
+        g.addColorStop(1,'transparent');
+        ctx.fillStyle=g;
+        ctx.beginPath();
+        ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
+        ctx.fill();
+      }
+      ctx.restore();
+    }
+  }
+
+  // init
+  for(let i=0;i<80;i++) particles.push(new Particle('spark'));
+  for(let i=0;i<6;i++)  particles.push(new Particle('orb'));
+
+  function loop(){
+    ctx.clearRect(0,0,W,H);
+    particles.forEach(p=>{p.update();p.draw();});
+    requestAnimationFrame(loop);
+  }
+  loop();
+})();
+
+/* ─── Progress bar ─── */
+window.addEventListener('scroll',()=>{
+  const st=window.scrollY;
+  const dh=document.documentElement.scrollHeight-window.innerHeight;
+  document.getElementById('pbar').style.width=(st/dh*100)+'%';
+
+  // update nav active state
+  const secs=['hero','s1','s2','s3','s4'];
+  const btns=document.querySelectorAll('.nav-btn');
+  let current=0;
+  secs.forEach((id,i)=>{
+    const el=document.getElementById(id);
+    if(el && el.getBoundingClientRect().top<=80) current=i;
+  });
+  btns.forEach((b,i)=>b.classList.toggle('active',i===current));
+});
+
+/* ─── Smooth scroll nav ─── */
+function scrollTo(hash){
+  const el=document.querySelector(hash);
+  if(el) el.scrollIntoView({behavior:'smooth'});
+}
+
+/* ─── Accordion ─── */
+function toggleAcc(btn){
+  const item=btn.closest('.acc-item');
+  const wasOpen=item.classList.contains('open');
+  // close all in same accordion
+  item.closest('.accordion').querySelectorAll('.acc-item').forEach(i=>i.classList.remove('open'));
+  if(!wasOpen) item.classList.add('open');
+}
+
+/* ─── Intersection Observer ─── */
+const io=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting) e.target.classList.add('vis');
+  });
+},{threshold:0.08});
+
+document.querySelectorAll(
+  '.sec-eyebrow,.sec-title,.acc-item,.summary-card,.cond-card,.tl-item,.band,.final-cta'
+).forEach(el=>io.observe(el));
+
+/* ─── Cursor light trail ─── */
+(function(){
+  let mx=0,my=0;
+  const cv=document.getElementById('bg-canvas');
+  const ctx=cv.getContext('2d');
+  // overlay subtle cursor glow
+  document.addEventListener('mousemove',e=>{
+    mx=e.clientX; my=e.clientY;
+  });
+  // paint cursor glow each frame — append to existing loop by modifying prototype
+  const origDraw = window._origLoop;
+  // Simple approach: just track and draw in RAF
+  function drawCursorGlow(){
+    ctx.save();
+    const g=ctx.createRadialGradient(mx,my,0,mx,my,120);
+    g.addColorStop(0,'rgba(200,149,42,0.04)');
+    g.addColorStop(1,'transparent');
+    ctx.fillStyle=g;
+    ctx.fillRect(0,0,cv.width,cv.height);
+    ctx.restore();
+    requestAnimationFrame(drawCursorGlow);
+  }
+  drawCursorGlow();
+})();
+
+/* ─── Age badge count-up animation ─── */
+function animateAge(el, target){
+  let current=0;
+  const duration=1200;
+  const steps=40;
+  const increment=target/steps;
+  const stepTime=duration/steps;
+  const timer=setInterval(()=>{
+    current+=increment;
+    if(current>=target){
+      current=target;
+      clearInterval(timer);
+      el.textContent = target===11 ? '제11시' : target+'세';
+    } else {
+      el.textContent = Math.floor(current)+(target!==11?'세':'...');
+    }
+  },stepTime);
+}
+
+const ageObserver=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting && !e.target.dataset.animated){
+      e.target.dataset.animated='1';
+      const raw=e.target.dataset.age;
+      if(raw) animateAge(e.target, parseInt(raw));
+    }
+  });
+},{threshold:0.3});
+
+document.querySelectorAll('.age-badge').forEach((el,i)=>{
+  const ages=[80,85,84,11];
+  el.dataset.age=ages[i];
+  el.textContent='0세';
+  ageObserver.observe(el);
+});
+</script>
+</body>
+</html>

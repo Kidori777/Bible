@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>블레즈 파스칼과 은밀한 기도</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700&family=IM+Fell+English:ital@0;1&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #1a1208;
+            --parchment: #f5eed8;
+            --parchment-dark: #e8dfc0;
+            --gold: #b8960c;
+            --gold-light: #d4aa1a;
+            --ember: #c0441a;
+            --shadow: rgba(15, 10, 0, 0.6);
+            --candlelight: #fff8e0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: #0d0a05;
+            background-image:
+                radial-gradient(ellipse at 50% 0%, #2a1a05 0%, transparent 70%),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+            min-height: 100vh;
+            padding: 40px 20px 80px;
+            font-family: 'Noto Serif KR', serif;
+            color: var(--ink);
+        }
+
+        /* ── Candle flame ── */
+        .candle-wrap {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        .candle {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .flame {
+            width: 18px;
+            height: 34px;
+            background: radial-gradient(ellipse at 50% 80%, #fff5b0, #f0a020 40%, #c04010 75%, transparent);
+            border-radius: 50% 50% 30% 30%;
+            box-shadow: 0 0 12px 6px #f0901080, 0 0 30px 12px #c0440840, 0 0 60px 20px #8020080a;
+            animation: flicker 2.4s ease-in-out infinite;
+            transform-origin: bottom center;
+        }
+        .wick { width: 2px; height: 10px; background: #333; margin-top: -3px; }
+        .candle-body {
+            width: 18px;
+            height: 70px;
+            background: linear-gradient(to right, #e8dfc0 0%, #f5eed8 40%, #fffdf0 60%, #e0d4a8 100%);
+            border-radius: 2px 2px 1px 1px;
+        }
+        .candle-drip {
+            position: absolute;
+            top: 50px;
+            left: 2px;
+            width: 6px;
+            height: 14px;
+            background: var(--parchment);
+            border-radius: 0 0 40% 40%;
+            opacity: 0.8;
+        }
+        @keyframes flicker {
+            0%,100% { transform: scaleX(1) scaleY(1) rotate(-1deg); opacity: 1; }
+            25% { transform: scaleX(0.92) scaleY(1.06) rotate(1deg); opacity: 0.95; }
+            50% { transform: scaleX(1.04) scaleY(0.97) rotate(-0.5deg); opacity: 1; }
+            75% { transform: scaleX(0.96) scaleY(1.03) rotate(1.5deg); opacity: 0.93; }
+        }
+
+        /* ── Main parchment ── */
+        .page {
+            max-width: 760px;
+            margin: 0 auto;
+            background:
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='t'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.55' numOctaves='8' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23t)' opacity='0.07'/%3E%3C/svg%3E"),
+                linear-gradient(160deg, #fdf8e8 0%, #f5eed8 30%, #ede3c4 60%, #f8f2df 100%);
+            border-radius: 4px;
+            box-shadow:
+                0 0 0 1px #b89c5020,
+                0 2px 8px #0d0a0540,
+                0 8px 30px #0d0a0560,
+                0 20px 70px #0d0a0570,
+                inset 0 0 60px rgba(184,150,12,0.06);
+            padding: 60px 64px 70px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* aged corners */
+        .page::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 0% 0%, #c8a05020 0%, transparent 40%),
+                radial-gradient(ellipse at 100% 0%, #a07a1020 0%, transparent 35%),
+                radial-gradient(ellipse at 0% 100%, #a07a1015 0%, transparent 40%),
+                radial-gradient(ellipse at 100% 100%, #c8a05018 0%, transparent 40%);
+            pointer-events: none;
+        }
+
+        /* inner border */
+        .page::after {
+            content: '';
+            position: absolute;
+            inset: 18px;
+            border: 1px solid #b89c5030;
+            border-radius: 2px;
+            pointer-events: none;
+        }
+
+        /* decorative corner ornaments */
+        .corner {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            opacity: 0.35;
+        }
+        .corner svg { width: 100%; height: 100%; fill: var(--gold); }
+        .corner-tl { top: 8px; left: 8px; }
+        .corner-tr { top: 8px; right: 8px; transform: scaleX(-1); }
+        .corner-bl { bottom: 8px; left: 8px; transform: scaleY(-1); }
+        .corner-br { bottom: 8px; right: 8px; transform: scale(-1); }
+
+        /* ── Typography ── */
+        .main-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.15rem;
+            font-weight: 600;
+            letter-spacing: 0.22em;
+            text-align: center;
+            color: var(--gold);
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            opacity: 0.85;
+        }
+
+        .title-kr {
+            font-family: 'Noto Serif KR', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            text-align: center;
+            color: #2a1a06;
+            line-height: 1.4;
+            margin-bottom: 28px;
+            letter-spacing: -0.01em;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 24px 0;
+        }
+        .divider-line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--gold), transparent);
+            opacity: 0.5;
+        }
+        .divider-ornament {
+            color: var(--gold);
+            font-size: 1.1rem;
+            opacity: 0.7;
+        }
+
+        .intro-box {
+            background: linear-gradient(135deg, rgba(184,150,12,0.07), rgba(184,150,12,0.03));
+            border: 1px solid rgba(184,150,12,0.25);
+            border-left: 3px solid var(--gold);
+            padding: 22px 28px;
+            border-radius: 2px;
+            margin-bottom: 28px;
+        }
+        .intro-box p { font-size: 0.97rem; line-height: 2; margin-bottom: 8px; color: #2e1e08; }
+        .intro-box p:last-child { margin-bottom: 0; }
+
+        .pull-quote {
+            font-family: 'IM Fell English', serif;
+            font-style: italic;
+            font-size: 1.13rem;
+            text-align: center;
+            color: #3d2710;
+            padding: 20px 40px;
+            margin: 28px 0;
+            position: relative;
+            line-height: 1.9;
+        }
+        .pull-quote::before, .pull-quote::after {
+            content: '';
+            display: block;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--gold-light), transparent);
+            opacity: 0.45;
+            margin: 12px 0;
+        }
+
+        h2.section-title {
+            font-family: 'Noto Serif KR', serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #2a1608;
+            margin: 36px 0 14px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(184,150,12,0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        h2.section-title .num {
+            font-family: 'Cinzel', serif;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            color: var(--gold);
+            background: rgba(184,150,12,0.1);
+            border: 1px solid rgba(184,150,12,0.3);
+            padding: 2px 9px;
+            border-radius: 2px;
+        }
+
+        h2.plain-title {
+            font-family: 'Noto Serif KR', serif;
+            font-size: 1.0rem;
+            font-weight: 700;
+            color: #2a1608;
+            margin: 28px 0 12px;
+            padding-left: 14px;
+            border-left: 3px solid var(--gold);
+            line-height: 1.6;
+        }
+
+        .body-text {
+            font-size: 0.96rem;
+            line-height: 2.05;
+            color: #2e1e0a;
+            margin-bottom: 14px;
+        }
+
+        .body-text em {
+            font-style: italic;
+            color: #4a2e10;
+        }
+
+        .verse-box {
+            background: rgba(184,150,12,0.06);
+            border: 1px solid rgba(184,150,12,0.2);
+            padding: 22px 32px;
+            margin: 28px 0;
+            text-align: center;
+            border-radius: 2px;
+            position: relative;
+        }
+        .verse-box::before {
+            content: '✦';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--parchment);
+            padding: 0 8px;
+            color: var(--gold);
+            font-size: 0.85rem;
+        }
+        .verse-box p {
+            font-family: 'Noto Serif KR', serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #2a1608;
+            line-height: 2;
+        }
+        .verse-box .ref {
+            font-size: 0.85rem;
+            color: var(--gold);
+            margin-top: 8px;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 0.1em;
+        }
+
+        .section-block {
+            padding: 20px 0;
+        }
+
+        strong.emp {
+            color: #3d1a06;
+            font-weight: 700;
+        }
+
+        .highlight-pill {
+            background: rgba(184,150,12,0.12);
+            border: 1px solid rgba(184,150,12,0.25);
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-weight: 700;
+            color: #3d2000;
+            font-size: 0.93em;
+        }
+
+        ul.styled {
+            list-style: none;
+            padding: 0;
+            margin: 14px 0 14px 12px;
+        }
+        ul.styled li {
+            padding: 5px 0 5px 22px;
+            position: relative;
+            font-size: 0.95rem;
+            color: #2e1e0a;
+            line-height: 1.9;
+        }
+        ul.styled li::before {
+            content: '◆';
+            position: absolute;
+            left: 0;
+            color: var(--gold);
+            font-size: 0.55rem;
+            top: 11px;
+        }
+
+        .pascal-memo {
+            border: 1px solid rgba(192,68,26,0.25);
+            background: rgba(192,68,26,0.04);
+            padding: 22px 28px;
+            margin: 22px 0;
+            border-radius: 2px;
+            font-family: 'IM Fell English', serif;
+            font-style: italic;
+            font-size: 1.05rem;
+            line-height: 2;
+            color: #3a1808;
+        }
+        .pascal-memo .attribution {
+            font-size: 0.82rem;
+            text-align: right;
+            color: #7a4020;
+            margin-top: 10px;
+            font-style: normal;
+            font-family: 'Noto Serif KR', serif;
+        }
+
+        .date-callout {
+            font-family: 'Cinzel', serif;
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--ember);
+            letter-spacing: 0.1em;
+        }
+
+        /* conclusion */
+        .conclusion {
+            margin-top: 48px;
+            padding: 36px 40px;
+            background:
+                linear-gradient(160deg, #2a1608 0%, #1a0d04 50%, #261408 100%);
+            border-radius: 4px;
+            color: var(--candlelight);
+            text-align: center;
+            box-shadow:
+                0 0 0 1px rgba(184,150,12,0.2),
+                inset 0 0 40px rgba(184,150,12,0.06);
+            position: relative;
+            overflow: hidden;
+        }
+        .conclusion::before {
+            content: '';
+            position: absolute;
+            inset: 12px;
+            border: 1px solid rgba(184,150,12,0.2);
+            border-radius: 2px;
+            pointer-events: none;
+        }
+        .conclusion h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.3em;
+            color: var(--gold-light);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        .conclusion h3 {
+            font-family: 'Noto Serif KR', serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #f5eed8;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+        .conclusion p {
+            font-size: 0.94rem;
+            line-height: 2.1;
+            color: #d4c8a8;
+            margin-bottom: 10px;
+        }
+        .conclusion .final-sentence {
+            margin-top: 20px;
+            font-weight: 700;
+            color: var(--gold-light);
+            font-size: 0.97rem;
+            line-height: 1.9;
+        }
+
+        .page-break-ornament {
+            text-align: center;
+            margin: 56px 0 40px;
+            color: var(--gold);
+            font-size: 1.4rem;
+            opacity: 0.5;
+            letter-spacing: 0.5em;
+        }
+
+        .second-title {
+            font-family: 'Noto Serif KR', serif;
+            font-size: 1.7rem;
+            font-weight: 700;
+            text-align: center;
+            color: #2a1a06;
+            margin-bottom: 6px;
+        }
+
+        .summary-box {
+            border: 1px solid rgba(184,150,12,0.3);
+            background: rgba(184,150,12,0.05);
+            padding: 22px 28px;
+            margin: 28px 0 8px;
+            border-radius: 2px;
+        }
+        .summary-box .label {
+            font-family: 'Cinzel', serif;
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            color: var(--gold);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        .summary-box p {
+            font-size: 0.96rem;
+            line-height: 1.9;
+            color: #2e1e0a;
+        }
+
+        .final-conclusion {
+            margin-top: 48px;
+            padding: 36px 40px;
+            background:
+                linear-gradient(160deg, #2a1608 0%, #1a0d04 50%, #261408 100%);
+            border-radius: 4px;
+            color: var(--candlelight);
+            text-align: center;
+            box-shadow:
+                0 0 0 1px rgba(184,150,12,0.2),
+                inset 0 0 40px rgba(184,150,12,0.06);
+            position: relative;
+            overflow: hidden;
+        }
+        .final-conclusion::before {
+            content: '';
+            position: absolute;
+            inset: 12px;
+            border: 1px solid rgba(184,150,12,0.2);
+            border-radius: 2px;
+            pointer-events: none;
+        }
+        .final-conclusion h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.3em;
+            color: var(--gold-light);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        .final-conclusion h3 {
+            font-family: 'Noto Serif KR', serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #f5eed8;
+            margin-bottom: 22px;
+            line-height: 1.8;
+        }
+        .final-conclusion ul {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .final-conclusion ul li {
+            padding: 4px 0 4px 20px;
+            position: relative;
+            font-size: 0.93rem;
+            color: #d4c8a8;
+            line-height: 1.9;
+        }
+        .final-conclusion ul li::before {
+            content: '◆';
+            position: absolute;
+            left: 0;
+            color: var(--gold);
+            font-size: 0.5rem;
+            top: 10px;
+        }
+        .final-conclusion p {
+            font-size: 0.94rem;
+            line-height: 2.1;
+            color: #d4c8a8;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(184,150,12,0.25);
+            color: #7a6040;
+            font-family: 'Cinzel', serif;
+            font-size: 0.82rem;
+            letter-spacing: 0.2em;
+        }
+
+        /* fade-in */
+        .page { animation: pageIn 1.2s ease-out; }
+        @keyframes pageIn {
+            from { opacity: 0; transform: translateY(18px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="candle-wrap">
+        <div class="candle">
+            <div class="flame"></div>
+            <div class="wick"></div>
+            <div class="candle-body">
+                <div class="candle-drip"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page">
+
+        <!-- corner ornaments -->
+        <div class="corner corner-tl">
+            <svg viewBox="0 0 50 50"><path d="M2,2 Q25,2 48,2 Q48,25 48,48 Q35,35 25,25 Q15,15 2,2Z" opacity="0.4"/><circle cx="6" cy="6" r="2.5"/><path d="M10,2 L10,14 M2,10 L14,10" stroke-width="1" fill="none" stroke="currentColor"/></svg>
+        </div>
+        <div class="corner corner-tr">
+            <svg viewBox="0 0 50 50"><path d="M2,2 Q25,2 48,2 Q48,25 48,48 Q35,35 25,25 Q15,15 2,2Z" opacity="0.4"/><circle cx="6" cy="6" r="2.5"/><path d="M10,2 L10,14 M2,10 L14,10" stroke-width="1" fill="none" stroke="currentColor"/></svg>
+        </div>
+        <div class="corner corner-bl">
+            <svg viewBox="0 0 50 50"><path d="M2,2 Q25,2 48,2 Q48,25 48,48 Q35,35 25,25 Q15,15 2,2Z" opacity="0.4"/><circle cx="6" cy="6" r="2.5"/><path d="M10,2 L10,14 M2,10 L14,10" stroke-width="1" fill="none" stroke="currentColor"/></svg>
+        </div>
+        <div class="corner corner-br">
+            <svg viewBox="0 0 50 50"><path d="M2,2 Q25,2 48,2 Q48,25 48,48 Q35,35 25,25 Q15,15 2,2Z" opacity="0.4"/><circle cx="6" cy="6" r="2.5"/><path d="M10,2 L10,14 M2,10 L14,10" stroke-width="1" fill="none" stroke="currentColor"/></svg>
+        </div>
+
+        <div class="main-title">Blaise Pascal &amp; Secret Prayer</div>
+        <div class="title-kr">블레즈 파스칼과 은밀한 기도</div>
+
+        <div class="divider">
+            <div class="divider-line"></div>
+            <span class="divider-ornament">✦ ✦ ✦</span>
+            <div class="divider-line"></div>
+        </div>
+
+        <div class="intro-box">
+            <p><strong class="emp">블레즈 파스칼</strong>을 아십니까? 파스칼은 프랑스의 물리학자이자 수학자이며 철학자였습니다.</p>
+            <p>파스칼이 남긴 유명한 명언 중에 <span class="highlight-pill">"인간은 생각하는 갈대다"</span> 라는 말이 있습니다.</p>
+            <p>여기서 '갈대'란 무엇인가? → <strong class="emp">인간의 연약함</strong>을 이야기하고 있습니다. 그러나 인간은 연약하기 때문에 하나님이 필요하고 인간은 생각할 수 있기 때문에 하나님을 찾을 수 있는 존재라는 것입니다.</p>
+        </div>
+
+        <div class="pull-quote">
+            "인간의 위대함은 하나님을 찾는 데 있다."<br>
+            <span style="font-size:0.82rem; letter-spacing:0.15em; font-style:normal; color:#7a5a30; font-family:'Cinzel',serif;">— BLAISE PASCAL —</span>
+        </div>
+
+        <h2 class="plain-title">보이지 않는 자리, 은밀한 골방에서</h2>
+        <div class="section-block">
+            <p class="body-text">사람은 누구나 겉으로 드러난 삶을 살아갑니다. 관계 속에서 인정받고 싶고, 쓰임받고 싶고, 의미 있는 존재로 보이고 싶습니다.</p>
+            <p class="body-text">그러나 하나님은 종종 우리를 보이지 않는 자리, 닫힌 문 뒤의 공간으로 부르십니다.</p>
+        </div>
+
+        <div class="verse-box">
+            <p>"그대는 기도할 때, 그대의 골방에 들어가 문을 닫고,<br>은밀한 가운데 계시는 아버지께 기도하십시오."</p>
+            <div class="ref">마태복음 6:6</div>
+        </div>
+
+        <div class="section-block">
+            <h3 style="font-size:0.97rem; font-weight:700; color:#2a1608; margin-bottom:10px;">골방의 사전적 의미</h3>
+            <ul class="styled">
+                <li>창문이 거의 없거나 어둡고 좁은 방</li>
+                <li>집 안에서 잘 사용하지 않는 공간</li>
+                <li>혼자 조용히 숨어드는 방</li>
+            </ul>
+            <p class="body-text">하나님은 은밀한 가운데 기도함으로 나와 만나신다는 약속입니다. 대중적으로 만날 수도 있지만 개인적이고 친밀하며 애정 어린 그런 만남!</p>
+        </div>
+
+        <div class="divider" style="margin: 36px 0 10px;">
+            <div class="divider-line"></div>
+            <span class="divider-ornament">✦</span>
+            <div class="divider-line"></div>
+        </div>
+
+        <!-- Section 1 -->
+        <h2 class="section-title">
+            <span class="num">I</span>
+            인간의 마음에는 말할 수 없는 공허가 있다
+        </h2>
+        <div class="section-block">
+            <p class="body-text">블레즈 파스칼은 젊은 나이에 이미 과학과 철학의 정상에 오른 사람이었습니다. 사람들은 그를 천재라 불렀고, 그의 머리는 누구보다 밝았습니다.</p>
+            <p class="body-text">그러나 그의 마음속 깊은 곳에는 설명할 수 없는 공허가 있었습니다.</p>
+            <p class="body-text">그는 스스로에게 질문했습니다. <em>"내가 아는 모든 지식이… 정말로 나를 만족시키는가?"</em></p>
+            <p class="body-text">사람들과 토론할 때는 당당했지만, 밤이 되어 혼자가 되면 그는 이상한 허전함과 무게를 느꼈습니다.</p>
+            <p class="body-text">그것은 단순한 철학적 질문이 아니라, <strong class="emp">나의 영혼이 하나님을 찾고 있다는 신호</strong>였습니다.</p>
+        </div>
+
+        <!-- Section 2 -->
+        <h2 class="section-title">
+            <span class="num">II</span>
+            그날 밤, 하나님은 은밀한 자리에서 찾아오셨다
+        </h2>
+        <div class="section-block">
+            <p class="body-text"><span class="date-callout">1654년 11월 23일 밤.</span> 파스칼은 사람도, 명예도, 학문도 아닌 오직 하나님께 시선을 두고 은밀한 기도를 드리고 있었습니다.</p>
+            <p class="body-text">그 순간— 그의 방을 밝히는 어떤 강렬한 불빛 같은 하나님의 임재가 임했습니다. 지식 속에서의 하나님이 아닌 체험 가운데 살아계신 하나님 자신을 만난 것입니다.</p>
+        </div>
+
+        <div class="pascal-memo">
+            "불, 확신, 느낌, 평안, 기쁨! 기쁨! 기쁨의 눈물!"<br>
+            "아브라함의 하나님, 이삭의 하나님, 야곱의 하나님!<br>
+            철학자와 학자의 하나님이 아니라!"
+            <div class="attribution">— 파스칼의 기념문서</div>
+        </div>
+
+        <div class="section-block">
+            <p class="body-text">그 기념문서는 옷 속에 바느질해 넣어 평생 간직되었는데 그가 죽은 후에 그의 하인이 옷 속에 있는 이것을 발견하여 기념문서라고 전해져 내려오고 있습니다.</p>
+            <p class="body-text">그것은 한 번의 체험이 아니라, <strong class="emp">그의 존재를 바꾼 순간</strong>이었기 때문입니다.</p>
+        </div>
+
+        <!-- Section 3 -->
+        <h2 class="section-title">
+            <span class="num">III</span>
+            하나님은 보이는 자리보다, 보이지 않는 곳에서 사람을 만나신다
+        </h2>
+        <div class="section-block">
+            <p class="body-text">예수님은 기적을 행하시고 사람들의 환호를 받을 때마다 조용히 산으로 올라가 기도하셨습니다. 사람들 속에서 기적을 행하셨지만 하나님 앞에서는 홀로 서셨습니다.</p>
+            <p class="body-text"><strong class="emp">왜일까요?</strong></p>
+            <p class="body-text">하나님과의 교통이 끊어지지 않기 위해, 사람의 시선이 아니라 아버지의 마음으로 사역하기 위해서였습니다.</p>
+            <p class="body-text">바울도 마찬가지였습니다. 그는 율법과 학문을 누구보다 잘 알았지만, 예수님을 다메섹 도상에서 만나는 순간, 그의 삶은 새로운 방향으로 흘러갔습니다.</p>
+            <p class="body-text"><span class="highlight-pill">지식이 사람을 변화시키지 못합니다. 하나님을 '만나는 체험'이 사람을 바꿉니다.</span></p>
+        </div>
+
+        <!-- Section 4 -->
+        <h2 class="section-title">
+            <span class="num">IV</span>
+            은밀한 기도는 지식을 체험으로 바꾸는 장소다
+        </h2>
+        <div class="section-block">
+            <p class="body-text">우리는 많은 연설도 듣습니다. 성경 공부도 합니다. 때로는 토론도 합니다.</p>
+            <p class="body-text">그러나— <strong class="emp">하나님을 만나기 전까지는 신앙은 이론일 뿐입니다.</strong></p>
+            <p class="body-text">은밀한 기도는 그 이론이 뜨거운 실재가 되는 자리, 하나님이 '그분 자신'으로 찾아오시는 자리입니다.</p>
+            <p class="body-text">그 자리에서 우리는 알게 됩니다. 하나님은 멀리 계신 개념이 아니라, 지금 나를 사랑하시고 나를 찾으시는 인격이라는 것을.</p>
+        </div>
+
+        <div class="conclusion">
+            <h2>✦ &nbsp; 결론 &nbsp; ✦</h2>
+            <h3>"하나님은 은밀한 곳에서 기다리신다."</h3>
+            <p>파스칼의 불의 밤은 특별한 사람이어서가 아니라, 이것은 하나님을 찾는 자의 골방에서 일어난 일이었습니다.</p>
+            <p>그리고 그 하나님은 지금도 동일하십니다.</p>
+            <p>사람 앞에서는 조용한 사람일지라도, 하나님 앞에서 영안에서 가난함으로 순수함으로 기도하는 사람은 반드시 하늘의 불을 경험하게 될 것입니다.</p>
+            <p class="final-sentence">은밀한 기도는 신앙을 이론에서 체험으로 변화시키는 문입니다. 그리고 그 문은 오늘도 열려 있습니다.</p>
+        </div>
+
+        <!-- ── Part 2 ── -->
+        <div class="page-break-ornament">✦ &nbsp; &nbsp; ✦ &nbsp; &nbsp; ✦</div>
+
+        <div class="second-title">골방의 영적 의미</div>
+
+        <div class="divider" style="margin: 16px 0 32px;">
+            <div class="divider-line"></div>
+            <span class="divider-ornament">✦ ✦ ✦</span>
+            <div class="divider-line"></div>
+        </div>
+
+        <!-- Part 2 - Section 1 -->
+        <h2 class="section-title">
+            <span class="num">I</span>
+            골방은 사람이 보지 않는 곳이 아니라, 사람을 의식하지 않는 자리입니다
+        </h2>
+        <div class="section-block">
+            <p class="body-text">골방은 문을 닫는 곳입니다. 문을 닫는다는 것은:</p>
+            <ul class="styled">
+                <li>사람의 시선에서 벗어나고</li>
+                <li>인정과 평가를 내려놓고</li>
+                <li>외적 활동을 멈추며</li>
+                <li>마음을 하나님께 집중하는 것</li>
+            </ul>
+            <p class="body-text">골방은 사람이 보지 않는 곳이 아니라, <span class="highlight-pill">사람을 의식하지 않는 자리</span>입니다. 바로 하나님과 만남을 가지는 지성소인 것입니다.</p>
+        </div>
+
+        <!-- Part 2 - Section 2 -->
+        <h2 class="section-title">
+            <span class="num">II</span>
+            골방은 '하나님이 임재하시는 깊은 내면'이다
+        </h2>
+        <div class="section-block">
+            <p class="body-text">성경에서 은밀한 중에 계신 아버지라는 표현은 하나님이 감추어진 곳에 계신 분이라는 뜻입니다.</p>
+            <p class="body-text">하나님은:</p>
+            <ul class="styled">
+                <li>소란스러움이 아니라 고요 속에서</li>
+                <li>외적 열심이 아니라 내적 진실 속에서</li>
+                <li>말의 많음이 아니라 마음의 진실함 속에서</li>
+            </ul>
+            <p class="body-text">우리에게 임하십니다.</p>
+            <p class="body-text">그래서 골방은 단순한 기도 장소가 아니라, <strong class="emp">하나님을 만나는 영적 깊이의 공간</strong>입니다.</p>
+        </div>
+
+        <!-- Part 2 - Section 3 -->
+        <h2 class="section-title">
+            <span class="num">III</span>
+            골방은 '내가 아니라 하나님이 역사하시는 장소'입니다
+        </h2>
+        <div class="section-block">
+            <p class="body-text">사람들 앞에서의 기도는 때로는 '내가 기도한다'는 느낌이 강합니다.</p>
+            <p class="body-text">하지만 골방에서는 내 생각과 감정, 계획과 논리가 내려가고 <strong class="emp">하나님이 말씀하시고, 하나님이 만지시고, 하나님이 역사하십니다.</strong></p>
+            <p class="body-text">여기에서 신앙은 지식에서 체험(만남)으로 옮겨갑니다.</p>
+        </div>
+
+        <!-- Part 2 - Section 4 -->
+        <h2 class="section-title">
+            <span class="num">IV</span>
+            은밀함은 '하나님과 나만의 관계가 형성되는 과정'이다
+        </h2>
+        <div class="section-block">
+            <p class="body-text">은밀함은 숨김이 아니라 <strong class="emp">구별</strong>입니다.</p>
+            <ul class="styled">
+                <li>사람을 위한 것이 아니라</li>
+                <li>하나님만을 위한 시간</li>
+                <li>하나님만을 위한 눈물</li>
+                <li>하나님만이 아시는 기도</li>
+            </ul>
+            <p class="body-text">이것이 은밀함의 영적 속성입니다.</p>
+            <p class="body-text">그래서 은밀함은 신앙을 표면에서 뿌리로 옮기고, 행위를 관계로 바꾸며, 의무를 사랑으로 변화시킵니다.</p>
+        </div>
+
+        <div class="final-conclusion">
+            <h2>✦ &nbsp; 최종 결론 &nbsp; ✦</h2>
+            <h3>골방은 장소가 아니라 하나님과의 깊은 관계가 시작되는 마음의 성소이다</h3>
+            <ul>
+                <li>보여지는 자리에서 벗어나</li>
+                <li>보이지 않는 하나님 앞에 머물러야 하고</li>
+                <li>들리는 소음에서 벗어나</li>
+                <li>하나님의 미세한 음성을 들어야 하며</li>
+                <li>사람의 인정이 아닌</li>
+                <li>하나님의 시선을 의식하는 자리</li>
+            </ul>
+            <p>그곳에서 신앙은 행위가 아니라 만남이 되고, 습관이 아니라 변화가 되고, 종교가 아니라 사랑이 됩니다.</p>
+        </div>
+
+        <div class="summary-box" style="margin-top: 36px;">
+            <div class="label">📍 &nbsp; 한 문장 요약</div>
+            <p>골방은 하나님을 위한 공간이 아니라, 하나님과 나만의 관계가 살아나는 내면의 성소입니다.</p>
+        </div>
+
+        <div class="footer">
+            <p>부산교회 2구역</p>
+        </div>
+
+    </div>
+
+</body>
+</html>

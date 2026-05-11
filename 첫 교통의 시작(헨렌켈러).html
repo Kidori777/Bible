@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>W·A·T·E·R — 헬렌 켈러와 앤 설리번</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;900&family=Bebas+Neue&family=Nanum+Myeongjo:wght@400;700;800&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden;background:#06080a;}
+body{font-family:'Noto Serif KR',serif;color:#d8cfc0;cursor:crosshair;user-select:none;}
+
+/* ══ 레이어 구조 ══ */
+#bg-canvas{position:fixed;inset:0;z-index:0;}        /* 배경 + 물결 */
+#braille-canvas{position:fixed;inset:0;z-index:1;pointer-events:none;}  /* 점자 패턴 */
+#ui{position:fixed;inset:0;z-index:10;pointer-events:none;}
+
+/* ══ 오프닝 ══ */
+#opening{
+  position:fixed;inset:0;z-index:50;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:18px;pointer-events:all;
+  background:radial-gradient(ellipse at 50% 60%,rgba(10,18,30,0.97),rgba(4,6,10,1));
+}
+#opening-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(64px,14vw,160px);
+  letter-spacing:0.18em;color:#fff;
+  line-height:0.85;text-align:center;
+  text-shadow:0 0 80px rgba(80,160,220,0.25);
+}
+#opening-title .dot{
+  display:inline-block;width:12px;height:12px;border-radius:50%;
+  background:#fff;margin:0 4px;vertical-align:middle;
+  box-shadow:0 0 12px rgba(255,255,255,0.6);
+}
+#opening-sub{
+  font-family:'Noto Serif KR',serif;font-size:clamp(12px,1.8vw,16px);
+  color:rgba(200,190,170,0.5);text-align:center;
+  line-height:1.9;max-width:380px;word-break:keep-all;
+}
+#opening-instruction{
+  font-family:'Special Elite',serif;font-size:10px;
+  letter-spacing:0.5em;text-transform:uppercase;
+  color:rgba(80,160,220,0.5);margin-top:10px;
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{0%,100%{opacity:0.3}50%{opacity:0.8}}
+#opening-btn{
+  padding:12px 48px;border:1px solid rgba(80,160,220,0.35);
+  background:rgba(80,160,220,0.06);
+  color:rgba(140,200,240,0.8);
+  font-family:'Noto Serif KR',serif;font-size:15px;
+  cursor:pointer;letter-spacing:0.12em;border-radius:2px;
+  transition:all 0.2s;pointer-events:all;
+}
+#opening-btn:hover{background:rgba(80,160,220,0.16);border-color:rgba(80,160,220,0.7);}
+
+/* ══ 챕터 시스템 ══ */
+.chapter{
+  position:fixed;inset:0;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:clamp(24px,4vw,60px) clamp(24px,6vw,100px);
+  opacity:0;pointer-events:none;
+  transition:opacity 0.9s;
+  z-index:15;
+}
+.chapter.active{opacity:1;pointer-events:all;}
+
+/* 두 컬럼 레이아웃 */
+.ch-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:clamp(24px,4vw,60px);
+  width:100%;max-width:1000px;
+  align-items:center;
+}
+.ch-grid.single{grid-template-columns:1fr;max-width:680px;}
+
+/* 텍스트 블록 */
+.ch-tag{
+  font-family:'Special Elite',serif;font-size:9px;
+  letter-spacing:0.5em;text-transform:uppercase;
+  color:rgba(80,160,220,0.5);margin-bottom:12px;display:block;
+}
+.ch-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(32px,5vw,64px);
+  color:#fff;letter-spacing:0.04em;line-height:0.92;
+  margin-bottom:16px;word-break:keep-all;
+}
+.ch-body{
+  font-family:'Nanum Myeongjo',serif;
+  font-size:clamp(14px,1.8vw,17px);font-weight:400;
+  color:rgba(210,200,180,0.8);line-height:2;
+  word-break:keep-all;margin-bottom:0.8em;
+}
+.ch-body strong{color:#fff;font-weight:700;}
+.ch-body:last-of-type{margin-bottom:0;}
+
+/* 인용 블록 */
+.ch-quote{
+  border-left:2px solid rgba(80,160,220,0.4);
+  padding:14px 0 14px 20px;margin:16px 0;
+}
+.ch-quote p{
+  font-family:'Nanum Myeongjo',serif;
+  font-size:clamp(15px,2vw,19px);font-weight:700;
+  color:#f0e8d8;line-height:1.8;word-break:keep-all;
+}
+.ch-quote .attr{
+  font-family:'Special Elite',serif;font-size:9px;
+  letter-spacing:0.3em;color:rgba(80,160,220,0.5);
+  margin-top:8px;display:block;text-transform:uppercase;
+}
+
+/* 다음 버튼 */
+.ch-next{
+  display:inline-block;margin-top:20px;
+  font-family:'Special Elite',serif;font-size:9px;
+  letter-spacing:0.45em;text-transform:uppercase;
+  color:rgba(80,160,220,0.5);cursor:pointer;border:none;background:none;
+  animation:pulse 1.6s infinite;pointer-events:all;
+  padding:8px 0;
+}
+.ch-next:hover{color:rgba(80,160,220,0.9);}
+
+/* ══ WATER 폭발 장면 ══ */
+#water-scene{
+  position:fixed;inset:0;z-index:60;
+  display:none;
+  flex-direction:column;
+  align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.6s;
+  background:rgba(4,10,20,0);
+}
+#water-scene.active{display:flex;opacity:1;pointer-events:all;}
+#water-scene.lit{background:rgba(4,18,36,0.92);}
+
+#water-word{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(80px,18vw,200px);
+  letter-spacing:0.12em;color:#fff;
+  line-height:0.88;text-align:center;
+  opacity:0;transform:scale(0.7);
+  transition:opacity 1s 0.3s, transform 1.2s 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  text-shadow:
+    0 0 60px rgba(80,180,255,0.8),
+    0 0 120px rgba(40,120,200,0.4);
+  position:relative;z-index:2;
+}
+#water-scene.active #water-word{opacity:1;transform:scale(1);}
+
+#water-kr{
+  font-family:'Nanum Myeongjo',serif;
+  font-size:clamp(20px,4vw,44px);font-weight:800;
+  color:rgba(140,210,255,0.9);
+  letter-spacing:0.15em;text-align:center;
+  opacity:0;transition:opacity 0.8s 1.4s;
+  margin-top:8px;
+}
+#water-scene.active #water-kr{opacity:1;}
+
+#water-quote{
+  max-width:480px;text-align:center;
+  margin-top:24px;padding:20px 28px;
+  background:rgba(4,14,28,0.8);
+  border:1px solid rgba(80,160,220,0.2);
+  opacity:0;transition:opacity 0.8s 2s;
+}
+#water-scene.active #water-quote{opacity:1;}
+#water-quote p{
+  font-family:'Nanum Myeongjo',serif;
+  font-size:clamp(13px,1.8vw,17px);font-weight:700;
+  color:#f0e8d8;line-height:1.85;word-break:keep-all;
+}
+#water-next{
+  opacity:0;transition:opacity 0.8s 2.8s;
+  font-family:'Special Elite',serif;font-size:9px;
+  letter-spacing:0.45em;text-transform:uppercase;
+  color:rgba(80,160,220,0.5);cursor:pointer;border:none;background:none;
+  animation:pulse 1.6s 2.8s infinite;margin-top:20px;pointer-events:all;
+  position:relative;z-index:65;
+  padding:12px 24px;
+}
+#water-scene.active #water-next{opacity:1;}
+
+/* ══ 말씀 클로징 ══ */
+#closing-scene{
+  position:fixed;inset:0;z-index:70;
+  overflow-y:auto;
+  background:linear-gradient(to bottom,#040a10,#060c14);
+  opacity:0;pointer-events:none;
+  transition:opacity 0.8s;
+}
+#closing-scene.active{opacity:1;pointer-events:all;}
+.closing-wrap{
+  max-width:740px;margin:0 auto;
+  padding:80px clamp(24px,6vw,64px) 100px;
+}
+.cl-big{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(40px,8vw,96px);
+  color:#fff;letter-spacing:0.04em;line-height:0.9;
+  margin-bottom:16px;word-break:keep-all;
+  text-shadow:0 0 40px rgba(80,160,220,0.2);
+}
+.cl-body{
+  font-family:'Noto Serif KR',serif;font-size:15.5px;
+  line-height:2.2;color:rgba(200,190,170,0.75);
+  word-break:keep-all;margin-bottom:0.9em;
+}
+.cl-body strong{color:#fff;font-weight:600;}
+.cl-verse{
+  border-top:1px solid rgba(80,160,220,0.2);
+  border-bottom:1px solid rgba(80,160,220,0.2);
+  padding:24px 0 20px;margin:28px 0;
+}
+.cl-ref{font-family:'Special Elite',serif;font-size:9px;
+  letter-spacing:0.45em;text-transform:uppercase;
+  color:rgba(80,160,220,0.55);margin-bottom:12px;display:block;}
+.cl-verse-text{
+  font-family:'Nanum Myeongjo',serif;
+  font-size:clamp(16px,2.5vw,22px);font-weight:700;
+  color:#f0e8d0;line-height:1.85;word-break:keep-all;
+}
+.cl-final{
+  text-align:center;padding:32px 0 0;
+}
+.cl-final-big{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(28px,5vw,60px);
+  color:#fff;letter-spacing:0.06em;line-height:1.2;
+  text-shadow:0 0 30px rgba(80,160,220,0.3);
+  word-break:keep-all;
+}
+
+/* ══ 터치 힌트 ══ */
+#touch-hint{
+  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+  z-index:20;font-family:'Special Elite',serif;font-size:9px;
+  letter-spacing:0.4em;text-transform:uppercase;
+  color:rgba(80,160,220,0.3);pointer-events:none;
+  animation:pulse 2.5s infinite;white-space:nowrap;
+}
+
+/* 진행 바 */
+#progress-bar{
+  position:fixed;top:0;left:0;height:2px;z-index:30;
+  background:linear-gradient(to right,rgba(40,100,200,0.6),rgba(80,160,255,0.8));
+  width:0%;transition:width 0.6s ease;pointer-events:none;
+}
+
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:#040a10}
+::-webkit-scrollbar-thumb{background:rgba(80,160,220,0.25)}
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+<canvas id="braille-canvas"></canvas>
+<div id="progress-bar"></div>
+
+<div id="ui">
+  <div id="touch-hint">화면을 클릭하면 물결이 퍼집니다</div>
+</div>
+
+<!-- 오프닝 -->
+<div id="opening">
+  <div id="opening-title">
+    W<span class="dot"></span>A<span class="dot"></span>T<span class="dot"></span>E<span class="dot"></span>R
+  </div>
+  <p id="opening-sub">손바닥 위의 물 한 줄기가<br>헬렌 켈러의 세상을 열었습니다</p>
+  <p id="opening-instruction">Helen Keller · Anne Sullivan · 1887</p>
+  <button id="opening-btn" onclick="startStory()">▶ 시작하기</button>
+</div>
+
+<!-- 챕터 1: 헬렌 켈러 소개 -->
+<div class="chapter" id="ch1">
+  <div class="ch-grid">
+    <div>
+      <span class="ch-tag">Chapter 01 · 1880 Alabama</span>
+      <h2 class="ch-title">어둠과<br>침묵 속의<br>소녀</h2>
+      <p class="ch-body">1880년 미국 앨라배마주에서 헬렌 켈러(Helen Keller)가 태어났습니다. 건강하게 태어났지만 생후 약 19개월이 되었을 때 갑작스러운 병을 앓게 되었습니다.</p>
+      <p class="ch-body">이 병을 앓은 뒤 헬렌은 <strong>시력과 청력을 모두 잃게 되었습니다.</strong></p>
+      <p class="ch-body">앞을 볼 수도 없고 소리를 들을 수도 없었던 어린 헬렌은 세상과 소통할 방법이 거의 없었습니다. 자신의 생각을 표현할 방법이 없어 자주 화를 내거나 좌절하곤 했습니다.</p>
+      <button class="ch-next" onclick="goChapter(2)">▼ 계속</button>
+    </div>
+    <div>
+      <!-- 점자 시각화 SVG -->
+      <svg viewBox="0 0 200 200" width="100%" style="max-width:240px;margin:0 auto;display:block;opacity:0.4;">
+        <defs>
+          <radialGradient id="dotg" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#d0e8ff"/>
+            <stop offset="100%" stop-color="#4090c0"/>
+          </radialGradient>
+        </defs>
+        <!-- 점자 H 패턴 -->
+        <g fill="url(#dotg)">
+          <circle cx="60" cy="60" r="8"/><circle cx="90" cy="60" r="8"/>
+          <circle cx="60" cy="90" r="8"/><circle cx="90" cy="90" r="8"/>
+          <circle cx="60" cy="120" r="8"/>
+        </g>
+        <!-- 점자 E -->
+        <g fill="url(#dotg)">
+          <circle cx="130" cy="60" r="8"/>
+          <circle cx="130" cy="90" r="8"/><circle cx="160" cy="90" r="8"/>
+          <circle cx="130" cy="120" r="8"/>
+        </g>
+        <text x="100" y="175" font-family="Special Elite,serif" font-size="11" fill="rgba(80,160,220,0.35)" text-anchor="middle" letter-spacing="4">BRAILLE</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- 챕터 2: 앤 설리번 -->
+<div class="chapter" id="ch2">
+  <div class="ch-grid">
+    <div>
+      <span class="ch-tag">Chapter 02 · Anne Sullivan · 1887</span>
+      <h2 class="ch-title">스무 살의<br>선생님</h2>
+      <p class="ch-body">헬렌이 일곱 살이 되던 해, 보스턴의 퍼킨스 맹학교에서 한 젊은 교사를 보내기로 했습니다. 그녀의 이름은 <strong>앤 설리번(Anne Sullivan)</strong>이었습니다.</p>
+      <p class="ch-body">앤 설리번 역시 어려운 어린 시절을 보냈습니다. 가난한 이민자 가정에서 태어나 부모를 잃었고, 동생도 병으로 세상을 떠났습니다. 그녀 자신도 심한 눈 질환을 앓았지만 여러 차례 수술로 시력을 회복했습니다.</p>
+      <p class="ch-body">1887년, 스무 살의 앤 설리번은 헬렌의 집에 도착했습니다. 그리고 두 사람의 특별한 교육이 시작되었습니다.</p>
+      <button class="ch-next" onclick="goChapter(3)">▼ 계속</button>
+    </div>
+    <div>
+      <!-- 손 + 철자 시각화 -->
+      <svg viewBox="0 0 200 200" width="100%" style="max-width:240px;margin:0 auto;display:block;opacity:0.5;">
+        <!-- 손바닥 윤곽 -->
+        <ellipse cx="100" cy="130" rx="55" ry="45" fill="rgba(30,50,80,0.6)" stroke="rgba(80,160,220,0.3)" stroke-width="1.5"/>
+        <!-- 손가락들 -->
+        <rect x="55" y="95" width="14" height="40" rx="7" fill="rgba(40,70,110,0.7)" stroke="rgba(80,160,220,0.2)" stroke-width="1"/>
+        <rect x="73" y="85" width="14" height="50" rx="7" fill="rgba(40,70,110,0.7)" stroke="rgba(80,160,220,0.2)" stroke-width="1"/>
+        <rect x="91" y="82" width="14" height="52" rx="7" fill="rgba(40,70,110,0.7)" stroke="rgba(80,160,220,0.2)" stroke-width="1"/>
+        <rect x="109" y="85" width="14" height="48" rx="7" fill="rgba(40,70,110,0.7)" stroke="rgba(80,160,220,0.2)" stroke-width="1"/>
+        <rect x="127" y="95" width="12" height="38" rx="6" fill="rgba(40,70,110,0.7)" stroke="rgba(80,160,220,0.2)" stroke-width="1"/>
+        <!-- 손바닥의 물방울들 -->
+        <circle cx="80" cy="135" r="4" fill="rgba(80,180,255,0.6)">
+          <animate attributeName="opacity" values="0.3;0.9;0.3" dur="2s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="100" cy="125" r="3" fill="rgba(80,180,255,0.5)">
+          <animate attributeName="opacity" values="0.6;0.2;0.6" dur="1.5s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="118" cy="138" r="5" fill="rgba(80,180,255,0.55)">
+          <animate attributeName="opacity" values="0.2;0.8;0.2" dur="2.5s" repeatCount="indefinite"/>
+        </circle>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- 챕터 3: 교육 방법 -->
+<div class="chapter" id="ch3">
+  <div class="ch-grid single">
+    <div>
+      <span class="ch-tag">Chapter 03 · The Method · 방법</span>
+      <h2 class="ch-title">손바닥 위의<br>언어</h2>
+      <p class="ch-body">설리번은 헬렌의 손바닥 위에 단어의 철자를 손가락으로 쓰는 방식으로 가르치기 시작했습니다. 처음에는 헬렌이 그 의미를 이해하지 못했습니다.</p>
+      <p class="ch-body">그러나 어느 날, 집 앞의 펌프에서 물을 길어 올리던 순간 — 설리번은 한 손으로 헬렌의 손에 흐르는 물을 느끼게 하면서 다른 손으로 <strong>"W-A-T-E-R"</strong>이라는 철자를 반복해 썼습니다.</p>
+      <button class="ch-next" onclick="goWater()">▼ 그 순간...</button>
+    </div>
+  </div>
+</div>
+
+<!-- WATER 폭발 장면 -->
+<div id="water-scene">
+  <div id="water-word">W·A·T·E·R</div>
+  <div id="water-kr">물</div>
+  <div id="water-quote">
+    <p>"그 순간 모든 것이 살아 움직이는 것처럼 느껴졌다. 모든 사물에는 이름이 있었고, 그 이름이 나에게 새로운 세상을 열어 주었다."</p>
+  </div>
+  <button id="water-next" onclick="goChapter(4)">▼ 계속</button>
+</div>
+
+<!-- 챕터 4: 이후 삶 -->
+<div class="chapter" id="ch4">
+  <div class="ch-grid">
+    <div>
+      <span class="ch-tag">Chapter 04 · 1900–1904 · Radcliffe</span>
+      <h2 class="ch-title">새로운<br>세상으로</h2>
+      <p class="ch-body">그날 이후 헬렌은 놀라운 속도로 단어를 배우기 시작했습니다. 점자를 읽고 글을 쓰는 법도 배웠습니다.</p>
+      <p class="ch-body">마침내 1900년 래드클리프 칼리지에 입학했고, 앤 설리번은 대학 수업 내내 헬렌 옆에 앉아 교수의 말을 헬렌의 손바닥에 철자로 전달했습니다.</p>
+      <p class="ch-body"><strong>1904년, 헬렌 켈러는 시각과 청각을 모두 잃은 사람으로서는 처음으로 학사 학위를 받은 사람이 되었습니다.</strong></p>
+      <p class="ch-body">헬렌의 삶은 한 사람의 노력만으로 이루어진 것이 아니었습니다. 헬렌의 끈기와 앤 설리번의 헌신이 함께 만들어 낸 이야기였습니다.</p>
+      <button class="ch-next" onclick="goClosing()">▼ 말씀으로</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div style="background:rgba(10,20,40,0.7);border:1px solid rgba(80,160,220,0.15);padding:20px 22px;">
+        <div style="font-family:'Special Elite',serif;font-size:8px;letter-spacing:0.4em;color:rgba(80,160,220,0.4);margin-bottom:8px;text-transform:uppercase;">Timeline</div>
+        <div style="font-family:'Nanum Myeongjo',serif;font-size:14px;color:rgba(200,190,170,0.7);line-height:2;">
+          1880 — 앨라배마 출생<br>
+          1882 — 시청각 장애<br>
+          1887 — 앤 설리번과 만남<br>
+          1887 — W·A·T·E·R 순간<br>
+          1900 — 래드클리프 입학<br>
+          1904 — 학사 학위 취득
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 클로징 말씀 -->
+<div id="closing-scene">
+  <div class="closing-wrap">
+    <div class="cl-big">하나님과<br>나 사이의<br>소통</div>
+    <p class="cl-body">하나님과 나와의 관계도 마찬가지입니다. 우리는 태어나면서부터 세상의 많은 소리를 듣고 살아갑니다. 하지만 하나님의 마음을 처음 알게 되는 순간이 있습니다. 그것은 하나님의 말씀을 들을 때입니다.</p>
+    <p class="cl-body">성경 말씀을 통해 우리는 하나님이 어떤 분이신지 알게 됩니다. 그리고 믿음을 갖게 되면 우리는 하나님께 기도로 말을 시작하게 됩니다.</p>
+    <p class="cl-body">아기가 엄마의 뱃속에서 세상으로 태어나서 자신의 존재를 첫 울음으로 표현하듯 우리는 주님을 영접하고 믿고 난 이후 나의 주님의 이름을 부르며 주님과의 대화를 시작합니다.</p>
+    <p class="cl-body"><strong>헬렌이 처음 입에서 나온 말이 "저는 벙어리가 아니에요"라는 말이었습니다.</strong> 우리는 교회 모임 가운데 벙어리가 아니지만 벙어리처럼 가만히 있지는 않나요?</p>
+    <p class="cl-body">헬렌이 어둠의 침묵 속에 지내다가 설리번 선생님과의 의사소통이 되면서 언어가 있다는 것을 처음 알았을 때 내일이 빨리 왔으면 하고 그 기쁨의 소망을 바랐던 것처럼, 우리들도 주님과의 대화와 지체들과의 교통을 사모하고 자라나는 자들이어야 할 것입니다.</p>
+    <div class="cl-verse">
+      <span class="cl-ref">고린도후서 13장 14절 · 2 Corinthians 13:14</span>
+      <p class="cl-verse-text">"주 예수 그리스도의 은혜와 하나님의 사랑과 성령의 교통이 여러분 모두와 함께하기를 바랍니다."</p>
+    </div>
+    <div class="cl-final">
+      <div class="cl-final-big">
+        우리는<br>벙어리가<br>아닙니다.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+//  캔버스
+// ══════════════════════════════════════════════
+const bgC  = document.getElementById('bg-canvas');
+const bgX  = bgC.getContext('2d');
+const brC  = document.getElementById('braille-canvas');
+const brX  = brC.getContext('2d');
+let W=0, H=0;
+function resize(){ W=bgC.width=brC.width=innerWidth; H=bgC.height=brC.height=innerHeight; buildBraille(); }
+window.addEventListener('resize', resize);
+
+// ══════════════════════════════════════════════
+//  마우스 / 터치
+// ══════════════════════════════════════════════
+let mx=W/2, my=H/2;
+let ripples=[];
+let storyActive=false;
+
+window.addEventListener('mousemove', e=>{ mx=e.clientX; my=e.clientY; });
+window.addEventListener('click', e=>{
+  if(!storyActive) return;
+  // UI 버튼 클릭은 물결 안 만들기
+  if(e.target.tagName==='BUTTON'||e.target.closest('button')) return;
+  addRipple(e.clientX, e.clientY);
+});
+window.addEventListener('touchstart', e=>{
+  if(!storyActive) return;
+  addRipple(e.touches[0].clientX, e.touches[0].clientY);
+},{passive:true});
+
+function addRipple(x,y){
+  ripples.push({x,y,r:0,maxR:Math.min(W,H)*0.5,opacity:0.6,speed:3+Math.random()*2});
+}
+
+// ══════════════════════════════════════════════
+//  점자 배경 패턴
+// ══════════════════════════════════════════════
+let braillePoints=[];
+function buildBraille(){
+  braillePoints=[];
+  const gap=40;
+  for(let y=gap;y<H;y+=gap){
+    for(let x=gap;x<W;x+=gap){
+      if(Math.random()>0.35){
+        braillePoints.push({
+          x:x+(Math.random()-0.5)*8,
+          y:y+(Math.random()-0.5)*8,
+          r:Math.random()*2+1,
+          base:Math.random()*0.04+0.02,
+          phase:Math.random()*Math.PI*2
+        });
+      }
+    }
+  }
+}
+
+// ══════════════════════════════════════════════
+//  배경 그리기
+// ══════════════════════════════════════════════
+let T=0;
+function drawBg(){
+  bgX.clearRect(0,0,W,H);
+
+  // 어두운 배경
+  const grd=bgX.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.max(W,H)*0.7);
+  grd.addColorStop(0,'#0a1422');
+  grd.addColorStop(0.6,'#060d18');
+  grd.addColorStop(1,'#03080f');
+  bgX.fillStyle=grd;
+  bgX.fillRect(0,0,W,H);
+
+  // 물결 (클릭 시)
+  ripples.forEach((r,i)=>{
+    r.r+=r.speed;
+    r.opacity*=0.975;
+    if(r.opacity<0.01){ripples.splice(i,1);return;}
+    // 여러 겹 파문
+    for(let ring=0;ring<3;ring++){
+      const rr=r.r-ring*22;
+      if(rr<=0) continue;
+      bgX.beginPath();
+      bgX.arc(r.x,r.y,rr,0,Math.PI*2);
+      bgX.strokeStyle=`rgba(60,140,220,${r.opacity*(1-ring*0.28)})`;
+      bgX.lineWidth=1.5-ring*0.4;
+      bgX.stroke();
+    }
+    // 중심 글로우
+    if(r.r<60){
+      const lg=bgX.createRadialGradient(r.x,r.y,0,r.x,r.y,60);
+      lg.addColorStop(0,`rgba(80,160,255,${r.opacity*0.15})`);
+      lg.addColorStop(1,'rgba(80,160,255,0)');
+      bgX.fillStyle=lg;
+      bgX.fillRect(r.x-60,r.y-60,120,120);
+    }
+  });
+
+  // 마우스 주변 미세 글로우 (스토리 활성 시)
+  if(storyActive){
+    const mg=bgX.createRadialGradient(mx,my,0,mx,my,80);
+    mg.addColorStop(0,'rgba(60,120,200,0.04)');
+    mg.addColorStop(1,'rgba(60,120,200,0)');
+    bgX.fillStyle=mg;
+    bgX.fillRect(mx-80,my-80,160,160);
+  }
+}
+
+function drawBraille(){
+  brX.clearRect(0,0,W,H);
+  braillePoints.forEach(p=>{
+    const tw=Math.sin(T*0.8+p.phase)*0.015+p.base;
+    brX.beginPath();
+    brX.arc(p.x,p.y,p.r,0,Math.PI*2);
+    brX.fillStyle=`rgba(80,140,200,${tw})`;
+    brX.fill();
+  });
+}
+
+function loop(){
+  drawBg();
+  drawBraille();
+  T+=0.016;
+  requestAnimationFrame(loop);
+}
+
+// ══════════════════════════════════════════════
+//  챕터 시스템
+// ══════════════════════════════════════════════
+let currentCh=0;
+const TOTAL=4;
+
+function startStory(){
+  document.getElementById('opening').style.opacity='0';
+  document.getElementById('opening').style.pointerEvents='none';
+  setTimeout(()=>document.getElementById('opening').style.display='none',800);
+  storyActive=true;
+  goChapter(1);
+}
+
+function goChapter(n){
+  // water-scene 숨기기
+  const ws=document.getElementById('water-scene');
+  if(ws){ ws.classList.remove('active'); ws.classList.remove('lit'); }
+
+  // 이전 챕터 숨기기
+  document.querySelectorAll('.chapter').forEach(c=>c.classList.remove('active'));
+
+  currentCh=n;
+  const ch=document.getElementById('ch'+n);
+  if(ch){setTimeout(()=>ch.classList.add('active'),150);}
+  updateProgress(n/TOTAL*0.8);
+
+  // 물결 몇 개 자동 생성
+  for(let i=0;i<3;i++){
+    setTimeout(()=>addRipple(Math.random()*W, Math.random()*H),i*200);
+  }
+}
+
+function goWater(){
+  // 모든 챕터 숨기기
+  document.querySelectorAll('.chapter').forEach(c=>c.classList.remove('active'));
+
+  // 연속 물결
+  for(let i=0;i<8;i++){
+    setTimeout(()=>addRipple(W/2+Math.random()*200-100, H/2+Math.random()*200-100), i*120);
+  }
+
+  setTimeout(()=>{
+    const ws=document.getElementById('water-scene');
+    ws.style.display='flex';
+    ws.classList.add('active');
+    setTimeout(()=>ws.classList.add('lit'),300);
+    updateProgress(0.85);
+  },400);
+}
+
+function goClosing(){
+  // 모든 챕터 숨기기
+  document.querySelectorAll('.chapter').forEach(c=>c.classList.remove('active'));
+  const ws=document.getElementById('water-scene');
+  if(ws){ ws.classList.remove('active'); ws.classList.remove('lit'); }
+  setTimeout(()=>{
+    const cl=document.getElementById('closing-scene');
+    cl.classList.add('active');
+    updateProgress(1);
+  },300);
+}
+
+function updateProgress(ratio){
+  document.getElementById('progress-bar').style.width=(ratio*100)+'%';
+}
+
+// ══════════════════════════════════════════════
+//  초기화
+// ══════════════════════════════════════════════
+resize();
+loop();
+</script>
+</body>
+</html>

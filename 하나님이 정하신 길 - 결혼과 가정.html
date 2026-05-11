@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>하나님이 정하신 길 — 결혼과 가정</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700;900&family=Libre+Baskerville:wght@400;700&family=Tenor+Sans&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --page:      #fdf6ec;
+            --page2:     #f8eedf;
+            --ink:       #2c1f0e;
+            --ink-soft:  #614d38;
+            --ink-faint: #a08c78;
+            --gold:      #b8862a;
+            --gold-lt:   #d4a84b;
+            --gold-pale: #f5e6c4;
+            --forest:    #2d5a3d;
+            --forest-lt: #4a7c5a;
+            --forest-pale:#e6f2eb;
+            --wine:      #6b1e2e;
+            --wine-lt:   #8b2a3c;
+            --wine-pale: #f5e6ea;
+            --slate:     #1e3a4a;
+            --slate-lt:  #2e5a6e;
+            --slate-pale:#e3eff4;
+            --rule:      rgba(44,31,14,0.12);
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior:smooth; }
+
+        body {
+            background: #e8ddd0;
+            background-image:
+                radial-gradient(ellipse at 20% 50%, rgba(184,134,42,0.06) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(45,90,61,0.05) 0%, transparent 50%);
+            font-family: 'Noto Serif KR', serif;
+            color: var(--ink);
+            overflow-x: hidden;
+        }
+
+        /* ── PAGE WRAPPER ── */
+        .book {
+            max-width: 860px;
+            margin: 0 auto;
+            background: var(--page);
+            box-shadow:
+                -6px 0 24px rgba(44,31,14,0.08),
+                6px 0 24px rgba(44,31,14,0.08),
+                0 20px 60px rgba(44,31,14,0.18);
+            position: relative;
+        }
+
+        /* Left binding line */
+        .book::before {
+            content: '';
+            position: absolute;
+            left: 52px; top: 0; bottom: 0;
+            width: 1px;
+            background: linear-gradient(to bottom,
+                transparent 0%,
+                rgba(184,134,42,0.25) 8%,
+                rgba(184,134,42,0.25) 92%,
+                transparent 100%);
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        /* ── COVER ── */
+        .cover {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 80px 64px 80px 80px;
+            position: relative;
+            background: var(--page);
+            overflow: hidden;
+        }
+
+        /* Botanical SVG corners */
+        .botanical-tl,
+        .botanical-br {
+            position: absolute;
+            pointer-events: none;
+            opacity: .18;
+        }
+        .botanical-tl { top: 0; left: 0; width: 260px; }
+        .botanical-br { bottom: 0; right: 0; width: 260px; transform: rotate(180deg); }
+
+        /* gold border frame */
+        .cover-frame {
+            position: absolute;
+            inset: 32px;
+            border: 1px solid rgba(184,134,42,0.3);
+            pointer-events: none;
+        }
+        .cover-frame::before {
+            content: '';
+            position: absolute;
+            inset: 6px;
+            border: 1px solid rgba(184,134,42,0.15);
+        }
+        /* corner ornaments */
+        .cover-frame::after {
+            content: '✦';
+            position: absolute;
+            top: -8px; left: 50%;
+            transform: translateX(-50%);
+            background: var(--page);
+            padding: 0 10px;
+            font-size: 14px;
+            color: var(--gold);
+        }
+
+        .cover-inner {
+            position: relative;
+            z-index: 2;
+            max-width: 560px;
+        }
+
+        .cover-series {
+            font-family: 'Tenor Sans', sans-serif;
+            font-size: 11px;
+            letter-spacing: 0.45em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeUp .9s ease .3s forwards;
+        }
+
+        .cover-title {
+            font-family: 'Libre Baskerville', serif;
+            font-size: clamp(32px, 7vw, 64px);
+            font-weight: 700;
+            line-height: 1.12;
+            color: var(--ink);
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeUp .9s ease .6s forwards;
+        }
+
+        .cover-subtitle {
+            font-family: 'Libre Baskerville', serif;
+            font-size: clamp(16px, 3vw, 24px);
+            font-weight: 400;
+            color: var(--forest);
+            margin-bottom: 48px;
+            opacity: 0;
+            animation: fadeUp .9s ease .85s forwards;
+        }
+
+        .cover-rule {
+            width: 80px;
+            height: 1px;
+            background: var(--gold);
+            margin: 0 auto 28px;
+            opacity: 0;
+            animation: fadeIn .9s ease 1.1s forwards;
+        }
+
+        .cover-verse {
+            font-size: clamp(13px, 2vw, 15px);
+            line-height: 1.9;
+            color: var(--ink-soft);
+            font-weight: 300;
+            max-width: 400px;
+            margin: 0 auto 40px;
+            opacity: 0;
+            animation: fadeUp .9s ease 1.2s forwards;
+        }
+
+        .cover-ref {
+            font-family: 'Tenor Sans', sans-serif;
+            font-size: 10px;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--gold);
+            opacity: 0;
+            animation: fadeIn .9s ease 1.5s forwards;
+        }
+
+        .scroll-cue {
+            position: absolute;
+            bottom: 44px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            animation: fadeIn 1s ease 2.2s forwards;
+        }
+        .scroll-cue span {
+            font-family: 'Tenor Sans', sans-serif;
+            font-size: 9px;
+            letter-spacing: 0.4em;
+            color: var(--ink-faint);
+            text-transform: uppercase;
+        }
+        .scroll-cue-line {
+            width: 1px; height: 44px;
+            background: linear-gradient(to bottom, var(--gold), transparent);
+            animation: lineBreath 2s ease-in-out infinite;
+        }
+
+        /* ── CHAPTER DIVIDER ── */
+        .chapter-divider {
+            padding: 60px 80px 0 80px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity .8s ease, transform .8s ease;
+        }
+        .chapter-divider.vis { opacity: 1; transform: translateY(0); }
+        .chapter-divider::before,
+        .chapter-divider::after {
+            content: ''; flex: 1;
+            height: 1px;
+            background: var(--rule);
+        }
+        .chapter-divider-sym {
+            font-family: 'Tenor Sans', sans-serif;
+            font-size: 10px;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--ink-faint);
+            white-space: nowrap;
+        }
+
+        /* ── CHAPTER HEADER ── */
+        .chapter-head {
+            padding: 40px 80px 48px 80px;
+            position: relative;
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity .8s ease .1s, transform .8s ease .1s;
+        }
+        .chapter-head.vis { opacity: 1; transform: translateY(0); }
+
+        .ch-number {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 11px;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 16px;
+        }
+        .ch-title {
+            font-family: 'Libre Baskerville', serif;
+            font-size: clamp(26px, 5.5vw, 44px);
+            font-weight: 700;
+            line-height: 1.18;
+            margin-bottom: 20px;
+        }
+        .ch-title.forest { color: var(--forest); }
+        .ch-title.wine   { color: var(--wine); }
+        .ch-title.slate  { color: var(--slate); }
+
+        .ch-intro {
+            font-size: clamp(14.5px, 2.1vw, 17px);
+            line-height: 2.0;
+            color: var(--ink-soft);
+            font-weight: 300;
+            max-width: 580px;
+            border-left: 3px solid var(--gold);
+            padding-left: 20px;
+        }
+
+        /* ── BODY TEXT AREA ── */
+        .body-area {
+            padding: 0 80px 64px 80px;
+        }
+
+        .body-text {
+            font-size: clamp(15px, 2.1vw, 17px);
+            line-height: 2.1;
+            color: var(--ink-soft);
+            font-weight: 300;
+            margin-bottom: 32px;
+            opacity: 0;
+            transform: translateY(18px);
+            transition: opacity .7s ease, transform .7s ease;
+        }
+        .body-text.vis { opacity: 1; transform: translateY(0); }
+        .body-text p { margin-bottom: 16px; }
+
+        /* ── STORY CARD ── */
+        .story {
+            margin-bottom: 56px;
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity .8s ease, transform .8s ease;
+        }
+        .story.vis { opacity: 1; transform: translateY(0); }
+
+        .story-header {
+            display: flex;
+            align-items: baseline;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .story-roman {
+            font-family: 'Libre Baskerville', serif;
+            font-size: clamp(20px, 4vw, 32px);
+            font-weight: 700;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+        .story-roman.forest { color: rgba(45,90,61,0.25); }
+        .story-roman.wine   { color: rgba(107,30,46,0.2); }
+
+        .story-title-wrap {}
+        .story-title {
+            font-family: 'Libre Baskerville', serif;
+            font-size: clamp(17px, 3vw, 22px);
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 4px;
+        }
+        .story-title.forest { color: var(--forest); }
+        .story-title.wine   { color: var(--wine-lt); }
+
+        .story-tagline {
+            font-family: 'Tenor Sans', sans-serif;
+            font-size: 11px;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--ink-faint);
+        }
+
+        /* ── VERSE BOX ── */
+        .verse {
+            margin: 20px 0;
+            padding: 22px 24px 22px 28px;
+            position: relative;
+            opacity: 0;
+            transform: translateX(-12px);
+            transition: opacity .7s ease .15s, transform .7s ease .15s;
+        }
+        .verse.vis { opacity: 1; transform: translateX(0); }
+
+        .verse.gold-v {
+            background: var(--gold-pale);
+            border-left: 3px solid var(--gold);
+        }
+        .verse.forest-v {
+            background: var(--forest-pale);
+            border-left: 3px solid var(--forest-lt);
+        }
+        .verse.wine-v {
+            background: var(--wine-pale);
+            border-left: 3px solid var(--wine-lt);
+        }
+        .verse.slate-v {
+            background: var(--slate-pale);
+            border-left: 3px solid var(--slate-lt);
+        }
+
+        .verse p {
+            font-size: clamp(14.5px, 2vw, 16.5px);
+            line-height: 1.85;
+            color: var(--ink);
+            font-weight: 400;
+            margin-bottom: 10px;
+        }
+        .verse p:last-child { margin-bottom: 0; }
+        .verse .vref {
+            font-family: 'Tenor Sans', sans-serif;
+            font-size: 10px;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: var(--ink-faint);
+        }
+        .verse .vtitle {
+            font-family: 'Tenor Sans', sans-serif;
+            font-size: 10px;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        /* ── PRINCIPLE BOX ── */
+        .principle {
+            margin-top: 24px;
+            padding: 20px 22px;
+            background: var(--page2);
+            border: 1px solid var(--rule);
+            border-radius: 2px;
+            opacity: 0;
+            transform: translateY(12px);
+            transition: opacity .7s ease .2s, transform .7s ease .2s;
+        }
+        .principle.vis { opacity: 1; transform: translateY(0); }
+
+        .principle-label {
+            font-family: 'Tenor Sans', sans-serif;
+            font-size: 10px;
+            letter-spacing: 0.38em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+        .principle-label.forest { color: var(--forest-lt); }
+        .principle-label.wine   { color: var(--wine-lt); }
+        .principle-label.slate  { color: var(--slate-lt); }
+
+        .principle ul {
+            list-style: none;
+            padding: 0;
+        }
+        .principle ul li {
+            font-size: clamp(14px, 2vw, 15.5px);
+            line-height: 1.85;
+            color: var(--ink-soft);
+            font-weight: 300;
+            padding-left: 20px;
+            position: relative;
+            margin-bottom: 8px;
+        }
+        .principle ul li::before {
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        .principle ul li.check::before { content: '✓'; color: var(--forest-lt); font-weight: 700; }
+        .principle ul li.cross::before { content: '✕'; color: var(--wine-lt); font-weight: 700; }
+
+        /* ── WARNING CALLOUT ── */
+        .warning-item {
+            margin-bottom: 48px;
+            padding-left: 20px;
+            border-left: 2px solid rgba(107,30,46,0.25);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity .8s ease, transform .8s ease;
+        }
+        .warning-item.vis { opacity: 1; transform: translateY(0); }
+
+        .warn-title {
+            font-family: 'Libre Baskerville', serif;
+            font-size: clamp(16px, 2.8vw, 20px);
+            font-weight: 700;
+            color: var(--wine-lt);
+            margin-bottom: 14px;
+        }
+        .warn-counter {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 11px;
+            letter-spacing: 0.25em;
+            color: rgba(107,30,46,0.4);
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        /* ── SECTION BG BANDS ── */
+        .section-bg-forest {
+            background: linear-gradient(180deg, var(--page) 0%, #f0f8f3 50%, var(--page) 100%);
+        }
+        .section-bg-wine {
+            background: linear-gradient(180deg, var(--page) 0%, #faf0f2 50%, var(--page) 100%);
+        }
+        .section-bg-slate {
+            background: linear-gradient(180deg, var(--page) 0%, #f0f4f8 50%, var(--page) 100%);
+        }
+
+        /* ── FULL-WIDTH VERSE BAND ── */
+        .band {
+            margin: 0;
+            padding: 64px 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity .9s ease, transform .9s ease;
+        }
+        .band.vis { opacity: 1; transform: translateY(0); }
+
+        .band-forest {
+            background: var(--forest);
+        }
+        .band-forest::before {
+            content: '';
+            position: absolute; inset: 0;
+            background-image: repeating-linear-gradient(
+                90deg,
+                transparent, transparent 40px,
+                rgba(255,255,255,0.03) 40px, rgba(255,255,255,0.03) 41px
+            );
+        }
+        .band-quote {
+            position: relative;
+            font-family: 'Libre Baskerville', serif;
+            font-size: clamp(16px, 3.2vw, 24px);
+            font-weight: 400;
+            line-height: 1.75;
+            color: #e8f5ee;
+            max-width: 600px;
+            margin: 0 auto 16px;
+        }
+        .band-ref {
+            font-family: 'Tenor Sans', sans-serif;
+            font-size: 11px;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: rgba(232,245,238,0.5);
+        }
+
+        /* ── CLOSING SECTION ── */
+        .closing {
+            padding: 72px 80px 80px;
+            background: var(--page);
+            position: relative;
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity .9s ease, transform .9s ease;
+        }
+        .closing.vis { opacity: 1; transform: translateY(0); }
+
+        .closing::before {
+            content: '';
+            display: block;
+            width: 60px; height: 1px;
+            background: var(--gold);
+            margin-bottom: 40px;
+        }
+
+        .closing-title {
+            font-family: 'Libre Baskerville', serif;
+            font-size: clamp(22px, 4.5vw, 36px);
+            font-weight: 700;
+            color: var(--slate);
+            line-height: 1.25;
+            margin-bottom: 28px;
+        }
+
+        .closing-verse {
+            margin: 28px 0;
+        }
+
+        .closing-body {
+            font-size: clamp(15px, 2.1vw, 17px);
+            line-height: 2.1;
+            color: var(--ink-soft);
+            font-weight: 300;
+        }
+        .closing-body p { margin-bottom: 16px; }
+
+        /* ── FOOTER ── */
+        .foot {
+            padding: 40px 80px 56px;
+            border-top: 1px solid var(--rule);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .foot-church {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gold);
+        }
+        .foot-zone {
+            font-family: 'Tenor Sans', sans-serif;
+            font-size: 11px;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--ink-faint);
+        }
+        .foot-ornament {
+            font-size: 18px;
+            color: rgba(184,134,42,0.3);
+            letter-spacing: 8px;
+        }
+
+        /* ── INLINE HIGHLIGHT ── */
+        .hi-forest { color: var(--forest); font-weight: 600; }
+        .hi-wine   { color: var(--wine-lt); font-weight: 600; }
+        .hi-gold   { color: var(--gold); font-weight: 600; }
+        .hi-slate  { color: var(--slate); font-weight: 600; }
+
+        /* ── MOBILE ── */
+        @media (max-width: 640px) {
+            .book::before { left: 24px; }
+            .cover { padding: 60px 28px; }
+            .chapter-divider,
+            .chapter-head,
+            .body-area { padding-left: 28px; padding-right: 28px; }
+            .band { padding: 48px 28px; }
+            .closing { padding: 56px 28px 64px; }
+            .foot { padding: 32px 28px 44px; flex-direction: column; gap: 12px; text-align: center; }
+        }
+
+        /* ── ANIMATIONS ── */
+        @keyframes fadeUp {
+            from { opacity:0; transform:translateY(22px); }
+            to   { opacity:1; transform:translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity:0; } to { opacity:1; }
+        }
+        @keyframes lineBreath {
+            0%,100% { opacity:1; transform:scaleY(1); }
+            50%      { opacity:.4; transform:scaleY(.6); }
+        }
+    </style>
+</head>
+<body>
+<div class="book">
+
+    <!-- ══════════════ COVER ══════════════ -->
+    <section class="cover">
+
+        <!-- Botanical corners -->
+        <svg class="botanical-tl" viewBox="0 0 260 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q80 40 120 120 Q60 90 10 10Z" fill="#4a7c5a"/>
+            <path d="M10 10 Q50 100 30 180 Q20 100 10 10Z" fill="#4a7c5a" opacity=".6"/>
+            <path d="M10 10 Q130 30 200 80 Q110 60 10 10Z" fill="#4a7c5a" opacity=".5"/>
+            <circle cx="130" cy="118" r="7" fill="#b8862a" opacity=".7"/>
+            <circle cx="52" cy="95" r="5" fill="#b8862a" opacity=".5"/>
+            <circle cx="95" cy="55" r="4" fill="#b8862a" opacity=".4"/>
+            <path d="M10 10 Q90 20 160 50" stroke="#4a7c5a" stroke-width="1.5" fill="none" opacity=".4"/>
+            <path d="M10 10 Q40 80 60 160" stroke="#4a7c5a" stroke-width="1.5" fill="none" opacity=".4"/>
+        </svg>
+        <svg class="botanical-br" viewBox="0 0 260 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q80 40 120 120 Q60 90 10 10Z" fill="#4a7c5a"/>
+            <path d="M10 10 Q50 100 30 180 Q20 100 10 10Z" fill="#4a7c5a" opacity=".6"/>
+            <path d="M10 10 Q130 30 200 80 Q110 60 10 10Z" fill="#4a7c5a" opacity=".5"/>
+            <circle cx="130" cy="118" r="7" fill="#b8862a" opacity=".7"/>
+            <circle cx="52" cy="95" r="5" fill="#b8862a" opacity=".5"/>
+        </svg>
+
+        <div class="cover-frame"></div>
+
+        <div class="cover-inner">
+            <p class="cover-series">부산교회 2구역 &nbsp;·&nbsp; 결혼과 가정 시리즈</p>
+
+            <h1 class="cover-title">하나님이<br>정하신 길</h1>
+            <p class="cover-subtitle">결혼과 가정</p>
+
+            <div class="cover-rule"></div>
+
+            <p class="cover-verse">
+                "남자는 부모를 떠나 아내와 결합하여,<br>
+                그들이 한 몸이 된다."
+            </p>
+            <p class="cover-ref">창세기 2:24</p>
+        </div>
+
+        <div class="scroll-cue">
+            <span>읽기 시작</span>
+            <div class="scroll-cue-line"></div>
+        </div>
+    </section>
+
+
+    <!-- ══════════════ PART I — 하나님이 기뻐하시는 방식 ══════════════ -->
+    <div class="section-bg-forest">
+
+        <div class="chapter-divider">
+            <span class="chapter-divider-sym">Part One</span>
+        </div>
+
+        <div class="chapter-head">
+            <p class="ch-number">제 1 장</p>
+            <h2 class="ch-title forest">하나님이<br>기뻐하시는 방식</h2>
+            <p class="ch-intro">성경은 결혼에 관한 아름다운 세 이야기를 들려줍니다. 아담과 하와, 이삭과 리브가, 룻과 보아스 — 각각의 이야기는 하나님이 결혼의 주관자이심을 서로 다른 방식으로 보여줍니다.</p>
+        </div>
+
+        <div class="body-area">
+
+            <!-- Story I: 아담과 하와 -->
+            <div class="story">
+                <div class="story-header">
+                    <span class="story-roman forest">I.</span>
+                    <div class="story-title-wrap">
+                        <div class="story-title forest">아담과 하와</div>
+                        <div class="story-tagline">하나님이 직접 짝지어 주신 결혼 &nbsp;·&nbsp; 창세기 2:18–24</div>
+                    </div>
+                </div>
+
+                <div class="verse forest-v">
+                    <p>"사람이 혼자 있는 것이 좋지 않으니, 내가 그에게 도울 배필을 만들어 주겠다."… 그러므로 남자는 부모를 떠나 아내와 결합하여, 그들이 한 몸이 된다.</p>
+                    <p class="vref">— 창세기 2:18, 24</p>
+                </div>
+
+                <div class="body-text">
+                    <p>결혼은 하나님의 창조 질서이며, 하나님이 결혼의 주관자이심을 인정해야 합니다. 이 이야기는 세 가지 원리를 담고 있습니다.</p>
+                </div>
+
+                <div class="verse gold-v">
+                    <span class="vtitle">1 · 하나님 형상과 사명 수행</span>
+                    <p>"하나님이 그들에게 복을 주시며… 생육하고 번성하여 땅에 충만하라."</p>
+                    <p class="vref">— 창세기 1:27–28</p>
+                </div>
+                <div class="body-text">
+                    <p>결혼을 통해 하나님의 형상과 신앙이 다음 세대에 전해지기를 원하십니다. 결혼은 단순한 감정적 결합이 아니라 <span class="hi-forest">하나님의 나라 확장에 동참하는 동행</span>입니다.</p>
+                    <p><span class="hi-forest">서로 돕는 배필</span> — 결혼은 "나를 위로해줄 대상"이 아니라 하나님의 뜻을 함께 이루는 관계입니다.</p>
+                </div>
+
+                <div class="verse gold-v">
+                    <span class="vtitle">2 · 그리스도와 교회의 모형</span>
+                    <p>"…이 비밀이 크도다. 나는 그리스도와 교회에 대하여 말하노라."</p>
+                    <p class="vref">— 에베소서 5:31–32</p>
+                </div>
+                <div class="body-text">
+                    <p>남편은 그리스도처럼 희생적 사랑으로, 아내는 교회처럼 존중과 순종으로. 결혼은 <span class="hi-gold">복음의 그림</span>이자, 하나님이 세우신 언약 관계의 증거입니다.</p>
+                </div>
+            </div>
+
+            <!-- Story II: 이삭과 리브가 -->
+            <div class="story">
+                <div class="story-header">
+                    <span class="story-roman forest">II.</span>
+                    <div class="story-title-wrap">
+                        <div class="story-title forest">이삭과 리브가</div>
+                        <div class="story-tagline">기도와 하나님의 인도 안에서의 만남 &nbsp;·&nbsp; 창세기 24장</div>
+                    </div>
+                </div>
+
+                <div class="verse forest-v">
+                    <span class="vtitle">종의 기도</span>
+                    <p>"오, 여호와 저의 주인 아브라함의 하나님! 저의 주인 아브라함에게 자애를 베풀어 주셔서 오늘 일이 잘되게 하여 주십시오…"</p>
+                    <p class="vref">— 창세기 24:12–14</p>
+                </div>
+
+                <div class="body-text">
+                    <p>리브가는 낯선 이에게 물을 주고, 낙타까지 먹였습니다. <span class="hi-forest">성품이 증거</span>였습니다. 그리고 결론은 단 하나였습니다.</p>
+                </div>
+
+                <div class="verse forest-v">
+                    <p>"이 일은 여호와에게서 나온 일이니…"</p>
+                    <p class="vref">— 창세기 24:50–51</p>
+                </div>
+
+                <div class="body-text">
+                    <p>저녁 무렵 이삭이 묵상을 하려고 들에 나갔다가 눈을 들어 리브가를 만납니다. 기다림 속의 묵상, 그 자리에서 만남이 이루어집니다.</p>
+                </div>
+
+                <div class="principle">
+                    <p class="principle-label forest">원리</p>
+                    <ul>
+                        <li class="check">결혼의 기준은 외모나 감정이 아니라 믿음·성품·하나님의 인도</li>
+                        <li class="check">선택의 과정에서 기도와 기다림이 필요함</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Story III: 룻과 보아스 -->
+            <div class="story">
+                <div class="story-header">
+                    <span class="story-roman forest">III.</span>
+                    <div class="story-title-wrap">
+                        <div class="story-title forest">룻과 보아스</div>
+                        <div class="story-tagline">경건과 언약적 책임 안에서의 결혼 &nbsp;·&nbsp; 룻기 전체</div>
+                    </div>
+                </div>
+
+                <div class="verse forest-v">
+                    <span class="vtitle">룻의 신앙 고백</span>
+                    <p>"어머니의 백성이 저의 백성이 되고, 어머니의 하나님께서 저의 하나님이 되실 것입니다."</p>
+                    <p class="vref">— 룻기 1:16</p>
+                </div>
+
+                <div class="verse forest-v">
+                    <span class="vtitle">보아스의 평가</span>
+                    <p>"그대가 여호와 이스라엘의 하나님의 날개 아래 피난처를 찾기 위해 왔으니, 그분에게서 온전한 보상을 받기를 바라오."</p>
+                    <p class="vref">— 룻기 2:12</p>
+                </div>
+
+                <div class="body-text">
+                    <p>결혼의 방식 또한 가까운 친족 제도(고엘 율법)에 따라 <span class="hi-forest">정당한 절차</span>로 진행되었습니다. 감정이 아닌 책임과 언약 위에 세워진 결혼이었습니다.</p>
+                </div>
+
+                <div class="principle">
+                    <p class="principle-label forest">원리</p>
+                    <ul>
+                        <li class="check">결혼은 감정만이 아니라 책임·신앙·언약적 헌신</li>
+                        <li class="check">관계와 과정이 정결하고 질서 안에 있을 것</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ══════════════ FOREST BAND ══════════════ -->
+    <div class="band band-forest">
+        <p class="band-quote">
+            "결혼은 복음의 그림이자,<br>
+            하나님이 세우신 언약 관계의 증거입니다."
+        </p>
+        <p class="band-ref">창세기 · 에베소서 · 룻기가 함께 증언하는 진리</p>
+    </div>
+
+
+    <!-- ══════════════ PART II — 하나님이 싫어하시는 방식 ══════════════ -->
+    <div class="section-bg-wine">
+
+        <div class="chapter-divider">
+            <span class="chapter-divider-sym">Part Two</span>
+        </div>
+
+        <div class="chapter-head">
+            <p class="ch-number">제 2 장</p>
+            <h2 class="ch-title wine">하나님이 싫어하시는 방식</h2>
+            <p class="ch-intro">잘못된 결혼은 단순한 실수 수준이 아니라 <span class="hi-wine">영적 타락의 통로</span>가 되었음을 성경은 반복적으로 보여줍니다. 경계해야 할 네 가지를 살펴봅니다.</p>
+        </div>
+
+        <div class="body-area">
+
+            <div class="warning-item">
+                <p class="warn-counter">경계 하나</p>
+                <h3 class="warn-title">욕망이 기준이 될 때 — 삼손</h3>
+                <div class="verse wine-v">
+                    <p>"삼손이 아버지에게 말하였다. '그 여자가 제 마음에 드니, 저를 위해 그 여자를 얻어 주십시오.'"</p>
+                    <p class="vref">— 사사기 14:3</p>
+                </div>
+                <div class="body-text">
+                    <p>즉각적인 감정, 외모, 육체적 매력이 판단을 흐렸습니다. 그의 결혼은 영적 타협과 파괴적인 결과로 이어졌고, 결국 델릴라와의 관계로 몰락했습니다.</p>
+                </div>
+                <div class="principle">
+                    <p class="principle-label wine">원리</p>
+                    <ul>
+                        <li class="cross">믿음을 기준으로 하지 않고 감정·외모·욕망으로 선택하는 결혼은 위험하며 영적 몰락을 가져옴</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="warning-item">
+                <p class="warn-counter">경계 둘</p>
+                <h3 class="warn-title">신앙을 타협할 때 — 솔로몬</h3>
+                <div class="verse wine-v">
+                    <p>"…여호와께서 경고하신 민족들의 여자들이었다. 그런데도 솔로몬은 사랑에 빠져 그 여자들에게 집착하였다."</p>
+                    <p class="vref">— 열왕기상 11:2</p>
+                </div>
+                <div class="body-text">
+                    <p>관계가 하나님과의 관계를 약화시키면 사랑이 아니라 우상이 됩니다. 그 아내들이 그의 마음을 돌려 다른 신들을 섬기게 했습니다.</p>
+                </div>
+                <div class="principle">
+                    <p class="principle-label wine">원리</p>
+                    <ul>
+                        <li class="cross">신앙을 약화시키는 관계는 하나님의 뜻 밖에 있는 결혼임</li>
+                        <li class="cross">결혼은 신앙을 지켜야 하며 무너뜨리지 않아야 한다</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="warning-item">
+                <p class="warn-counter">경계 셋</p>
+                <h3 class="warn-title">욕정과 죄 가운데 — 다윗과 밧세바</h3>
+                <div class="body-text">
+                    <p>다윗은 밧세바를 보고 욕심을 품고 간음했고, 그녀의 남편 우리야를 전쟁터에서 죽게 했습니다. 하나님은 선지자 나단을 보내 책망하셨습니다.</p>
+                </div>
+                <div class="principle">
+                    <p class="principle-label wine">원리</p>
+                    <ul>
+                        <li class="cross">간음과 부정한 방식으로 이루어진 결혼은 하나님 앞에 죄이며 심판을 가져옴</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="warning-item">
+                <p class="warn-counter">경계 넷</p>
+                <h3 class="warn-title">환경과 문화가 기준이 될 때</h3>
+                <div class="body-text">
+                    <p>문화·경제·가문·조건 중심의 선택은 신앙을 밀어냅니다. 오늘날로 말하면 조건 결혼, 스펙 중심의 배우자 선택이 이에 해당합니다.</p>
+                </div>
+                <div class="principle">
+                    <p class="principle-label wine">원리</p>
+                    <ul>
+                        <li class="cross">세상의 기준이 하나님의 기준을 대체할 때 결혼은 그 거룩함을 잃게 됨</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- ══════════════ PART III — 합당한 자세 ══════════════ -->
+    <div class="section-bg-slate">
+
+        <div class="chapter-divider">
+            <span class="chapter-divider-sym">Part Three</span>
+        </div>
+
+        <div class="chapter-head">
+            <p class="ch-number">제 3 장</p>
+            <h2 class="ch-title slate">합당한 배우자를 구하는<br>궁극적인 자세</h2>
+            <p class="ch-intro">하나님이 싫어하시는 방식들을 경계할 때, 우리는 다시 한번 하나님이 기뻐하시는 이상으로 돌아가야 합니다.</p>
+        </div>
+
+        <div class="body-area">
+
+            <div class="body-text">
+                <p>하나님이 싫어하시는 방식들을 경계할 때, 당신은 다시 한번 하나님이 기뻐하시는 이상으로 돌아가야 합니다.</p>
+            </div>
+
+            <div class="verse slate-v">
+                <p>"믿지 않는 이들과는 같지 않으므로 멍에를 함께 메지 마십시오. 의와 불법이 어떻게 짝이 될 수 있으며, 빛이 어둠과 어떻게 교통할 수 있겠습니까?"</p>
+                <p class="vref">— 고린도후서 6:14</p>
+            </div>
+
+            <div class="body-text">
+                <p>결국 합당한 배우자를 구하는 것은 <span class="hi-slate">영적 순종과 분별력의 문제</span>입니다. 당신이 먼저 하나님 앞에 정결하고 경건한 배우자로서 준비되어 있다면, 그에 합당한 만남을 하나님이 인도하실 것입니다.</p>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- ══════════════ CLOSING ══════════════ -->
+    <div class="closing">
+        <h2 class="closing-title">당신이 먼저<br>준비된 자가 되십시오</h2>
+
+        <div class="closing-verse">
+            <div class="verse gold-v">
+                <p>"집과 재물은 조상에게서 상속받지만,<br>슬기로운 아내는 여호와에게서 온다."</p>
+                <p class="vref">— 잠언 19:14</p>
+            </div>
+        </div>
+
+        <div class="closing-body">
+            <p>하나님의 결혼은 아름답습니다. 창조의 질서 안에서, 기도와 기다림 안에서, 경건과 언약 안에서 세워진 결혼은 세상이 줄 수 없는 깊이와 기쁨을 갖습니다.</p>
+            <p>당신은 지금 어떤 기준으로 결혼을 바라보고 있습니까? 하나님의 눈으로 바라볼 때, 결혼은 감정의 선택이 아니라 믿음의 여정이 됩니다.</p>
+        </div>
+    </div>
+
+
+    <!-- ══════════════ FOOTER ══════════════ -->
+    <footer class="foot">
+        <div>
+            <div class="foot-church">부산교회 2구역</div>
+            <div class="foot-zone">&nbsp;·&nbsp; 결혼과 가정 말씀</div>
+        </div>
+        <div class="foot-ornament">✦ ✦ ✦</div>
+    </footer>
+
+</div>
+
+<script>
+    const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) e.target.classList.add('vis');
+        });
+    }, { threshold: 0.08 });
+
+    document.querySelectorAll(
+        '.chapter-divider, .chapter-head, .body-text, .story, .verse, .principle, .warning-item, .band, .closing'
+    ).forEach(el => io.observe(el));
+</script>
+</body>
+</html>

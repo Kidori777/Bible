@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주님이 주시는 참된 안식과 멍에</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Serif+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #06070e;
+            --gold-primary: #c9a84c;
+            --gold-secondary: #e8c970;
+            --text-light: #e0e0e0;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(201, 168, 76, 0.2);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-light);
+            font-family: 'Noto Serif KR', serif;
+            line-height: 1.8;
+            overflow-x: hidden;
+            word-break: keep-all;
+        }
+
+        h1, h2, h3, h4, .en { font-family: 'Cormorant Garamond', serif; color: var(--gold-secondary); }
+
+        /* Background Canvas */
+        #starCanvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 25px; }
+
+        /* Animation Classes */
+        section {
+            padding: 120px 0;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        section.reveal { opacity: 1; transform: translateY(0); }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .halo {
+            position: absolute;
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(201, 168, 76, 0.12) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+            filter: blur(40px);
+        }
+
+        .rotating-ring {
+            position: absolute;
+            width: 550px; height: 550px;
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+            animation: rotate 25s linear infinite;
+        }
+
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            margin-bottom: 15px;
+            letter-spacing: 4px;
+            text-shadow: 0 0 25px rgba(201, 168, 76, 0.4);
+        }
+
+        .stats-badge {
+            margin-top: 40px;
+            padding: 15px 35px;
+            border: 1px solid var(--gold-primary);
+            border-radius: 50px;
+            background: rgba(201, 168, 76, 0.05);
+            backdrop-filter: blur(5px);
+        }
+
+        .stat-num { font-size: 2.8rem; display: block; line-height: 1; margin-bottom: 5px; }
+
+        /* Components */
+        .gcard {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(12px);
+            padding: 50px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .ms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .big-verse {
+            font-size: 1.85rem;
+            text-align: center;
+            padding: 100px 50px;
+            color: var(--gold-secondary);
+            font-style: italic;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+            border-left: 1px solid var(--glass-border);
+            margin: 40px 0;
+        }
+
+        .timeline-item { position: relative; margin-bottom: 60px; }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -46px; top: 10px;
+            width: 12px; height: 12px;
+            background: var(--gold-primary);
+            border-radius: 50%;
+            box-shadow: 0 0 15px var(--gold-primary);
+        }
+
+        .highlight { color: var(--gold-secondary); font-weight: bold; }
+        hr { border: 0; height: 1px; background: linear-gradient(to right, transparent, var(--gold-primary), transparent); margin: 40px 0; opacity: 0.3; }
+
+        ul { list-style: none; margin-top: 15px; }
+        ul li::before { content: "◈"; color: var(--gold-primary); margin-right: 10px; font-size: 0.8rem; }
+
+        footer {
+            text-align: center;
+            padding: 80px 0;
+            border-top: 1px solid var(--glass-border);
+            color: #555;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="starCanvas"></canvas>
+
+    <div class="container">
+        <section class="hero reveal">
+            <div class="halo" id="parallaxHalo"></div>
+            <div class="rotating-ring"></div>
+            <h1 class="en">Rest & Yoke</h1>
+            <p style="font-size: 1.4rem; letter-spacing: 2px;">📖 주님이 주시는 참된 안식과 멍에</p>
+            <div class="stats-badge">
+                <span class="stat-num" data-target="11">0</span>
+                <span class="en">Matthew 11:28-30</span>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <h2 class="en">01. Misconception</h2>
+            <div class="gcard">
+                <h3>1️⃣ 우리가 흔히 생각하는 “안식”의 오해</h3>
+                <p>보통 우리가 원하는 안식은 이렇습니다.</p>
+                <ul>
+                    <li>아무것도 안 하기</li>
+                    <li>책임 내려놓기</li>
+                    <li>쉬운 길, 편한 선택</li>
+                    <li>내 마음대로 해도 되는 상태</li>
+                </ul>
+                <p style="margin-top: 20px;">그래서 사람들은 예수님의 말씀을 이렇게 오해하기도 합니다.:</p>
+                <blockquote>“오면 쉬게 해 주신다니까, 그냥 내려놓고 가만히 있으면 되겠지.”라고 말입니다.</blockquote>
+                <hr>
+                <p>그런데 예수님은 “나에게로 오라”고 하신 후에 곧바로 <span class="highlight">“나의 멍에를 메고”</span>라고 말씀하시고 계십니다..</p>
+                <p>👉 이 말씀은 우리에게 가만히 쉬라는 말이 아니라, <strong>다른 방식으로 살아보지 않겠니?</strong> 라며 당신을 왕국의 생활에 초대하는 초대의 말씀입니다.</p>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <h2 class="en">02. True Rest</h2>
+            <div class="gcard">
+                <h3>2️⃣ 예수님이 주시는 안식은 “아무것도 없는 상태”가 아닙니다</h3>
+                <p>예수님이 주시는 안식은 일이 없는 상태가 아니라 우리가 무거운 짐을 지고 있는 상태에서 벗어나는 것입니다.</p>
+                <div class="ms-grid">
+                    <div style="background: rgba(255,255,255,0.02); padding: 20px; border-radius: 10px;">
+                        <p class="highlight">우리가 지고 있는 무거운 짐들</p>
+                        <ul>
+                            <li>잘해야 한다는 압박</li>
+                            <li>인정받아야 한다는 강박</li>
+                            <li>실패하면 끝이라는 두려움</li>
+                            <li>내가 인생을 책임져야 한다는 부담</li>
+                            <li>하나님 앞에서도 스스로 의로워져야 한다는 짐</li>
+                        </ul>
+                    </div>
+                </div>
+                <p>👉 문제는 우리에게 이러한 무거운 짐이 있다는 것이 아니라 바로 <span class="highlight">혼자 지고 있다는 것을 발견할 때</span> 우리는 주님께 나아가게 됩니다.</p>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <h2 class="en">03. The Yoke</h2>
+            <div class="gcard">
+                <h3>3️⃣ “나의 멍에를 메고" 라는 말의 의미</h3>
+                <p>🔹 멍에는 원래 두 마리가 함께 메는 도구입니다.</p>
+                <p>농부는 소 한 마리에게만 멍에를 씌우지 않습니다. 경험 많은 소와 어린 소를 함께 묶어.</p>
+                <div class="ms-grid">
+                    <div>📍방향은 큰 소가 잡고</div>
+                    <div>📍속도도 큰 소가 맞추고</div>
+                    <div>📍어린 소는 옆에서 배우며 걷게 함으로써 배울 수 있도록 하는 것입니다.</div>
+                </div>
+                <p>👉 예수님의 멍에란 <span class="highlight">“내가 먼저 끌 테니, 너는 옆에서 나와 함께 하지 않겠니?”</span> 라는 의미인 것입니다.</p>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <h2 class="en">04. Learning</h2>
+            <div class="gcard">
+                <h3>4️⃣ 왜 주님의 멍에가 처음엔 불편하고 무거워 보이나요?</h3>
+                <p>처음 멍에를 메면:</p>
+                <ul>
+                    <li>익숙하지 않아 어색하고</li>
+                    <li>내 방식대로 못 해서 답답하고</li>
+                    <li>내 의견과 판단을 내려놓아야 해서 불편합니다.</li>
+                </ul>
+                <p style="margin-top:20px;">이건 마치, 운전을 🚗 처음 배울 때</p>
+                <div class="ms-grid">
+                    <div>🔘핸들 잡는 것도 긴장되고</div>
+                    <div>🔘브레이크, 엑셀 다 어색하고</div>
+                    <div>🔘“차라리 안 몰고 말지” 라며 포기하고 싶을 때와 같은 심정일 것입니다.</div>
+                </div>
+                <hr>
+                <p>그런데 멍에를 메고 계속 배우게 되면?</p>
+                <p>✅주님이 나와 함께 하심을 체험하고<br>
+                ✅주님의 짐을 내가 곁에서 함께하니 나의 힘이 덜 들어가는 것을 발견하고<br>
+                ✅하나님의 왕국의 생활이 어떠한 삶인지 배우게 됩니다.</p>
+                <p>👉 예수님께서 <span class="highlight">“나에게서 배우라”</span>고 하신 이유가 바로 주님의 멍에를 함께 멜 때 주님의 온유하심과 겸손하심을 배우게 되며 그 안에서 영혼의 안식을 누릴 수 있기 때문입니다.</p>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <h2 class="en">05. Gentleness</h2>
+            <div class="gcard">
+                <h3>5️⃣ 왜 예수님의 멍에에서 진 짐은 가벼울까?</h3>
+                <p>여기서 핵심은 이것입니다..</p>
+                <p>예수님은 이렇게 말씀하지 않으셨습니다. “너희가 잘하면 내가 도와줄게” “너희가 강해지면 안식을 줄게” 라고 하시지 않으시고 대신 이렇게 말씀하십니다.</p>
+                <p class="highlight" style="font-size: 1.2rem; text-align: center; margin: 20px 0;">“나는 온유하고 겸허하다” “내가 너희와 함께 멍에를 메고 짐을 짊어질거야”</p>
+                <p>온유는 반대에 저항하지 않는 태도이며 겸허는 자신을 높이지 않는 태도입니다.</p>
+                <p>온유는 약함이 아닙니다. 사람들은 온유하다는 것을 착하다. 자기 주장이 없는 사람이라고 생각할 지 모르지만 온유는 힘이 없는 그런 상태가 아니라 힘을 가지고도 통제하는 상태를 말하고 있습니다. 성경적 의미로 보면 온유는 헬러어로 <span class="highlight">프라우테스(πραΰτης)</span> 즉 길들여진 힘, 절제된 강함, 통제된 권위를 나타내는데 마치 야생마가 길들여져 주인의 손에 반응하는 상태를 온유하다라고 말할 수 있습니다.</p>
+                <p>예수님은 창조주이시며 하나님의 아들이셨고 권능과 이 세상을 심판할 권세도 가지고 있었지만 자신을 핍박하고 멸시하는 사람들에게 저항하지 않으시고 온유함과 자신을 겸허한 위치에서 아버지의 뜻을 따르고 행하는 것을 볼 수 있습니다.</p>
+                <p>이러한 과정속에 우리는 주님의 온유함과 겸허함을 체험하며 배우게 되고 나의 짐이 이제 더 이상 나의 짐이 아니라 주님께서 함께 지는 짐이 되어 주님과 함께하는 참된 안식을 누릴 수 있는것입니다..</p>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <div class="big-verse">
+                6. 한 문장으로 정리하면<br>
+                예수님의 안식은 ‘아무것도 하지 않는 쉼’이 아니라<br>
+                주님의 멍에를 메고, 주님께 배우는 삶을 통해 혼의 안식을 누리는 것입니다.
+            </div>
+        </section>
+
+        <section class="reveal">
+            <h2 class="en">06. Definition</h2>
+            <div class="gcard">
+                <h3>1️⃣ 멍에란 무엇인가? (아주 실제적인 정의)</h3>
+                <p>멍에는 👉 소나 말 두 마리를 함께 묶어 같은 방향으로 걷게 하는 나무 도구입니다. 보통 밭을 갈거나 짐을 끌 때 사용해 왔습니다.</p>
+                <p>📍한 마리만 쓰면 힘도 부족하고 방향이 흔들리지만 두 마리를 묶으면 힘이 분산되고, 방향이 안정된다고 합니다.</p>
+                <p class="highlight">📌 멍에는 짐을 지우는 도구가 아니라, 힘을 나누는 도구입니다.</p>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <h2 class="en">07. Structure</h2>
+            <div class="gcard">
+                <h3>2️⃣ 멍에의 구조</h3>
+                <p>🔹 <strong>① 가로 나무 (주요 구조)</strong></p>
+                <ul>
+                    <li>소 두 마리의 목 위에 걸치는 긴 나무</li>
+                    <li>전체 무게와 균형을 잡아 줍니다.</li>
+                </ul>
+                <p>🔹 <strong>② 목걸이 홈</strong></p>
+                <ul>
+                    <li>각 소의 목에 맞게 파인 곡선</li>
+                    <li>딱 맞게 만들어서 목을 조이지도, 헐겁지도 않게 만들어 졌습니다.</li>
+                </ul>
+                <p>👉 좋은 멍에는 목을 상하게 하지 않고 오히려 힘이 고르게 전달되게 도와줍니다.</p>
+                <p>🔹 <strong>③ 연결 고리 또는 줄</strong></p>
+                <ul>
+                    <li>멍에 아래쪽에 달려 있어 쟁기나 수레, 짐과 연결되어 있습니다.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <h2 class="en">08. Functions</h2>
+            <div class="ms-grid">
+                <div class="gcard">
+                    <h4>1️⃣ 힘을 나눕니다</h4>
+                    <p>짐은 하나지만 힘은 두 마리가 함께 감당하여 혼자면 버거운 짐도 함께하면 견딜 수 있고 짐은 가벼워집니다..</p>
+                </div>
+                <div class="gcard">
+                    <h4>2️⃣ 방향을 하나로 만듭니다</h4>
+                    <p>멍에를 메면 오른쪽으로 가고 싶어도 못 가고 멈추고 싶어도 멈출 수 없습니다. 👉 방향은 농부가 정하고 소들은 그 방향에 몸을 맡기고 나아갑니다.</p>
+                </div>
+                <div class="gcard">
+                    <h4>3️⃣ 속도를 맞춥니다</h4>
+                    <p>경험 많은 소는 너무 빠르지도 않고 너무 느리지도 않게 어린 소를 끌어주고 기다립니다. 👉 그래서 멍에는 훈련의 도구라고도 할 수 있습니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <h2 class="en">09. Chrestos</h2>
+            <div class="gcard">
+                <h3>4️⃣ “나의 멍에는 편하고”는 말의 실제 의미</h3>
+                <p>🔹 <strong>“편하다” (헬라어: χρηστός, 크레스토스)</strong></p>
+                <p>이 말은 단순히 “편안하다”가 아니라 👉 <span class="highlight">잘 맞다 / 유용하다 / 목에 상처를 내지 않는다</span>는 뜻으로 즉 “너에게 맞게 만들어진 멍에”라는 의미입니다.</p>
+                <p>📌 나에게 맞지 않는 멍에는: 세상을 기준과 성공 방식, 스스로 만든 의로움, 비교와 경쟁. 이건 다 목을 쓸고 상처를 내는 멍에입니다.</p>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <h2 class="en">10. Life Shift</h2>
+            <div class="gcard">
+                <h3>5️⃣ 왜 예수님은 “나의 멍에”라고 하셨나요?</h3>
+                <p>예수님은 “내가 짐을 없애주겠다” 이렇게 말씀하지 않으시고 대신 “나의 멍에를 메고 나에게서 배우십시오.”라고 하십니다. 이 말은 곧, 짐을 지는 방식 자체를 바꾸라는 말입니다.</p>
+                <p>✨혼자 끄는 삶에서 주님과 함께 끄는 삶으로<br>
+                ✨내가 주도하는 삶에서 주님이 주도하는 삶으로<br>
+                ✨불안한 책임에서 주님께 맡겨진 순종으로</p>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <h2 class="en">11. The Cross</h2>
+            <div class="gcard">
+                <h3>6️⃣ 십자가와 멍에의 연결</h3>
+                <p>멍에는 십자가와 깊이 연결되어 있습니다.</p>
+                <p>✝️십자가는 나의 방식이 끝나는 자리이고 멍에는 주님의 방식에 나를 묶는 자리입니다.</p>
+                <p>👉 하지만 중요한 것은 십자가는 혼자 지는 게 아니라 주님이 이미 먼저 지셨고, 지금도 함께 메고 계시다는 것입니다..</p>
+                <hr>
+                <h4 style="text-align: center;">7️⃣ 한 줄 요약: 멍에는 짐을 더 얹는 도구가 아니라 짐을 ‘혼자 지지 않게’ 만드는 도구인 것입니다.</h4>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <h2 class="en">12. Christ is Our Rest</h2>
+            <div class="gcard">
+                <p>📖 우리에게 안식을 주시는 분이신 그리스도</p>
+                <p>하나님은 우리에게 주시고자 하는 것이 있는데 그것이 무엇이냐하면 바로 안식입니다. 우리가 생각하는 안식은 무엇입니까? 아무것도 안하고 쉬는 것을 이야기합니다. 내가 책임 질 일이 없이 쉽고 편한 것은 선택하는 것을 안식이라고 생각하며 이 안식은 간섭받지 않고 내 마음대로 해도 되는 상태라고 생각할 지도 모르겠습니다.</p>
+                <p>그래서 많은 사람들은 주님께로 가면 안식을 주신다고 하시니까 나는 그냥 모든 것을 내려놓고 가만히 있으면서 쉬면 되겠구나 라며 잘못 오해한다는 것입니다.</p>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <div class="big-verse">
+                “수고하며 짐을 진 사람들이여, 다 나에게로 오십시오. 내가 여러분에게 안식을 줄 것입니다. 나는 마음이 온유하고 겸허하니, 나의 멍에를 메고 나에게서 배우십시오. 그러면 여러분의 혼이 안식을 얻게 될 것입니다. 왜냐하면 나의 멍에는 편하고 나의 짐은 가볍기 때문입니다.” (마태복음 11:28-30)
+            </div>
+        </section>
+
+        <section class="reveal">
+            <h2 class="en">13. The Characteristics</h2>
+            <div class="gcard">
+                <p>먼저 나의 멍에를 메고 라는 말씀이 나오는데 멍에가 무엇인지 아시나요? 멍에는 한 쌍의 소들이 함께 짐을 끌어당길 수 있도록 하는 나무 들보를 가리키고 있습니다. 이 멍에는 단순히 짐을 지우기 위한 도구가 아니라 짐을 함께 들기 위한 도구입니다. 우리는 주님의 멍에를 지기전에 수고하고 무거운 짐을 나 혼자 지고 있었습니다.</p>
+                <p>그러나 주님은 나의 멍에를 메고 라고 말씀하시는 것은 우리에게 무거운 짐을 지우려는 것이 아니라 내가 그 짐을 함께 짊어 지겠다는 주님의 의지를 나타내고 있습니다. 그리고 우리가 주님의 멍에를 멘다 라는 것은 내가 주님께 나의 짐을 함께 맡기고 동역하겠다는 믿음의 행동입니다.</p>
+                <hr>
+                <p>🛡️ 이 멍에의 특징은</p>
+                <p><strong>첫째. 힘을 나눕니다 (주님이 이끄는 삶입니다.)</strong> 짐은 하나지만 힘은 두 마리가 함께 감당하여 혼자면 버거운 짐도 함께하면 견딜 수 있고 짐은 가벼워집니다.</p>
+                <p><strong>둘째. 방향을 하나로 만듭니다. (아버지의 뜻을 행할 수 있습니다.)</strong> 멍에를 메면 오른쪽으로 가고 싶어도 못 가고 멈추고 싶어도 멈출 수 없습니다. 👉 방향은 아버지의 뜻대로 농부이신 하나님이 정하시고 소들은 그 방향에 몸을 맡기고 나아가면 되는 것입니다.</p>
+                <p><strong>셋째. 멍에는 속도를 맞추게 합니다. (함께 동역하며 움질일 수 있도록 도와줍니다.)</strong> 경험 많은 주님은 너무 빠르지도 않고 너무 느리지도 않게 우리들을 이끌어주고 기다리십니다. 👉 그래서 멍에는 배움의 훈련의 도구라고도 할 수 있습니다.</p>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <h2 class="en">Final. Transformation</h2>
+            <div class="gcard" style="border: 2px solid var(--gold-primary);">
+                <p>🌱 그런데 멍에를 메고 계속 배우게 되면?</p>
+                <p>✅ 주님이 나와 함께 하심을 체험하고 ✅ 주님의 짐을 내가 곁에서 함께하니 나의 힘이 덜 들어가는 것을 발견하고 ✅ 하나님의 왕국의 생활이 어떠한 삶인지 배우게 됩니다.</p>
+                <p>👉 예수님께서 “나에게서 배우라”고 하신 이유가 바로 주님의 멍에를 함께 메고 라는 것은 곧, 짐을 지는 방식 자체를 바꾸라는 말입니다.</p>
+                <p>✨ 혼자 끄는 삶에서 주님과 함께 끄는 삶으로 ✨ 내가 주도하는 삶에서 주님이 주도하는 삶으로 ✨ 불안한 책임에서 수고하고 무거운 짐을 짊어 지고 있었다면 주님께 맡기고 따르는 순종의 삶으로</p>
+                <p style="margin-top: 20px;">우리는 주님의 멍에를 메고 바로 그리스도의 온유와 겸허를 배워야 하는 것입니다. 어떠한 반대에도 저항하지 않는 온유와 자신을 높이지 않는 겸허의 본을 따를 때, 우리의 혼은 참된 안식을 얻습니다. 이는 외적인 상황에 좌우되지 않는 내면의 온전한 만족입니다. (마 11:28-30)</p>
+                <hr>
+                <p>예수님은 창조주이시며 하나님의 아들이셨고 권능과 이 세상을 심판할 권세도 가지고 있었지만 자신을 핍박하고 멸시하는 사람들에게 저항하지 않으시고 온유함과 자신을 겸허한 위치에서 아버지의 뜻을 따르고 행하는 것을 볼 수 있습니다. 이러한 과정속에 우리는 주님의 온유함과 겸허함을 체험하며 배우게 되고 나의 짐이 이제 더 이상 나의 짐이 아니라 주님께서 함께 지는 짐이 되어 주님과 함께하는 참된 안식을 누릴 수 있는 것입니다.</p>
+                <p style="text-align: right; margin-top: 30px;" class="en highlight">부산교회 2구역</p>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Interactive Web Article Architect</p>
+        <p class="en">Faith, Rest, and the Yoke of Grace</p>
+    </footer>
+
+    <script>
+        // 1. Starfield & Shooting Star Canvas
+        const canvas = document.getElementById('starCanvas');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+        let shootingStars = [];
+
+        function initCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            stars = [];
+            for(let i=0; i<200; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 1.5,
+                    opacity: Math.random()
+                });
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#fff";
+            stars.forEach(s => {
+                ctx.globalAlpha = s.opacity;
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.size, 0, Math.PI*2);
+                ctx.fill();
+                s.opacity += (Math.random() - 0.5) * 0.03;
+                if(s.opacity < 0) s.opacity = 0;
+                if(s.opacity > 1) s.opacity = 1;
+            });
+
+            if(Math.random() < 0.015) {
+                shootingStars.push({
+                    x: Math.random() * canvas.width,
+                    y: 0,
+                    len: Math.random() * 100 + 50,
+                    speed: Math.random() * 15 + 10
+                });
+            }
+
+            shootingStars.forEach((ss, i) => {
+                ctx.strokeStyle = "rgba(232, 201, 112, 0.4)";
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(ss.x, ss.y);
+                ctx.lineTo(ss.x - ss.len, ss.y + ss.len);
+                ctx.stroke();
+                ss.x -= ss.speed;
+                ss.y += ss.speed;
+                if(ss.y > canvas.height) shootingStars.splice(i, 1);
+            });
+            requestAnimationFrame(draw);
+        }
+
+        window.addEventListener('resize', initCanvas);
+        initCanvas();
+        draw();
+
+        // 2. Scroll Reveal (Intersection Observer)
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('reveal');
+                    const stat = entry.target.querySelector('.stat-num');
+                    if(stat && !stat.classList.contains('done')) {
+                        const target = +stat.getAttribute('data-target');
+                        let count = 0;
+                        const timer = setInterval(() => {
+                            count++;
+                            stat.innerText = count;
+                            if(count >= target) { clearInterval(timer); stat.classList.add('done'); }
+                        }, 100);
+                    }
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('section').forEach(s => observer.observe(s));
+
+        // 3. Mouse Parallax
+        document.addEventListener('mousemove', (e) => {
+            const x = (window.innerWidth / 2 - e.clientX) / 50;
+            const y = (window.innerHeight / 2 - e.clientY) / 50;
+            const halo = document.getElementById('parallaxHalo');
+            if(halo) halo.style.transform = `translate(${x}px, ${y}px)`;
+        });
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주님이 주시는 참된 안식과 멍에</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Serif+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #06070e;
+            --gold-primary: #c9a84c;
+            --gold-secondary: #e8c970;
+            --text-light: #e0e0e0;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(201, 168, 76, 0.2);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-light);
+            font-family: 'Noto Serif KR', serif;
+            line-height: 1.8;
+            overflow-x: hidden;
+            word-break: keep-all;
+        }
+
+        h1, h2, h3, h4, .en { font-family: 'Cormorant Garamond', serif; color: var(--gold-secondary); }
+
+        /* Background Canvas */
+        #starCanvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 25px; }
+
+        /* Animation Classes */
+        section {
+            padding: 120px 0;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        section.reveal { opacity: 1; transform: translateY(0); }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .halo {
+            position: absolute;
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(201, 168, 76, 0.12) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+            filter: blur(40px);
+        }
+
+        .rotating-ring {
+            position: absolute;
+            width: 550px; height: 550px;
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+            animation: rotate 25s linear infinite;
+        }
+
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            margin-bottom: 15px;
+            letter-spacing: 4px;
+            text-shadow: 0 0 25px rgba(201, 168, 76, 0.4);
+        }
+
+        .stats-badge {
+            margin-top: 40px;
+            padding: 15px 35px;
+            border: 1px solid var(--gold-primary);
+            border-radius: 50px;
+            background: rgba(201, 168, 76, 0.05);
+            backdrop-filter: blur(5px);
+        }
+
+        .stat-num { font-size: 2.8rem; display: block; line-height: 1; margin-bottom: 5px; }
+
+        /* Components */
+        .gcard {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(12px);
+            padding: 50px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .ms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .big-verse {
+            font-size: 1.85rem;
+            text-align: center;
+            padding: 100px 50px;
+            color: var(--gold-secondary);
+            font-style: italic;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+            border-left: 1px solid var(--glass-border);
+            margin: 40px 0;
+        }
+
+        .timeline-item { position: relative; margin-bottom: 60px; }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -46px; top: 10px;
+            width: 12px; height: 12px;
+            background: var(--gold-primary);
+            border-radius: 50%;
+            box-shadow: 0 0 15px var(--gold-primary);
+        }
+
+        .highlight { color: var(--gold-secondary); font-weight: bold; }
+        hr { border: 0; height: 1px; background: linear-gradient(to right, transparent, var(--gold-primary), transparent); margin: 40px 0; opacity: 0.3; }
+
+        ul { list-style: none; margin-top: 15px; }
+        ul li::before { content: "◈"; color: var(--gold-primary); margin-right: 10px; font-size: 0.8rem; }
+
+        footer {
+            text-align: center;
+            padding: 80px 0;
+            border-top: 1px solid var(--glass-border);
+            color: #555;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="starCanvas"></canvas>
+
+    <div class="container">
+        <section class="hero reveal">
+            <div class="halo" id="parallaxHalo"></div>
+            <div class="rotating-ring"></div>
+            <h1 class="en">Rest & Yoke</h1>
+            <p style="font-size: 1.4rem; letter-spacing: 2px;">📖 주님이 주시는 참된 안식과 멍에</p>
+            <div class="stats-badge">
+                <span class="stat-num" data-target="11">0</span>
+                <span class="en">Matthew 11:28-30</span>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <h2 class="en">01. Misconception</h2>
+            <div class="gcard">
+                <h3>1️⃣ 우리가 흔히 생각하는 “안식”의 오해</h3>
+                <p>보통 우리가 원하는 안식은 이렇습니다.</p>
+                <ul>
+                    <li>아무것도 안 하기</li>
+                    <li>책임 내려놓기</li>
+                    <li>쉬운 길, 편한 선택</li>
+                    <li>내 마음대로 해도 되는 상태</li>
+                </ul>
+                <p style="margin-top: 20px;">그래서 사람들은 예수님의 말씀을 이렇게 오해하기도 합니다.:</p>
+                <blockquote>“오면 쉬게 해 주신다니까, 그냥 내려놓고 가만히 있으면 되겠지.”라고 말입니다.</blockquote>
+                <hr>
+                <p>그런데 예수님은 “나에게로 오라”고 하신 후에 곧바로 <span class="highlight">“나의 멍에를 메고”</span>라고 말씀하시고 계십니다..</p>
+                <p>👉 이 말씀은 우리에게 가만히 쉬라는 말이 아니라, <strong>다른 방식으로 살아보지 않겠니?</strong> 라며 당신을 왕국의 생활에 초대하는 초대의 말씀입니다.</p>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <h2 class="en">02. True Rest</h2>
+            <div class="gcard">
+                <h3>2️⃣ 예수님이 주시는 안식은 “아무것도 없는 상태”가 아닙니다</h3>
+                <p>예수님이 주시는 안식은 일이 없는 상태가 아니라 우리가 무거운 짐을 지고 있는 상태에서 벗어나는 것입니다.</p>
+                <div class="ms-grid">
+                    <div style="background: rgba(255,255,255,0.02); padding: 20px; border-radius: 10px;">
+                        <p class="highlight">우리가 지고 있는 무거운 짐들</p>
+                        <ul>
+                            <li>잘해야 한다는 압박</li>
+                            <li>인정받아야 한다는 강박</li>
+                            <li>실패하면 끝이라는 두려움</li>
+                            <li>내가 인생을 책임져야 한다는 부담</li>
+                            <li>하나님 앞에서도 스스로 의로워져야 한다는 짐</li>
+                        </ul>
+                    </div>
+                </div>
+                <p>👉 문제는 우리에게 이러한 무거운 짐이 있다는 것이 아니라 바로 <span class="highlight">혼자 지고 있다는 것을 발견할 때</span> 우리는 주님께 나아가게 됩니다.</p>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <h2 class="en">03. The Yoke</h2>
+            <div class="gcard">
+                <h3>3️⃣ “나의 멍에를 메고" 라는 말의 의미</h3>
+                <p>🔹 멍에는 원래 두 마리가 함께 메는 도구입니다.</p>
+                <p>농부는 소 한 마리에게만 멍에를 씌우지 않습니다. 경험 많은 소와 어린 소를 함께 묶어.</p>
+                <div class="ms-grid">
+                    <div>📍방향은 큰 소가 잡고</div>
+                    <div>📍속도도 큰 소가 맞추고</div>
+                    <div>📍어린 소는 옆에서 배우며 걷게 함으로써 배울 수 있도록 하는 것입니다.</div>
+                </div>
+                <p>👉 예수님의 멍에란 <span class="highlight">“내가 먼저 끌 테니, 너는 옆에서 나와 함께 하지 않겠니?”</span> 라는 의미인 것입니다.</p>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <h2 class="en">04. Learning</h2>
+            <div class="gcard">
+                <h3>4️⃣ 왜 주님의 멍에가 처음엔 불편하고 무거워 보이나요?</h3>
+                <p>처음 멍에를 메면:</p>
+                <ul>
+                    <li>익숙하지 않아 어색하고</li>
+                    <li>내 방식대로 못 해서 답답하고</li>
+                    <li>내 의견과 판단을 내려놓아야 해서 불편합니다.</li>
+                </ul>
+                <p style="margin-top:20px;">이건 마치, 운전을 🚗 처음 배울 때</p>
+                <div class="ms-grid">
+                    <div>🔘핸들 잡는 것도 긴장되고</div>
+                    <div>🔘브레이크, 엑셀 다 어색하고</div>
+                    <div>🔘“차라리 안 몰고 말지” 라며 포기하고 싶을 때와 같은 심정일 것입니다.</div>
+                </div>
+                <hr>
+                <p>그런데 멍에를 메고 계속 배우게 되면?</p>
+                <p>✅주님이 나와 함께 하심을 체험하고<br>
+                ✅주님의 짐을 내가 곁에서 함께하니 나의 힘이 덜 들어가는 것을 발견하고<br>
+                ✅하나님의 왕국의 생활이 어떠한 삶인지 배우게 됩니다.</p>
+                <p>👉 예수님께서 <span class="highlight">“나에게서 배우라”</span>고 하신 이유가 바로 주님의 멍에를 함께 멜 때 주님의 온유하심과 겸손하심을 배우게 되며 그 안에서 영혼의 안식을 누릴 수 있기 때문입니다.</p>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <h2 class="en">05. Gentleness</h2>
+            <div class="gcard">
+                <h3>5️⃣ 왜 예수님의 멍에에서 진 짐은 가벼울까?</h3>
+                <p>여기서 핵심은 이것입니다..</p>
+                <p>예수님은 이렇게 말씀하지 않으셨습니다. “너희가 잘하면 내가 도와줄게” “너희가 강해지면 안식을 줄게” 라고 하시지 않으시고 대신 이렇게 말씀하십니다.</p>
+                <p class="highlight" style="font-size: 1.2rem; text-align: center; margin: 20px 0;">“나는 온유하고 겸허하다” “내가 너희와 함께 멍에를 메고 짐을 짊어질거야”</p>
+                <p>온유는 반대에 저항하지 않는 태도이며 겸허는 자신을 높이지 않는 태도입니다.</p>
+                <p>온유는 약함이 아닙니다. 사람들은 온유하다는 것을 착하다. 자기 주장이 없는 사람이라고 생각할 지 모르지만 온유는 힘이 없는 그런 상태가 아니라 힘을 가지고도 통제하는 상태를 말하고 있습니다. 성경적 의미로 보면 온유는 헬러어로 <span class="highlight">프라우테스(πραΰτης)</span> 즉 길들여진 힘, 절제된 강함, 통제된 권위를 나타내는데 마치 야생마가 길들여져 주인의 손에 반응하는 상태를 온유하다라고 말할 수 있습니다.</p>
+                <p>예수님은 창조주이시며 하나님의 아들이셨고 권능과 이 세상을 심판할 권세도 가지고 있었지만 자신을 핍박하고 멸시하는 사람들에게 저항하지 않으시고 온유함과 자신을 겸허한 위치에서 아버지의 뜻을 따르고 행하는 것을 볼 수 있습니다.</p>
+                <p>이러한 과정속에 우리는 주님의 온유함과 겸허함을 체험하며 배우게 되고 나의 짐이 이제 더 이상 나의 짐이 아니라 주님께서 함께 지는 짐이 되어 주님과 함께하는 참된 안식을 누릴 수 있는것입니다..</p>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <div class="big-verse">
+                6. 한 문장으로 정리하면<br>
+                예수님의 안식은 ‘아무것도 하지 않는 쉼’이 아니라<br>
+                주님의 멍에를 메고, 주님께 배우는 삶을 통해 혼의 안식을 누리는 것입니다.
+            </div>
+        </section>
+
+        <section class="reveal">
+            <h2 class="en">06. Definition</h2>
+            <div class="gcard">
+                <h3>1️⃣ 멍에란 무엇인가? (아주 실제적인 정의)</h3>
+                <p>멍에는 👉 소나 말 두 마리를 함께 묶어 같은 방향으로 걷게 하는 나무 도구입니다. 보통 밭을 갈거나 짐을 끌 때 사용해 왔습니다.</p>
+                <p>📍한 마리만 쓰면 힘도 부족하고 방향이 흔들리지만 두 마리를 묶으면 힘이 분산되고, 방향이 안정된다고 합니다.</p>
+                <p class="highlight">📌 멍에는 짐을 지우는 도구가 아니라, 힘을 나누는 도구입니다.</p>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <h2 class="en">07. Structure</h2>
+            <div class="gcard">
+                <h3>2️⃣ 멍에의 구조</h3>
+                <p>🔹 <strong>① 가로 나무 (주요 구조)</strong></p>
+                <ul>
+                    <li>소 두 마리의 목 위에 걸치는 긴 나무</li>
+                    <li>전체 무게와 균형을 잡아 줍니다.</li>
+                </ul>
+                <p>🔹 <strong>② 목걸이 홈</strong></p>
+                <ul>
+                    <li>각 소의 목에 맞게 파인 곡선</li>
+                    <li>딱 맞게 만들어서 목을 조이지도, 헐겁지도 않게 만들어 졌습니다.</li>
+                </ul>
+                <p>👉 좋은 멍에는 목을 상하게 하지 않고 오히려 힘이 고르게 전달되게 도와줍니다.</p>
+                <p>🔹 <strong>③ 연결 고리 또는 줄</strong></p>
+                <ul>
+                    <li>멍에 아래쪽에 달려 있어 쟁기나 수레, 짐과 연결되어 있습니다.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <h2 class="en">08. Functions</h2>
+            <div class="ms-grid">
+                <div class="gcard">
+                    <h4>1️⃣ 힘을 나눕니다</h4>
+                    <p>짐은 하나지만 힘은 두 마리가 함께 감당하여 혼자면 버거운 짐도 함께하면 견딜 수 있고 짐은 가벼워집니다..</p>
+                </div>
+                <div class="gcard">
+                    <h4>2️⃣ 방향을 하나로 만듭니다</h4>
+                    <p>멍에를 메면 오른쪽으로 가고 싶어도 못 가고 멈추고 싶어도 멈출 수 없습니다. 👉 방향은 농부가 정하고 소들은 그 방향에 몸을 맡기고 나아갑니다.</p>
+                </div>
+                <div class="gcard">
+                    <h4>3️⃣ 속도를 맞춥니다</h4>
+                    <p>경험 많은 소는 너무 빠르지도 않고 너무 느리지도 않게 어린 소를 끌어주고 기다립니다. 👉 그래서 멍에는 훈련의 도구라고도 할 수 있습니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <h2 class="en">09. Chrestos</h2>
+            <div class="gcard">
+                <h3>4️⃣ “나의 멍에는 편하고”는 말의 실제 의미</h3>
+                <p>🔹 <strong>“편하다” (헬라어: χρηστός, 크레스토스)</strong></p>
+                <p>이 말은 단순히 “편안하다”가 아니라 👉 <span class="highlight">잘 맞다 / 유용하다 / 목에 상처를 내지 않는다</span>는 뜻으로 즉 “너에게 맞게 만들어진 멍에”라는 의미입니다.</p>
+                <p>📌 나에게 맞지 않는 멍에는: 세상을 기준과 성공 방식, 스스로 만든 의로움, 비교와 경쟁. 이건 다 목을 쓸고 상처를 내는 멍에입니다.</p>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <h2 class="en">10. Life Shift</h2>
+            <div class="gcard">
+                <h3>5️⃣ 왜 예수님은 “나의 멍에”라고 하셨나요?</h3>
+                <p>예수님은 “내가 짐을 없애주겠다” 이렇게 말씀하지 않으시고 대신 “나의 멍에를 메고 나에게서 배우십시오.”라고 하십니다. 이 말은 곧, 짐을 지는 방식 자체를 바꾸라는 말입니다.</p>
+                <p>✨혼자 끄는 삶에서 주님과 함께 끄는 삶으로<br>
+                ✨내가 주도하는 삶에서 주님이 주도하는 삶으로<br>
+                ✨불안한 책임에서 주님께 맡겨진 순종으로</p>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <h2 class="en">11. The Cross</h2>
+            <div class="gcard">
+                <h3>6️⃣ 십자가와 멍에의 연결</h3>
+                <p>멍에는 십자가와 깊이 연결되어 있습니다.</p>
+                <p>✝️십자가는 나의 방식이 끝나는 자리이고 멍에는 주님의 방식에 나를 묶는 자리입니다.</p>
+                <p>👉 하지만 중요한 것은 십자가는 혼자 지는 게 아니라 주님이 이미 먼저 지셨고, 지금도 함께 메고 계시다는 것입니다..</p>
+                <hr>
+                <h4 style="text-align: center;">7️⃣ 한 줄 요약: 멍에는 짐을 더 얹는 도구가 아니라 짐을 ‘혼자 지지 않게’ 만드는 도구인 것입니다.</h4>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <h2 class="en">12. Christ is Our Rest</h2>
+            <div class="gcard">
+                <p>📖 우리에게 안식을 주시는 분이신 그리스도</p>
+                <p>하나님은 우리에게 주시고자 하는 것이 있는데 그것이 무엇이냐하면 바로 안식입니다. 우리가 생각하는 안식은 무엇입니까? 아무것도 안하고 쉬는 것을 이야기합니다. 내가 책임 질 일이 없이 쉽고 편한 것은 선택하는 것을 안식이라고 생각하며 이 안식은 간섭받지 않고 내 마음대로 해도 되는 상태라고 생각할 지도 모르겠습니다.</p>
+                <p>그래서 많은 사람들은 주님께로 가면 안식을 주신다고 하시니까 나는 그냥 모든 것을 내려놓고 가만히 있으면서 쉬면 되겠구나 라며 잘못 오해한다는 것입니다.</p>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <div class="big-verse">
+                “수고하며 짐을 진 사람들이여, 다 나에게로 오십시오. 내가 여러분에게 안식을 줄 것입니다. 나는 마음이 온유하고 겸허하니, 나의 멍에를 메고 나에게서 배우십시오. 그러면 여러분의 혼이 안식을 얻게 될 것입니다. 왜냐하면 나의 멍에는 편하고 나의 짐은 가볍기 때문입니다.” (마태복음 11:28-30)
+            </div>
+        </section>
+
+        <section class="reveal">
+            <h2 class="en">13. The Characteristics</h2>
+            <div class="gcard">
+                <p>먼저 나의 멍에를 메고 라는 말씀이 나오는데 멍에가 무엇인지 아시나요? 멍에는 한 쌍의 소들이 함께 짐을 끌어당길 수 있도록 하는 나무 들보를 가리키고 있습니다. 이 멍에는 단순히 짐을 지우기 위한 도구가 아니라 짐을 함께 들기 위한 도구입니다. 우리는 주님의 멍에를 지기전에 수고하고 무거운 짐을 나 혼자 지고 있었습니다.</p>
+                <p>그러나 주님은 나의 멍에를 메고 라고 말씀하시는 것은 우리에게 무거운 짐을 지우려는 것이 아니라 내가 그 짐을 함께 짊어 지겠다는 주님의 의지를 나타내고 있습니다. 그리고 우리가 주님의 멍에를 멘다 라는 것은 내가 주님께 나의 짐을 함께 맡기고 동역하겠다는 믿음의 행동입니다.</p>
+                <hr>
+                <p>🛡️ 이 멍에의 특징은</p>
+                <p><strong>첫째. 힘을 나눕니다 (주님이 이끄는 삶입니다.)</strong> 짐은 하나지만 힘은 두 마리가 함께 감당하여 혼자면 버거운 짐도 함께하면 견딜 수 있고 짐은 가벼워집니다.</p>
+                <p><strong>둘째. 방향을 하나로 만듭니다. (아버지의 뜻을 행할 수 있습니다.)</strong> 멍에를 메면 오른쪽으로 가고 싶어도 못 가고 멈추고 싶어도 멈출 수 없습니다. 👉 방향은 아버지의 뜻대로 농부이신 하나님이 정하시고 소들은 그 방향에 몸을 맡기고 나아가면 되는 것입니다.</p>
+                <p><strong>셋째. 멍에는 속도를 맞추게 합니다. (함께 동역하며 움질일 수 있도록 도와줍니다.)</strong> 경험 많은 주님은 너무 빠르지도 않고 너무 느리지도 않게 우리들을 이끌어주고 기다리십니다. 👉 그래서 멍에는 배움의 훈련의 도구라고도 할 수 있습니다.</p>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <h2 class="en">Final. Transformation</h2>
+            <div class="gcard" style="border: 2px solid var(--gold-primary);">
+                <p>🌱 그런데 멍에를 메고 계속 배우게 되면?</p>
+                <p>✅ 주님이 나와 함께 하심을 체험하고 ✅ 주님의 짐을 내가 곁에서 함께하니 나의 힘이 덜 들어가는 것을 발견하고 ✅ 하나님의 왕국의 생활이 어떠한 삶인지 배우게 됩니다.</p>
+                <p>👉 예수님께서 “나에게서 배우라”고 하신 이유가 바로 주님의 멍에를 함께 메고 라는 것은 곧, 짐을 지는 방식 자체를 바꾸라는 말입니다.</p>
+                <p>✨ 혼자 끄는 삶에서 주님과 함께 끄는 삶으로 ✨ 내가 주도하는 삶에서 주님이 주도하는 삶으로 ✨ 불안한 책임에서 수고하고 무거운 짐을 짊어 지고 있었다면 주님께 맡기고 따르는 순종의 삶으로</p>
+                <p style="margin-top: 20px;">우리는 주님의 멍에를 메고 바로 그리스도의 온유와 겸허를 배워야 하는 것입니다. 어떠한 반대에도 저항하지 않는 온유와 자신을 높이지 않는 겸허의 본을 따를 때, 우리의 혼은 참된 안식을 얻습니다. 이는 외적인 상황에 좌우되지 않는 내면의 온전한 만족입니다. (마 11:28-30)</p>
+                <hr>
+                <p>예수님은 창조주이시며 하나님의 아들이셨고 권능과 이 세상을 심판할 권세도 가지고 있었지만 자신을 핍박하고 멸시하는 사람들에게 저항하지 않으시고 온유함과 자신을 겸허한 위치에서 아버지의 뜻을 따르고 행하는 것을 볼 수 있습니다. 이러한 과정속에 우리는 주님의 온유함과 겸허함을 체험하며 배우게 되고 나의 짐이 이제 더 이상 나의 짐이 아니라 주님께서 함께 지는 짐이 되어 주님과 함께하는 참된 안식을 누릴 수 있는 것입니다.</p>
+                <p style="text-align: right; margin-top: 30px;" class="en highlight">부산교회 2구역</p>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Interactive Web Article Architect</p>
+        <p class="en">Faith, Rest, and the Yoke of Grace</p>
+    </footer>
+
+    <script>
+        // 1. Starfield & Shooting Star Canvas
+        const canvas = document.getElementById('starCanvas');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+        let shootingStars = [];
+
+        function initCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            stars = [];
+            for(let i=0; i<200; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 1.5,
+                    opacity: Math.random()
+                });
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#fff";
+            stars.forEach(s => {
+                ctx.globalAlpha = s.opacity;
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.size, 0, Math.PI*2);
+                ctx.fill();
+                s.opacity += (Math.random() - 0.5) * 0.03;
+                if(s.opacity < 0) s.opacity = 0;
+                if(s.opacity > 1) s.opacity = 1;
+            });
+
+            if(Math.random() < 0.015) {
+                shootingStars.push({
+                    x: Math.random() * canvas.width,
+                    y: 0,
+                    len: Math.random() * 100 + 50,
+                    speed: Math.random() * 15 + 10
+                });
+            }
+
+            shootingStars.forEach((ss, i) => {
+                ctx.strokeStyle = "rgba(232, 201, 112, 0.4)";
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(ss.x, ss.y);
+                ctx.lineTo(ss.x - ss.len, ss.y + ss.len);
+                ctx.stroke();
+                ss.x -= ss.speed;
+                ss.y += ss.speed;
+                if(ss.y > canvas.height) shootingStars.splice(i, 1);
+            });
+            requestAnimationFrame(draw);
+        }
+
+        window.addEventListener('resize', initCanvas);
+        initCanvas();
+        draw();
+
+        // 2. Scroll Reveal (Intersection Observer)
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('reveal');
+                    const stat = entry.target.querySelector('.stat-num');
+                    if(stat && !stat.classList.contains('done')) {
+                        const target = +stat.getAttribute('data-target');
+                        let count = 0;
+                        const timer = setInterval(() => {
+                            count++;
+                            stat.innerText = count;
+                            if(count >= target) { clearInterval(timer); stat.classList.add('done'); }
+                        }, 100);
+                    }
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('section').forEach(s => observer.observe(s));
+
+        // 3. Mouse Parallax
+        document.addEventListener('mousemove', (e) => {
+            const x = (window.innerWidth / 2 - e.clientX) / 50;
+            const y = (window.innerHeight / 2 - e.clientY) / 50;
+            const halo = document.getElementById('parallaxHalo');
+            if(halo) halo.style.transform = `translate(${x}px, ${y}px)`;
+        });
+    </script>
+</body>
+</html>

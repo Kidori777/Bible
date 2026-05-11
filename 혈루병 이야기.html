@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>12년 동안 멈추지 않던 병</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Noto+Serif+KR:wght@300;400;600;700&family=IM+Fell+English&display=swap" rel="stylesheet">
+
+<style>
+* { margin:0; padding:0; box-sizing:border-box; font-style:normal !important; }
+html { scroll-behavior:smooth; }
+
+:root {
+  --bg:       #090408;
+  --wine:     #6B1428;
+  --rose:     #C0586A;
+  --rose-dim: rgba(192,88,106,0.18);
+  --blood:    #8B1A2E;
+  --dust:     #C4A882;
+  --dust-dim: rgba(196,168,130,0.5);
+  --text:     #EDE0D0;
+  --dim:      rgba(237,224,208,0.5);
+  --heal:     #FFF8EE;
+  --gold:     #D4A843;
+  --cormorant:'Cormorant Garamond', serif;
+  --serif:    'Noto Serif KR', serif;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--serif);
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar { width:2px; }
+::-webkit-scrollbar-thumb { background: rgba(192,88,106,0.3); border-radius:2px; }
+
+/* ══════════════════════════
+   FIXED: YEAR STRIP (TOP)
+══════════════════════════ */
+#yearStrip {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 36px;
+  z-index: 300;
+  background: rgba(9,4,8,0.96);
+  border-bottom: 1px solid rgba(107,20,40,0.4);
+  display: flex;
+  align-items: center;
+  padding: 0 clamp(20px,5vw,60px);
+  gap: 0;
+}
+
+.year-pip {
+  flex: 1;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: background 0.6s ease;
+}
+.year-pip::after {
+  content: attr(data-y) '년';
+  font-family: var(--cormorant);
+  font-weight: 300;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: rgba(192,88,106,0.25);
+  transition: color 0.6s ease;
+  position: absolute;
+  bottom: 4px;
+}
+.year-pip.lit { background: rgba(107,20,40,0.35); }
+.year-pip.lit::after { color: rgba(192,88,106,0.75); }
+
+/* Progress fill line */
+.year-pip-fill {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: transparent;
+  transition: background 0.6s ease;
+}
+.year-pip.lit .year-pip-fill { background: var(--blood); }
+.year-pip.heal .year-pip-fill { background: var(--gold) !important; }
+.year-pip.heal { background: rgba(212,168,67,0.08) !important; }
+.year-pip.heal::after { color: rgba(212,168,67,0.7) !important; }
+
+/* Year counter display */
+#yearCount {
+  margin-left: auto;
+  font-family: var(--cormorant);
+  font-weight: 300;
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  color: rgba(192,88,106,0.6);
+  white-space: nowrap;
+  flex-shrink: 0;
+  padding-left: 20px;
+  transition: color 0.6s ease;
+}
+
+/* ══════════════════════════
+   HERO
+══════════════════════════ */
+.hero {
+  min-height: 100vh;
+  padding-top: 36px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 36px clamp(40px,9vw,120px) clamp(80px,12vh,140px);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Blood drip lines — vertical */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: clamp(40px,9vw,120px);
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(180deg,
+    transparent 0%,
+    rgba(139,26,46,0.4) 20%,
+    rgba(139,26,46,0.6) 70%,
+    rgba(139,26,46,0.2) 100%
+  );
+}
+
+/* Giant "12" ghost */
+.hero-ghost {
+  position: absolute;
+  right: -0.05em; bottom: -0.1em;
+  font-family: var(--cormorant);
+  font-weight: 700;
+  font-size: clamp(220px,38vw,580px);
+  color: rgba(107,20,40,0.07);
+  line-height: 1;
+  pointer-events: none;
+  letter-spacing: -0.04em;
+}
+
+.hero-tag {
+  font-family: var(--cormorant);
+  font-weight: 300;
+  font-size: clamp(12px,1.5vw,15px);
+  letter-spacing: 0.38em;
+  color: rgba(192,88,106,0.5);
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.hero-tag::before {
+  content: '';
+  width: 28px; height: 1px;
+  background: rgba(192,88,106,0.4);
+  display: block;
+  flex-shrink: 0;
+}
+
+h1.hero-h1 {
+  font-family: var(--cormorant);
+  font-weight: 700;
+  font-size: clamp(46px,8vw,118px);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  max-width: 700px;
+}
+.hero-h1 .years {
+  display: block;
+  color: var(--rose);
+  text-shadow: 0 0 60px rgba(192,88,106,0.4);
+}
+
+.hero-sub {
+  display: block;
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: clamp(13px,1.6vw,16px);
+  color: var(--dim);
+  margin-top: 20px;
+  letter-spacing: 0.03em;
+  line-height: 1.85;
+}
+
+/* ══════════════════════════
+   CHAPTER STRUCTURE
+══════════════════════════ */
+.ch {
+  padding: clamp(60px,8vh,110px) clamp(40px,9vw,120px);
+  border-bottom: 1px solid rgba(107,20,40,0.2);
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.85s ease, transform 0.85s ease;
+  position: relative;
+}
+.ch.in { opacity:1; transform:translateY(0); }
+
+/* Giant faded chapter year in background */
+.ch-ghost {
+  position: absolute;
+  right: 0.05em; top: -0.1em;
+  font-family: var(--cormorant);
+  font-weight: 700;
+  font-size: clamp(100px,18vw,280px);
+  color: rgba(107,20,40,0.055);
+  line-height: 1;
+  pointer-events:none;
+  letter-spacing: -0.03em;
+  user-select:none;
+}
+
+.ch-num {
+  font-family: var(--cormorant);
+  font-weight: 400;
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  color: rgba(192,88,106,0.4);
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.ch-num::after {
+  content:'';
+  width: 40px; height: 1px;
+  background: rgba(192,88,106,0.18);
+  display:block;
+}
+
+.ch-title {
+  font-family: var(--cormorant);
+  font-weight: 700;
+  font-size: clamp(28px,4.5vw,60px);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  margin-bottom: 28px;
+  max-width: 640px;
+}
+.ch-title .accent { color: var(--rose); }
+
+.prose {
+  font-size: clamp(15px,1.85vw,18px);
+  line-height: 2.1;
+  color: rgba(237,224,208,0.88);
+  font-weight: 400;
+  max-width: 600px;
+  margin-bottom: 1.2em;
+}
+.prose:last-child { margin-bottom:0; }
+
+/* Thought / speech */
+.thought {
+  margin: 22px 0;
+  padding: 18px 26px;
+  border-left: 2px solid rgba(192,88,106,0.35);
+  background: rgba(107,20,40,0.12);
+  max-width: 540px;
+}
+.thought p {
+  font-family: var(--cormorant);
+  font-weight: 500;
+  font-size: clamp(17px,2.3vw,26px);
+  line-height: 1.7;
+  color: rgba(237,224,208,0.9);
+  letter-spacing: 0.01em;
+}
+
+/* Bullet items */
+.b-list {
+  margin: 18px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 480px;
+}
+.b-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  font-size: clamp(14px,1.7vw,17px);
+  color: rgba(237,224,208,0.75);
+  line-height: 1.85;
+}
+.b-item::before {
+  content: '';
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--rose);
+  flex-shrink: 0;
+  margin-top: 0.6em;
+  box-shadow: 0 0 6px rgba(192,88,106,0.5);
+}
+
+/* Scripture */
+.scripture {
+  margin: 24px 0;
+  padding: 24px 30px;
+  border-left: 2px solid;
+  opacity: 0;
+  transform: translateX(-14px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.scripture.in { opacity:1; transform:translateX(0); }
+.scripture.blood {
+  border-color: var(--blood);
+  background: rgba(139,26,46,0.08);
+}
+.scripture.gold {
+  border-color: var(--gold);
+  background: rgba(212,168,67,0.06);
+}
+.scripture.rose {
+  border-color: var(--rose);
+  background: rgba(192,88,106,0.06);
+}
+.scr-ref {
+  font-family: var(--cormorant);
+  font-weight: 400;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  display: block;
+  margin-bottom: 12px;
+}
+.scripture.blood .scr-ref { color: rgba(139,26,46,0.65); }
+.scripture.gold  .scr-ref { color: rgba(212,168,67,0.6); }
+.scripture.rose  .scr-ref { color: rgba(192,88,106,0.55); }
+.scripture p {
+  font-family: var(--cormorant);
+  font-size: clamp(16px,2.1vw,22px);
+  line-height: 1.85;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* ══════════════════════════
+   12 YEARS PASSAGE MARKER
+══════════════════════════ */
+.years-marker {
+  padding: clamp(50px,6vh,80px) clamp(40px,9vw,120px);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  border-bottom: 1px solid rgba(107,20,40,0.2);
+  opacity: 0;
+  transition: opacity 0.9s ease;
+}
+.years-marker.in { opacity:1; }
+
+.year-block {
+  width: 36px; height: 48px;
+  border: 1px solid rgba(139,26,46,0.25);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 5px;
+  position: relative;
+  transition: border-color 0.4s ease, background 0.4s ease;
+}
+.year-block.filled {
+  background: rgba(107,20,40,0.35);
+  border-color: rgba(139,26,46,0.5);
+}
+.year-block span {
+  font-family: var(--cormorant);
+  font-weight: 300;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: rgba(192,88,106,0.4);
+  transition: color 0.4s ease;
+}
+.year-block.filled span { color: rgba(192,88,106,0.7); }
+
+.years-caption {
+  width: 100%;
+  margin-top: 14px;
+  font-family: var(--cormorant);
+  font-weight: 300;
+  font-size: clamp(14px,1.8vw,18px);
+  letter-spacing: 0.15em;
+  color: rgba(192,88,106,0.4);
+}
+
+/* ══════════════════════════
+   CROWD SECTION
+══════════════════════════ */
+.crowd-zone {
+  padding: clamp(60px,8vh,100px) clamp(40px,9vw,120px);
+  border-bottom: 1px solid rgba(107,20,40,0.2);
+  position: relative;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.85s ease, transform 0.85s ease;
+}
+.crowd-zone.in { opacity:1; transform:translateY(0); }
+
+/* Crowd dots canvas */
+#crowdCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  pointer-events:none;
+  z-index: 0;
+}
+.crowd-content { position:relative; z-index:1; }
+
+/* ══════════════════════════
+   TOUCH MOMENT — THE CLIMAX
+══════════════════════════ */
+.touch-zone {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: clamp(80px,10vh,140px) clamp(40px,9vw,120px);
+  background: var(--bg);
+  opacity: 0;
+  transition: opacity 0.9s ease;
+}
+.touch-zone.in {
+  opacity:1;
+  animation: touchReveal 2.5s ease forwards 0.2s;
+}
+@keyframes touchReveal {
+  0%   { background: var(--bg); }
+  30%  { background: #3A0A14; }
+  55%  { background: #7A1A2A; }
+  70%  { background: #FFF0E0; }
+  85%  { background: #FFF8F0; }
+  100% { background: #FFFAF4; }
+}
+
+/* Radial burst */
+.touch-burst {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 0; height: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle,
+    rgba(255,248,230,0.98) 0%,
+    rgba(240,200,120,0.6) 40%,
+    rgba(212,168,67,0.2) 70%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 0;
+  transition: width 2.4s cubic-bezier(0.22,1,0.36,1),
+              height 2.4s cubic-bezier(0.22,1,0.36,1);
+}
+.touch-zone.in .touch-burst {
+  width: 250vw;
+  height: 250vw;
+}
+
+.touch-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 700px;
+}
+
+.touch-label {
+  font-family: var(--cormorant);
+  font-weight: 300;
+  font-size: clamp(10px,1.3vw,13px);
+  letter-spacing: 0.45em;
+  color: rgba(192,88,106,0.5);
+  margin-bottom: 24px;
+  display: block;
+}
+
+.touch-moment {
+  font-family: var(--cormorant);
+  font-weight: 700;
+  font-size: clamp(38px,7vw,96px);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--bg);
+  margin-bottom: 28px;
+  transition: color 2s ease 0.3s;
+}
+.touch-zone.in .touch-moment {
+  color: var(--wine);
+}
+
+.touch-verse {
+  font-family: var(--cormorant);
+  font-size: clamp(15px,2vw,21px);
+  line-height: 1.9;
+  font-weight: 500;
+  color: rgba(9,4,8,0);
+  transition: color 2s ease 0.8s;
+  max-width: 580px;
+  margin: 0 auto 16px;
+}
+.touch-zone.in .touch-verse {
+  color: rgba(80,20,30,0.85);
+}
+
+.touch-ref {
+  font-family: var(--cormorant);
+  font-weight: 300;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: rgba(9,4,8,0);
+  transition: color 2s ease 1.1s;
+}
+.touch-zone.in .touch-ref {
+  color: rgba(107,20,40,0.6);
+}
+
+/* ══════════════════════════
+   POST-HEALING ZONE (light)
+══════════════════════════ */
+.after-zone {
+  background: #FFFAF4;
+  border-top: 1px solid rgba(212,168,67,0.25);
+}
+
+.after-ch {
+  padding: clamp(60px,8vh,100px) clamp(40px,9vw,120px);
+  border-bottom: 1px solid rgba(212,168,67,0.15);
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.85s ease, transform 0.85s ease;
+}
+.after-ch.in { opacity:1; transform:translateY(0); }
+
+.after-ch .ch-num { color: rgba(107,20,40,0.4); }
+.after-ch .ch-num::after { background: rgba(107,20,40,0.15); }
+.after-ch .ch-title { color: #1A0A0A; }
+.after-ch .prose   { color: rgba(30,15,15,0.82); }
+.after-ch .thought { border-color: rgba(212,168,67,0.5); background: rgba(212,168,67,0.07); }
+.after-ch .thought p { color: rgba(80,30,30,0.9); }
+.after-ch .b-item  { color: rgba(30,15,15,0.7); }
+.after-ch .b-item::before { background: var(--gold); box-shadow: 0 0 6px rgba(212,168,67,0.4); }
+.after-ch .ch-ghost { color: rgba(212,168,67,0.06); }
+
+/* Jesus word in light zone */
+.jesus-word {
+  font-family: var(--cormorant);
+  font-weight: 700;
+  font-size: clamp(44px,8vw,110px);
+  line-height: 0.95;
+  color: var(--wine);
+  letter-spacing: 0.04em;
+  text-shadow: 0 2px 30px rgba(107,20,40,0.2);
+  display: block;
+  margin: 20px 0 14px;
+}
+
+.jesus-quote {
+  padding: clamp(60px,8vh,100px) clamp(40px,9vw,120px);
+  background: var(--wine);
+  opacity: 0;
+  transform: scale(0.97);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+  position: relative;
+  overflow: hidden;
+}
+.jesus-quote::before {
+  content: '"';
+  position: absolute;
+  left: 0.02em; top: -0.15em;
+  font-family: var(--cormorant);
+  font-weight: 700;
+  font-size: clamp(180px,28vw,420px);
+  color: rgba(255,255,255,0.04);
+  line-height: 1;
+  pointer-events: none;
+}
+.jesus-quote.in { opacity:1; transform:scale(1); }
+.jesus-quote .ch-num { color: rgba(255,255,255,0.3); }
+.jesus-quote .ch-num::after { background: rgba(255,255,255,0.12); }
+.jesus-quote .ch-title {
+  color: rgba(255,255,255,0.95);
+  font-size: clamp(24px,4vw,54px);
+}
+.jesus-quote .prose { color: rgba(255,240,220,0.85); max-width:620px; }
+.jesus-quote .thought {
+  border-color: rgba(255,255,255,0.35);
+  background: rgba(255,255,255,0.08);
+  max-width:620px;
+}
+.jesus-quote .thought p { color: rgba(255,245,230,0.95); }
+.jesus-quote .scripture.gold {
+  border-color: var(--gold);
+  background: rgba(212,168,67,0.08);
+}
+.jesus-quote .scripture p { color: #FFF8E8; }
+
+/* After: Jesus section restored */
+.after-spirit {
+  padding: clamp(60px,8vh,100px) clamp(40px,9vw,120px);
+  background: #FFFAF4;
+  border-bottom: 1px solid rgba(212,168,67,0.15);
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.85s ease, transform 0.85s ease;
+}
+.after-spirit.in { opacity:1; transform:translateY(0); }
+.after-spirit .prose { color: rgba(30,15,15,0.82); }
+.after-spirit .b-item { color: rgba(30,15,15,0.7); }
+.after-spirit .b-item::before { background: var(--blood); box-shadow: none; }
+
+/* Closing */
+.closing {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  padding: clamp(70px,10vw,140px);
+  background: #FFFAF4;
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+.closing::before {
+  content: '믿음';
+  position: absolute;
+  right: -0.05em; bottom: -0.12em;
+  font-family: var(--cormorant);
+  font-weight: 700;
+  font-size: clamp(150px,24vw,380px);
+  color: rgba(107,20,40,0.04);
+  line-height:1;
+  pointer-events:none;
+}
+.closing.in { opacity:1; transform:translateY(0); }
+.closing p {
+  font-size: clamp(17px,2.3vw,24px);
+  line-height: 2.2;
+  color: rgba(30,10,10,0.82);
+  font-weight: 400;
+  max-width: 640px;
+  margin-bottom: 1em;
+  position: relative;
+}
+.closing p.em {
+  color: var(--wine);
+  font-weight: 600;
+  font-family: var(--cormorant);
+  font-size: clamp(20px,3vw,32px);
+}
+</style>
+</head>
+<body>
+
+<!-- ── YEAR STRIP ── -->
+<div id="yearStrip">
+  <div class="year-pip" data-y="1"><div class="year-pip-fill"></div></div>
+  <div class="year-pip" data-y="2"><div class="year-pip-fill"></div></div>
+  <div class="year-pip" data-y="3"><div class="year-pip-fill"></div></div>
+  <div class="year-pip" data-y="4"><div class="year-pip-fill"></div></div>
+  <div class="year-pip" data-y="5"><div class="year-pip-fill"></div></div>
+  <div class="year-pip" data-y="6"><div class="year-pip-fill"></div></div>
+  <div class="year-pip" data-y="7"><div class="year-pip-fill"></div></div>
+  <div class="year-pip" data-y="8"><div class="year-pip-fill"></div></div>
+  <div class="year-pip" data-y="9"><div class="year-pip-fill"></div></div>
+  <div class="year-pip" data-y="10"><div class="year-pip-fill"></div></div>
+  <div class="year-pip" data-y="11"><div class="year-pip-fill"></div></div>
+  <div class="year-pip" data-y="12"><div class="year-pip-fill"></div></div>
+  <div id="yearCount">— 년</div>
+</div>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-ghost">12</div>
+  <div class="hero-tag">MARK 5 · 마가복음 5장 · A WOMAN'S STORY</div>
+  <h1 class="hero-h1">
+    12년 동안<br>
+    <span class="years">멈추지 않던 병</span>
+  </h1>
+  <span class="hero-sub">― 혈루증 여인의 이야기</span>
+</section>
+
+<!-- 1. 멈추지 않는 병 -->
+<div class="ch" id="ch1">
+  <div class="ch-ghost">1년</div>
+  <div class="ch-num">CHAPTER 01 · 멈추지 않는 병</div>
+  <div class="ch-title">멈추지 않는 <span class="accent">병</span></div>
+  <p class="prose">그 여인은 12년 동안 병을 앓고 있었습니다.</p>
+  <p class="prose">처음에는 단순한 출혈이었습니다.</p>
+  <div class="thought"><p>"곧 괜찮아지겠지."</p></div>
+  <p class="prose">그러나 며칠이 지나고 몇 달이 지나도 출혈은 멈추지 않았습니다.</p>
+  <p class="prose">몸은 점점 약해졌습니다.</p>
+  <div class="b-list">
+    <div class="b-item">어지러움</div>
+    <div class="b-item">피로</div>
+    <div class="b-item">창백한 얼굴</div>
+  </div>
+  <p class="prose">지속적인 출혈 때문에 몸은 심한 빈혈 상태가 되었을 것입니다.</p>
+  <p class="prose">하지만 그것보다 더 큰 문제가 있었습니다.</p>
+</div>
+
+<!-- 2. 사람들로부터 멀어지다 -->
+<div class="ch" id="ch2">
+  <div class="ch-ghost">3년</div>
+  <div class="ch-num">CHAPTER 02 · 고립</div>
+  <div class="ch-title">사람들로부터 <span class="accent">멀어지다</span></div>
+  <p class="prose">유대 율법에 따르면 이런 출혈이 있는 여인은 부정한 사람으로 여겨졌습니다.</p>
+  <p class="prose">레위기에는 이렇게 기록되어 있습니다.</p>
+</div>
+
+<div class="scripture blood" id="scr1">
+  <span class="scr-ref">레위기 15장 25절</span>
+  <p>"어떤 여자가 불결한 기간이 아닌데도 여러 날 동안 피가 유출되거나, 불결한 기간이 끝났는데도 피가 유출되면, 피가 유출되는 모든 날 동안 그 여자는 부정하다. 그 여자는 불결한 기간일 때처럼 부정하다."</p>
+</div>
+
+<div class="ch" style="border-top:none; padding-top:0;" id="ch2b">
+  <p class="prose">이 말은 단순한 종교 규정이 아니었습니다.</p>
+  <div class="b-list">
+    <div class="b-item">사람들과 접촉할 수 없었고</div>
+    <div class="b-item">공동체 생활을 할 수 없었고</div>
+    <div class="b-item">성전에 갈 수도 없었습니다</div>
+  </div>
+  <p class="prose">병은 몸만 아프게 하는 것이 아니었습니다.</p>
+  <p class="prose">그녀의 삶 전체를 고립시켰습니다.</p>
+</div>
+
+<!-- 12년 시각화 블록 -->
+<div class="years-marker" id="yMarker">
+  <div class="year-block filled" id="yb1"><span>1</span></div>
+  <div class="year-block filled" id="yb2"><span>2</span></div>
+  <div class="year-block filled" id="yb3"><span>3</span></div>
+  <div class="year-block filled" id="yb4"><span>4</span></div>
+  <div class="year-block filled" id="yb5"><span>5</span></div>
+  <div class="year-block filled" id="yb6"><span>6</span></div>
+  <div class="year-block filled" id="yb7"><span>7</span></div>
+  <div class="year-block filled" id="yb8"><span>8</span></div>
+  <div class="year-block filled" id="yb9"><span>9</span></div>
+  <div class="year-block filled" id="yb10"><span>10</span></div>
+  <div class="year-block filled" id="yb11"><span>11</span></div>
+  <div class="year-block filled" id="yb12"><span>12</span></div>
+  <div class="years-caption">12년 동안 멈추지 않은 출혈 — 4,380일</div>
+</div>
+
+<!-- 3. 마지막 희망까지 사라지다 -->
+<div class="ch" id="ch3">
+  <div class="ch-ghost">7년</div>
+  <div class="ch-num">CHAPTER 03 · 마지막 희망</div>
+  <div class="ch-title">마지막 희망까지 <span class="accent">사라지다</span></div>
+  <p class="prose">그녀는 포기하지 않았습니다. 성경은 이렇게 말합니다.</p>
+</div>
+
+<div class="scripture blood" id="scr2">
+  <span class="scr-ref">마가복음 5장 26절</span>
+  <p>"많은 의사를 찾아다니면서 많은 고통을 받았으며, 자기의 소유를 다 써 버렸지만 조금도 낫지 않고 오히려 악화되었다."</p>
+</div>
+
+<div class="ch" style="border-top:none; padding-top:0;" id="ch3b">
+  <p class="prose">병을 고치기 위해</p>
+  <div class="b-list">
+    <div class="b-item">의사를 찾아갔고</div>
+    <div class="b-item">약을 먹었고</div>
+    <div class="b-item">돈을 썼습니다</div>
+  </div>
+  <p class="prose">하지만 결과는 같았습니다. 병은 여전히 멈추지 않았습니다.</p>
+  <p class="prose">그리고 어느 순간 그녀는 깨달았을 것입니다.</p>
+  <div class="thought"><p>"이 병은… 평생 갈지도 모른다."</p></div>
+</div>
+
+<!-- 4. 한 사람의 소식 -->
+<div class="ch" id="ch4">
+  <div class="ch-ghost">12년</div>
+  <div class="ch-num">CHAPTER 04 · 소문</div>
+  <div class="ch-title">한 사람의 <span class="accent">소식</span></div>
+  <p class="prose">어느 날 그녀는 한 사람의 이야기를 듣게 됩니다.</p>
+  <p class="prose">사람들이 말했습니다.</p>
+  <div class="thought"><p>"병든 사람을 고치는 분이 있다."</p></div>
+  <div class="thought"><p>"눈먼 사람이 보게 되었대."</p></div>
+  <div class="thought"><p>"중풍병자가 걸어 나갔대."</p></div>
+  <p class="prose">그 이름은 예수였습니다.</p>
+</div>
+
+<!-- 5. 군중 속에서 -->
+<div class="crowd-zone" id="ch5">
+  <canvas id="crowdCanvas"></canvas>
+  <div class="crowd-content">
+    <div class="ch-num">CHAPTER 05 · 군중 속에서</div>
+    <div class="ch-title">군중 속에서</div>
+    <p class="prose">어느 날 예수님이 마을로 들어오셨습니다.</p>
+    <p class="prose">수많은 사람들이 몰려들었습니다.</p>
+    <p class="prose">그 여인도 그 사이에 있었습니다.</p>
+    <p class="prose">하지만 그녀는 사람들 앞에 나설 수 없었습니다. 왜냐하면 율법에 따르면 그녀는 부정한 사람이었기 때문입니다.</p>
+    <p class="prose">그래서 그녀는 조용히 생각했습니다.</p>
+    <div class="thought"><p>"내가 그의 옷에만 손을 대어도 나으리라."</p></div>
+  </div>
+</div>
+
+<!-- 6. 그 순간 — TOUCH CLIMAX -->
+<div class="touch-zone" id="ch6">
+  <div class="touch-burst"></div>
+  <div class="touch-content">
+    <span class="touch-label">CHAPTER 06 · 그 순간 · THE MOMENT OF TOUCH</span>
+    <div class="touch-moment">그리고 만졌습니다.</div>
+    <p class="touch-verse">"그러자 즉시 출혈의 근원이 마르니, 그 여인은 병이 나은 것을 몸으로 느껴 알았다."</p>
+    <span class="touch-ref">마가복음 5장 29절</span>
+  </div>
+</div>
+
+<!-- 7~8. POST-HEALING (light zone) -->
+<div class="after-zone">
+
+  <div class="after-ch" id="ch7">
+    <div class="ch-ghost">해방</div>
+    <div class="ch-num">CHAPTER 07 · 예수님의 질문</div>
+    <div class="ch-title">예수님의 질문</div>
+    <p class="prose">그때 예수님이 갑자기 멈추셨습니다. 그리고 말씀하셨습니다.</p>
+    <div class="thought"><p>"누가 나의 겉옷을 만지셨습니까?"</p></div>
+    <p class="prose">제자들은 놀라 말했습니다.</p>
+    <div class="thought"><p>"무리가 에워싸 미는 것을 보시면서도 누가 만졌느냐고 하십니까?"</p></div>
+    <p class="prose">그러나 예수님은 아셨습니다. 누군가가 믿음으로 손을 댔다는 것을.</p>
+  </div>
+
+  <div class="after-ch" id="ch8">
+    <div class="ch-ghost">새로운</div>
+    <div class="ch-num">CHAPTER 08 · 떨며 나온 여인</div>
+    <div class="ch-title">떨며 나온 여인</div>
+    <p class="prose">그 여인은 두려워 떨며 예수님 앞에 나왔습니다. 그리고 모든 일을 말했습니다.</p>
+    <p class="prose">그때 예수님은 그녀를 바라보며 말씀하셨습니다.</p>
+  </div>
+
+  <div class="jesus-quote" id="jQuote">
+    <div class="ch-num">MARK 5:34 · 마가복음 5장 34절</div>
+    <div class="ch-title">"여인이여, 그대의 믿음이 그대를 낫게 하였으니, 평안히 가십시오. 그대의 병고에서 벗어나 건강해지십시오."</div>
+    <p class="prose" style="margin-top:24px;">12년 동안 병과 고립 속에 살던 여인이 그 순간 완전히 새로운 삶을 얻게 되었습니다.</p>
+  </div>
+
+  <!-- 9. 이 이야기가 말하는 것 -->
+  <div class="after-spirit" id="ch9">
+    <div class="ch-num">CHAPTER 09 · 이 이야기가 말하는 것</div>
+    <div class="ch-title" style="color:#1A0A0A; font-family:var(--cormorant); font-weight:700; font-size:clamp(28px,4.5vw,60px); line-height:1.15; letter-spacing:-0.01em; margin-bottom:28px;">이 이야기가 <span style="color:var(--wine);">말하는 것</span></div>
+    <p class="prose">이 이야기는 단순한 병 치료 이야기가 아닙니다.</p>
+    <p class="prose">혈루증은</p>
+    <div class="b-list">
+      <div class="b-item">멈추지 않는 출혈</div>
+      <div class="b-item">점점 약해지는 몸</div>
+      <div class="b-item">인간의 방법으로 해결되지 않는 병</div>
+    </div>
+    <p class="prose">이었습니다.</p>
+    <p class="prose">어떤 사람의 삶도 비슷할 수 있습니다.</p>
+    <div class="b-list">
+      <div class="b-item">멈추지 않는 문제</div>
+      <div class="b-item">해결되지 않는 고통</div>
+      <div class="b-item">아무리 노력해도 해결되지 않는 마음의 짐</div>
+    </div>
+    <p class="prose">그러나 이 여인이 깨달은 것이 있습니다.</p>
+    <p class="prose" style="color:var(--wine); font-family:var(--cormorant); font-weight:700; font-size:clamp(20px,2.8vw,34px); letter-spacing:-0.01em;">예수님께 나아가는 것.</p>
+  </div>
+
+</div><!-- after-zone -->
+
+<!-- CLOSING / 마지막 말씀 -->
+<div class="after-ch" id="lastScr" style="background:#FFFAF4; border-bottom:1px solid rgba(212,168,67,0.15);">
+  <div class="ch-num" style="color:rgba(107,20,40,0.4);">마지막 말씀</div>
+  <div class="ch-title" style="color:#1A0A0A; font-family:var(--cormorant); font-weight:700; font-size:clamp(28px,4.5vw,60px); line-height:1.15; letter-spacing:-0.01em; margin-bottom:28px;">마지막 말씀</div>
+  <p class="prose">예수님은 말씀하셨습니다.</p>
+</div>
+
+<div class="scripture gold" id="scrFinal" style="margin: 0 clamp(40px,9vw,120px) 0;">
+  <span class="scr-ref">마태복음 11장 28절</span>
+  <p>"수고하며 짐을 진 사람들이여, 다 나에게로 오십시오. 내가 여러분에게 안식을 줄 것입니다."</p>
+</div>
+
+<div class="closing" id="b-closing">
+  <div>
+    <p>12년 동안 멈추지 않던 병도 예수님 앞에서 멈추었습니다.</p>
+    <p>오늘도 마찬가지입니다.</p>
+    <p class="em">예수 그리스도는 사람의 몸뿐 아니라 삶을 새롭게 하시는 분입니다. 지금 이순간 당신도 주님의 도움을 받으실 수 있습니다.</p>
+  </div>
+</div>
+
+<script>
+/* ── YEAR STRIP SCROLL ─────────────────────── */
+const pips = document.querySelectorAll('.year-pip');
+const healSect = document.getElementById('ch6');
+
+function updateYears() {
+  const sp = window.scrollY / Math.max(1,
+    document.documentElement.scrollHeight - window.innerHeight);
+
+  // Years fill: 0%→45% of scroll fills years 1-12
+  const ratio = Math.min(1, sp / 0.45);
+  const litCount = Math.floor(ratio * 12);
+  const isHealed = sp > 0.52;
+
+  pips.forEach((pip, i) => {
+    pip.classList.remove('lit','heal');
+    if (i < litCount) {
+      pip.classList.add(isHealed ? 'heal' : 'lit');
+    }
+  });
+
+  const yearDisp = document.getElementById('yearCount');
+  if (isHealed) {
+    yearDisp.textContent = '치유되다';
+    yearDisp.style.color = 'rgba(212,168,67,0.7)';
+  } else if (litCount > 0) {
+    yearDisp.textContent = litCount + '년째';
+    yearDisp.style.color = 'rgba(192,88,106,0.6)';
+  } else {
+    yearDisp.textContent = '— 년';
+    yearDisp.style.color = 'rgba(192,88,106,0.35)';
+  }
+}
+
+window.addEventListener('scroll', updateYears, { passive:true });
+updateYears();
+
+/* ── CROWD CANVAS ──────────────────────────── */
+const cc = document.getElementById('crowdCanvas');
+const cx = cc.getContext('2d');
+let cW = 0, cH = 0;
+const crowdZone = document.getElementById('ch5');
+
+function resizeCrowd() {
+  cW = cc.width  = crowdZone.offsetWidth;
+  cH = cc.height = crowdZone.offsetHeight;
+}
+
+function drawCrowd() {
+  if (!cW || !cH) return;
+  cx.clearRect(0, 0, cW, cH);
+  const cols = Math.floor(cW / 22);
+  const rows = Math.floor(cH / 22);
+  const centerX = cW * 0.42;
+  const centerY = cH * 0.62;
+
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const x = c * 22 + 11;
+      const y = r * 22 + 11;
+      const dx = x - centerX;
+      const dy = y - centerY;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      const gap = 55;
+
+      if (dist < gap) continue; // parted path for woman
+
+      const a = 0.04 + Math.random() * 0.06;
+      cx.beginPath();
+      cx.arc(x, y, 2.5, 0, Math.PI*2);
+      cx.fillStyle = `rgba(192,88,106,${a})`;
+      cx.fill();
+    }
+  }
+}
+
+new ResizeObserver(() => { resizeCrowd(); drawCrowd(); }).observe(crowdZone);
+resizeCrowd();
+drawCrowd();
+
+/* ── INTERSECTION OBSERVER ─────────────────── */
+document.querySelectorAll(
+  '.ch,.scripture,.years-marker,.crowd-zone,.touch-zone,.after-ch,.after-spirit,.jesus-quote,.closing'
+).forEach(el => {
+  new IntersectionObserver(
+    entries => entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('in'); }),
+    { threshold:0.06, rootMargin:'0px 0px -44px 0px' }
+  ).observe(el);
+});
+
+// scripture in the after zone
+document.querySelectorAll('.scripture').forEach(el => {
+  new IntersectionObserver(
+    entries => entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('in'); }),
+    { threshold:0.06 }
+  ).observe(el);
+});
+</script>
+</body>
+</html>

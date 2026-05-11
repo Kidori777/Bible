@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>절름발이 어머니</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;900&family=Nanum+Myeongjo:wght@400;700;800&family=Cormorant+Garamond:wght@300;400;600&family=Nanum+Gothic+Coding&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --paper: #f2ede4;
+  --paper2: #ede5d8;
+  --ink: #1a1410;
+  --ink2: #2d2520;
+  --ink3: #4a3f35;
+  --ash: #8a7d72;
+  --ash2: #b5a898;
+  --red: #8b2020;
+  --red2: #6b1515;
+  --gold: #a07030;
+  --gold2: #c49040;
+  --letter-bg: #f8f3e8;
+}
+
+html{scroll-behavior:smooth}
+
+body{
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Nanum Myeongjo', 'Noto Serif KR', serif;
+  overflow-x: hidden;
+}
+
+/* ── 한지 텍스처 캔버스 ── */
+#texture{
+  position:fixed;top:0;left:0;
+  width:100%;height:100%;
+  z-index:0;pointer-events:none;
+  opacity:0.45;
+}
+
+/* ── 발자국 캔버스 (사이드) ── */
+#footstep-canvas{
+  position:fixed;
+  left:0;top:0;
+  width:100%;height:100%;
+  z-index:1;pointer-events:none;
+}
+
+/* ── 스크롤 진행 바 ── */
+#progress{
+  position:fixed;
+  right:0;top:0;bottom:0;
+  width:3px;
+  background:rgba(26,20,16,0.08);
+  z-index:100;
+}
+#progress-bar{
+  width:100%;
+  background:linear-gradient(to bottom,var(--gold),var(--red));
+  height:0%;
+  transition:height 0.1s;
+}
+
+/* ── 메인 레이아웃 ── */
+main{
+  position:relative;
+  z-index:2;
+  max-width:680px;
+  margin:0 auto;
+  padding:0 48px 0 80px;
+}
+
+/* ── 오프닝 ── */
+.opening{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:80px 0 60px;
+  position:relative;
+}
+
+/* 세로 제목 */
+.title-vertical{
+  position:absolute;
+  left:-52px;
+  top:50%;
+  transform:translateY(-50%);
+  writing-mode:vertical-rl;
+  font-family:'Noto Serif KR',serif;
+  font-size:11px;
+  letter-spacing:0.5em;
+  color:var(--ash2);
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+
+.title-main{
+  font-family:'Nanum Myeongjo',serif;
+  font-size:clamp(48px,9vw,96px);
+  font-weight:800;
+  color:var(--ink);
+  line-height:0.92;
+  letter-spacing:-0.02em;
+  position:relative;
+}
+
+.title-main .underline-stroke{
+  position:relative;
+  display:inline-block;
+}
+.title-main .underline-stroke::after{
+  content:'';
+  position:absolute;
+  left:0;bottom:-4px;right:0;
+  height:2px;
+  background:var(--red);
+}
+
+.title-en{
+  font-family:'Cormorant Garamond',serif;
+  font-size:13px;
+  letter-spacing:0.3em;
+  color:var(--ash);
+  margin-top:20px;
+  text-transform:uppercase;
+}
+
+.opening-deco{
+  width:40px;height:1px;
+  background:var(--ink);
+  margin:28px 0;
+  opacity:0.3;
+}
+
+/* ── 섹션 공통 ── */
+.section{
+  padding:48px 0;
+  position:relative;
+  opacity:0;
+  transform:translateY(16px);
+  transition:opacity 0.9s ease, transform 0.9s ease;
+}
+.section.visible{opacity:1;transform:translateY(0)}
+
+/* ── 단락 ── */
+p.body{
+  font-family:'Nanum Myeongjo',serif;
+  font-size:16.5px;
+  line-height:2.15;
+  color:var(--ink2);
+  word-break:keep-all;
+  margin-bottom:1em;
+}
+
+p.body-sm{
+  font-family:'Noto Serif KR',serif;
+  font-size:14.5px;
+  line-height:2.1;
+  color:var(--ink3);
+  word-break:keep-all;
+  margin-bottom:0.85em;
+}
+
+/* ── 장면 레이블 ── */
+.scene-num{
+  font-family:'Cormorant Garamond',serif;
+  font-size:11px;
+  letter-spacing:0.45em;
+  text-transform:uppercase;
+  color:var(--ash2);
+  margin-bottom:12px;
+  display:block;
+}
+
+/* ── 두 칼럼 분기 (어린 시절) ── */
+.split-view{
+  display:grid;
+  grid-template-columns:1fr 2px 1fr;
+  gap:0 0;
+  margin:32px 0;
+  position:relative;
+}
+.split-left{padding-right:24px;}
+.split-right{padding-left:24px;}
+.split-divider{
+  background:linear-gradient(to bottom,transparent,var(--ash2),transparent);
+  width:1px;
+  margin:0 auto;
+}
+.split-label{
+  font-family:'Cormorant Garamond',serif;
+  font-size:10px;
+  letter-spacing:0.35em;
+  text-transform:uppercase;
+  color:var(--ash2);
+  margin-bottom:10px;
+  display:block;
+}
+.split-left p, .split-right p{
+  font-family:'Nanum Myeongjo',serif;
+  font-size:14px;
+  line-height:2;
+  color:var(--ink3);
+  word-break:keep-all;
+}
+
+/* ── 운동회 장면 ── */
+.field-day{
+  background:rgba(26,20,16,0.04);
+  border-top:1px solid rgba(26,20,16,0.12);
+  border-bottom:1px solid rgba(26,20,16,0.12);
+  padding:32px 28px;
+  margin:32px 0;
+  position:relative;
+}
+.field-day::before{
+  content:'運動會';
+  position:absolute;
+  right:20px;top:16px;
+  font-family:'Noto Serif KR',serif;
+  font-size:10px;
+  letter-spacing:0.3em;
+  color:rgba(26,20,16,0.1);
+  font-weight:900;
+}
+
+/* ── 조롱 대화 ── */
+.taunt-block{
+  margin:24px 0;
+  padding:16px 0 16px 20px;
+  border-left:3px solid var(--red);
+}
+.taunt-block p{
+  font-family:'Nanum Myeongjo',serif;
+  font-size:15.5px;
+  line-height:2;
+  color:var(--red2);
+  word-break:keep-all;
+}
+
+/* ── 내면 상태 박스 ── */
+.inner-box{
+  border:1px solid rgba(26,20,16,0.15);
+  padding:24px 28px;
+  margin:28px 0;
+  position:relative;
+  background:rgba(242,237,228,0.5);
+}
+.inner-box::before{
+  content:'心';
+  position:absolute;
+  top:-14px;left:20px;
+  background:var(--paper);
+  padding:0 8px;
+  font-family:'Noto Serif KR',serif;
+  font-size:11px;
+  color:var(--ash2);
+  letter-spacing:0.2em;
+}
+.inner-box p{
+  font-family:'Nanum Myeongjo',serif;
+  font-size:16px;
+  line-height:2;
+  color:var(--ink3);
+  word-break:keep-all;
+}
+
+/* ── 성공 상승 섹션 ── */
+.rise-section{
+  position:relative;
+  padding:20px 0;
+}
+.rise-list{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  margin:20px 0 20px 0;
+}
+.rise-item{
+  display:flex;
+  align-items:center;
+  gap:16px;
+}
+.rise-dot{
+  width:6px;height:6px;
+  border-radius:50%;
+  background:var(--gold);
+  flex-shrink:0;
+}
+.rise-item p{
+  font-family:'Noto Serif KR',serif;
+  font-size:15px;
+  line-height:1.8;
+  color:var(--ink3);
+}
+
+/* ── 문 앞 장면 — 핵심 충돌 ── */
+.door-scene{
+  margin:48px 0;
+  position:relative;
+}
+
+.door-frame{
+  border:1px solid var(--ash2);
+  padding:40px 36px;
+  position:relative;
+  background: var(--paper2);
+}
+.door-frame::before{
+  content:'門';
+  position:absolute;
+  top:-14px;left:50%;
+  transform:translateX(-50%);
+  background:var(--paper);
+  padding:0 12px;
+  font-family:'Noto Serif KR',serif;
+  font-size:11px;
+  color:var(--ash);
+  letter-spacing:0.2em;
+}
+
+.denial-words{
+  font-family:'Nanum Myeongjo',serif;
+  font-size:22px;
+  font-weight:700;
+  color:var(--red2);
+  line-height:1.8;
+  text-align:center;
+  margin:20px 0;
+  letter-spacing:0.04em;
+}
+
+.mother-reply{
+  background:rgba(255,255,255,0.5);
+  border-left:2px solid var(--ash2);
+  padding:12px 0 12px 20px;
+  margin:20px 0;
+}
+.mother-reply p{
+  font-family:'Nanum Myeongjo',serif;
+  font-size:15px;
+  line-height:2;
+  color:var(--ash);
+  word-break:keep-all;
+}
+
+/* ── 뒷모습 시각화 ── */
+.back-view{
+  text-align:center;
+  padding:32px 0;
+  position:relative;
+}
+.back-view svg{
+  opacity:0.6;
+}
+.back-view p{
+  font-family:'Cormorant Garamond',serif;
+  font-size:14px;
+  letter-spacing:0.15em;
+  color:var(--ash);
+  margin-top:16px;
+}
+
+/* ── 진실 섹션 ── */
+.truth-section{
+  background:rgba(26,20,16,0.05);
+  padding:40px 36px;
+  margin:40px 0;
+  border-top:2px solid var(--ink);
+  border-bottom:2px solid var(--ink);
+}
+.truth-section p{
+  font-family:'Nanum Myeongjo',serif;
+  font-size:16px;
+  line-height:2.15;
+  color:var(--ink);
+  word-break:keep-all;
+  margin-bottom:0.9em;
+}
+.truth-highlight{
+  font-weight:700;
+  color:var(--ink);
+}
+
+/* ── 편지 ── */
+.letter-wrapper{
+  margin:48px 0;
+  position:relative;
+}
+
+/* 편지지 효과 */
+.letter{
+  background:var(--letter-bg);
+  padding:52px 48px 48px;
+  position:relative;
+  box-shadow:
+    0 1px 0 rgba(0,0,0,0.06),
+    0 4px 12px rgba(0,0,0,0.08),
+    inset 0 0 0 1px rgba(180,160,130,0.3);
+}
+
+/* 편지지 줄 */
+.letter::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;bottom:0;
+  background-image:repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 39px,
+    rgba(160,112,48,0.1) 39px,
+    rgba(160,112,48,0.1) 40px
+  );
+  pointer-events:none;
+}
+
+/* 접힌 흔적 */
+.letter::after{
+  content:'';
+  position:absolute;
+  left:0;right:0;
+  top:33.3%;
+  height:1px;
+  background:rgba(160,112,48,0.15);
+  pointer-events:none;
+}
+
+.letter-fold2{
+  position:absolute;
+  left:0;right:0;
+  top:66.6%;
+  height:1px;
+  background:rgba(160,112,48,0.15);
+  pointer-events:none;
+  z-index:1;
+}
+
+.letter-header{
+  font-family:'Noto Serif KR',serif;
+  font-size:11px;
+  letter-spacing:0.3em;
+  color:var(--ash2);
+  margin-bottom:32px;
+  text-transform:uppercase;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.letter-header::after{
+  content:'';
+  flex:1;
+  height:1px;
+  background:linear-gradient(to right,var(--ash2),transparent);
+  opacity:0.4;
+}
+
+.letter p{
+  font-family:'Nanum Myeongjo',serif;
+  font-size:17px;
+  line-height:2.5;
+  color:var(--ink);
+  word-break:keep-all;
+  position:relative;
+  z-index:2;
+  margin-bottom:0.3em;
+}
+
+.letter p.emphasis{
+  font-weight:700;
+  font-size:18px;
+}
+
+/* ── 무너짐 ── */
+.collapse-section{
+  padding:32px 0;
+  text-align:center;
+  position:relative;
+}
+.collapse-section p.big{
+  font-family:'Nanum Myeongjo',serif;
+  font-size:clamp(28px,5vw,48px);
+  font-weight:800;
+  color:var(--ink);
+  line-height:1.4;
+  letter-spacing:-0.01em;
+  word-break:keep-all;
+}
+.collapse-section p.small{
+  font-family:'Noto Serif KR',serif;
+  font-size:14px;
+  line-height:2;
+  color:var(--ash);
+  margin-top:16px;
+  word-break:keep-all;
+}
+
+/* ── 고백 장면 ── */
+.confession{
+  padding:60px 0;
+  text-align:center;
+  position:relative;
+}
+.confession-words{
+  font-family:'Nanum Myeongjo',serif;
+  font-size:clamp(32px,6vw,58px);
+  font-weight:800;
+  color:var(--red2);
+  line-height:1.5;
+  letter-spacing:0.05em;
+  margin:20px 0;
+  word-break:keep-all;
+}
+.confession-sub{
+  font-family:'Noto Serif KR',serif;
+  font-size:13px;
+  letter-spacing:0.2em;
+  color:var(--ash2);
+  margin-bottom:4px;
+}
+.confession-late{
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px;
+  letter-spacing:0.1em;
+  color:var(--ash);
+  margin-top:20px;
+}
+
+/* ── 구분 규칙선 ── */
+.rule-full{
+  height:1px;
+  background:linear-gradient(to right,transparent,var(--ink),transparent);
+  opacity:0.12;
+  margin:48px 0;
+}
+.rule-center{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  margin:48px 0;
+}
+.rule-center::before,.rule-center::after{
+  content:'';flex:1;height:1px;
+  background:linear-gradient(to right,transparent,var(--ash2));
+  opacity:0.5;
+}
+.rule-center::after{
+  background:linear-gradient(to left,transparent,var(--ash2));
+}
+.rule-center span{
+  font-family:'Cormorant Garamond',serif;
+  font-size:14px;
+  color:var(--ash2);
+  letter-spacing:0.1em;
+}
+
+/* ── 성경 마무리 ── */
+.scripture-section{
+  padding:48px 0 60px;
+}
+.scripture-ref{
+  font-family:'Cormorant Garamond',serif;
+  font-size:11px;
+  letter-spacing:0.45em;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:20px;
+  display:block;
+}
+.scripture-text{
+  font-family:'Nanum Myeongjo',serif;
+  font-size:clamp(16px,2.8vw,22px);
+  font-weight:700;
+  line-height:2;
+  color:var(--ink);
+  word-break:keep-all;
+  margin-bottom:32px;
+}
+.scripture-body{
+  font-family:'Noto Serif KR',serif;
+  font-size:15px;
+  line-height:2.2;
+  color:var(--ink3);
+  word-break:keep-all;
+  margin-bottom:1em;
+}
+
+.cross-final{
+  text-align:center;
+  padding:40px 0;
+}
+.cross-final p{
+  font-family:'Nanum Myeongjo',serif;
+  font-size:clamp(24px,4.5vw,42px);
+  font-weight:800;
+  color:var(--red2);
+  line-height:1.8;
+  letter-spacing:0.04em;
+  word-break:keep-all;
+}
+
+/* ── 푸터 ── */
+footer{
+  text-align:center;
+  padding:32px 0 64px;
+  font-family:'Cormorant Garamond',serif;
+  font-size:11px;
+  letter-spacing:0.35em;
+  color:var(--ash2);
+  text-transform:uppercase;
+  border-top:1px solid rgba(26,20,16,0.08);
+}
+
+/* ── 스크롤바 ── */
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(26,20,16,0.2);border-radius:2px}
+</style>
+</head>
+<body>
+
+<canvas id="texture"></canvas>
+<canvas id="footstep-canvas"></canvas>
+
+<div id="progress"><div id="progress-bar"></div></div>
+
+<main>
+
+<!-- ── 오프닝 ── -->
+<div class="opening section visible">
+  <div class="title-vertical">A Mother's Footsteps</div>
+  <div class="title-main">
+    <span class="underline-stroke">절름발이</span><br>어머니
+  </div>
+  <div class="title-en">The Limping Mother</div>
+  <div class="opening-deco"></div>
+  <p class="body-sm" style="max-width:420px;">내 어머니는 한쪽 다리를 절룩거리는 절름발이였습니다.<br>어머니는 시장에서 작은 장사를 하셨습니다.<br>산에 올라 나물을 캐고, 약초를 캐고,<br>그렇게 하루 종일 고생해서 번 돈으로 저를 키우셨습니다.</p>
+</div>
+
+<!-- ── 부끄러움 ── -->
+<div class="section">
+  <span class="scene-num">I — 부끄러움</span>
+  <div class="inner-box">
+    <p>하지만 어린 저는 그런 어머니가 너무 부끄러웠습니다.<br>남루한 옷차림… 절뚝거리는 걸음…<br>친구들이 보면 창피할 것 같았습니다.</p>
+  </div>
+</div>
+
+<!-- ── 운동회 ── -->
+<div class="section">
+  <span class="scene-num">II — 운동회</span>
+  <div class="field-day">
+    <p class="body-sm">어느 날 초등학교 운동회가 열렸습니다.<br>아이들의 부모님들이 다들 학교에 찾아왔습니다.<br>예쁜 옷을 입고, 멀쩡한 모습으로 말입니다.</p>
+    <p class="body-sm">그때였습니다. 운동장 한쪽에서<br>누군가 절뚝거리며 걸어오는 모습이 보였습니다.<br>그 사람은 바로… 내 어머니였습니다.</p>
+    <p class="body-sm">어머니는 숨을 고르며 저를 찾고 계셨습니다.</p>
+    <div class="inner-box" style="margin:20px 0 0;">
+      <p>'엄마가 왜 왔지…?'<br>아이들이 볼까 봐 너무 창피했습니다.<br>그래서 저는 어머니에게 가지 않고<br>그 자리를 뛰쳐나가 버렸습니다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── 놀림 & 화 ── -->
+<div class="section">
+  <span class="scene-num">III — 상처를 돌려주다</span>
+  <p class="body-sm">다음 날 학교에서였습니다.<br>아이들이 저를 보며 웃기 시작했습니다.</p>
+  <div class="taunt-block">
+    <p>"야! 너희 엄마 절름발이라며?"<br>"어제 봤어! 절뚝절뚝 걷던데!"</p>
+  </div>
+  <p class="body-sm">그날 집에 돌아와 저는 어머니에게 화를 냈습니다.</p>
+  <div class="taunt-block">
+    <p>"엄마! 왜 다리를 그렇게 절뚝거려?"<br>"엄마 때문에 창피해 죽겠어!"</p>
+  </div>
+
+  <div class="split-view" style="margin-top:28px;">
+    <div class="split-left">
+      <span class="split-label">아들</span>
+      <p>어머니는 잠시 저를 바라보더니 조용히 웃으셨습니다. 그리고는 아무 말도 하지 않으셨습니다.</p>
+      <p style="margin-top:10px;color:var(--ash);">저는 속이 시원했습니다.</p>
+    </div>
+    <div class="split-divider"></div>
+    <div class="split-right">
+      <span class="split-label">어머니 — 그날 밤</span>
+      <p>목이 말라 물을 마시러 부엌에 갔습니다. 구석에서 누군가 흐느끼는 소리가 들렸습니다.</p>
+      <p style="margin-top:10px;font-weight:700;">어머니였습니다.<br>소리를 죽이며 혼자 울고 계셨습니다.</p>
+    </div>
+  </div>
+
+  <div class="inner-box" style="margin-top:28px;">
+    <p>하지만 저는 그 모습을 못 본 척하고 돌아섰습니다.<br>괜히 마음이 불편했기 때문입니다.</p>
+    <p style="margin-top:12px;">'이 가난한 집이 싫다.'<br>'절름발이 엄마도 싫다.'</p>
+  </div>
+</div>
+
+<!-- ── 상승 ── -->
+<div class="section">
+  <span class="scene-num">IV — 상승</span>
+  <p class="body-sm">저는 악착같이 공부했습니다. 그리고 결국 서울의 명문 의과대학에 합격했습니다.</p>
+  <div class="rise-section">
+    <div class="rise-list">
+      <div class="rise-item"><div class="rise-dot"></div><p>좋은 학교 · 좋은 친구들</p></div>
+      <div class="rise-item"><div class="rise-dot"></div><p>사랑하는 여자를 만나 결혼했습니다</p></div>
+      <div class="rise-item"><div class="rise-dot"></div><p>장인어른이 집도, 병원까지 차려 주셨습니다</p></div>
+      <div class="rise-item"><div class="rise-dot"></div><p>아름다운 아내, 예쁜 아이</p></div>
+    </div>
+    <p class="body-sm">저는 세상 누구보다 행복했습니다.<br>그리고 무엇보다 좋았던 것은<br><strong>어머니 생각이 나지 않는 삶이었습니다.</strong></p>
+  </div>
+</div>
+
+<!-- ── 문 앞 ── -->
+<div class="section">
+  <span class="scene-num">V — 대문 앞</span>
+  <p class="body-sm">어느 날이었습니다.<br>집 앞에서 아내가 누군가와 실랑이를 하고 있었습니다.</p>
+  <p class="body-sm">대문 앞에는 남루한 옷을 입은 한 늙은 할머니가 서 있었습니다.<br>그 할머니는 다리를 절뚝거리고 있었습니다.</p>
+  <p class="body-sm">저는 순간 얼어붙었습니다. 어머니였습니다.</p>
+
+  <div class="door-scene">
+    <div class="door-frame">
+      <p class="body-sm">어머니는 조심스럽게 말했습니다.</p>
+      <div class="mother-reply">
+        <p>"여기가… 내 아들이 사는…"</p>
+      </div>
+      <p class="body-sm">아내가 물었습니다.</p>
+      <div class="mother-reply">
+        <p>"여보, 누구야?"</p>
+      </div>
+      <p class="body-sm" style="margin-top:16px;">그 순간 저는 거짓말을 떠올렸습니다.<br>결혼할 때 저는 아내에게 이렇게 말했었습니다.</p>
+      <div class="inner-box" style="margin:16px 0;">
+        <p>"어머니는 돌아가셨다."</p>
+      </div>
+      <p class="body-sm">그래서 저는 어머니를 보며 말했습니다.</p>
+      <div class="denial-words">"누구세요?"</div>
+      <div class="taunt-block">
+        <p>"왜 남의 집에 와서 난리예요?"<br>"아이까지 울잖아요!"</p>
+      </div>
+      <div class="mother-reply" style="margin-top:16px;">
+        <p>"죄송합니다… 제가 집을 잘못 찾아왔나 봅니다."</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="back-view">
+    <svg width="80" height="120" viewBox="0 0 80 120" xmlns="http://www.w3.org/2000/svg">
+      <!-- 어머니 뒷모습 실루엣 -->
+      <ellipse cx="40" cy="18" rx="12" ry="14" fill="var(--ash2)"/>
+      <path d="M28 32 Q40 28 52 32 L58 90 Q50 92 40 92 Q30 92 22 90 Z" fill="var(--ash2)"/>
+      <!-- 절뚝이는 다리 -->
+      <line x1="35" y1="90" x2="28" y2="118" stroke="var(--ash2)" stroke-width="5" stroke-linecap="round"/>
+      <line x1="45" y1="90" x2="50" y2="112" stroke="var(--ash2)" stroke-width="5" stroke-linecap="round"/>
+    </svg>
+    <p>그 뒷모습은 너무 쓸쓸하고 초라해 보였습니다.</p>
+  </div>
+
+  <div class="inner-box">
+    <p>하지만 저는 생각했습니다.<br>다행이다.<br>이제 다시는 어머니가 나타나지 않을 것이라고.</p>
+  </div>
+</div>
+
+<!-- ── 부고 & 진실 ── -->
+<div class="section">
+  <span class="scene-num">VI — 진실</span>
+  <p class="body-sm">몇 년 후였습니다.<br>고향의 선생님에게 연락이 왔습니다.<br>어머니가 돌아가셨다는 소식이었습니다.</p>
+  <p class="body-sm">급히 고향으로 내려갔지만<br>이미 장례는 끝난 뒤였습니다.</p>
+  <p class="body-sm">선생님은 저에게 보따리 하나를 건네셨습니다.</p>
+
+  <div class="truth-section">
+    <p>"이건 네 어머니가 남긴 것이다."</p>
+    <p style="margin-top:16px;">"사실… 너는 그분의 친아들이 아니다."</p>
+    <p class="truth-highlight" style="margin-top:16px;">"너는 길에 버려진 아이였다.<br>네 부모님이 너를 주워다 키운 거야."</p>
+    <p style="margin-top:16px;">어느 날 공사장에서 어린 제가 위험한 곳에서 놀고 있었습니다.<br>공사 자재가 무너져 내리기 시작했습니다.</p>
+    <p>어머니가 저를 구하려고 달려들었습니다.<br>그 모습을 본 아버지가 저와 어머니를 밀어냈습니다.</p>
+    <p class="truth-highlight">그리고… 아버지는 그 자리에서 돌아가셨습니다.</p>
+    <p>어머니는 저를 감싸 안은 채 다리를 크게 다쳤습니다.<br>그 사고로 평생 절름발이가 되었습니다.</p>
+    <p style="margin-top:16px;">하지만 어머니는 저를 고아원에 보내지 않았습니다.<br>가난한 몸으로 저를 키웠습니다.<br>그리고 동네 사람들에게 항상 말했습니다.</p>
+    <p class="truth-highlight">"우리 아들이 의사가 될 거예요."</p>
+  </div>
+</div>
+
+<!-- ── 편지 ── -->
+<div class="section">
+  <span class="scene-num">VII — 편지</span>
+  <p class="body-sm">저는 선생님 앞에서 주저앉아 울었습니다.<br>가슴이 찢어지는 것 같았습니다.<br>그리고 어머니의 편지를 읽었습니다.</p>
+
+  <div class="letter-wrapper">
+    <div class="letter">
+      <div class="letter-fold2"></div>
+      <div class="letter-header">母의 편지 · Letter from Mother</div>
+      <p>"사랑하는 내 아들아.</p>
+      <p>엄마는 이제 서울에 가지 않을게.<br>그러니까<br>네가 가끔 엄마를 보러 와 줄 수 있겠니?</p>
+      <p>엄마는 네가 너무 보고 싶구나.</p>
+      <p class="emphasis">엄마는<br>네가 혹시 올까 봐<br>기다리는 것만으로도 행복했단다.</p>
+      <p>아들아…<br>엄마는<br>너를 한 번도 미워한 적이 없단다.</p>
+      <p>네가 짜증 냈던 것도<br>엄마는<br>날 사랑해서 그런 거라고 생각했단다.</p>
+      <p>아들아…<br>엄마가 먼저 가도<br>울지 마라.<br>넌 항상<br>행복하게 살아야 한다.</p>
+      <p class="emphasis">사랑한다.<br>내 아들아."</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── 무너짐 ── -->
+<div class="section collapse-section">
+  <span class="scene-num" style="text-align:center;display:block;">VIII</span>
+  <p class="big">저는 의사였습니다.</p>
+  <p class="small">수많은 환자의 병을 고치는 의사였습니다.<br>하지만<br>정작 내 어머니의 마음의 병은<br>내가 만든 병이었습니다.</p>
+</div>
+
+<!-- ── 고백 ── -->
+<div class="section confession">
+  <p class="confession-sub">어머니 무덤 앞에 엎드렸습니다</p>
+  <p class="confession-sub">그리고 처음으로 말했습니다</p>
+  <div class="confession-words">
+    "엄마…"<br>
+    "사랑합니다."<br>
+    "어머니… 사랑합니다…"
+  </div>
+  <p class="confession-late">하지만 그 말은 너무 늦은 고백이었습니다.</p>
+</div>
+
+<!-- ── 신학 전환 ── -->
+<div class="rule-center"><span>✦</span></div>
+
+<div class="section scripture-section">
+  <span class="scripture-ref">이사야 53장 5절 · Isaiah 53:5</span>
+  <p class="scripture-text">그러나 그가 상처를 입은 것은 우리의 잘못 때문이며<br>그가 으스러진 것은 우리의 죄악 때문이니<br>그가 징벌을 받음으로 우리가 평화를 누리고<br>그가 채찍에 맞음으로 우리가 낫게 되었다.</p>
+
+  <p class="scripture-body">우리는 예수님을 알지 못할 때<br>그분을 멸시했습니다.<br>외면했습니다.</p>
+  <p class="scripture-body">하지만 십자가는 말합니다.</p>
+
+  <div class="cross-final">
+    <p>"내가 너를 위해<br>이렇게 했다."</p>
+  </div>
+
+  <div class="rule-full"></div>
+
+  <p class="scripture-body">그리고 그 사랑을 깨닫는 순간<br>우리는 비로소 고백하게 됩니다.</p>
+
+  <div class="confession" style="padding:32px 0 0;">
+    <div class="confession-words" style="font-size:clamp(26px,4.5vw,44px);">
+      "주 예수님…<br>사랑합니다."
+    </div>
+  </div>
+</div>
+
+<footer>절름발이 어머니 · The Limping Mother · Isaiah 53:5</footer>
+
+</main>
+
+<script>
+// ── 한지 텍스처 ────────────────────────────────
+const tex = document.getElementById('texture');
+const tc = tex.getContext('2d');
+function drawTexture(){
+  tex.width = window.innerWidth;
+  tex.height = window.innerHeight;
+  const img = tc.createImageData(tex.width,tex.height);
+  for(let i=0;i<img.data.length;i+=4){
+    const v = Math.random()*30;
+    img.data[i]= 180+v;
+    img.data[i+1]=165+v;
+    img.data[i+2]=140+v;
+    img.data[i+3]=255;
+  }
+  tc.putImageData(img,0,0);
+}
+drawTexture();
+window.addEventListener('resize',drawTexture);
+
+// ── 발자국 캔버스 ──────────────────────────────
+const fc = document.getElementById('footstep-canvas');
+const fctx = fc.getContext('2d');
+let W,H,steps=[];
+let scrollRatio=0;
+
+function resizeFC(){
+  W=fc.width=window.innerWidth;
+  H=fc.height=window.innerHeight;
+}
+resizeFC();
+window.addEventListener('resize',resizeFC);
+
+// 발자국 데이터 사전 생성
+const totalSteps=40;
+for(let i=0;i<totalSteps;i++){
+  const side = i%2===0 ? -1 : 1; // 왼/오른 발
+  const isLeft = i%4<2;
+  steps.push({
+    pct: i/totalSteps,
+    x: 0.5 + side*0.07 + (Math.random()-0.5)*0.02,
+    offset: (isLeft?-1:1)*14,
+    opacity:0,
+    revealed:false
+  });
+}
+
+function drawSteps(){
+  fctx.clearRect(0,0,W,H);
+  const docH = document.documentElement.scrollHeight - H;
+  const sy = window.scrollY;
+  scrollRatio = sy/Math.max(docH,1);
+
+  steps.forEach((s,i)=>{
+    const threshold = s.pct * 0.85;
+    if(scrollRatio >= threshold && !s.revealed){
+      s.revealed=true;
+      s.opacity=0;
+    }
+    if(s.revealed && s.opacity<0.18) s.opacity+=0.008;
+
+    if(!s.revealed) return;
+
+    // 발자국을 현재 뷰포트 기준으로 그림
+    const absY = s.pct * document.documentElement.scrollHeight;
+    const screenY = absY - sy;
+    if(screenY < -40 || screenY > H+40) return;
+
+    const x = s.x*W + s.offset;
+
+    fctx.save();
+    fctx.globalAlpha = s.opacity;
+    fctx.translate(x, screenY);
+    fctx.rotate(s.offset<0 ? -0.08 : 0.08);
+
+    // 발 모양 (타원 + 발가락)
+    fctx.beginPath();
+    fctx.ellipse(0,0,7,12,0,0,Math.PI*2);
+    fctx.fillStyle='#8a7d72';
+    fctx.fill();
+
+    // 발가락 3개
+    [-4,0,4].forEach((tx,ti)=>{
+      fctx.beginPath();
+      fctx.ellipse(tx,-13+ti*0.5,2.5,2.5,0,0,Math.PI*2);
+      fctx.fill();
+    });
+
+    fctx.restore();
+  });
+
+  requestAnimationFrame(drawSteps);
+}
+drawSteps();
+
+// ── 스크롤 진행 바 ─────────────────────────────
+const bar = document.getElementById('progress-bar');
+window.addEventListener('scroll',()=>{
+  const d=document.documentElement;
+  const pct=d.scrollTop/(d.scrollHeight-d.clientHeight)*100;
+  bar.style.height=pct+'%';
+});
+
+// ── Intersection Observer ──────────────────────
+const sections = document.querySelectorAll('.section');
+const obs = new IntersectionObserver(en=>{
+  en.forEach(e=>{if(e.isIntersecting) e.target.classList.add('visible')});
+},{threshold:0.08});
+sections.forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>

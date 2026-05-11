@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>올바른 기도 - 묵상 콘텐츠</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(180deg, #f8f9fa 0%, #e3f2fd 100%);
+            --text-main: #2c3e50;
+            --accent-blue: #2196f3;
+            --accent-purple: #9c27b0;
+            --accent-orange: #ff9800;
+            --accent-green: #4caf50;
+            --glass-bg: rgba(255, 255, 255, 0.85);
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            font-family: 'Nanum Myeongjo', serif;
+            overflow-x: hidden;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.8) 0%, transparent 70%);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #1a237e;
+            animation: fadeInDown 1.5s ease-out;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            line-height: 1.8;
+            opacity: 0;
+            animation: fadeIn 2s ease-out forwards;
+            animation-delay: 0.8s;
+        }
+
+        .scroll-hint {
+            margin-top: 50px;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 0.9rem;
+            color: #777;
+            animation: bounce 2s infinite;
+        }
+
+        /* Layout Container */
+        .content-wrapper {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Section Styling */
+        .story-section {
+            margin-bottom: 120px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease-out;
+        }
+
+        .story-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            margin-bottom: 25px;
+            text-align: center;
+            color: #34495e;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            padding-bottom: 15px;
+        }
+
+        /* Card styles */
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .theme-warning { border-top: 5px solid var(--accent-orange); }
+        .theme-deep { border-top: 5px solid var(--accent-purple); }
+        .theme-truth { border-top: 5px solid var(--accent-green); }
+        .theme-prayer { border-top: 5px solid var(--accent-blue); }
+
+        /* Bible Verse Style */
+        .bible-verse {
+            display: block;
+            background: rgba(0,0,0,0.03);
+            padding: 20px;
+            border-radius: 12px;
+            font-weight: 700;
+            margin: 20px 0;
+            line-height: 1.6;
+            color: #1a237e;
+            position: relative;
+        }
+
+        .bible-verse::before {
+            content: '“';
+            position: absolute;
+            top: 5px;
+            left: 10px;
+            font-size: 2rem;
+            opacity: 0.2;
+        }
+
+        /* Lists */
+        .list-container {
+            margin: 20px 0;
+            padding-left: 0;
+        }
+
+        .list-item {
+            list-style: none;
+            padding: 10px 0 10px 25px;
+            position: relative;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 1rem;
+        }
+
+        .list-item::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--accent-blue);
+            font-weight: bold;
+        }
+
+        .bold { font-weight: 800; color: #000; }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 100px 20px;
+            background: #fff;
+            color: #999;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 2.2rem; }
+            .card { padding: 20px; }
+            h2 { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="hero">
+        <h1> 올바른 기도 </h1>
+        <p>사람에게 향한 기도가 어떻게 생기는지,<br>성경이 제시하는 하나님께 향한 기도의 방향은 무엇인지,<br>우리가 실제로 붙잡을 수 있는 기도의 원칙을 알아보려고 합니다.</p>
+        <div class="scroll-hint">아래로 천천히 스크롤하여 묵상해 보세요 ↓</div>
+    </header>
+
+    <div class="content-wrapper">
+        <section class="story-section theme-warning">
+            <h2>1️⃣ 예수님이 먼저 경고하신 기도:<br>“사람에게 보이려는 기도”</h2>
+            <div class="card">
+                <span class="bible-verse">📖 마태복음 6:5 “또 여러분은 기도할 때, 위선자들처럼 하지 마십시오. 그들은 사람들에게 보이려고 회당과 큰 거리 모퉁이에 서서 기도하기를 좋아합니다.”</span>
+                
+                <p class="bold">🔍 핵심 문제</p>
+                <div class="list-item">기도의 대상은 하나님인데 청중이 사람이 되는 순간, 기도는 이미 방향을 잃습니다.</div>
+                <div class="list-item">인정받고 싶은 마음</div>
+                <div class="list-item">“아, 저 사람 기도 잘한다”는 평가</div>
+                <div class="list-item">영적인 사람처럼 보이고 싶은 욕망</div>
+                <p>이 모든 것이 기도의 방향을 틀어버립니다.</p>
+
+                <p class="bold">📌 예수님의 해법은 단순합니다.</p>
+                <span class="bible-verse">📖 마태복음 6:6 “너는 기도할 때에 네 골방에 들어가 문을 닫고 은밀한 중에 계신 네 아버지께 기도하라”</span>
+                
+                <div class="list-item">장소의 문제가 아니라 의식의 방향의 문제입니다.</div>
+                <p>“지금 내 기도를 듣는 분이 누구입니까?” 골방에서 문을 열어 놓고 기도하시지는 않습니까? 내가 여기서 기도하고 있다는 것은 은밀히 보여주고 싶어하기 때문에 문을 열어 놓는 분들이 간혹 있습니다. 기도는 사람들이 들으라고 하는 것이 아니라 바로 내 아버지 하나님께 나아가는 것입니다.</p>
+
+                <p class="bold">기도의 장소와 태도:</p>
+                <div class="list-item">기도는 '골방'에 들어가 '문을 닫고' 행해져야 합니다. 이는 세상과 분리된 개인적이고 은밀한 공간을 상징합니다.</div>
+                <div class="list-item">기도의 대상은 '은밀한 가운데 계시는 아버지'입니다. 아버지는 은밀한 가운데 보시고 그에 따라 갚으시는데 왕국 백성은 아버지의 은밀하고 감추어진 임재를 항상 의식하며 살아야 합니다.</div>
+
+                <p class="bold">동기의 순수성:</p>
+                <div class="list-item">왕국 백성은 다른 사람의 칭찬을 얻기 위해 육체 안에서 행하지 않습니다. 모든 행위는 하늘의 아버지를 기쁘시게 하기 위해 영 안에서 이루어야 합니다.</div>
+                <div class="list-item">인간의 타고난 생명은 과시하고 드러내기를 좋아하지만, 하나님의 신성한 생명은 본질적으로 감추어져 있습니다. 위선자는 내적 실재 없이 겉으로 드러난 것만 가진 사람입니다.</div>
+            </div>
+        </section>
+
+        <section class="story-section theme-deep">
+            <h2>2️⃣ 말이 많아질수록 기도가 깊어지는가? (아니다)</h2>
+            <div class="card">
+                <span class="bible-verse">📖 마태복음 6:7 “기도할 때, 이방인들처럼 빈말을 되풀이하지 마십시오. 그들은 말을 많이 해야 들으실 줄로 생각합니다.”</span>
+                <p>여기서 말하는 문제는 말이 길고 말의 표현력이 좋고 말이 문장력이 뛰어나면 하나님이 들어 주십니까? 아닙니다.</p>
+                
+                <p class="bold">🔍 문제는 ‘불신’입니다.</p>
+                <div class="list-item">말을 많이 해야 들으실 것 같고</div>
+                <div class="list-item">자세히 설명하지 않으면 모르실 것 같고</div>
+                <div class="list-item">설득해야 움직이실 것 같은 마음은 불신에서 시작된 행위입니다.</div>
+                
+                <p>하지만 성경은 분명히 말합니다.</p>
+                <span class="bible-verse">📖 마태복음 6:8 “여러분이 구하기 전에, 여러분의 아버지는 여러분에게 필요한 것들을 알고 계십니다.”</span>
+                <p class="bold">🙏 깊은 기도는 말이 줄어들고, 신뢰가 커집니다.</p>
+            </div>
+        </section>
+
+        <section class="story-section theme-prayer">
+            <h2>3️⃣ 자기하소연식 기도는 잘못된 것인가?</h2>
+            <div class="card">
+                <p>여기서 아주 중요한 균형이 필요합니다.</p>
+                <span class="bible-verse">📖 시편 62:8 “백성들아! 언제나 그분을 신뢰하고 그 앞에 너희 마음을 쏟아 놓아라. 하나님은 우리의 피난처시다”</span>
+                
+                <p class="bold">👉 성경은 하소연 자체를 금지하지 않습니다. 문제는 머무르는 지점입니다.</p>
+                <div class="list-item">❌ 문제에만 머무는 기도</div>
+                <div class="list-item">❌ 감정 배출로 끝나는 기도</div>
+                <div class="list-item">❌ 하나님을 찾기보다 마음을 쏟고 끝나 버리는 기도 이런 기도는 올바른 기도가 아닙니다.</div>
+                
+                <p class="bold">📌 성경 속 바른 흐름은 이렇습니다. 하소연 → 신뢰 → 응답</p>
+                <p class="bold">📖 시편 13편 구조</p>
+                <div class="list-item">“오, 여호와님! 언제까지 계속 저를 잊으시렵니까?”</div>
+                <div class="list-item">“저는 다만 주님의 자애를 신뢰하오니”</div>
+                <div class="list-item">“이는 그분께서 나를 후대하셨기 때문이라.”</div>
+                <p class="bold">👉 기도는 감정으로 시작해도 하나님께로 귀결 되어야 합니다.</p>
+            </div>
+        </section>
+
+        <section class="story-section theme-truth">
+            <h2>4️⃣ 미사여구와 웅변형 기도에 대한 성경의 시선</h2>
+            <div class="card">
+                <span class="bible-verse">📖 전도서 5:2 “섣불리 입을 놀리지 말고, 하나님 앞에서 조급한 마음으로 아무 말이나 내뱉지 마라. 하나님은 하늘에 계시고 너는 땅에 있는 까닭인즉, 너의 말을 적게 하여라.”</span>
+                <p>기도는 문학 작품이 아닙니다. 하나님은 표현의 화려함보다 마음의 진실을 보십니다.</p>
+                <span class="bible-verse">📖 로마서 8:26 “우리는 마땅히 무엇을 위하여 기도해야 할지 알지 못하지만, 그 영께서 말할 수 없는 탄식으로 우리를 위하여 직접 중보기도 하십니다.”</span>
+                
+                <div class="list-item">✔ 말이 정제되지 않아도</div>
+                <div class="list-item">✔ 문장이 엉켜버리고 말을 더듬고</div>
+                <div class="list-item">✔ 표현이 조금 투박해도</div>
+                <p class="bold">👉 영안에서 하나님께 향한 기도이어야 입니다.</p>
+            </div>
+        </section>
+
+        <section class="story-section theme-warning">
+            <h2>5️⃣ 요구만 가득한 기도는 왜 우리를 메마르게 하는가?</h2>
+            <div class="card">
+                <span class="bible-verse">📖 야고보서 4:3 “구하여도 받지 못하는 것은 여러분의 쾌락에 써 버리려고 잘못 구하기 때문입니다.”</span>
+                <p>문제는 무엇을 구하느냐보다 누가 기도의 중심에 있느냐? 입니다.</p>
+                <p class="bold">📌 예수님이 가르치신 기도의 순서</p>
+                <span class="bible-verse">📖 마태복음 6:9–10 “그러므로 여러분은 이렇게 기도하십시오. ‘하늘에 계신 우리 아버지, 아버지의 이름이 거룩히 여겨지도록 하시며, 왕국이 오게 하시며, 뜻이 하늘에서 이루어진 것같이 땅에서도 이루어지게 하십시오.”</span>
+                <p class="bold">👉 👉 하나님의 경륜 → 뜻 → 필요의 순서입니다. 요구는 뒤에 옵니다.</p>
+            </div>
+        </section>
+
+        <section class="story-section theme-truth">
+            <h2>6️⃣ 성경이 제시하는 기도의 핵심 원칙 (정리)</h2>
+            <div class="card">
+                <div class="list-item"><span class="bold">✅ 1. 기도의 대상이 분명해야 합니다:</span> 하나님 앞인가, 사람 앞인가?</div>
+                <div class="list-item"><span class="bold">✅ 2. 말의 양보다 방향이 중요합니다:</span> 많이 말하는 기도 ≠ 깊은 기도</div>
+                <div class="list-item"><span class="bold">✅ 3. 감정은 출발점이지 목적지가 아닙니다:</span> 하소연 후에 반드시 하나님께 맡길 것</div>
+                <div class="list-item"><span class="bold">✅ 4. 표현보다 진실이 중요합니다:</span> 미사여구보다 정직한 마음</div>
+                <div class="list-item"><span class="bold">✅ 5. 요구보다 하나님의 뜻을 먼저 구하라!:</span> “원합니다”보다 “이루어지게 하십시오”</div>
+                <div class="list-item"><span class="bold">✅ 6. 짧게 선포하는 기도:</span> 믿음으로 하나님 편에 서서 말하는 기도</div>
+                <div class="list-item"><span class="bold">✅ 7. 건축하는 기도:</span> 나를 넘어서 몸을 세우는 기도</div>
+            </div>
+        </section>
+
+        <section class="story-section theme-deep">
+            <h2>7️⃣ 마지막으로, 아주 단순하지만 강력한 기도 질문 하나</h2>
+            <div class="card" style="text-align: center;">
+                <p>기도할 때 스스로에게 물어보세요.</p>
+                <p class="bold" style="font-size: 1.2rem; color: #1a237e; line-height: 1.6;">“지금 이 기도가 나를 드러내는가,<br>하나님을 신뢰하며 하나님의 경륜 안에 있는 기도를 하는가?”</p>
+                <p style="margin-top: 30px; font-size: 1.1rem;">이 질문 하나가 당신의 기도를 다시 하나님께로 돌려놓습니다. ✨</p>
+            </div>
+        </section>
+    </div>
+
+    <footer class="footer">
+        부산교회 2구역
+    </footer>
+
+    <script>
+        // Scroll Reveal Effect
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.story-section').forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>

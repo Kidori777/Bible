@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>우츄프라 카치아 — 부끄럼풀</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;900&family=Playfair+Display:wght@400;700;900&family=Special+Elite&family=Nanum+Myeongjo:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+
+:root{
+  --jungle: #0a1a0a;
+  --deep: #061206;
+  --leaf: #1a4a1a;
+  --leaf2: #2a6a2a;
+  --leaf3: #3a8a3a;
+  --lime: #7ab83a;
+  --gold: #c8a020;
+  --paper: #f5edd8;
+  --paper2: #ede0c0;
+  --ink: #1a1208;
+  --mist: rgba(180,220,160,0.08);
+}
+
+html,body{
+  width:100%;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+body{
+  background:var(--jungle);
+  color:var(--paper);
+  font-family:'Noto Serif KR',serif;
+  cursor:none;
+}
+
+/* ══════════════════
+   커스텀 커서
+══════════════════ */
+#cursor{
+  position:fixed;
+  width:20px;height:20px;
+  pointer-events:none;
+  z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:transform 0.1s;
+}
+#cursor svg{
+  width:100%;height:100%;
+  filter:drop-shadow(0 0 4px rgba(122,184,58,0.8));
+}
+
+/* ══════════════════
+   미모사 캔버스
+══════════════════ */
+#leaf-canvas{
+  position:fixed;
+  top:0;left:0;
+  width:100%;height:100%;
+  z-index:1;
+  pointer-events:none;
+}
+
+/* ══════════════════
+   정글 분위기 오버레이들
+══════════════════ */
+#fog{
+  position:fixed;top:0;left:0;right:0;bottom:0;
+  z-index:2;pointer-events:none;
+  background:
+    radial-gradient(ellipse at 20% 30%, rgba(10,30,10,0.0) 0%, rgba(6,18,6,0.6) 100%),
+    radial-gradient(ellipse at 80% 70%, rgba(10,30,10,0.0) 0%, rgba(6,18,6,0.5) 100%);
+}
+
+/* ══════════════════
+   스크롤 본문
+══════════════════ */
+main{
+  position:relative;
+  z-index:5;
+  padding:0 0 120px;
+}
+
+/* ══════════════════
+   히어로 섹션
+══════════════════ */
+.hero{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:60px 40px;
+  position:relative;
+}
+
+.hero-subtitle{
+  font-family:'Special Elite',serif;
+  font-size:clamp(10px,1.5vw,13px);
+  letter-spacing:0.5em;
+  text-transform:uppercase;
+  color:var(--lime);
+  margin-bottom:20px;
+  opacity:0;
+  animation:fadeUp 1s 0.5s forwards;
+}
+
+.hero-name{
+  font-family:'Nanum Myeongjo',serif;
+  font-size:clamp(48px,10vw,120px);
+  font-weight:800;
+  line-height:0.88;
+  color:#ffffff;
+  letter-spacing:-0.02em;
+  position:relative;
+  opacity:0;
+  animation:fadeUp 1.2s 0.8s forwards;
+}
+.hero-name .small-line{
+  display:block;
+  font-size:clamp(16px,3vw,36px);
+  font-weight:400;
+  color:var(--lime);
+  letter-spacing:0.15em;
+  margin-top:12px;
+}
+
+.hero-latin{
+  font-family:'Special Elite',serif;
+  font-size:clamp(11px,1.8vw,16px);
+  letter-spacing:0.3em;
+  color:rgba(122,184,58,0.6);
+  margin-top:20px;
+  opacity:0;
+  animation:fadeUp 1s 1.2s forwards;
+}
+
+.scroll-indicator{
+  position:absolute;
+  bottom:40px;
+  left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  opacity:0;animation:fadeIn 1s 2s forwards;
+}
+.scroll-indicator span{
+  font-family:'Special Elite',serif;
+  font-size:10px;letter-spacing:0.4em;
+  color:rgba(122,184,58,0.5);text-transform:uppercase;
+}
+.scroll-line{
+  width:1px;height:48px;
+  background:linear-gradient(to bottom,var(--lime),transparent);
+  animation:scrollLine 1.8s infinite;
+}
+@keyframes scrollLine{
+  0%{transform:scaleY(0);transform-origin:top;opacity:1}
+  100%{transform:scaleY(1);transform-origin:top;opacity:0}
+}
+
+/* ══════════════════
+   콘텐츠 섹션
+══════════════════ */
+.content-wrap{
+  max-width:780px;
+  margin:0 auto;
+  padding:0 clamp(24px,6vw,80px);
+}
+
+/* 섹션 공통 */
+.section{
+  padding:80px 0 40px;
+  opacity:0;
+  transform:translateY(24px);
+  transition:opacity 1s ease,transform 1s ease;
+}
+.section.visible{opacity:1;transform:translateY(0)}
+
+/* 섹션 헤더 */
+.sec-label{
+  font-family:'Special Elite',serif;
+  font-size:10px;
+  letter-spacing:0.5em;
+  text-transform:uppercase;
+  color:var(--lime);
+  margin-bottom:16px;
+  display:flex;align-items:center;gap:16px;
+}
+.sec-label::after{
+  content:'';flex:1;height:1px;
+  background:linear-gradient(to right,rgba(122,184,58,0.4),transparent);
+}
+
+/* ══════════════════
+   필드노트 카드
+══════════════════ */
+.field-note{
+  background:rgba(245,237,216,0.96);
+  color:var(--ink);
+  padding:clamp(28px,5vw,52px);
+  position:relative;
+  box-shadow:
+    4px 4px 0 rgba(0,0,0,0.4),
+    0 0 60px rgba(0,0,0,0.5);
+  margin:20px 0 40px;
+}
+/* 테이프 효과 */
+.field-note::before{
+  content:'';
+  position:absolute;
+  top:-12px;left:50%;transform:translateX(-50%);
+  width:80px;height:24px;
+  background:rgba(200,160,32,0.55);
+  box-shadow:inset 0 0 0 1px rgba(200,160,32,0.3);
+}
+/* 노트 줄 */
+.field-note::after{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;bottom:0;
+  background-image:repeating-linear-gradient(
+    to bottom,transparent,transparent 32px,
+    rgba(180,160,120,0.2) 32px,rgba(180,160,120,0.2) 33px
+  );
+  pointer-events:none;
+}
+
+.field-note h2{
+  font-family:'Nanum Myeongjo',serif;
+  font-size:clamp(18px,3vw,26px);
+  font-weight:800;
+  color:var(--ink);
+  margin-bottom:16px;
+  position:relative;z-index:1;
+  line-height:1.4;
+}
+.field-note p{
+  font-family:'Noto Serif KR',serif;
+  font-size:15px;
+  line-height:2.15;
+  color:#2a2010;
+  word-break:keep-all;
+  margin-bottom:0.9em;
+  position:relative;z-index:1;
+}
+.field-note p strong{
+  color:var(--ink);
+  font-weight:700;
+  background:rgba(200,160,32,0.25);
+  padding:0 2px;
+}
+.field-note .stamp{
+  position:absolute;
+  bottom:20px;right:24px;
+  font-family:'Special Elite',serif;
+  font-size:10px;
+  letter-spacing:0.3em;
+  color:rgba(200,120,40,0.4);
+  text-transform:uppercase;
+  border:2px solid rgba(200,120,40,0.3);
+  padding:4px 10px;
+  transform:rotate(-3deg);
+}
+
+/* ══════════════════
+   어두운 본문 (정글 배경 위)
+══════════════════ */
+.dark-text{
+  padding:24px 0;
+  margin:16px 0;
+}
+.dark-text p{
+  font-family:'Noto Serif KR',serif;
+  font-size:15.5px;
+  line-height:2.2;
+  color:rgba(245,237,216,0.8);
+  word-break:keep-all;
+  margin-bottom:0.9em;
+}
+.dark-text p strong{color:#fff;font-weight:600;}
+
+/* ══════════════════
+   인터랙티브 미모사 섹션 (중앙 체험)
+══════════════════ */
+.touch-demo{
+  text-align:center;
+  padding:40px 0 20px;
+  position:relative;
+}
+.touch-demo-label{
+  font-family:'Special Elite',serif;
+  font-size:11px;
+  letter-spacing:0.4em;
+  color:var(--lime);
+  text-transform:uppercase;
+  margin-bottom:24px;
+  display:block;
+}
+.touch-demo-text{
+  font-family:'Nanum Myeongjo',serif;
+  font-size:clamp(22px,4vw,38px);
+  font-weight:800;
+  color:#fff;
+  line-height:1.5;
+  word-break:keep-all;
+  margin-bottom:8px;
+}
+.touch-demo-sub{
+  font-family:'Noto Serif KR',serif;
+  font-size:14px;
+  color:rgba(245,237,216,0.5);
+  letter-spacing:0.05em;
+  word-break:keep-all;
+}
+
+/* ══════════════════
+   대형 인용
+══════════════════ */
+.big-quote{
+  padding:48px 0;
+  text-align:center;
+  position:relative;
+}
+.big-quote::before{
+  content:'"';
+  font-family:'Playfair Display',serif;
+  font-size:180px;
+  color:rgba(122,184,58,0.08);
+  position:absolute;
+  top:-40px;left:-20px;
+  line-height:1;
+  pointer-events:none;
+}
+.big-quote p{
+  font-family:'Nanum Myeongjo',serif;
+  font-size:clamp(20px,3.5vw,34px);
+  font-weight:700;
+  color:#fff;
+  line-height:1.65;
+  word-break:keep-all;
+  position:relative;z-index:1;
+}
+.big-quote .source{
+  font-family:'Special Elite',serif;
+  font-size:11px;
+  letter-spacing:0.35em;
+  color:var(--lime);
+  margin-top:20px;
+  text-transform:uppercase;
+  display:block;
+}
+
+/* ══════════════════
+   성경 구절
+══════════════════ */
+.scripture-box{
+  border-left:3px solid var(--lime);
+  padding:24px 0 24px 28px;
+  margin:32px 0;
+  position:relative;
+}
+.scripture-ref{
+  font-family:'Special Elite',serif;
+  font-size:10px;
+  letter-spacing:0.4em;
+  color:var(--lime);
+  text-transform:uppercase;
+  margin-bottom:12px;
+  display:block;
+}
+.scripture-box p{
+  font-family:'Nanum Myeongjo',serif;
+  font-size:clamp(16px,2.8vw,22px);
+  font-weight:700;
+  color:#f0e8d0;
+  line-height:1.8;
+  word-break:keep-all;
+}
+
+/* ══════════════════
+   3단 열 (사람을 살리는 힘)
+══════════════════ */
+.triple{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:2px;
+  margin:32px 0;
+}
+.triple-item{
+  background:rgba(26,74,26,0.4);
+  border:1px solid rgba(122,184,58,0.15);
+  padding:28px 20px;
+  text-align:center;
+  transition:background 0.3s;
+}
+.triple-item:hover{background:rgba(26,74,26,0.7);}
+.triple-num{
+  font-family:'Playfair Display',serif;
+  font-size:42px;
+  font-weight:900;
+  color:rgba(122,184,58,0.3);
+  line-height:1;
+  margin-bottom:8px;
+}
+.triple-item p{
+  font-family:'Noto Serif KR',serif;
+  font-size:13.5px;
+  line-height:1.9;
+  color:rgba(245,237,216,0.8);
+  word-break:keep-all;
+}
+
+/* ══════════════════
+   클로징
+══════════════════ */
+.closing{
+  text-align:center;
+  padding:60px 0 40px;
+  border-top:1px solid rgba(122,184,58,0.2);
+  margin-top:60px;
+}
+.closing p{
+  font-family:'Noto Serif KR',serif;
+  font-size:15px;
+  line-height:2.3;
+  color:rgba(245,237,216,0.75);
+  word-break:keep-all;
+  margin-bottom:0.8em;
+}
+.closing p strong{color:#fff;font-weight:600;}
+.closing-final{
+  font-family:'Nanum Myeongjo',serif;
+  font-size:clamp(22px,4vw,40px);
+  font-weight:800;
+  color:#fff;
+  line-height:1.6;
+  margin-top:32px;
+  word-break:keep-all;
+}
+
+footer{
+  text-align:center;
+  padding:32px 0 60px;
+  font-family:'Special Elite',serif;
+  font-size:10px;
+  letter-spacing:0.4em;
+  color:rgba(122,184,58,0.3);
+  text-transform:uppercase;
+}
+
+/* ══════════════════
+   애니메이션
+══════════════════ */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(16px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes fadeIn{
+  from{opacity:0}to{opacity:1}
+}
+
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--deep)}
+::-webkit-scrollbar-thumb{background:rgba(122,184,58,0.3)}
+
+@media(max-width:600px){
+  .triple{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- 커스텀 커서 — 잎 모양 -->
+<div id="cursor">
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 2 C6 2 2 8 2 12 C2 18 8 22 12 22 C16 22 20 18 22 12 C22 6 18 2 12 2 Z" fill="rgba(122,184,58,0.6)" stroke="rgba(122,184,58,0.9)" stroke-width="1"/>
+    <line x1="12" y1="22" x2="12" y2="26" stroke="rgba(122,184,58,0.5)" stroke-width="1.5" stroke-linecap="round"/>
+  </svg>
+</div>
+
+<canvas id="leaf-canvas"></canvas>
+<div id="fog"></div>
+
+<main>
+  <!-- ── 히어로 ── -->
+  <div class="hero">
+    <span class="hero-subtitle">Mimosa · 부끄럼풀 · Africa</span>
+    <h1 class="hero-name">
+      우츄프라<br>카치아
+      <span class="small-line">밀림 속의 작은 식물</span>
+    </h1>
+    <span class="hero-latin">Mimosa pudica · The Sensitive Plant</span>
+    <div class="scroll-indicator">
+      <span>Explore</span>
+      <div class="scroll-line"></div>
+    </div>
+  </div>
+
+  <div class="content-wrap">
+
+    <!-- ── 섹션 1: 이름과 모습 ── -->
+    <div class="section" id="s1">
+      <div class="sec-label">Field Note 01 — Discovery</div>
+      <div class="field-note">
+        <h2>'우츄프라 카치아!'</h2>
+        <p>아프리카의 깊은 밀림 속에는 아주 신기한 식물이 하나 있다고 합니다. 처음 들으면 어느 나라 말인지도, 무슨 뜻인지도 알기 어려운 이름입니다.</p>
+        <p>이 식물의 정식 이름은 미모사(Mimosa)입니다. 사람들에게는 <strong>'부끄럼풀'</strong>이라는 이름으로 더 잘 알려져 있습니다.</p>
+        <p>이름도 낯설고, 모습도 특이한 식물이었습니다. 누군가 그 잎을 살짝 건드리기만 하면 그 식물은 금세 잎을 오므리며 축 늘어져 버립니다. 마치 생명이 다한 것처럼 금방 시들어 버린 것처럼 보입니다.</p>
+        <div class="stamp">Mimosa Pudica</div>
+      </div>
+
+      <div class="dark-text">
+        <p>그래서 사람들은 말했습니다.</p>
+        <p><strong>"이 식물은 참 이상하다."</strong><br>
+        "누가 조금만 건드려도 병이 들어버리는 식물이래."<br>
+        "결벽증이 아주 심한 식물이야."</p>
+        <p>사람들은 그 식물을 그렇게 이해했습니다.</p>
+      </div>
+    </div>
+
+    <!-- ── 인터랙티브 안내 ── -->
+    <div class="section touch-demo" id="s-touch">
+      <span class="touch-demo-label">커서를 움직여보세요 · Move your cursor</span>
+      <p class="touch-demo-text">건드리면 닫히고<br>계속 오면 열립니다</p>
+      <p class="touch-demo-sub">— 주변의 잎들을 직접 만져보세요 —</p>
+    </div>
+
+    <!-- ── 섹션 2: 식물학자 ── -->
+    <div class="section" id="s2">
+      <div class="sec-label">Field Note 02 — The Botanist</div>
+      <div class="field-note">
+        <h2>한 식물학자의 호기심</h2>
+        <p>그러던 어느 날, 한 식물학자가 이 식물에 관심을 갖게 되었습니다.</p>
+        <p>"정말 건드리기만 해도 시들어 버리는 식물일까?"</p>
+        <p>그는 매일같이 그 식물을 찾아갔습니다. 그리고 조심스럽게 잎을 만졌습니다. 처음에는 예상대로였습니다. 살짝 건드리기만 해도 잎이 금세 닫혀 버렸습니다. 마치 세상을 향해 마음을 닫아 버리는 것처럼 말입니다.</p>
+        <p>그런데 며칠이 지나자 이상한 일이 일어났습니다. 그가 다시 잎을 만졌을 때 그 식물은 더 이상 시들지 않았습니다. 다음 날도 그 다음 날도 그 식물은 여전히 살아 있었고 오히려 더 건강하게 자라고 있었습니다.</p>
+        <div class="stamp">Observation Log</div>
+      </div>
+    </div>
+
+    <!-- ── 섹션 3: 비밀 ── -->
+    <div class="section" id="s3">
+      <div class="sec-label">Field Note 03 — The Secret</div>
+      <div class="dark-text">
+        <p>오랜 연구 끝에 그는 마침내 깨닫게 되었습니다.</p>
+        <p>이 식물은 결벽증이 있는 것이 아니었습니다. 누군가 건드리면 시들어 버리는 것도 아니었습니다.</p>
+      </div>
+
+      <div class="big-quote">
+        <p>이 식물은 단지<br>자신을 보호하기 위해<br>잎을 접고 있었던 것입니다.</p>
+      </div>
+
+      <div class="dark-text">
+        <p>위험이 왔다고 느끼면 마치 죽은 것처럼 위장하여 자신을 지키는 것이었습니다. 그러나 같은 사람이 다시 오고, 또 오고, 또 찾아와 해치려는 것이 아니라는 것을 알게 되면 그 식물은 더 이상 잎을 닫지 않았습니다.</p>
+      </div>
+
+      <div class="field-note" style="margin-top:20px;">
+        <h2>외로운 식물</h2>
+        <p>어떤 사람은 이 식물을 이렇게 말했습니다.</p>
+        <p><strong>"이 식물은 결벽증이 있는 것이 아니라 세상에서 가장 외로운 식물이다."</strong></p>
+        <p>겉으로는 누군가의 손길을 거부하는 것처럼 보이지만 사실은 누군가가 계속 찾아와 주기를 기다리는 식물이기 때문입니다.</p>
+        <div class="stamp">Loneliest Plant</div>
+      </div>
+    </div>
+
+    <!-- ── 섹션 4: 우리 ── -->
+    <div class="section" id="s4">
+      <div class="sec-label">Field Note 04 — Us</div>
+      <div class="dark-text">
+        <p>가만히 생각해 보면 우리의 모습도 이 식물과 참 닮아 있습니다. 사람의 마음도 그렇습니다.</p>
+        <p>스쳐 지나가는 말 한마디에 마음이 접혀 버립니다. 가벼운 농담 하나에 영혼이 움츠러들어 버립니다.</p>
+        <p>그래서 사람들은 쉽게 말합니다.</p>
+        <p>"왜 저렇게 예민하지?"<br>"왜 저렇게 마음이 약하지?"</p>
+        <p>그러나 우리는 모릅니다. 그 마음이 얼마나 오래 상처를 안고 살아왔는지를 말입니다.</p>
+      </div>
+    </div>
+
+    <!-- ── 섹션 5: 사람을 살리는 힘 ── -->
+    <div class="section" id="s5">
+      <div class="sec-label">Field Note 05 — What Heals</div>
+
+      <div class="big-quote">
+        <p>'우츄프라 카치아'는 한 번의 손길에는 시들어 버리지만<br>같은 사람이 계속 찾아와<br>사랑으로 만져 주면 다시 살아납니다.</p>
+      </div>
+
+      <div class="dark-text">
+        <p>사람의 영혼도 마찬가지입니다. 우리를 살리는 것은</p>
+      </div>
+
+      <div class="triple">
+        <div class="triple-item">
+          <div class="triple-num">①</div>
+          <p>한 번의 관심이 아닙니다</p>
+        </div>
+        <div class="triple-item">
+          <div class="triple-num">②</div>
+          <p>포기하지 않는 관심<br>지속되는 사랑</p>
+        </div>
+        <div class="triple-item">
+          <div class="triple-num">③</div>
+          <p>계속되는 손길<br>그것이 영혼을 살립니다</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 섹션 6: 예수님 ── -->
+    <div class="section" id="s6">
+      <div class="sec-label">Field Note 06 — The Heart of Jesus</div>
+      <div class="dark-text">
+        <p>예수님은 이 마음을 이렇게 말씀하셨습니다.</p>
+      </div>
+      <div class="scripture-box">
+        <span class="scripture-ref">누가복음 15장 8절 · Luke 15:8</span>
+        <p>"또 어떤 여인이 드라크마 열 개를 가지고 있다가, 한 개를 잃어버린다면, 등불을 켜고 집 안을 쓸며, 찾을 때까지 세심하게 찾지 않겠습니까?"</p>
+      </div>
+      <div class="dark-text">
+        <p>여인은 잃어버린 동전 하나를 찾을 때까지 멈추지 않습니다. 왜냐하면 그것이 소중하기 때문입니다.</p>
+      </div>
+    </div>
+
+    <!-- ── 클로징 ── -->
+    <div class="section" id="s7">
+      <div class="closing">
+        <p>어쩌면 우리 모두는 밀림 속 작은 식물처럼 관심이 필요하지만 상처받기 쉬운 존재입니다.</p>
+        <p>그래서 우리는 서로에게 <strong>한 번의 관심이 아니라 계속되는 사랑</strong>을 주어야 합니다.</p>
+        <p>누군가의 마음이 움츠러들어 있을 때 그를 판단하기보다 다시 다가가고 또 다가가고 또 손을 내밀어야 합니다.</p>
+        <p>왜냐하면 어쩌면 그 사람의 마음도 '우츄프라 카치아'처럼 누군가의 따뜻한 손길을 기다리고 있기 때문입니다.</p>
+        <div class="closing-final">
+          다시 다가가고<br>또 다가가고<br>또 손을 내밀어야 합니다.
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content-wrap -->
+</main>
+
+<footer>우츄프라 카치아 · Mimosa Pudica · The Sensitive Plant · Luke 15:8</footer>
+
+<script>
+// ═══════════════════════════════════════════════════
+//  커스텀 커서
+// ═══════════════════════════════════════════════════
+const cursorEl = document.getElementById('cursor');
+let mx = window.innerWidth/2, my = window.innerHeight/2;
+window.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursorEl.style.left = mx + 'px';
+  cursorEl.style.top = my + 'px';
+});
+
+// ═══════════════════════════════════════════════════
+//  미모사 잎 캔버스
+// ═══════════════════════════════════════════════════
+const canvas = document.getElementById('leaf-canvas');
+const ctx = canvas.getContext('2d');
+let W, H;
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+// 잎 데이터 생성
+const LEAF_COUNT = 80;
+const leaves = [];
+
+// 잎 클러스터 (미모사 특유의 깃털 형태)
+function createLeaf(x, y, side) {
+  return {
+    x, y,
+    stemAngle: Math.random() * Math.PI * 2,
+    stemLen: 40 + Math.random() * 80,
+    leaflets: Array.from({length: 4 + Math.floor(Math.random()*4)}, (_, i) => ({
+      offset: i,
+      len: 8 + Math.random() * 16,
+      angle: 0,           // 0 = open, 1 = closed
+      targetAngle: 0,
+      visitCount: 0,      // 같은 커서가 머문 누적 시간
+    })),
+    baseGreen: `hsl(${100 + Math.random()*30}, ${50+Math.random()*30}%, ${20+Math.random()*20}%)`,
+    scale: 0.7 + Math.random() * 0.6,
+    side: side || (Math.random() > 0.5 ? 1 : -1),
+    phase: Math.random() * Math.PI * 2,
+    // 화면 어느 위치에 고정
+    screenX: Math.random(),
+    screenY: Math.random(),
+    radius: 60 + Math.random() * 80, // 커서 반응 반경
+    openTimer: 0, // 얼마나 오래 커서가 근처에 있었나
+  };
+}
+
+for (let i = 0; i < LEAF_COUNT; i++) {
+  leaves.push(createLeaf(
+    Math.random() * window.innerWidth,
+    Math.random() * window.innerHeight,
+    i % 2 === 0 ? 1 : -1
+  ));
+}
+
+// ── 잎 하나 그리기 ──────────────────────────────
+function drawLeaflet(ctx, x, y, angle, len, closeFactor, green) {
+  // closeFactor: 0=열림, 1=닫힘
+  const spread = (1 - closeFactor) * 0.5; // 좌우 퍼짐
+  const height = len * (1 - closeFactor * 0.7);
+
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(angle);
+
+  // 잎 모양
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.bezierCurveTo(
+    -len * spread, -height * 0.3,
+    -len * spread * 0.5, -height,
+    0, -height
+  );
+  ctx.bezierCurveTo(
+    len * spread * 0.5, -height,
+    len * spread, -height * 0.3,
+    0, 0
+  );
+  ctx.fillStyle = green;
+  ctx.fill();
+
+  // 잎맥
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.lineTo(0, -height);
+  ctx.strokeStyle = 'rgba(0,50,0,0.3)';
+  ctx.lineWidth = 0.5;
+  ctx.stroke();
+
+  ctx.restore();
+}
+
+function drawMimosa(leaf, t) {
+  const sx = leaf.screenX * W;
+  const sy = leaf.screenY * H;
+
+  // 커서와의 거리 계산 (스크롤 보정)
+  const scrollY = window.scrollY;
+  const dy = my - sy;
+  const dist = Math.hypot(mx - sx, dy);
+
+  // 거리에 따라 닫힘 정도 계산
+  let targetClose = 0;
+  if (dist < leaf.radius) {
+    targetClose = 1 - (dist / leaf.radius);
+    leaf.openTimer += 0.016; // 가까이 있는 시간 누적
+  } else {
+    leaf.openTimer = Math.max(0, leaf.openTimer - 0.03);
+  }
+
+  // 오래 머물면 다시 열림 (신뢰 형성)
+  const trustFactor = Math.min(leaf.openTimer / 3, 1); // 3초면 완전 신뢰
+  const closeFactor = targetClose * (1 - trustFactor * 0.9);
+
+  // 줄기 흔들림
+  const sway = Math.sin(t * 0.8 + leaf.phase) * 0.03;
+  const stemA = leaf.stemAngle + sway;
+
+  ctx.save();
+  ctx.translate(sx, sy);
+
+  // 줄기
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  const stemEndX = Math.cos(stemA) * leaf.stemLen * leaf.scale;
+  const stemEndY = Math.sin(stemA) * leaf.stemLen * leaf.scale;
+  ctx.lineTo(stemEndX, stemEndY);
+  ctx.strokeStyle = `rgba(30,60,20,${0.5 + closeFactor * 0.2})`;
+  ctx.lineWidth = 1.2 * leaf.scale;
+  ctx.stroke();
+
+  // 잎 무리 (줄기 따라 배치)
+  const count = leaf.leaflets.length;
+  leaf.leaflets.forEach((l, i) => {
+    const prog = (i + 1) / (count + 1);
+    const lx = stemEndX * prog;
+    const ly = stemEndY * prog;
+
+    // 좌우 번갈아
+    const sideAngle = stemA + (i % 2 === 0 ? -1 : 1) * (Math.PI * 0.5 - closeFactor * Math.PI * 0.45);
+    const len = l.len * leaf.scale;
+
+    drawLeaflet(ctx, lx, ly, sideAngle, len, closeFactor, leaf.baseGreen);
+  });
+
+  // 끝 잎
+  drawLeaflet(ctx, stemEndX, stemEndY, stemA, leaf.leaflets[0].len * 1.2 * leaf.scale, closeFactor, leaf.baseGreen);
+
+  ctx.restore();
+}
+
+// ── 메인 루프 ──────────────────────────────────
+let t = 0;
+function animate() {
+  ctx.clearRect(0, 0, W, H);
+
+  // 정글 배경 강화
+  const grad = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, Math.max(W,H));
+  grad.addColorStop(0, 'rgba(10,26,10,0)');
+  grad.addColorStop(1, 'rgba(6,18,6,0.3)');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, W, H);
+
+  leaves.forEach(leaf => drawMimosa(leaf, t));
+
+  t += 0.016;
+  requestAnimationFrame(animate);
+}
+animate();
+
+// ── IntersectionObserver ──────────────────────
+const sections = document.querySelectorAll('.section');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+sections.forEach(s => obs.observe(s));
+
+// 터치 지원
+window.addEventListener('touchmove', e => {
+  const t = e.touches[0];
+  mx = t.clientX; my = t.clientY;
+}, {passive: true});
+</script>
+</body>
+</html>

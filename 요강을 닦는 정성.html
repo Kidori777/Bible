@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>요강을 닦는 정성 — 고당 조만식 선생</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700&family=Cormorant+Garamond:wght@400;500;600&family=Nanum+Myeongjo:wght@400;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+/* ── NO ITALIC ── */
+em, i, cite { font-style: normal; }
+
+:root {
+  --hanji:      #f4eedf;
+  --hanji-deep: #e8dfc8;
+  --hanji-dark: #d9cdb4;
+  --ink:        #1e1a14;
+  --ink-mid:    #3a3228;
+  --ink-soft:   #5a5040;
+  --brass:      #9a7a3a;
+  --brass-light:#c4a05a;
+  --brass-pale: #e8d09a;
+  --rust:       #7a3a20;
+  --rust-light: #a05030;
+  --sage:       #5a6a4a;
+  --cream:      #faf6ec;
+}
+
+body {
+  background: var(--hanji);
+  color: var(--ink);
+  font-family: 'Nanum Myeongjo', 'Noto Serif KR', Georgia, serif;
+  font-weight: 400;
+  overflow-x: hidden;
+  line-height: 1;
+}
+
+/* ── HANJI TEXTURE OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 0;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)' opacity='0.06'/%3E%3C/svg%3E");
+  background-size: 300px 300px;
+  opacity: 0.5;
+}
+
+/* ── PROGRESS ── */
+#progress {
+  position: fixed; top: 0; left: 0;
+  height: 2px; width: 0;
+  background: linear-gradient(90deg, var(--rust), var(--brass));
+  z-index: 999;
+  transition: width 0.08s linear;
+}
+
+/* ── CURTAIN ── */
+#curtain {
+  position: fixed; inset: 0;
+  background: var(--ink);
+  z-index: 3000;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 1.4rem;
+  transition: opacity 1s ease, transform 0.9s ease;
+  pointer-events: none;
+}
+#curtain.gone { opacity: 0; transform: translateY(-10px); }
+.c-ko {
+  font-family: 'Nanum Myeongjo', serif;
+  font-size: clamp(1.2rem, 3.5vw, 1.8rem);
+  color: var(--brass-pale);
+  letter-spacing: 0.55em;
+  font-weight: 400;
+  opacity: 0;
+  animation: fadeUp 1.3s ease 0.4s forwards;
+}
+.c-title {
+  font-family: 'Nanum Myeongjo', serif;
+  font-size: clamp(2rem, 7vw, 4.5rem);
+  color: var(--hanji);
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  opacity: 0;
+  animation: fadeUp 1.4s ease 0.9s forwards;
+}
+.c-sub {
+  font-size: clamp(0.65rem, 1.5vw, 0.78rem);
+  color: var(--brass-light);
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  font-weight: 300;
+  font-family: 'Cormorant Garamond', serif;
+  opacity: 0;
+  animation: fadeUp 1.2s ease 1.6s forwards;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── DOTS NAV ── */
+#dots {
+  position: fixed; right: 1.6rem; top: 50%;
+  transform: translateY(-50%);
+  z-index: 100;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--hanji-dark);
+  cursor: pointer;
+  transition: all 0.35s ease;
+  border: 1px solid var(--hanji-dark);
+}
+.dot.on {
+  background: var(--brass);
+  border-color: var(--brass);
+  transform: scale(1.6);
+}
+@media (max-width: 640px) { #dots { display: none; } }
+
+/* ════════════════════════════
+   HERO
+════════════════════════════ */
+#hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+  padding: 6rem 2rem;
+  background: var(--ink);
+}
+.hero-texture {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 50%, #2a2318 0%, var(--ink) 70%),
+    radial-gradient(ellipse 30% 40% at 80% 20%, rgba(154,122,58,0.12) 0%, transparent 60%);
+}
+.hero-grid {
+  position: absolute; inset: 0; opacity: 0.04;
+  background-image:
+    linear-gradient(var(--brass) 1px, transparent 1px),
+    linear-gradient(90deg, var(--brass) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+.hero-inner {
+  position: relative; z-index: 2;
+  text-align: center; max-width: 760px;
+}
+.hero-badge {
+  display: inline-block;
+  border: 1px solid var(--brass);
+  padding: 0.4rem 1.4rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.6em;
+  color: var(--brass-light);
+  text-transform: uppercase;
+  font-family: 'Cormorant Garamond', serif;
+  margin-bottom: 2.8rem;
+  opacity: 0;
+  animation: fadeUp 1s ease 3s forwards;
+}
+.hero-title-ko {
+  font-family: 'Nanum Myeongjo', serif;
+  font-size: clamp(2.4rem, 8vw, 5.5rem);
+  color: var(--hanji);
+  line-height: 1.25;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  opacity: 0;
+  animation: fadeUp 1.3s ease 3.2s forwards;
+}
+.hero-title-ko .accent { color: var(--brass-light); }
+.hero-rule {
+  display: flex; align-items: center; gap: 1.2rem;
+  margin: 2.4rem auto;
+  max-width: 380px;
+  opacity: 0;
+  animation: fadeUp 1s ease 3.6s forwards;
+}
+.hero-rule-line { flex: 1; height: 1px; background: var(--brass); opacity: 0.4; }
+.hero-rule-diamond {
+  width: 7px; height: 7px;
+  background: var(--brass);
+  transform: rotate(45deg);
+}
+.hero-verse-preview {
+  font-family: 'Nanum Myeongjo', serif;
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  color: var(--hanji-dark);
+  line-height: 2.1;
+  letter-spacing: 0.06em;
+  font-weight: 400;
+  opacity: 0;
+  animation: fadeUp 1s ease 3.9s forwards;
+}
+.scroll-cue {
+  position: absolute; bottom: 2.8rem; left: 50%;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 0.7rem;
+  opacity: 0;
+  animation: fadeUp 1s ease 4.4s forwards;
+}
+.scroll-cue span {
+  font-size: 0.58rem; letter-spacing: 0.55em;
+  color: var(--brass); text-transform: uppercase;
+  font-family: 'Cormorant Garamond', serif;
+}
+.scroll-line {
+  width: 1px; height: 48px;
+  background: linear-gradient(to bottom, var(--brass), transparent);
+  animation: pulse 2.2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity: 0.3; }
+  50%      { opacity: 1; }
+}
+
+/* ════════════════════════════
+   SECTION BASE (hanji light)
+════════════════════════════ */
+.sec {
+  position: relative; z-index: 1;
+  max-width: 760px; margin: 0 auto;
+  padding: 6rem 2rem;
+  opacity: 0; transform: translateY(32px);
+  transition: opacity 0.85s ease, transform 0.85s ease;
+}
+.sec.vis { opacity: 1; transform: translateY(0); }
+
+/* chapter label */
+.ch-lbl {
+  font-size: 0.62rem; letter-spacing: 0.6em;
+  color: var(--brass); text-transform: uppercase;
+  font-family: 'Cormorant Garamond', serif;
+  margin-bottom: 1.4rem; display: block;
+}
+/* chapter heading */
+.ch-h {
+  font-family: 'Nanum Myeongjo', serif;
+  font-size: clamp(1.5rem, 4vw, 2.3rem);
+  font-weight: 700; color: var(--ink);
+  line-height: 1.5; margin-bottom: 2.8rem;
+  letter-spacing: 0.04em;
+}
+/* body text */
+.body {
+  font-size: clamp(0.95rem, 2.1vw, 1.06rem);
+  line-height: 2.6; color: var(--ink-mid);
+  font-weight: 400; letter-spacing: 0.02em;
+}
+.body p { margin-bottom: 1.8em; }
+.body p:last-child { margin-bottom: 0; }
+
+/* brass hairline */
+.hr {
+  display: flex; align-items: center; gap: 1rem;
+  margin: 3rem 0;
+}
+.hr-line { flex: 1; height: 1px; background: var(--brass); opacity: 0.3; }
+.hr-dot {
+  width: 5px; height: 5px;
+  background: var(--brass); opacity: 0.6;
+  transform: rotate(45deg);
+}
+
+/* quote block — 인용 */
+.qblock {
+  position: relative;
+  margin: 3rem 0;
+  padding: 2rem 2.4rem 2rem 3.2rem;
+  background: var(--hanji-deep);
+  border-left: 3px solid var(--brass);
+}
+.qblock::before {
+  content: '"';
+  position: absolute; top: -0.6rem; left: 1.2rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 5rem; color: var(--brass-pale);
+  line-height: 1; opacity: 0.7;
+  font-style: normal;
+}
+.qtext {
+  font-family: 'Noto Serif KR', 'Nanum Myeongjo', serif;
+  font-size: clamp(1rem, 2.4vw, 1.2rem);
+  font-weight: 400; color: var(--ink);
+  line-height: 2.2; position: relative; z-index: 1;
+}
+.qsrc {
+  margin-top: 1rem;
+  font-size: 0.7rem; letter-spacing: 0.25em;
+  color: var(--brass); text-transform: uppercase;
+  font-family: 'Cormorant Garamond', serif;
+  position: relative; z-index: 1;
+}
+
+/* key phrase highlight */
+.key {
+  display: inline-block;
+  background: linear-gradient(to right, var(--brass-pale), transparent);
+  padding: 0 0.3em;
+  color: var(--ink);
+  font-weight: 700;
+}
+
+/* ════════════════════════════
+   DARK BAND (먹 배경)
+════════════════════════════ */
+.dark-band {
+  background: var(--ink);
+  padding: 7rem 2rem;
+  position: relative; overflow: hidden;
+}
+.dark-band::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 60% at 50% 50%, #2a2318 0%, var(--ink) 80%);
+}
+.dark-inner {
+  position: relative; z-index: 2;
+  max-width: 760px; margin: 0 auto;
+  opacity: 0; transform: translateY(32px);
+  transition: opacity 0.85s ease, transform 0.85s ease;
+}
+.dark-inner.vis { opacity: 1; transform: translateY(0); }
+.dark-lbl {
+  font-size: 0.62rem; letter-spacing: 0.6em;
+  color: var(--brass-light); text-transform: uppercase;
+  font-family: 'Cormorant Garamond', serif;
+  margin-bottom: 1.4rem; display: block;
+}
+.dark-h {
+  font-family: 'Nanum Myeongjo', serif;
+  font-size: clamp(1.5rem, 4vw, 2.3rem);
+  font-weight: 700; color: var(--hanji);
+  line-height: 1.5; margin-bottom: 2.8rem;
+  letter-spacing: 0.04em;
+}
+.dark-body {
+  font-size: clamp(0.95rem, 2.1vw, 1.06rem);
+  line-height: 2.6; color: var(--hanji-dark);
+  font-weight: 400; letter-spacing: 0.02em;
+}
+.dark-body p { margin-bottom: 1.8em; }
+.dark-qblock {
+  margin: 3rem 0;
+  padding: 2rem 2.4rem 2rem 3.2rem;
+  background: rgba(196,160,90,0.07);
+  border-left: 3px solid var(--brass);
+  position: relative;
+}
+.dark-qblock::before {
+  content: '"';
+  position: absolute; top: -0.6rem; left: 1.2rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 5rem; color: rgba(196,160,90,0.18);
+  line-height: 1; font-style: normal;
+}
+.dark-qtext {
+  font-family: 'Noto Serif KR', 'Nanum Myeongjo', serif;
+  font-size: clamp(1rem, 2.4vw, 1.2rem);
+  font-weight: 400; color: var(--hanji);
+  line-height: 2.2; position: relative; z-index: 1;
+}
+.dark-qsrc {
+  margin-top: 1rem;
+  font-size: 0.7rem; letter-spacing: 0.25em;
+  color: var(--brass-light); text-transform: uppercase;
+  font-family: 'Cormorant Garamond', serif;
+  position: relative; z-index: 1;
+}
+.dark-hr {
+  display: flex; align-items: center; gap: 1rem; margin: 3rem 0;
+}
+.dark-hr-line { flex: 1; height: 1px; background: var(--brass); opacity: 0.2; }
+.dark-hr-dot { width: 5px; height: 5px; background: var(--brass); opacity: 0.5; transform: rotate(45deg); }
+
+/* ════════════════════════════
+   INTERLUDE
+════════════════════════════ */
+.interlude {
+  width: 100%; padding: 5rem 2rem;
+  text-align: center; position: relative;
+  background: var(--hanji-deep);
+  border-top: 1px solid var(--hanji-dark);
+  border-bottom: 1px solid var(--hanji-dark);
+}
+.int-orn {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem; color: var(--brass); opacity: 0.5;
+  display: block; margin-bottom: 1.6rem;
+  font-style: normal;
+}
+.int-text {
+  font-family: 'Nanum Myeongjo', serif;
+  font-size: clamp(1rem, 2.5vw, 1.3rem);
+  color: var(--ink-soft); line-height: 2.2;
+  font-weight: 400; letter-spacing: 0.05em;
+  max-width: 580px; margin: 0 auto;
+}
+
+/* ════════════════════════════
+   VERSE SECTION (성경)
+════════════════════════════ */
+#verse {
+  background: var(--ink);
+  padding: 8rem 2rem;
+  position: relative; overflow: hidden;
+}
+.verse-glow {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 50% at 50% 50%,
+    rgba(154,122,58,0.08) 0%, transparent 70%);
+}
+.verse-inner {
+  position: relative; z-index: 2;
+  max-width: 760px; margin: 0 auto;
+  opacity: 0; transform: translateY(32px);
+  transition: opacity 0.85s ease, transform 0.85s ease;
+}
+.verse-inner.vis { opacity: 1; transform: translateY(0); }
+.verse-ref {
+  font-size: 0.62rem; letter-spacing: 0.6em;
+  color: var(--brass-light); text-transform: uppercase;
+  font-family: 'Cormorant Garamond', serif;
+  margin-bottom: 2.5rem; display: block; text-align: center;
+}
+.verse-main {
+  font-family: 'Nanum Myeongjo', serif;
+  font-size: clamp(1.1rem, 3vw, 1.65rem);
+  font-weight: 400; color: var(--hanji);
+  line-height: 2.1; text-align: center;
+  letter-spacing: 0.04em;
+  border-top: 1px solid rgba(196,160,90,0.2);
+  border-bottom: 1px solid rgba(196,160,90,0.2);
+  padding: 3rem 2rem;
+  margin-bottom: 2.5rem;
+}
+.verse-main .vhl { color: var(--brass-light); font-weight: 700; }
+.verse-body {
+  font-size: clamp(0.92rem, 2vw, 1.04rem);
+  line-height: 2.6; color: var(--hanji-dark);
+  font-weight: 400; letter-spacing: 0.02em;
+}
+.verse-body p { margin-bottom: 1.8em; }
+.verse-body p:last-child { margin-bottom: 0; }
+
+/* ════════════════════════════
+   QUESTION SECTION
+════════════════════════════ */
+#question {
+  background: var(--rust);
+  padding: 7rem 2rem;
+  position: relative; overflow: hidden;
+}
+#question::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 60% at 50% 50%, #a05030 0%, var(--rust) 70%);
+}
+.q-inner {
+  position: relative; z-index: 2;
+  max-width: 760px; margin: 0 auto; text-align: center;
+  opacity: 0; transform: translateY(32px);
+  transition: opacity 0.85s ease, transform 0.85s ease;
+}
+.q-inner.vis { opacity: 1; transform: translateY(0); }
+.q-lbl {
+  font-size: 0.62rem; letter-spacing: 0.6em;
+  color: rgba(244,238,223,0.6); text-transform: uppercase;
+  font-family: 'Cormorant Garamond', serif;
+  margin-bottom: 2.5rem; display: block;
+}
+.q-main {
+  font-family: 'Nanum Myeongjo', serif;
+  font-size: clamp(1.2rem, 3.5vw, 1.9rem);
+  font-weight: 700; color: var(--hanji);
+  line-height: 2; letter-spacing: 0.06em;
+  margin-bottom: 2rem;
+}
+.q-sub {
+  font-family: 'Nanum Myeongjo', serif;
+  font-size: clamp(0.95rem, 2.2vw, 1.1rem);
+  color: rgba(244,238,223,0.8);
+  line-height: 2.3; letter-spacing: 0.04em;
+  font-weight: 400; margin-bottom: 1.4em;
+}
+
+/* ════════════════════════════
+   CLOSING BLESSING
+════════════════════════════ */
+#close {
+  background: var(--ink);
+  min-height: 60vh;
+  display: flex; align-items: center; justify-content: center;
+  padding: 8rem 2rem;
+  position: relative; overflow: hidden;
+}
+.close-glow {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 55% 65% at 50% 50%,
+    rgba(154,122,58,0.07) 0%, transparent 70%);
+  animation: breathe 5s ease-in-out infinite;
+}
+@keyframes breathe {
+  0%,100% { transform: scale(1); opacity: 0.6; }
+  50%      { transform: scale(1.06); opacity: 1; }
+}
+.close-inner {
+  position: relative; z-index: 2;
+  max-width: 700px; margin: 0 auto; text-align: center;
+  opacity: 0; transform: translateY(32px);
+  transition: opacity 0.85s ease, transform 0.85s ease;
+}
+.close-inner.vis { opacity: 1; transform: translateY(0); }
+.close-orn {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem; color: var(--brass); opacity: 0.4;
+  display: block; margin-bottom: 2.5rem; font-style: normal;
+}
+.close-text {
+  font-family: 'Nanum Myeongjo', serif;
+  font-size: clamp(1rem, 2.6vw, 1.4rem);
+  font-weight: 400; color: var(--hanji);
+  line-height: 2.3; letter-spacing: 0.05em;
+  margin-bottom: 3.5rem;
+}
+.close-text .hl { color: var(--brass-light); font-weight: 700; }
+.close-hr {
+  display: flex; align-items: center; gap: 1rem;
+  margin: 3rem auto; max-width: 300px;
+}
+.close-hr-line { flex: 1; height: 1px; background: var(--brass); opacity: 0.25; }
+.close-hr-d { width: 5px; height: 5px; background: var(--brass); opacity: 0.5; transform: rotate(45deg); }
+
+/* ── FOOTER ── */
+footer {
+  background: #0e0c09;
+  text-align: center; padding: 3rem 2rem;
+  border-top: 1px solid rgba(154,122,58,0.15);
+}
+.foot-orn {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem; color: rgba(154,122,58,0.3);
+  display: block; margin-bottom: 1rem; font-style: normal;
+}
+footer p {
+  font-size: 0.65rem; color: #706a60;
+  letter-spacing: 0.22em; line-height: 2.2; text-transform: uppercase;
+  font-family: 'Cormorant Garamond', serif;
+}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<!-- CURTAIN -->
+<div id="curtain">
+  <div class="c-ko">신실한 종</div>
+  <div class="c-title">요강을 닦는<br>정성</div>
+  <div class="c-sub">고당 조만식 선생의 이야기</div>
+</div>
+
+<!-- DOTS -->
+<nav id="dots">
+  <div class="dot" data-id="hero"></div>
+  <div class="dot" data-id="s1"></div>
+  <div class="dot" data-id="s2"></div>
+  <div class="dot" data-id="s3"></div>
+  <div class="dot" data-id="s4"></div>
+  <div class="dot" data-id="s5"></div>
+  <div class="dot" data-id="verse"></div>
+  <div class="dot" data-id="question"></div>
+  <div class="dot" data-id="close"></div>
+</nav>
+
+<!-- ════ HERO ════ -->
+<section id="hero">
+  <div class="hero-texture"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">평안북도 정주 · 조선 말기</div>
+    <h1 class="hero-title-ko">
+      요강을 닦는<br>
+      <span class="accent">정성</span>
+    </h1>
+    <div class="hero-rule">
+      <div class="hero-rule-line"></div>
+      <div class="hero-rule-diamond"></div>
+      <div class="hero-rule-line"></div>
+    </div>
+    <p class="hero-verse-preview">
+      착하고 신실한 노예야.<br>
+      네가 적은 일에 신실하였으니,<br>
+      내가 많은 일을 너에게 맡길 것이다.
+    </p>
+  </div>
+  <div class="scroll-cue">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ════ S1 ════ -->
+<article class="sec" id="s1">
+  <span class="ch-lbl">첫 번째 이야기 · 머슴살이</span>
+  <h2 class="ch-h">오래전 평안북도 정주에<br>한 젊은이가 살고 있었습니다</h2>
+  <div class="body">
+    <p>이 청년은 생활이 매우 곤궁하여 근처 부잣집에서 머슴살이를 하게 되었습니다. 아직 나이가 어렸기 때문에 막 머슴이라고 해서 마당도 쓸고 물도 긷고 주인의 자질구레한 심부름을 하면서 밥이나 얻어먹는 그런 일이었습니다.</p>
+
+    <p>가장 거북스러웠던 것은 매일 아침 주인 마님이 안방에서 마루에 내놓는 <span class="key">요강을 비우는 일</span>이었습니다. 요강에는 식구들이 밤새 오줌을 누고 아이가 있는 집에서는 똥을 누는 일도 있었습니다. 밤새도록 뜨뜻한 방에서 부글부글 괴어 풍기는 냄새란 여간 비위가 아니고는 달갑지 않은 일이었습니다.</p>
+  </div>
+</article>
+
+<div class="interlude">
+  <span class="int-orn">◆</span>
+  <div class="int-text">그러나 이 청년이 요강을 비우는 모습은<br>아주 달랐습니다.</div>
+</div>
+
+<!-- ════ S2 ════ -->
+<article class="sec" id="s2">
+  <span class="ch-lbl">두 번째 이야기 · 놋요강의 윤기</span>
+  <h2 class="ch-h">마치 꿀단지나 끼고 가듯이<br>조심조심 정성을 들여</h2>
+  <div class="body">
+    <p>우선 요강을 마치 꿀단지나 끼고 가듯이 오른손으로 감아 안고 한 방울도 튀지 않도록 조심조심 정성을 들여 옮기는 것이었습니다. 측간 뒤에 있는 오줌통에 한 방울도 허실 없이 잘 부은 다음 샘가에 가서 모래를 한 줌 집어넣고 물에 적신 수세미로 잘 문지른 다음 헹궈 내기를 여러 번 해서 <span class="key">놋요강이 윤이 나도록 닦는 것</span>이었습니다.</p>
+
+    <p>주발이나 숟가락을 닦을 때처럼 얼굴이 환하게 비칠 만큼 문지른 후에 걸레로 물기 한 방울 없이 깨끗이 닦아서 마루에 공손히 갖다 놓았습니다.</p>
+
+    <p>하루 이틀이 아니고 <span class="key">일 년 열두 달을 한 번도 허투루 하는 일 없이</span> 매일 그런 정성을 들이는 것을 주인이 방문에 달린 작은 유리를 통해서 지켜보고 있었습니다.</p>
+  </div>
+
+  <div class="hr">
+    <div class="hr-line"></div>
+    <div class="hr-dot"></div>
+    <div class="hr-line"></div>
+  </div>
+
+  <div class="body">
+    <p>그러고는 섣달 어느 날 그 젊은이를 방으로 불러들였습니다.</p>
+  </div>
+</article>
+
+<!-- ════ S3 다크 — 주인의 대화 ════ -->
+<div class="dark-band" id="s3">
+  <div class="dark-inner">
+    <span class="dark-lbl">세 번째 이야기 · 주인의 물음</span>
+    <h2 class="dark-h">나는 자네가 지난 일 년 동안<br>요강 비우는 것을 문틈으로 지켜보았다네</h2>
+    <div class="dark-qblock">
+      <div class="dark-qtext">
+        "나는 자네가 지난 일 년 동안 요강 비우는 것을 문틈으로 지켜보았다네. 그런데 그 요강 비우는 솜씨가 다른 사람하고 사뭇 다르더군. 어떻게 요강을 그렇게 잘 비울 수 있단 말인가?"
+      </div>
+      <div class="dark-qsrc">— 주인의 말</div>
+    </div>
+
+    <div class="dark-body">
+      <p>그러자 공손히 무릎을 꿇고 앉아 있던 젊은이가 이렇게 대답을 하는 것이었습니다.</p>
+    </div>
+
+    <div class="dark-qblock">
+      <div class="dark-qtext">
+        "주인 마님, 소인은 무엇이나 제가 하는 일은 이 세상에서 제일 잘하는 사람이 되고 싶었습니다. 마님께서 제게 요강 비우는 일을 시키셨기 때문에 요강 하나는 이 나라에서 가장 잘 비우고 싶었을 뿐입니다."
+      </div>
+      <div class="dark-qsrc">— 청년의 대답</div>
+    </div>
+
+    <div class="dark-body">
+      <p>이 말을 듣고 있던 주인이 한참 고개를 끄덕이더니 이렇게 말하는 것이었습니다.</p>
+    </div>
+
+    <div class="dark-qblock">
+      <div class="dark-qtext">
+        "그랬구먼. 자네가 요강 비우는 것을 보니 자네는 요강만 비울 사람은 아닐세. 내일부터 그 일은 그만두고 내가 학자금을 대줄 테니 평양에 가서 공부를 하게나."
+      </div>
+      <div class="dark-qsrc">— 주인의 대답</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ S4 ════ -->
+<article class="sec" id="s4">
+  <span class="ch-lbl">네 번째 이야기 · 숭실학교</span>
+  <h2 class="ch-h">그렇게 해서 이 청년은<br>평양에 가서 공부를 하게 되었습니다</h2>
+  <div class="body">
+    <p>무슨 일이든지 자신에게 맡겨진 일은 이 세상에서 최고로 잘하려 했던 그가 공부인들 대충 했을 리가 없었습니다. 그는 누구보다 열심히 공부해서 우수한 성적으로 학교를 졸업했으며 일본 유학까지 마치고 고향인 정주의 오산학교에 와서 교사가 되었습니다.</p>
+
+    <p>이 분이 바로 <span class="key">일제 강점기 민족의 암흑기에 조국의 독립과 구국의 길에 앞장섰던 고당 조만식 선생</span>이었습니다.</p>
+  </div>
+
+  <div class="hr">
+    <div class="hr-line"></div>
+    <div class="hr-dot"></div>
+    <div class="hr-line"></div>
+  </div>
+
+  <div class="body">
+    <p>후에 사람들이 물었습니다.<br>
+    머슴이 어떻게 대학에 가고 선생님이 되고 독립운동가가 되었냐고 물으면</p>
+  </div>
+
+  <div class="qblock">
+    <div class="qtext">
+      "주인의 요강을 정성 들여 씻는 정성을 보여라."
+    </div>
+    <div class="qsrc">— 고당 조만식</div>
+  </div>
+
+  <div class="body">
+    <p>그렇게 대답하였다고 합니다.<br>
+    남의 요강을 닦는 겸손과 자기를 낮출 줄 아는 아량, 그게 조만식 선생님을 낳게 했던 것입니다.</p>
+
+    <p>그로 인하여 주인의 은혜로 1905년 평양 숭실중학(崇實中學)에 입학하였고, 재학 중 주님을 영접하게 되어 후에는 후학을 양성하고 민족의 독립에 앞장섰던 것입니다.</p>
+  </div>
+</article>
+
+<!-- ════ VERSE — 성경 ════ -->
+<section id="verse">
+  <div class="verse-glow"></div>
+  <div class="verse-inner" id="verse-in">
+    <span class="verse-ref">마태복음 25장 21절 · 23절</span>
+    <div class="verse-main">
+      <span class="vhl">잘하였다. 착하고 신실한 노예야.</span><br>
+      네가 적은 일에 신실하였으니,<br>
+      내가 많은 일을 너에게 맡길 것이다.<br>
+      네 주인의 기쁨에 참여하여라.
+    </div>
+    <div class="verse-body">
+      <p>성경은 우리에게 신앙의 신실함을 보여주고자 합니다.</p>
+      <p>주님은 우리에게 먼저 큰일을 맡기지 않으십니다. 우리의 삶과 생활 가운데 적은 일을 맡기고 그 일을 어떻게 처리하는지 지켜보고 계십니다. 게으른 종은 잠시 먼 나라로 떠날 때 주인이 노예들에게 소유의 맡김을 보고 주인의 인격을 핑계 삼아 자신의 게으름을 정당화하려고 하는 것을 봅니다. 그러나 주인은 자신의 소유의 맡김을 통하여 노예들의 신실함을 보고 더 큰일을 맡기고자 하는 것을 볼 수 있습니다.</p>
+      <p>나에게 주어진 일이 때로는 하찮고 업신여겨질지라도 그 일이 크든 작든 주인의 소유인 것을 발견한다면 그 일에 관하여 우리는 어떠한 것으로도 자신의 게으름을 변명할 수 없을 것입니다. 작은 일이지만 주인의 소유를 신실함으로 충성한다면 우리에게는 주인의 칭찬이 기다릴 것입니다. 큰일이 주어지기 전에 작은 일이 주어지는 것을 감사하고 신실하게 일하게 될 때 비로소 노예는 주인의 참된 기쁨에 참여할 수 있게 될 것입니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════ QUESTION ════ -->
+<section id="question">
+  <div class="q-inner" id="q-in">
+    <span class="q-lbl">당신에게 묻습니다</span>
+    <div class="q-main">당신은 지금 어떠한 노예입니까?</div>
+    <p class="q-sub">적은 일에 신실한 노예입니까?</p>
+    <p class="q-sub">
+      아니면 자신의 신세를 한탄하며<br>
+      "더 큰 일만 맡겨봐!"<br>
+      내가 이 큰일을 처리함으로 칭찬을 받으려고 하는<br>
+      게으른 노예는 아니겠지요?
+    </p>
+  </div>
+</section>
+
+<!-- ════ CLOSING ════ -->
+<section id="close">
+  <div class="close-glow"></div>
+  <div class="close-inner" id="close-in">
+    <span class="close-orn">◆</span>
+    <div class="close-text">
+      주님은 우리가 적은 일에도 신실하게 될 때<br>
+      <span class="hl">착한 노예로 칭찬을 받을 것</span>이며 또한<br>
+      주인의 많은 일을 맡을 것이며<br>
+      <span class="hl">주인의 기쁨에 참여하는 큰 축복의 은혜</span>를 가질 것입니다.
+    </div>
+    <div class="close-hr">
+      <div class="close-hr-line"></div>
+      <div class="close-hr-d"></div>
+      <div class="close-hr-line"></div>
+    </div>
+    <div class="close-text" style="font-size: clamp(0.88rem, 2vw, 1rem); color: var(--hanji-dark); opacity: 0.75; margin-bottom: 0;">
+      남의 요강을 닦는 겸손과<br>
+      자기를 낮출 줄 아는 아량.<br>
+      그것이 한 청년을 독립운동가로 세웠습니다.
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="foot-orn">◆</span>
+  <p>
+    고당 조만식 선생 · 1883 – 1950<br>
+    마태복음 25장 21절 · 착하고 신실한 노예야
+  </p>
+</footer>
+
+<script>
+// Curtain
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const c = document.getElementById('curtain');
+    c.classList.add('gone');
+    setTimeout(() => c.style.display = 'none', 1100);
+  }, 2800);
+});
+
+// Progress
+const prog = document.getElementById('progress');
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.body.scrollHeight - innerHeight) * 100;
+  prog.style.width = pct + '%';
+}, { passive: true });
+
+// Reveal
+const toReveal = document.querySelectorAll('.sec, .dark-inner, .verse-inner, .q-inner, .close-inner');
+const revObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+}, { threshold: 0.08 });
+toReveal.forEach(el => revObs.observe(el));
+
+// Dots
+const dots = document.querySelectorAll('.dot');
+const ids = ['hero','s1','s2','s3','s4','verse','question','close'];
+// map to fewer dots if needed
+const navIds = ['hero','s1','s2','s3','s4','verse','question','close'];
+const navEls = navIds.map(id => document.getElementById(id)).filter(Boolean);
+
+dots.forEach((d, i) => {
+  if (navEls[i]) d.addEventListener('click', () => navEls[i].scrollIntoView({ behavior: 'smooth' }));
+});
+
+const dotObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const i = navEls.indexOf(e.target);
+      if (i < 0) return;
+      dots.forEach((d, j) => d.classList.toggle('on', j === i));
+    }
+  });
+}, { threshold: 0.4 });
+navEls.forEach(el => dotObs.observe(el));
+</script>
+</body>
+</html>

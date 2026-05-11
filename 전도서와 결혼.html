@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>전도서와 결혼 – 삶의 허무 속에서 찾는 참된 의미</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700;900&family=DM+Serif+Display:wght@400&family=Tenor+Sans&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg:        #fdf8f2;
+            --bg2:       #f7f0e6;
+            --ink:       #2a1f14;
+            --ink-soft:  #6b5a48;
+            --ink-faint: #a8968a;
+            --terracotta:#b85c38;
+            --terra-pale:#f2ded4;
+            --sage:      #4a6741;
+            --sage-pale: #deebd9;
+            --wheat:     #c9993a;
+            --wheat-pale:#faefd9;
+            --blush:     #d4849a;
+            --blush-pale:#faeaee;
+            --line:      rgba(42,31,20,0.12);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg);
+            color: var(--ink);
+            font-family: 'Noto Serif KR', serif;
+            overflow-x: hidden;
+        }
+
+        /* ─── HERO ─── */
+        .hero {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            text-align: center;
+            position: relative;
+            padding: 80px 32px 60px;
+            background: var(--bg);
+            overflow: hidden;
+        }
+
+        /* Decorative rings */
+        .hero-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(201,153,58,0.18);
+            pointer-events: none;
+        }
+        .hero-ring:nth-child(1) { width: 520px; height: 520px; top: 50%; left: 50%; transform: translate(-50%,-50%); }
+        .hero-ring:nth-child(2) { width: 760px; height: 760px; top: 50%; left: 50%; transform: translate(-50%,-50%); opacity: .6; }
+        .hero-ring:nth-child(3) { width: 1020px; height: 1020px; top: 50%; left: 50%; transform: translate(-50%,-50%); opacity: .3; }
+
+        /* Soft gradient glow */
+        .hero-glow {
+            position: absolute;
+            width: 600px; height: 600px;
+            top: 50%; left: 50%;
+            transform: translate(-50%,-52%);
+            background: radial-gradient(ellipse, rgba(201,153,58,0.14) 0%, transparent 68%);
+            pointer-events: none;
+        }
+
+        .hero-inner {
+            position: relative;
+            z-index: 2;
+            max-width: 700px;
+        }
+
+        .hero-eyebrow {
+            font-family: 'Tenor Sans', sans-serif;
+            font-size: 11px;
+            letter-spacing: 0.38em;
+            text-transform: uppercase;
+            color: var(--wheat);
+            margin-bottom: 32px;
+            opacity: 0;
+            animation: fadeUp .9s ease .3s forwards;
+        }
+
+        .hero-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(38px, 8.5vw, 82px);
+            font-weight: 400;
+            line-height: 1.08;
+            color: var(--ink);
+            margin-bottom: 24px;
+            opacity: 0;
+            animation: fadeUp .9s ease .55s forwards;
+        }
+
+        .hero-title .accent { color: var(--terracotta); }
+
+        .hero-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin: 28px auto;
+            opacity: 0;
+            animation: fadeIn .9s ease 1s forwards;
+        }
+        .hero-divider::before,
+        .hero-divider::after {
+            content: '';
+            width: 56px;
+            height: 1px;
+            background: var(--wheat);
+            opacity: .6;
+        }
+        .hero-divider-icon { color: var(--wheat); font-size: 14px; }
+
+        .hero-sub {
+            font-family: 'Noto Serif KR', serif;
+            font-weight: 300;
+            font-size: clamp(14px, 2.2vw, 17px);
+            line-height: 1.9;
+            color: var(--ink-soft);
+            max-width: 480px;
+            margin: 0 auto;
+            opacity: 0;
+            animation: fadeUp .9s ease 1.1s forwards;
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 36px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            animation: fadeIn 1s ease 2s forwards;
+        }
+        .scroll-hint span {
+            font-family: 'Tenor Sans', sans-serif;
+            font-size: 9px;
+            letter-spacing: 0.35em;
+            color: var(--ink-faint);
+            text-transform: uppercase;
+        }
+        .scroll-line {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--wheat), transparent);
+            animation: lineGrow 2s ease-in-out infinite;
+        }
+
+        /* ─── WRAPPER ─── */
+        .wrapper {
+            max-width: 740px;
+            margin: 0 auto;
+            padding: 0 28px 120px;
+        }
+
+        /* ─── CHAPTER ─── */
+        .chapter {
+            position: relative;
+            padding: 72px 0 0;
+            opacity: 0;
+            transform: translateY(36px);
+            transition: opacity .85s ease, transform .85s ease;
+        }
+        .chapter.visible { opacity: 1; transform: translateY(0); }
+
+        /* Chapter label */
+        .ch-label {
+            font-family: 'Tenor Sans', sans-serif;
+            font-size: 10px;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--ink-faint);
+            margin-bottom: 14px;
+        }
+
+        /* Chapter heading */
+        .ch-title {
+            font-family: 'DM Serif Display', serif;
+            font-weight: 400;
+            font-size: clamp(26px, 5.5vw, 44px);
+            line-height: 1.15;
+            margin-bottom: 32px;
+        }
+        .ch-title.terra { color: var(--terracotta); }
+        .ch-title.sage  { color: var(--sage); }
+        .ch-title.wheat { color: var(--wheat); }
+        .ch-title.blush { color: var(--blush); }
+
+        /* Body text */
+        .ch-body {
+            font-weight: 300;
+            font-size: clamp(15px, 2.1vw, 17px);
+            line-height: 2.05;
+            color: var(--ink-soft);
+        }
+        .ch-body p { margin-bottom: 18px; }
+        .ch-body p:last-child { margin-bottom: 0; }
+
+        /* Blockquote */
+        .bq {
+            margin: 28px 0;
+            padding: 22px 26px 22px 34px;
+            border-left: 3px solid var(--terracotta);
+            background: var(--terra-pale);
+            border-radius: 0 8px 8px 0;
+            font-size: clamp(14px, 2vw, 16px);
+            line-height: 1.9;
+            color: var(--ink);
+            font-weight: 400;
+        }
+        .bq.sage-bq  { border-left-color: var(--sage);  background: var(--sage-pale); }
+        .bq.wheat-bq { border-left-color: var(--wheat); background: var(--wheat-pale); }
+        .bq.blush-bq { border-left-color: var(--blush); background: var(--blush-pale); }
+
+        .bq-ref {
+            display: block;
+            margin-top: 10px;
+            font-family: 'Tenor Sans', sans-serif;
+            font-size: 11px;
+            letter-spacing: 0.22em;
+            color: var(--ink-faint);
+            text-transform: uppercase;
+        }
+
+        /* Accent text */
+        .hi-terra { color: var(--terracotta); font-weight: 600; }
+        .hi-sage   { color: var(--sage);       font-weight: 600; }
+        .hi-wheat  { color: var(--wheat);      font-weight: 600; }
+
+        /* ─── CARD ROW ─── */
+        .card-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 28px;
+        }
+        @media (max-width: 600px) {
+            .card-row { grid-template-columns: 1fr; }
+        }
+
+        .card {
+            padding: 28px 22px;
+            border-radius: 12px;
+            border: 1px solid var(--line);
+            background: var(--bg2);
+        }
+        .card-icon {
+            font-size: 26px;
+            margin-bottom: 14px;
+        }
+        .card-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 17px;
+            color: var(--ink);
+            margin-bottom: 10px;
+        }
+        .card-body {
+            font-size: 13.5px;
+            line-height: 1.85;
+            color: var(--ink-soft);
+            font-weight: 300;
+        }
+
+        /* ─── FULL-WIDTH QUOTE BAND ─── */
+        .band {
+            margin: 72px -28px 0;
+            padding: 60px 52px;
+            background: var(--ink);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(36px);
+            transition: opacity .85s ease, transform .85s ease;
+        }
+        .band.visible { opacity: 1; transform: translateY(0); }
+
+        /* subtle pattern */
+        .band::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(circle, rgba(201,153,58,0.08) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        .band-quote {
+            position: relative;
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(19px, 3.8vw, 30px);
+            font-weight: 400;
+            color: #fdf8f2;
+            line-height: 1.65;
+            max-width: 580px;
+            margin: 0 auto 18px;
+        }
+        .band-quote .band-accent { color: var(--wheat); }
+        .band-ref {
+            font-family: 'Tenor Sans', sans-serif;
+            font-size: 11px;
+            letter-spacing: 0.3em;
+            color: rgba(253,248,242,0.45);
+            text-transform: uppercase;
+        }
+
+        /* ─── STEPS ─── */
+        .steps {
+            margin-top: 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .step {
+            display: grid;
+            grid-template-columns: 52px 1fr;
+            gap: 18px;
+            align-items: start;
+        }
+        .step-num {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 1.5px solid var(--sage);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'DM Serif Display', serif;
+            font-size: 17px;
+            color: var(--sage);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .step-content { font-size: clamp(14.5px, 2vw, 16.5px); line-height: 1.95; color: var(--ink-soft); font-weight: 300; }
+        .step-head { font-weight: 700; color: var(--ink); margin-bottom: 4px; font-size: 15px; }
+
+        /* ─── DIVIDER ─── */
+        .sep {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin: 0;
+            padding: 56px 0 0;
+            opacity: .35;
+        }
+        .sep::before, .sep::after { content: ''; flex: 1; height: 1px; background: var(--ink); }
+        .sep-diamond { font-size: 8px; color: var(--wheat); opacity: 2; }
+
+        /* ─── CLOSING ─── */
+        .closing {
+            margin-top: 72px;
+            padding: 52px 44px;
+            background: linear-gradient(135deg, var(--sage-pale), var(--wheat-pale));
+            border-radius: 16px;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(36px);
+            transition: opacity .85s ease, transform .85s ease;
+        }
+        .closing.visible { opacity: 1; transform: translateY(0); }
+
+        .closing-icon { font-size: 32px; margin-bottom: 20px; }
+        .closing-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(20px, 4vw, 30px);
+            color: var(--sage);
+            margin-bottom: 24px;
+            line-height: 1.3;
+        }
+        .closing-body {
+            font-size: clamp(15px, 2vw, 17px);
+            line-height: 2.1;
+            color: var(--ink-soft);
+            font-weight: 300;
+            max-width: 520px;
+            margin: 0 auto;
+        }
+        .closing-body p { margin-bottom: 14px; }
+        .closing-body p:last-child { margin-bottom: 0; }
+
+        /* ─── FOOTER ─── */
+        .footer {
+            text-align: center;
+            padding: 48px 28px 56px;
+            border-top: 1px solid var(--line);
+        }
+        .footer-church {
+            font-family: 'DM Serif Display', serif;
+            font-size: 22px;
+            color: var(--wheat);
+            margin-bottom: 6px;
+        }
+        .footer-sub {
+            font-family: 'Tenor Sans', sans-serif;
+            font-size: 11px;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: var(--ink-faint);
+        }
+
+        /* ─── ANIMATIONS ─── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(22px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+        @keyframes lineGrow {
+            0%,100% { transform: scaleY(1); opacity: 1; }
+            50%      { transform: scaleY(0.5); opacity: .4; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+    <div class="hero-ring"></div>
+    <div class="hero-ring"></div>
+    <div class="hero-ring"></div>
+    <div class="hero-glow"></div>
+
+    <div class="hero-inner">
+        <p class="hero-eyebrow">전도서와 결혼 &nbsp;·&nbsp; 청춘을 위한 말씀</p>
+
+        <h1 class="hero-title">
+            삶의 허무 속에서<br>찾는 <span class="accent">참된 사랑</span>
+        </h1>
+
+        <div class="hero-divider">
+            <span class="hero-divider-icon">✦</span>
+        </div>
+
+        <p class="hero-sub">
+            하나님 없이 찾는 사랑은 끝없이 부족하지만,<br>
+            하나님 안에서 누리는 결혼과 사랑은 은혜이며 선물입니다.
+        </p>
+    </div>
+
+    <div class="scroll-hint">
+        <span>읽기 시작</span>
+        <div class="scroll-line"></div>
+    </div>
+</section>
+
+<!-- ═══ CONTENT ═══ -->
+<div class="wrapper">
+
+    <!-- 1 -->
+    <article class="chapter">
+        <p class="ch-label">Chapter 01</p>
+        <h2 class="ch-title terra">인생과 결혼의 현실</h2>
+        <div class="ch-body">
+            <p>사람은 성장하면서 자연스럽게 배우자를 찾고 결혼을 꿈꿉니다. 많은 사람들은 결혼을 통해 행복을 얻고 사랑으로 만족할 것이라 기대합니다. 하지만 현실은 종종 달랐습니다.</p>
+
+            <div class="bq">
+                "지금의 배우자가 아니라 다른 사람이라면 더 행복할 텐데…<br>
+                지금의 남편이 아니라 저 사람이라면 더 행복할 텐데…"
+            </div>
+
+            <p>이 마음은 <span class="hi-terra">상대의 문제가 아니라</span>, 자신의 자아를 내려놓지 못한 결과입니다. 비교와 욕심으로 인해 참된 만족을 찾지 못하는 것입니다.</p>
+        </div>
+    </article>
+
+    <div class="sep"><div class="sep-diamond">◆</div></div>
+
+    <!-- 2 -->
+    <article class="chapter">
+        <p class="ch-label">Chapter 02</p>
+        <h2 class="ch-title terra">솔로몬과 해 아래의 허무함</h2>
+        <div class="ch-body">
+            <p>솔로몬은 인간의 헛됨을 깊이 탐구한 인물입니다. 그는 지혜의 절정에 있었고, 왕의 권력과 부를 마음껏 누렸으며, 수백 명의 아내와 첩들을 거느리며 정욕의 방종을 경험했습니다. 그는 해 아래서 모든 수고와 쾌락, 성공을 경험했지만 결론은 단 하나였습니다.</p>
+
+            <div class="bq wheat-bq">
+                "허무 중의 허무, 허무 중의 허무라. 모든 것이 허무여라."
+                <span class="bq-ref">— 전도서</span>
+            </div>
+
+            <p>왜 모든 것이 허무인가요? 사람은 하나님께서 그분의 형상으로 창조하셨습니다. 그러나 사탄이 인간 속에 죄를 주입하며 하나님의 목적에서 벗어나게 했습니다. 그 결과 인간과 모든 피조물은 썩어짐과 허무의 종이 되었고, <span class="hi-terra">진정한 만족을 얻지 못하게</span> 되었습니다.</p>
+        </div>
+    </article>
+
+    <div class="sep"><div class="sep-diamond">◆</div></div>
+
+    <!-- 3 -->
+    <article class="chapter">
+        <p class="ch-label">Chapter 03</p>
+        <h2 class="ch-title sage">그러나 절망 속에서도 길은 있다</h2>
+        <div class="ch-body">
+            <p>솔로몬은 완전히 실망하지 않았습니다. 그는 허무함 속에서도 하나님께로 돌아오는 길을 강조합니다.</p>
+
+            <div class="bq sage-bq">
+                "하나님을 경외하고 그분의 계명을 지켜라.<br>이것이 사람의 본분이다."
+                <span class="bq-ref">— 전도서 12:13</span>
+            </div>
+
+            <p>참된 만족과 의미는 <span class="hi-sage">하나님과 연결될 때</span> 회복됩니다.</p>
+        </div>
+    </article>
+
+</div>
+
+<!-- ═══ BAND QUOTE ═══ -->
+<div class="band">
+    <p class="band-quote">
+        "네 사랑하는 아내와 함께 인생을 누려라.<br>
+        이것이 <span class="band-accent">네 삶의 몫</span>이요,<br>
+        해 아래에서 수고한 네 수고의 몫이다."
+    </p>
+    <p class="band-ref">— 전도서 9:9</p>
+</div>
+
+<div class="wrapper">
+
+    <!-- 4 -->
+    <article class="chapter">
+        <p class="ch-label">Chapter 04</p>
+        <h2 class="ch-title wheat">결혼과 아내의 의미</h2>
+        <div class="ch-body">
+            <p>솔로몬은 결혼과 아내에 대해서도 분명히 말합니다. 전도서가 말하는 아내의 의미는 세 가지입니다.</p>
+        </div>
+
+        <div class="card-row">
+            <div class="card">
+                <div class="card-icon">🎁</div>
+                <div class="card-title">하나님의 선물</div>
+                <div class="card-body">헛된 인생 속에서 하나님이 허락하신 기쁨과 쉼의 선물입니다.</div>
+            </div>
+            <div class="card">
+                <div class="card-icon">🤝</div>
+                <div class="card-title">인생의 동행자</div>
+                <div class="card-body">외로움, 수고, 어려움을 함께 견디고 나누는 존재입니다. "두 사람이 한 사람보다 나음은…" (전 4:9)</div>
+            </div>
+            <div class="card">
+                <div class="card-icon">🌿</div>
+                <div class="card-title">거룩케 하는 도구</div>
+                <div class="card-body">겸손과 인내, 희생, 용서를 배우는 훈련장입니다. 결혼은 나를 빚으시는 하나님의 손길입니다.</div>
+            </div>
+        </div>
+    </article>
+
+    <div class="sep"><div class="sep-diamond">◆</div></div>
+
+    <!-- 5 -->
+    <article class="chapter">
+        <p class="ch-label">Chapter 05</p>
+        <h2 class="ch-title blush">하나님이 바라시는 결혼</h2>
+        <div class="ch-body">
+            <p>하나님은 결혼을 단순한 동반자 관계가 아니라 거룩한 목적을 위해 주셨습니다.</p>
+
+            <div class="bq blush-bq">
+                "나는 이혼을 미워한다." 여호와 이스라엘의 하나님의 말씀이다.<br>
+                "이혼하는 사람은 폭력을 행사하는 것이다."<br>
+                그러니 너희의 영을 주의하고 배신하지 마라.
+                <span class="bq-ref">— 말라기 2:15–16</span>
+            </div>
+
+            <p>결혼은 <span class="hi-terra">하나님 형상을 이어가는 통로</span>이자, 그분의 뜻을 실현하는 삶의 장입니다.</p>
+        </div>
+    </article>
+
+    <div class="sep"><div class="sep-diamond">◆</div></div>
+
+    <!-- 6 -->
+    <article class="chapter">
+        <p class="ch-label">Chapter 06</p>
+        <h2 class="ch-title sage">적용과 묵상</h2>
+        <div class="ch-body">
+            <p>오늘 이 말씀을 통해 우리의 결혼관과 삶의 태도를 돌아봅니다.</p>
+        </div>
+
+        <div class="steps">
+            <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                    <div class="step-head">비교와 욕심을 내려놓기</div>
+                    더 좋은 배우자를 찾으려는 마음보다, 지금의 배우자를 하나님이 주신 몫으로 감사하는 것이 참된 지혜입니다.
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                    <div class="step-head">결혼을 은혜로 보기</div>
+                    행복의 결과가 아니라, 하나님 안에서 빚어지는 성숙과 동행의 과정입니다.
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                    <div class="step-head">하나님 안에서 삶의 의미 회복</div>
+                    해 아래 헛된 수고 속에서도, 하나님께로 돌아와 그분 안에서 만족과 기쁨을 누릴 수 있습니다.
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <!-- Closing -->
+    <div class="closing">
+        <div class="closing-icon">✨</div>
+        <h2 class="closing-title">마무리 메시지</h2>
+        <div class="closing-body">
+            <p>하나님 없이 찾는 사랑과 행복은 끝없이 부족하지만,</p>
+            <p>하나님 안에서 누리는 결혼과 사랑은 은혜이며 선물입니다.</p>
+            <p>하나님께 돌아올 때, 우리는 이미 받은 것의<br>가치와 의미를 비로소 볼 수 있습니다.</p>
+        </div>
+    </div>
+
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="footer">
+    <p class="footer-church">부산교회 2구역</p>
+    <p class="footer-sub"> &nbsp;·&nbsp; 청춘 형제자매들을 위한 말씀</p>
+</footer>
+
+<script>
+    const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) e.target.classList.add('visible');
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.chapter, .band, .closing').forEach(el => io.observe(el));
+</script>
+</body>
+</html>

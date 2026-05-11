@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>코 없는 소녀의 노래</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;900&family=Cinzel:wght@400;700;900&family=Nanum+Myeongjo:wght@400;700;800&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden;background:#0a1208;}
+body{font-family:'Noto Serif KR',serif;color:#e8e0d0;cursor:none;}
+
+/* ══ 캔버스 레이어 ══ */
+#bg-canvas{position:fixed;inset:0;z-index:0;}
+#wave-canvas{position:fixed;inset:0;z-index:1;pointer-events:none;}
+
+/* ══ 커서 ══ */
+#cursor{
+  position:fixed;pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:transform 0.1s;
+}
+#cursor svg{filter:drop-shadow(0 0 5px rgba(180,240,130,0.9));}
+
+/* ══ 노드들 (클릭 가능한 지점) ══ */
+.node{
+  position:fixed;z-index:20;
+  transform:translate(-50%,-50%);
+  cursor:pointer;
+}
+.node-dot{
+  width:16px;height:16px;border-radius:50%;
+  background:rgba(160,220,100,0.25);
+  border:1.5px solid rgba(160,220,100,0.6);
+  position:relative;
+  transition:all 0.25s;
+  animation:nodePulse 2.5s infinite;
+}
+.node:hover .node-dot{
+  background:rgba(160,220,100,0.6);
+  transform:scale(1.4);
+  box-shadow:0 0 20px rgba(160,220,100,0.6);
+}
+.node.active .node-dot{
+  background:rgba(240,200,80,0.7);
+  border-color:rgba(240,200,80,0.9);
+  box-shadow:0 0 24px rgba(240,200,80,0.7);
+  animation:none;
+  transform:scale(1.3);
+}
+.node-label{
+  position:absolute;
+  white-space:nowrap;
+  font-family:'Special Elite',serif;
+  font-size:9px;letter-spacing:0.3em;
+  color:rgba(160,220,100,0.6);
+  text-transform:uppercase;
+  top:20px;left:50%;transform:translateX(-50%);
+  pointer-events:none;
+}
+.node.active .node-label{color:rgba(240,200,80,0.9);}
+
+@keyframes nodePulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(160,220,100,0.4);}
+  50%{box-shadow:0 0 0 8px rgba(160,220,100,0);}
+}
+
+/* ══ 패널 — 이야기 카드 ══ */
+#panel{
+  position:fixed;right:0;top:0;bottom:0;
+  width:clamp(320px,38vw,520px);
+  background:rgba(4,10,4,0.95);
+  border-left:1px solid rgba(100,160,60,0.18);
+  z-index:30;
+  transform:translateX(100%);
+  transition:transform 0.5s cubic-bezier(0.22,1,0.36,1);
+  display:flex;flex-direction:column;
+  overflow:hidden;
+}
+#panel.open{transform:translateX(0);}
+
+#panel-top{
+  padding:28px 32px 20px;
+  border-bottom:1px solid rgba(100,160,60,0.12);
+  flex-shrink:0;
+  position:relative;
+}
+#panel-chapter{
+  font-family:'Special Elite',serif;
+  font-size:9px;letter-spacing:0.5em;text-transform:uppercase;
+  color:rgba(160,220,100,0.5);margin-bottom:10px;
+}
+#panel-title{
+  font-family:'Nanum Myeongjo',serif;
+  font-size:clamp(18px,2.8vw,26px);font-weight:800;
+  color:#fff;line-height:1.35;word-break:keep-all;
+}
+#panel-close{
+  position:absolute;top:24px;right:24px;
+  width:28px;height:28px;
+  border:1px solid rgba(100,160,60,0.3);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:14px;color:rgba(160,220,100,0.5);
+  transition:all 0.2s;
+}
+#panel-close:hover{border-color:rgba(160,220,100,0.7);color:rgba(160,220,100,0.9);}
+
+#panel-body{
+  flex:1;overflow-y:auto;
+  padding:24px 32px 40px;
+}
+#panel-body::-webkit-scrollbar{width:3px;}
+#panel-body::-webkit-scrollbar-track{background:transparent;}
+#panel-body::-webkit-scrollbar-thumb{background:rgba(100,160,60,0.3);}
+
+.panel-p{
+  font-family:'Noto Serif KR',serif;
+  font-size:14.5px;line-height:2.15;
+  color:rgba(230,225,210,0.78);
+  word-break:keep-all;margin-bottom:0.9em;
+}
+.panel-p strong{color:#fff;font-weight:600;}
+
+.panel-verse{
+  border-left:2px solid rgba(220,180,60,0.5);
+  padding:14px 0 14px 18px;
+  margin:20px 0;
+}
+.panel-verse-ref{
+  font-family:'Special Elite',serif;font-size:8px;
+  letter-spacing:0.4em;text-transform:uppercase;
+  color:rgba(220,180,60,0.6);margin-bottom:8px;display:block;
+}
+.panel-verse p{
+  font-family:'Nanum Myeongjo',serif;
+  font-size:14px;font-weight:700;
+  color:#f0e8c0;line-height:1.9;word-break:keep-all;
+}
+
+.panel-big{
+  font-family:'Nanum Myeongjo',serif;
+  font-size:clamp(17px,2.2vw,22px);font-weight:800;
+  color:#fff;line-height:1.65;word-break:keep-all;
+  padding:18px 0;
+}
+
+.panel-nav{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-top:28px;padding-top:20px;
+  border-top:1px solid rgba(100,160,60,0.1);
+}
+.panel-nav-btn{
+  font-family:'Special Elite',serif;font-size:9px;
+  letter-spacing:0.35em;text-transform:uppercase;
+  color:rgba(160,220,100,0.45);cursor:pointer;
+  padding:6px 0;transition:color 0.2s;
+}
+.panel-nav-btn:hover{color:rgba(160,220,100,0.9);}
+.panel-nav-btn.dim{opacity:0.2;pointer-events:none;}
+
+/* ══ 하단 안내 ══ */
+#guide{
+  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+  z-index:20;text-align:center;
+  font-family:'Special Elite',serif;font-size:9px;
+  letter-spacing:0.4em;text-transform:uppercase;
+  color:rgba(160,220,100,0.35);
+  pointer-events:none;
+  animation:guideFade 3s 2s forwards;
+}
+@keyframes guideFade{to{opacity:0;}}
+
+/* ══ 제목 오버레이 ══ */
+#hero-overlay{
+  position:fixed;inset:0;z-index:25;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:rgba(4,10,4,0.82);
+  transition:opacity 0.7s;
+  pointer-events:all;
+}
+#hero-overlay.gone{opacity:0;pointer-events:none;}
+#hero-title{
+  font-family:'Cinzel',serif;
+  font-size:clamp(28px,6vw,72px);
+  font-weight:700;color:#fff;
+  letter-spacing:0.08em;text-align:center;
+  line-height:1.15;
+  text-shadow:0 0 60px rgba(120,200,80,0.4);
+  margin-bottom:16px;
+}
+#hero-sub{
+  font-family:'Special Elite',serif;
+  font-size:clamp(9px,1.3vw,12px);
+  letter-spacing:0.5em;text-transform:uppercase;
+  color:rgba(160,220,100,0.45);margin-bottom:36px;
+}
+#hero-btn{
+  padding:12px 44px;
+  border:1px solid rgba(160,220,100,0.4);
+  background:rgba(20,50,10,0.6);
+  color:rgba(160,220,100,0.85);
+  font-family:'Noto Serif KR',serif;font-size:14px;
+  cursor:pointer;letter-spacing:0.15em;
+  transition:all 0.2s;border-radius:2px;
+}
+#hero-btn:hover{background:rgba(40,90,20,0.8);border-color:rgba(160,220,100,0.8);}
+
+/* ══ 노래 음표 파티클 ══ */
+.note-particle{
+  position:fixed;z-index:15;pointer-events:none;
+  font-size:16px;color:rgba(160,220,100,0.7);
+  animation:noteFloat 3s ease-out forwards;
+}
+@keyframes noteFloat{
+  0%{opacity:0.8;transform:translate(0,0) scale(1);}
+  100%{opacity:0;transform:translate(var(--nx),var(--ny)) scale(0.5);}
+}
+
+/* ══ 범례 ══ */
+#legend{
+  position:fixed;left:80px;bottom:20px;z-index:20;
+  font-family:'Special Elite',serif;font-size:8px;
+  letter-spacing:0.3em;text-transform:uppercase;
+  color:rgba(160,220,100,0.3);
+  display:flex;flex-direction:column;gap:6px;
+  opacity:0;transition:opacity 1s 2s;
+}
+#legend.show{opacity:1;}
+.leg-row{display:flex;align-items:center;gap:8px;}
+.leg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+<canvas id="wave-canvas"></canvas>
+<div id="cursor">
+  <svg width="20" height="20" viewBox="0 0 20 20">
+    <circle cx="10" cy="10" r="3" fill="rgba(160,220,100,0.9)"/>
+    <circle cx="10" cy="10" r="7" fill="none" stroke="rgba(160,220,100,0.4)" stroke-width="1"/>
+  </svg>
+</div>
+
+<!-- 노드들 -->
+<div class="node" id="node-school" style="left:28%;top:38%;">
+  <div class="node-dot"></div>
+  <div class="node-label">기독교 학교<P>start<p></div>
+</div>
+<div class="node" id="node-girl" style="left:42%;top:55%;">
+  <div class="node-dot" style="width:22px;height:22px;background:rgba(240,200,80,0.2);border-color:rgba(240,200,80,0.7);"></div>
+  <div class="node-label" style="color:rgba(240,200,80,0.7);">코 없는 소녀</div>
+</div>
+<div class="node" id="node-jungle" style="left:60%;top:45%;">
+  <div class="node-dot"></div>
+  <div class="node-label">정글 마을</div>
+</div>
+<div class="node" id="node-mission" style="left:22%;top:62%;">
+  <div class="node-dot"></div>
+  <div class="node-label">선교회</div>
+</div>
+<div class="node" id="node-300" style="left:72%;top:58%;">
+  <div class="node-dot" style="background:rgba(200,120,60,0.2);border-color:rgba(200,120,60,0.6);"></div>
+  <div class="node-label" style="color:rgba(200,120,60,0.6);">300명의 원주민</div>
+</div>
+<div class="node" id="node-word" style="left:48%;top:30%;">
+  <div class="node-dot" style="background:rgba(200,170,80,0.2);border-color:rgba(200,170,80,0.6);width:14px;height:14px;"></div>
+  <div class="node-label" style="color:rgba(200,170,80,0.6);">말씀</div>
+</div>
+
+<!-- 안내 -->
+<div id="guide">지도 위의 점을 클릭하여 이야기를 탐험하세요</div>
+
+<!-- 범례 -->
+<div id="legend">
+  <div class="leg-row"><div class="leg-dot" style="background:rgba(160,220,100,0.6);"></div>이야기 지점</div>
+  <div class="leg-row"><div class="leg-dot" style="background:rgba(240,200,80,0.6);"></div>소녀</div>
+  <div class="leg-row"><div class="leg-dot" style="background:rgba(200,120,60,0.6);"></div>회심의 역사</div>
+</div>
+
+<!-- 패널 -->
+<div id="panel">
+  <div id="panel-top">
+    <div id="panel-chapter"></div>
+    <div id="panel-title"></div>
+    <div id="panel-close">✕</div>
+  </div>
+  <div id="panel-body"></div>
+</div>
+
+<!-- 히어로 -->
+<div id="hero-overlay">
+  <div id="hero-title">코 없는 소녀의<br>노래</div>
+  <div id="hero-sub">A Song That Crossed the Jungle</div>
+  <button id="hero-btn">▶ 지도 탐험 시작</button>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+//  캔버스 세팅
+// ══════════════════════════════════════════════
+const bgC  = document.getElementById('bg-canvas');
+const bgX  = bgC.getContext('2d');
+const wvC  = document.getElementById('wave-canvas');
+const wvX  = wvC.getContext('2d');
+let W=0,H=0;
+
+function resize(){
+  W=bgC.width=wvC.width=innerWidth;
+  H=bgC.height=wvC.height=innerHeight;
+  drawJungle();
+}
+window.addEventListener('resize',resize);
+
+// ══════════════════════════════════════════════
+//  마우스
+// ══════════════════════════════════════════════
+let mx=0,my=0;
+const cur=document.getElementById('cursor');
+window.addEventListener('mousemove',e=>{
+  mx=e.clientX;my=e.clientY;
+  cur.style.left=mx+'px';cur.style.top=my+'px';
+});
+
+// ══════════════════════════════════════════════
+//  정글 지형도 배경 그리기
+// ══════════════════════════════════════════════
+function rand(a,b){return a+Math.random()*(b-a);}
+
+// 나무 모양
+function drawTree(ctx,x,y,h,dark){
+  const trunk=h*0.25;
+  ctx.fillStyle=dark?'rgba(20,35,15,0.9)':'rgba(30,55,20,0.7)';
+  ctx.fillRect(x-2,y-trunk,4,trunk);
+  // 삼각형 캐노피 세 겹
+  [[1.2,0],[1,0.3*h],[0.7,0.55*h]].forEach(([scale,oy])=>{
+    ctx.beginPath();
+    ctx.moveTo(x,y-trunk-oy-h*scale*0.6);
+    ctx.lineTo(x-h*scale*0.45,y-trunk-oy);
+    ctx.lineTo(x+h*scale*0.45,y-trunk-oy);
+    ctx.closePath();
+    ctx.fillStyle=dark
+      ?`rgba(${10+Math.random()*8},${28+Math.random()*10},${10+Math.random()*6},0.95)`
+      :`rgba(${18+Math.random()*14},${52+Math.random()*20},${14+Math.random()*10},0.82)`;
+    ctx.fill();
+  });
+}
+
+// 강/길 경로
+function drawPath(ctx,pts,col,lw){
+  ctx.beginPath();
+  ctx.moveTo(pts[0][0],pts[0][1]);
+  for(let i=1;i<pts.length;i++){
+    const [px,py]=pts[i-1],[cx,cy]=pts[i];
+    ctx.quadraticCurveTo(px,py,(px+cx)/2,(py+cy)/2);
+  }
+  ctx.strokeStyle=col;ctx.lineWidth=lw;ctx.stroke();
+}
+
+let treesData=[];
+
+function drawJungle(){
+  bgX.clearRect(0,0,W,H);
+
+  // 기본 배경 — 깊은 정글
+  const bg=bgX.createRadialGradient(W*.45,H*.5,0,W*.45,H*.5,Math.max(W,H)*.75);
+  bg.addColorStop(0,'#142010');
+  bg.addColorStop(0.5,'#0d1a0a');
+  bg.addColorStop(1,'#060e04');
+  bgX.fillStyle=bg;bgX.fillRect(0,0,W,H);
+
+  // 안개 레이어
+  const fog=bgX.createLinearGradient(0,0,W,H);
+  fog.addColorStop(0,'rgba(60,90,40,0.04)');
+  fog.addColorStop(1,'rgba(20,40,15,0.08)');
+  bgX.fillStyle=fog;bgX.fillRect(0,0,W,H);
+
+  // 나무 무더기 생성 (고정 시드처럼 배치)
+  if(treesData.length===0){
+    for(let i=0;i<160;i++){
+      treesData.push({
+        x:rand(0,W),y:rand(0,H),
+        h:rand(18,52),dark:Math.random()>.4
+      });
+    }
+  }
+  // 가장자리 나무를 더 촘촘히
+  treesData.forEach(t=>drawTree(bgX,t.x,t.y,t.h,t.dark));
+
+  // 강줄기 — 소녀가 걸어간 길
+  const riverPts=[
+    [W*.05,H*.3],[W*.18,H*.4],[W*.3,H*.48],[W*.42,H*.55],
+    [W*.58,H*.5],[W*.7,H*.44],[W*.85,H*.42],[W*.98,H*.38]
+  ];
+  drawPath(bgX,riverPts,'rgba(30,70,20,0.3)',3);
+  drawPath(bgX,riverPts,'rgba(80,160,60,0.08)',8);
+
+  // 소녀가 걸어간 점선 경로
+  bgX.setLineDash([4,8]);
+  drawPath(bgX,riverPts,'rgba(220,195,80,0.18)',1.5);
+  bgX.setLineDash([]);
+
+  // 등고선 느낌
+  for(let lev=0;lev<5;lev++){
+    bgX.beginPath();
+    for(let x=0;x<=W;x+=6){
+      const y=H*(0.2+lev*.14)+Math.sin(x*.008+lev*1.2)*30+Math.cos(x*.013+lev)*20;
+      x===0?bgX.moveTo(x,y):bgX.lineTo(x,y);
+    }
+    bgX.strokeStyle=`rgba(50,90,30,${0.04-lev*.006})`;
+    bgX.lineWidth=1;bgX.stroke();
+  }
+
+  // 격자 미세 눈금 (지도 느낌)
+  bgX.strokeStyle='rgba(80,120,50,0.04)';bgX.lineWidth=0.5;
+  for(let x=0;x<W;x+=W/16){bgX.beginPath();bgX.moveTo(x,0);bgX.lineTo(x,H);bgX.stroke();}
+  for(let y=0;y<H;y+=H/10){bgX.beginPath();bgX.moveTo(0,y);bgX.lineTo(W,y);bgX.stroke();}
+}
+
+// ══════════════════════════════════════════════
+//  음파 시스템
+// ══════════════════════════════════════════════
+const waves=[];
+
+function addWave(x,y,color='rgba(160,220,100'){
+  waves.push({x,y,r:0,maxR:Math.max(W,H)*.7,opacity:0.6,
+    color,speed:1.8+Math.random()*.8});
+}
+
+// 소녀 노드 위치에서 자동 파동
+let autoWaveT=0;
+
+function drawWaves(){
+  wvX.clearRect(0,0,W,H);
+  for(let i=waves.length-1;i>=0;i--){
+    const w=waves[i];
+    w.r+=w.speed;
+    w.opacity=0.6*(1-w.r/w.maxR);
+    if(w.opacity<=0){waves.splice(i,1);continue;}
+    wvX.beginPath();
+    wvX.arc(w.x,w.y,w.r,0,Math.PI*2);
+    wvX.strokeStyle=`${w.color},${w.opacity})`;
+    wvX.lineWidth=1.5;wvX.stroke();
+  }
+}
+
+// ══════════════════════════════════════════════
+//  음표 파티클 생성
+// ══════════════════════════════════════════════
+const notes=['♩','♪','♫','♬'];
+function spawnNote(x,y){
+  for(let i=0;i<3;i++){
+    const el=document.createElement('div');
+    el.className='note-particle';
+    el.textContent=notes[Math.floor(Math.random()*notes.length)];
+    const angle=Math.random()*Math.PI*2;
+    const dist=40+Math.random()*60;
+    el.style.left=x+'px';el.style.top=y+'px';
+    el.style.setProperty('--nx',(Math.cos(angle)*dist)+'px');
+    el.style.setProperty('--ny',(Math.sin(angle)*dist-30)+'px');
+    el.style.animationDelay=(i*0.15)+'s';
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),3500);
+  }
+}
+
+// ══════════════════════════════════════════════
+//  콘텐츠 데이터
+// ══════════════════════════════════════════════
+const CONTENT={
+  'node-school':{
+    chapter:'Chapter 01 — 학교',
+    title:'한 소녀가 찾아왔다',
+    body:`<p class="panel-p">한 정글 지역에 있는 기독교 학교에 아주 보기 흉한 소녀가 찾아왔다. 흉한 몰골의 그 소녀는 코가 없는 기형아였으며 저능아였다.</p>
+    <p class="panel-p">하지만 그 학교의 교감은 그를 환대하고 학교에서 지낼 수 있도록 했다.</p>
+    <p class="panel-p">학교에서 그녀가 할 수 있는 것은 노래 몇 마디를 배우는 일 외에는 아무 것도 없었다. 그것이 코 없는 소녀가 가진 유일한 소질이었다.</p>
+    <p class="panel-p">몇 달이 되지 않아 아이들과 학부모, 그리고 교사들의 반대로 더 이상 소녀를 가르칠 수 없었고 교감은 그 소녀를 돌려보낼 수밖에 없었다.</p>`,
+    next:'node-girl'
+  },
+  'node-girl':{
+    chapter:'Chapter 02 — 소녀',
+    title:'정글 속으로 사라진 소녀',
+    body:`<p class="panel-p">소녀는 슬퍼하며 다시 정글 속으로 자취를 감추었다. 그렇게 소녀는 사람들의 기억 속에서 차츰 사라졌다.</p>
+    <p class="panel-p">그녀가 가진 것은 단 하나, 노래뿐이었다.</p>
+    <div class="panel-big">그러나 그 노래는<br>정글 깊은 곳에서<br>계속 흘러가고 있었다.</div>`,
+    next:'node-jungle',prev:'node-school'
+  },
+  'node-jungle':{
+    chapter:'Chapter 03 — 마을',
+    title:'온 마을을 준비시키다',
+    body:`<p class="panel-p">소녀는 비록 특출한 재능은 없었으나 정글 마을 사람들에게 찬양을 가르치면서 그들을 준비시켰다.</p>
+    <p class="panel-p">저능아였지만 그녀는 온 마을 사람들이 복음을 받아들일 수 있도록 그들에게 찬양을 가르치면서 그들을 준비시켰던 것이다.</p>
+    <div class="panel-big">하나님은 아주 미약한 자를<br>사용하셔서<br>당신의 뜻을 이루신다.</div>`,
+    next:'node-mission',prev:'node-girl'
+  },
+  'node-mission':{
+    chapter:'Chapter 04 — 선교회',
+    title:'2년 후 — 간절한 호소',
+    body:`<p class="panel-p">2년 후, 한 선교회에 정글 지방의 마을로부터 복음을 전해 달라는 간절한 호소의 편지가 왔다.</p>
+    <p class="panel-p">선교회는 그 마을의 요청을 받아들여 전도자를 파송했다. 전도자가 그 곳에 도착했을 때 사람들은 언덕에 모여 그를 기다리고 있었다.</p>
+    <p class="panel-p">전도자는 먼저 찬양을 하나 가르치기로 하고 간단한 합창을 하나 소개했다.</p>`,
+    next:'node-300',prev:'node-jungle'
+  },
+  'node-300':{
+    chapter:'Chapter 05 — 300명',
+    title:'"우리도 아는데요"',
+    body:`<p class="panel-p">그러자 300여 명의 원주민들은 <strong>"우리도 아는데요."</strong>라고 말하며 찬양을 함께 불렀다.</p>
+    <p class="panel-p">전도자는 너무나 놀라 다른 찬양을 불렀는데 역시 그 찬양도 그들은 알고 있었다.</p>
+    <p class="panel-p">"어디서 배우셨나요? 내가 알기로는 지금까지 여러분들에게 복음을 전해 준 전도자는 한 사람도 없었는데 말이예요."</p>
+    <p class="panel-p">그들은 한 사람을 손으로 가리켰다. 바로 학교에서 쫓겨난 후 모든 사람의 기억에서 사라진 그 소녀였다.</p>
+    <p class="panel-p">그녀는 온 마을을 예수님께로 인도하는 귀한 능력을 가지고 있었던 것이다.</p>`,
+    next:'node-word',prev:'node-mission'
+  },
+  'node-word':{
+    chapter:'Chapter 06 — 말씀',
+    title:'전도의 미련한 것',
+    body:`<div class="panel-verse">
+      <span class="panel-verse-ref">고린도전서 1장 21–24절 · 1 Corinthians 1:21–24</span>
+      <p>"하나님의 지혜에 있어서는 이 세상이 자기 지혜로 하나님을 알지 못하므로 하나님께서 전도의 미련한 것으로 믿는 자들을 구원하시기를 기뻐하셨도다 유대인은 표적을 구하고 헬라인은 지혜를 찾으나 우리는 십자가에 못 박힌 그리스도를 전하니 유대인에게는 거리끼는 것이요 이방인에게는 미련한 것이로되 오직 부르심을 받은 자들에게는 유대인이나 헬라인이나 그리스도는 하나님의 능력이요 하나님의 지혜니라"</p>
+    </div>
+    <p class="panel-p">혹시 내가 받은 그리스도의 사랑을 나 스스로 부끄러워하거나 어리석게 여기며 마음 한쪽 구석에 묻어 두고 있지는 않습니까?</p>
+    <p class="panel-p">지금 이 순간 나의 마음을 돌이켜서 내가 받은 그리스도의 사랑을 전해보시지 않으시겠습니까? 그 사랑은 세상이 어리석게 보는 전도의 미련한 것으로 선포되는 것입니다.</p>
+    <div class="panel-big">그것은 바로<br>십자가에 못 박히신<br>그리스도입니다.</div>
+    <p class="panel-p">이 그리스도는 유대인에게는 거리끼는 것이고 이방인에게는 미련한 것이지만 오직 부르심을 받은 자들에게는 그리스도는 하나님의 능력이요 하나님의 지혜인 것입니다.</p>
+    <p class="panel-p"><strong>내가 받은 그 사랑을 돌려주세요! 그러면 당신은 세상이 알지 못하는 하나님의 지혜와 능력을 맛 볼 것입니다.</strong></p>`,
+    prev:'node-300'
+  },
+};
+
+// ══════════════════════════════════════════════
+//  패널 열기/닫기
+// ══════════════════════════════════════════════
+const panel=document.getElementById('panel');
+const panChapter=document.getElementById('panel-chapter');
+const panTitle=document.getElementById('panel-title');
+const panBody=document.getElementById('panel-body');
+let activeNode=null;
+
+function openPanel(nodeId){
+  const d=CONTENT[nodeId];
+  if(!d)return;
+
+  // 이전 활성 노드 해제
+  if(activeNode) document.getElementById(activeNode)?.classList.remove('active');
+  activeNode=nodeId;
+  document.getElementById(nodeId)?.classList.add('active');
+
+  panChapter.textContent=d.chapter;
+  panTitle.textContent=d.title;
+
+  // 내비게이션 버튼 생성
+  const navHtml=`<div class="panel-nav">
+    <div class="panel-nav-btn ${d.prev?'':'dim'}" onclick="${d.prev?`openPanel('${d.prev}')`:''}">← 이전</div>
+    <div class="panel-nav-btn" onclick="closePanel()">지도로</div>
+    <div class="panel-nav-btn ${d.next?'':'dim'}" onclick="${d.next?`openPanel('${d.next}')`:''}">다음 →</div>
+  </div>`;
+
+  panBody.innerHTML=d.body+navHtml;
+  panBody.scrollTop=0;
+  panel.classList.add('open');
+
+  // 노드 위치에서 음파 발생
+  const el=document.getElementById(nodeId);
+  if(el){
+    const rect=el.getBoundingClientRect();
+    const cx=rect.left+rect.width/2,cy=rect.top+rect.height/2;
+    addWave(cx,cy,nodeId==='node-girl'?'rgba(240,200,80,':'rgba(160,220,100,');
+    addWave(cx,cy,nodeId==='node-300'?'rgba(200,120,60,':'rgba(120,180,80,');
+    spawnNote(cx,cy);
+  }
+}
+
+function closePanel(){
+  panel.classList.remove('open');
+  if(activeNode) document.getElementById(activeNode)?.classList.remove('active');
+  activeNode=null;
+}
+
+document.getElementById('panel-close').addEventListener('click',closePanel);
+
+// 노드 클릭
+document.querySelectorAll('.node').forEach(n=>{
+  n.addEventListener('click',()=>openPanel(n.id));
+});
+
+// ══════════════════════════════════════════════
+//  시작 버튼
+// ══════════════════════════════════════════════
+document.getElementById('hero-btn').addEventListener('click',()=>{
+  document.getElementById('hero-overlay').classList.add('gone');
+  document.getElementById('legend').classList.add('show');
+  // 소녀 노드 위치에서 초기 파동
+  setTimeout(()=>{
+    const girl=document.getElementById('node-girl');
+    if(girl){
+      const r=girl.getBoundingClientRect();
+      const cx=r.left+r.width/2,cy=r.top+r.height/2;
+      for(let i=0;i<3;i++) setTimeout(()=>addWave(cx,cy,'rgba(240,200,80,'),i*600);
+      spawnNote(cx,cy);
+    }
+  },400);
+});
+
+// ══════════════════════════════════════════════
+//  메인 루프
+// ══════════════════════════════════════════════
+let T=0;
+function loop(){
+  // 자동 파동 — 소녀 노드에서 주기적으로
+  autoWaveT+=0.016;
+  if(autoWaveT>3.5){
+    autoWaveT=0;
+    const girl=document.getElementById('node-girl');
+    if(girl){
+      const r=girl.getBoundingClientRect();
+      addWave(r.left+r.width/2,r.top+r.height/2,'rgba(200,180,80,');
+    }
+  }
+
+  drawWaves();
+  T+=0.016;
+  requestAnimationFrame(loop);
+}
+
+// 초기화
+resize();
+loop();
+</script>
+</body>
+</html>
