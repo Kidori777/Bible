@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>무저갱과 음부 그리고 불못</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700;900&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --void:    #04050a;
+      --deep1:   #080a14;
+      --deep2:   #0a0c1a;
+      --deep3:   #0c1020;
+      --abyss:   #1a2040;   /* 무저갱 — 깊은 청람 */
+      --hades:   #2a1408;   /* 음부 — 어두운 갈색 */
+      --fire:    #1a0a00;   /* 불못 — 숯검정 */
+      --blue:    #4070c0;
+      --blue2:   #6090e0;
+      --amber:   #c07820;
+      --amber2:  #e09840;
+      --ember:   #d04010;
+      --ember2:  #f06030;
+      --lava:    #f04800;
+      --lava2:   #ff7020;
+      --ash:     #e8e0d0;
+      --ash2:    #c8c0b0;
+      --muted:   rgba(232,224,208,0.5);
+      --gold:    #d4a820;
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+
+    body {
+      background: var(--void);
+      color: var(--ash);
+      font-family: 'Noto Serif KR', serif;
+      overflow-x: hidden;
+    }
+
+    /* ══════════════════════════════
+       COVER — 우주적 어둠
+    ══════════════════════════════ */
+    .cover {
+      position: relative;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 60px 24px 80px;
+      overflow: hidden;
+      background: radial-gradient(ellipse 80% 60% at 50% 30%, #0c1428 0%, #04050a 70%);
+      z-index: 1;
+    }
+
+    /* 별 */
+    .star-field { position:absolute; inset:0; pointer-events:none; }
+    .s { position:absolute; border-radius:50%; background:#fff;
+         animation: twinkle var(--d,3s) ease-in-out infinite var(--dl,0s); }
+    @keyframes twinkle {
+      0%,100%{ opacity:var(--lo,.15); } 50%{ opacity:var(--hi,.7); }
+    }
+
+    /* 하강 균열 효과 */
+    .cover-crack {
+      position: absolute; bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 2px; height: 45%;
+      background: linear-gradient(180deg, transparent, rgba(100,70,200,0.3), rgba(200,64,16,0.2), transparent);
+      pointer-events: none;
+    }
+    .cover-crack::before, .cover-crack::after {
+      content:''; position:absolute; bottom:0;
+      width:1px; background:inherit;
+    }
+    .cover-crack::before { left:-30px; height:55%; transform:rotate(8deg); transform-origin:bottom; }
+    .cover-crack::after  { right:-30px; height:55%; transform:rotate(-8deg); transform-origin:bottom; }
+
+    .cover-eyebrow {
+      font-family:'Noto Sans KR',sans-serif;
+      font-size:.62rem; font-weight:500; letter-spacing:.35em; text-transform:uppercase;
+      color:rgba(180,150,255,.5); margin-bottom:28px; position:relative; z-index:1;
+    }
+
+    .cover-title {
+      font-size: clamp(2rem,8vw,5rem); font-weight:900;
+      line-height:1.15; letter-spacing:-.04em;
+      position:relative; z-index:1; margin-bottom:14px;
+    }
+    .cover-title .w1 { color: var(--blue2); text-shadow:0 0 50px rgba(64,112,192,.6); }
+    .cover-title .w2 { color: rgba(232,224,208,.6); font-size:.7em; }
+    .cover-title .w3 { color: var(--ember2); text-shadow:0 0 50px rgba(240,96,48,.5); }
+
+    .cover-sub {
+      font-family:'Noto Sans KR',sans-serif;
+      font-size:clamp(.82rem,2.2vw,.95rem); font-weight:300;
+      color:var(--muted); line-height:1.9; max-width:400px; margin:0 auto 44px;
+      position:relative; z-index:1;
+    }
+
+    .cover-badges {
+      display:flex; gap:10px; flex-wrap:wrap; justify-content:center;
+      position:relative; z-index:1;
+    }
+    .cover-badge {
+      padding:7px 16px; border-radius:18px;
+      font-family:'Noto Sans KR',sans-serif;
+      font-size:.72rem; letter-spacing:.08em;
+    }
+    .badge-blue  { border:1px solid rgba(64,112,192,.4); color:var(--blue2); background:rgba(64,112,192,.08); }
+    .badge-amber { border:1px solid rgba(192,120,32,.4); color:var(--amber2); background:rgba(192,120,32,.08); }
+    .badge-red   { border:1px solid rgba(208,64,16,.4); color:var(--ember2); background:rgba(208,64,16,.08); }
+
+    /* ══════════════════════════════
+       지층 구분선 — 아래로 내려갈수록 깊어짐
+    ══════════════════════════════ */
+    .layer-mark {
+      display:flex; align-items:center; gap:0;
+      position:relative; z-index:5;
+      height:48px; overflow:hidden;
+    }
+
+    /* ══════════════════════════════
+       SECTION I — 무저갱 (청람)
+    ══════════════════════════════ */
+    .sec-abyss {
+      background: linear-gradient(180deg, #060a18 0%, #0a1228 50%, #081020 100%);
+      padding:64px 22px 72px; position:relative; z-index:2; overflow:hidden;
+    }
+    .sec-abyss::before {
+      content:''; position:absolute; inset:0;
+      background:radial-gradient(ellipse 70% 50% at 50% 30%, rgba(32,64,160,.12), transparent);
+      pointer-events:none;
+    }
+
+    .abyss-num-bg {
+      position:absolute; font-family:'Noto Serif KR',serif;
+      font-size:clamp(14rem,40vw,28rem); font-weight:900;
+      color:rgba(64,112,192,.03); top:50%; right:-5%;
+      transform:translateY(-50%); line-height:.85;
+      pointer-events:none; letter-spacing:-.05em;
+    }
+
+    /* ══════════════════════════════
+       SECTION II — 음부 (어두운 황토)
+    ══════════════════════════════ */
+    .sec-hades {
+      background: linear-gradient(180deg, #100800 0%, #1a0e04 50%, #140a02 100%);
+      padding:64px 22px 72px; position:relative; z-index:2; overflow:hidden;
+    }
+    .sec-hades::before {
+      content:''; position:absolute; inset:0;
+      background:radial-gradient(ellipse 70% 50% at 50% 30%, rgba(180,100,20,.1), transparent);
+      pointer-events:none;
+    }
+
+    /* ══════════════════════════════
+       부자와 나사로 비주얼 다이어그램
+    ══════════════════════════════ */
+    .hades-diagram {
+      margin:32px 0; position:relative;
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(192,120,32,.15);
+      border-radius:14px; padding:28px 22px;
+      max-width:560px;
+    }
+
+    .hd-title {
+      font-family:'Noto Sans KR',sans-serif;
+      font-size:.62rem; letter-spacing:.22em; text-transform:uppercase;
+      color:var(--amber); opacity:.7; margin-bottom:20px; display:block;
+    }
+
+    .hd-grid {
+      display:grid; grid-template-columns:1fr 4px 1fr; gap:0; align-items:stretch;
+    }
+
+    .hd-side {
+      padding:18px 14px; border-radius:10px;
+    }
+    .hd-side.comfort {
+      background:rgba(64,112,192,.08); border:1px solid rgba(64,112,192,.18);
+    }
+    .hd-side.torment {
+      background:rgba(208,64,16,.08); border:1px solid rgba(208,64,16,.18);
+    }
+
+    .hd-label {
+      font-family:'Noto Sans KR',sans-serif;
+      font-size:.62rem; letter-spacing:.15em; margin-bottom:8px; display:block;
+    }
+    .comfort .hd-label { color:var(--blue2); opacity:.7; }
+    .torment .hd-label { color:var(--ember2); opacity:.7; }
+
+    .hd-name {
+      font-size:clamp(.9rem,2.5vw,1.05rem); font-weight:700; margin-bottom:6px;
+    }
+    .comfort .hd-name { color:var(--blue2); }
+    .torment .hd-name { color:var(--ember2); }
+
+    .hd-desc {
+      font-family:'Noto Sans KR',sans-serif;
+      font-size:.78rem; font-weight:300;
+      color:rgba(232,224,208,.6); line-height:1.85;
+    }
+
+    .hd-wall {
+      display:flex; align-items:center; justify-content:center;
+      position:relative;
+    }
+    .hd-wall::before {
+      content:''; position:absolute; top:0; bottom:0; left:50%;
+      width:1px; background:linear-gradient(180deg,transparent,rgba(255,255,255,.12),transparent);
+    }
+    .hd-wall-text {
+      font-family:'Noto Sans KR',sans-serif;
+      font-size:.6rem; letter-spacing:.1em; writing-mode:vertical-rl;
+      color:rgba(232,224,208,.25); background:var(--hades);
+      padding:6px 2px; position:relative; z-index:1;
+    }
+
+    .hd-features {
+      margin-top:18px; display:grid; grid-template-columns:1fr 1fr; gap:10px;
+    }
+    @media(max-width:480px){ .hd-features{ grid-template-columns:1fr; } }
+
+    .hd-feat {
+      padding:12px 14px; border-radius:8px;
+      background:rgba(192,120,32,.06); border:1px solid rgba(192,120,32,.15);
+    }
+    .hd-feat-num {
+      font-family:'Noto Sans KR',sans-serif;
+      font-size:.58rem; letter-spacing:.15em; color:var(--amber); margin-bottom:6px; display:block;
+    }
+    .hd-feat-title {
+      font-size:.88rem; font-weight:700; color:var(--ash); margin-bottom:4px;
+    }
+    .hd-feat-body {
+      font-family:'Noto Sans KR',sans-serif;
+      font-size:.75rem; font-weight:300;
+      color:rgba(232,224,208,.6); line-height:1.8;
+    }
+
+    /* ══════════════════════════════
+       SECTION III — 불못·계시록 20 (화염)
+    ══════════════════════════════ */
+    .sec-fire {
+      background: linear-gradient(180deg, #0e0400 0%, #180600 40%, #200800 100%);
+      padding:64px 22px 72px; position:relative; z-index:2; overflow:hidden;
+    }
+    .sec-fire::before {
+      content:''; position:absolute; inset:0;
+      background:radial-gradient(ellipse 70% 40% at 50% 80%, rgba(240,72,0,.12), transparent);
+      pointer-events:none;
+    }
+
+    /* 불꽃 파티클 */
+    .fire-particles { position:absolute; inset:0; pointer-events:none; overflow:hidden; }
+    .fp {
+      position:absolute;
+      width:2px; height:3px; border-radius:50% 50% 30% 30%;
+      animation:rise var(--d,7s) ease-in infinite var(--dl,0s); opacity:0;
+    }
+    @keyframes rise {
+      0%  { opacity:0; transform:translateY(0) scale(1); }
+      15% { opacity:var(--op,.6); }
+      80% { opacity:.1; }
+      100%{ opacity:0; transform:translateY(-200px) scale(.3); }
+    }
+
+    /* 종말 플로우 다이어그램 */
+    .flow-diagram {
+      margin:28px 0; max-width:480px;
+    }
+
+    .flow-step {
+      display:flex; align-items:center; gap:14px; margin-bottom:4px;
+      opacity:0; transform:translateY(14px);
+      transition:opacity .65s ease, transform .65s ease;
+    }
+    .flow-step.vis { opacity:1; transform:translateY(0); }
+
+    .flow-node {
+      flex-shrink:0; width:44px; height:44px; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      font-size:.8rem; font-weight:700;
+      font-family:'Noto Sans KR',sans-serif;
+    }
+    .fn-earth  { background:rgba(64,112,192,.15); border:1px solid rgba(64,112,192,.3); color:var(--blue2); }
+    .fn-hades  { background:rgba(192,120,32,.15); border:1px solid rgba(192,120,32,.3); color:var(--amber2); }
+    .fn-rise   { background:rgba(64,180,80,.1); border:1px solid rgba(64,180,80,.25); color:#70e080; }
+    .fn-judge  { background:rgba(220,180,20,.12); border:1px solid rgba(220,180,20,.28); color:#e8d040; }
+    .fn-fire   { background:rgba(240,72,0,.15); border:1px solid rgba(240,72,0,.3); color:var(--lava2); }
+
+    .flow-text {
+      font-size:clamp(.88rem,2.3vw,.97rem); color:rgba(232,224,208,.82); line-height:1.75;
+    }
+    .flow-text strong { color:var(--ash); font-weight:600; }
+
+    .flow-arrow {
+      width:1px; height:28px; margin-left:21px;
+      background:linear-gradient(180deg, rgba(255,255,255,.1), rgba(255,255,255,.04));
+    }
+
+    /* 4가지 핵심 사실 카드 */
+    .fire-facts { display:flex; flex-direction:column; gap:14px; margin:24px 0; }
+
+    .fire-fact {
+      padding:20px 20px 18px;
+      border-radius:12px;
+      opacity:0; transform:translateX(-16px);
+      transition:opacity .65s ease, transform .65s ease;
+    }
+    .fire-fact.vis { opacity:1; transform:translateX(0); }
+    .fire-fact:nth-child(1){ background:rgba(208,64,16,.08); border:1px solid rgba(208,64,16,.2); }
+    .fire-fact:nth-child(2){ background:rgba(192,120,32,.07); border:1px solid rgba(192,120,32,.2); }
+    .fire-fact:nth-child(3){ background:rgba(220,40,40,.08); border:1px solid rgba(220,40,40,.2); }
+    .fire-fact:nth-child(4){ background:rgba(64,112,192,.07); border:1px solid rgba(64,112,192,.2); }
+
+    .ff-num {
+      font-family:'Noto Sans KR',sans-serif;
+      font-size:.58rem; letter-spacing:.2em; margin-bottom:8px; display:block;
+    }
+    .fire-fact:nth-child(1) .ff-num { color:var(--ember2); }
+    .fire-fact:nth-child(2) .ff-num { color:var(--amber2); }
+    .fire-fact:nth-child(3) .ff-num { color:#f06060; }
+    .fire-fact:nth-child(4) .ff-num { color:var(--blue2); }
+
+    .ff-title {
+      font-size:clamp(.92rem,2.5vw,1.02rem); font-weight:700;
+      color:var(--ash); margin-bottom:8px; line-height:1.4;
+    }
+    .ff-body {
+      font-family:'Noto Sans KR',sans-serif;
+      font-size:.82rem; font-weight:300;
+      color:rgba(232,224,208,.65); line-height:1.95;
+    }
+    .ff-verse {
+      margin-top:10px; padding:10px 14px;
+      background:rgba(255,255,255,.04); border-radius:8px;
+      font-size:.8rem; font-weight:500;
+      color:rgba(232,224,208,.8); line-height:1.85;
+    }
+
+    /* ══════════════════════════════
+       공통 컴포넌트
+    ══════════════════════════════ */
+    .sec-wrap { max-width:680px; margin:0 auto; }
+
+    .sec-tag {
+      font-family:'Noto Sans KR',sans-serif;
+      font-size:.6rem; font-weight:500; letter-spacing:.28em; text-transform:uppercase;
+      display:flex; align-items:center; gap:12px; margin-bottom:16px;
+    }
+    .sec-tag::after { content:''; flex:1; height:1px; }
+    .tag-blue  { color:var(--blue2); }
+    .tag-blue::after  { background:linear-gradient(90deg,rgba(64,112,192,.3),transparent); }
+    .tag-amber { color:var(--amber2); }
+    .tag-amber::after { background:linear-gradient(90deg,rgba(192,120,32,.3),transparent); }
+    .tag-fire  { color:var(--ember2); }
+    .tag-fire::after  { background:linear-gradient(90deg,rgba(208,64,16,.3),transparent); }
+
+    .sec-title {
+      font-size:clamp(1.5rem,5vw,2.4rem); font-weight:900;
+      line-height:1.2; letter-spacing:-.03em; margin-bottom:8px;
+    }
+    .sec-title .accent-blue  { color:var(--blue2); }
+    .sec-title .accent-amber { color:var(--amber2); }
+    .sec-title .accent-fire  { color:var(--ember2); }
+
+    .sec-rule {
+      width:50px; height:2px; margin:16px 0 36px; border-radius:1px;
+    }
+    .rule-blue  { background:linear-gradient(90deg,var(--blue2),transparent); }
+    .rule-amber { background:linear-gradient(90deg,var(--amber2),transparent); }
+    .rule-fire  { background:linear-gradient(90deg,var(--ember),transparent); }
+
+    .body-text {
+      font-size:clamp(.95rem,2.5vw,1.05rem); font-weight:400;
+      line-height:2.2; color:rgba(232,224,208,.8); margin-bottom:18px;
+    }
+
+    .verse-block {
+      margin:22px 0; padding:20px 22px 18px 26px;
+      border-radius:0 10px 10px 0; position:relative;
+    }
+    .vb-blue  { background:rgba(64,112,192,.06); border-left:3px solid var(--blue2); }
+    .vb-amber { background:rgba(192,120,32,.06); border-left:3px solid var(--amber2); }
+    .vb-fire  { background:rgba(208,64,16,.07); border-left:3px solid var(--ember); }
+
+    .verse-ref {
+      font-family:'Noto Sans KR',sans-serif;
+      font-size:.62rem; font-weight:600; letter-spacing:.18em;
+      margin-bottom:8px; display:block;
+    }
+    .vb-blue  .verse-ref { color:var(--blue2); opacity:.7; }
+    .vb-amber .verse-ref { color:var(--amber2); opacity:.7; }
+    .vb-fire  .verse-ref { color:var(--ember2); opacity:.7; }
+
+    .verse-text {
+      font-size:clamp(.9rem,2.4vw,1rem); font-weight:500;
+      color:rgba(232,224,208,.9); line-height:2.05;
+    }
+
+    /* 테이블 */
+    .comp-table {
+      width:100%; border-collapse:collapse;
+      margin:22px 0; font-size:clamp(.75rem,2vw,.85rem);
+      border-radius:10px; overflow:hidden;
+    }
+    .comp-table th {
+      padding:11px 10px; font-weight:600;
+      letter-spacing:.05em; border:1px solid rgba(255,255,255,.06);
+    }
+    .th-blue  { background:rgba(64,112,192,.3); color:var(--ash); }
+    .th-amber { background:rgba(192,120,32,.3); color:var(--ash); }
+    .th-fire  { background:rgba(208,64,16,.3); color:var(--ash); }
+    .th-gray  { background:rgba(255,255,255,.08); color:var(--ash2); }
+
+    .comp-table td {
+      padding:10px; text-align:center;
+      border:1px solid rgba(255,255,255,.06);
+      color:rgba(232,224,208,.75);
+      background:rgba(255,255,255,.02);
+    }
+    .comp-table tr:hover td { background:rgba(255,255,255,.04); }
+
+    /* 리스트 */
+    .dot-list { list-style:none; margin:14px 0; }
+    .dot-list li {
+      position:relative; padding-left:20px; margin-bottom:10px;
+      font-size:clamp(.88rem,2.3vw,.97rem);
+      color:rgba(232,224,208,.75); line-height:1.9;
+      font-family:'Noto Sans KR',sans-serif; font-weight:300;
+    }
+    .dot-list li::before { content:'◈'; position:absolute; left:0; font-size:.72rem; top:3px; }
+    .dl-blue li::before  { color:var(--blue2); }
+    .dl-amber li::before { color:var(--amber2); }
+    .dl-fire  li::before { color:var(--ember2); }
+
+    /* 핵심 선언 */
+    .declaration {
+      margin:28px 0; padding:20px; text-align:center;
+      border-top:1px solid rgba(255,255,255,.06);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .declaration-text {
+      font-size:clamp(.98rem,2.8vw,1.15rem); font-weight:700; line-height:1.85;
+    }
+    .decl-blue  .declaration-text { color:var(--blue2); }
+    .decl-amber .declaration-text { color:var(--amber2); }
+    .decl-fire  .declaration-text { color:var(--ember2); }
+
+    /* 서브 레이블 */
+    .sub-label {
+      font-family:'Noto Sans KR',sans-serif;
+      font-size:.62rem; font-weight:600; letter-spacing:.2em; text-transform:uppercase;
+      display:flex; align-items:center; gap:10px; margin:28px 0 14px;
+    }
+    .sub-label::after { content:''; flex:1; height:1px; background:rgba(255,255,255,.07); }
+
+    /* ══════════════════════════════
+       FINALE — 은혜의 선언
+    ══════════════════════════════ */
+    .finale {
+      min-height:80vh;
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      text-align:center; padding:80px 28px;
+      background: linear-gradient(180deg, #200800 0%, #0e0200 100%);
+      position:relative; z-index:2; overflow:hidden;
+    }
+    .finale::before {
+      content:''; position:absolute; inset:0;
+      background:radial-gradient(ellipse 60% 40% at 50% 60%, rgba(240,72,0,.1), transparent 70%);
+      animation:fg 4s ease-in-out infinite;
+    }
+    @keyframes fg { 0%,100%{opacity:.7;} 50%{opacity:1;} }
+
+    .finale-icon {
+      font-size:clamp(3rem,9vw,5.5rem); margin-bottom:24px;
+      position:relative; z-index:1;
+      animation:fi-pulse 3s ease-in-out infinite;
+    }
+    @keyframes fi-pulse {
+      0%,100%{ filter:drop-shadow(0 0 20px rgba(240,72,0,.3)); }
+      50%    { filter:drop-shadow(0 0 50px rgba(240,72,0,.7)); }
+    }
+
+    .finale-title {
+      font-size:clamp(1.6rem,5.5vw,3rem); font-weight:900;
+      line-height:1.25; letter-spacing:-.03em;
+      color:var(--ash); margin-bottom:28px;
+      position:relative; z-index:1;
+    }
+    .finale-title em { font-style:normal; color:var(--lava2); }
+
+    .finale-verse {
+      background:rgba(240,72,0,.08); border:1px solid rgba(240,72,0,.2);
+      border-radius:14px; padding:26px 24px;
+      max-width:520px; margin:0 auto 28px;
+      position:relative; z-index:1;
+    }
+    .finale-verse-text {
+      font-size:clamp(.92rem,2.5vw,1.05rem); font-weight:600;
+      color:rgba(232,224,208,.95); line-height:2.05; margin-bottom:10px;
+    }
+    .finale-verse-ref {
+      font-family:'Noto Sans KR',sans-serif;
+      font-size:.72rem; color:var(--ember2); letter-spacing:.1em;
+    }
+
+    .finale-msg {
+      font-size:clamp(.9rem,2.4vw,1rem); font-weight:400;
+      color:rgba(232,224,208,.6); line-height:2.2;
+      max-width:480px; margin:0 auto;
+      position:relative; z-index:1;
+    }
+    .finale-msg strong { color:var(--lava2); font-weight:600; }
+
+    /* 푸터 */
+    .site-footer {
+      background:#020100; padding:30px 24px 38px; text-align:center;
+      border-top:1px solid rgba(240,72,0,.1); position:relative; z-index:2;
+    }
+    .footer-rule { width:32px; height:1px; background:var(--ember); margin:0 auto 14px; opacity:.3; }
+    .footer-name { font-size:.85rem; font-weight:600; color:rgba(232,224,208,.5); letter-spacing:.2em; }
+
+    /* 스크롤 */
+    .fade-up {
+      opacity:0; transform:translateY(22px);
+      transition:opacity .75s ease, transform .75s ease;
+    }
+    .fade-up.vis { opacity:1; transform:translateY(0); }
+
+    @media(max-width:480px){
+      .sec-abyss,.sec-hades,.sec-fire{ padding:44px 18px 52px; }
+      .finale{ padding:60px 20px; }
+      .hd-grid{ grid-template-columns:1fr; gap:14px; }
+      .hd-wall{ display:none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ COVER ══ -->
+<section class="cover" id="cover">
+  <div class="star-field" id="stars"></div>
+  <div class="cover-crack"></div>
+
+  <p class="cover-eyebrow">부산교회 2구역 · 요한계시록 · 누가복음 · 히브리서</p>
+  <h1 class="cover-title">
+    <span class="w1">무저갱</span><span class="w2">과</span><br>
+    <span style="color:rgba(232,224,208,.5);font-size:.65em;">음부</span>
+    <span class="w2" style="font-size:.5em;">그리고</span>
+    <span class="w3">불못</span>
+  </h1>
+  <p class="cover-sub">성경이 말하는 사후 세계의 구조<br>— 세 공간의 차이와 종말론적 의미 —</p>
+  <div class="cover-badges">
+    <span class="cover-badge badge-blue">무저갱 · Abyss</span>
+    <span class="cover-badge badge-amber">음부 · Hades</span>
+    <span class="cover-badge badge-red">불못 · Lake of Fire</span>
+  </div>
+</section>
+
+<!-- 지층 전환 1 -->
+<svg viewBox="0 0 1440 36" preserveAspectRatio="none" style="display:block;height:36px;background:var(--void);position:relative;z-index:3;">
+  <path d="M0,0 Q720,36 1440,0 L1440,36 L0,36 Z" fill="#060a18"/>
+</svg>
+
+<!-- ══ I. 무저갱 ══ -->
+<section class="sec-abyss">
+  <div class="abyss-num-bg">Ⅰ</div>
+  <div class="sec-wrap">
+
+    <div class="sec-tag tag-blue fade-up">Chapter Ⅰ · Abyss</div>
+    <h2 class="sec-title fade-up">🕳️ 무저갱<br><span class="accent-blue" style="font-size:.65em; font-weight:300; letter-spacing:.02em;">ἄβυσσος — 바닥이 없는 심연</span></h2>
+    <div class="sec-rule rule-blue"></div>
+
+    <p class="body-text fade-up">무저갱(無底坑)은 문자 그대로 "바닥이 없는 구덩이", "끝을 알 수 없는 심연"이라는 뜻입니다. 성경에서는 단순한 공간 개념을 넘어 영적·종말론적 의미로 사용됩니다.</p>
+
+    <div class="sub-label fade-up" style="color:var(--blue2);">요한계시록에서의 무저갱</div>
+
+    <div class="verse-block vb-blue fade-up">
+      <span class="verse-ref">요한계시록 9:1–2</span>
+      <p class="verse-text">"그에게는 무저갱의 열쇠가 주어졌습니다. 그가 무저갱을 여니, 그 구덩이에서 연기가 올라왔는데, …"</p>
+    </div>
+    <p class="body-text fade-up" style="color:rgba(64,112,192,.8);">➜ 악한 영적 세력이 잠시 풀려나는 장소</p>
+
+    <div class="verse-block vb-blue fade-up">
+      <span class="verse-ref">요한계시록 20:1–3</span>
+      <p class="verse-text">"그의 손에는 무저갱의 열쇠와 큰 사슬이 있었습니다…무저갱에 던져 넣고 가둔 다음에 그 위에 봉인을 하여…"</p>
+    </div>
+    <p class="body-text fade-up" style="color:rgba(64,112,192,.8);">➜ 사탄이 일시적으로 결박되는 곳</p>
+
+    <div class="verse-block vb-blue fade-up">
+      <span class="verse-ref">누가복음 8:31</span>
+      <p class="verse-text">"귀신들은 자기들에게 무저갱으로 들어가라는 명령을 하지 마시도록 예수님께 간청하였다."</p>
+    </div>
+    <p class="body-text fade-up" style="color:rgba(64,112,192,.8);">➜ 귀신들도 무저갱을 두려움의 장소로 인식</p>
+
+    <div class="sub-label fade-up" style="color:var(--blue2);">무저갱 vs 불못 비교</div>
+
+    <table class="comp-table fade-up">
+      <thead>
+        <tr>
+          <th class="th-gray">구분</th>
+          <th class="th-blue">무저갱</th>
+          <th class="th-fire">불못</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>성격</td><td>임시적 감금</td><td>최종 심판</td></tr>
+        <tr><td>대상</td><td>악한 영, 사탄</td><td>사탄·거짓 선지자·불신자</td></tr>
+        <tr><td>시점</td><td>종말 과정 중</td><td>마지막 심판 후</td></tr>
+        <tr><td>계시록</td><td>9장, 20장</td><td>20장</td></tr>
+      </tbody>
+    </table>
+
+    <div class="declaration decl-blue fade-up">
+      <p class="declaration-text">무저갱은 지옥(불못)과 다릅니다.<br>최종 심판 이전의 감금·억제의 장소입니다.</p>
+    </div>
+
+    <div class="sub-label fade-up" style="color:var(--blue2);">핵심 요약 · 오늘의 적용</div>
+    <ul class="dot-list dl-blue fade-up">
+      <li>무저갱은 혼돈·어둠·통제되지 않은 악의 영역</li>
+      <li>하나님이 악을 완전히 제거하기 전까지 제한적으로 묶어 두는 장소</li>
+      <li>악은 존재하지만 하나님의 주권 아래 통제됨</li>
+      <li>악이 활개 치는 것처럼 보여도 → 완전히 풀린 것이 아닙니다.</li>
+      <li>하나님은 → <strong style="color:var(--ash)">열쇠를 쥐고 계신 분</strong> (계 1:18)</li>
+      <li>무저갱의 존재 자체가 → 하나님의 통치가 여전히 작동 중임을 증명</li>
+    </ul>
+
+    <div class="declaration decl-blue fade-up">
+      <p class="declaration-text">무저갱은 악의 자유가 아니라<br>'하나님의 허락 아래 제한된 악'의 공간입니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 지층 전환 2 -->
+<svg viewBox="0 0 1440 36" preserveAspectRatio="none" style="display:block;height:36px;background:#060a18;position:relative;z-index:3;">
+  <path d="M0,0 Q720,36 1440,0 L1440,36 L0,36 Z" fill="#100800"/>
+</svg>
+
+<!-- ══ II. 음부 ══ -->
+<section class="sec-hades">
+  <div class="sec-wrap">
+
+    <div class="sec-tag tag-amber fade-up">Chapter Ⅱ · Hades</div>
+    <h2 class="sec-title fade-up">⚖️ 음부<br><span class="accent-amber" style="font-size:.65em; font-weight:300;">ᾅδης — 죽은 영혼의 임시 대기 영역</span></h2>
+    <div class="sec-rule rule-amber"></div>
+
+    <div class="declaration decl-amber fade-up">
+      <p class="declaration-text">무저갱: 타락한 영적 존재(사탄·악한 영)를 위한 임시 감금소<br>음부: 죽은 인간의 영혼이 최종 심판 전까지 머무는 영역</p>
+    </div>
+
+    <div class="sub-label fade-up" style="color:var(--amber2);">성경 용어 기준 비교</div>
+
+    <table class="comp-table fade-up">
+      <thead>
+        <tr>
+          <th class="th-gray">구분</th>
+          <th class="th-blue">무저갱</th>
+          <th class="th-amber">음부</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>원어</td><td>ἄβυσσος</td><td>ᾅδης (Hades)</td></tr>
+        <tr><td>대상</td><td>사탄, 악한 영</td><td>사람의 영혼</td></tr>
+        <tr><td>성격</td><td>감금·봉쇄</td><td>대기·구분</td></tr>
+        <tr><td>고통</td><td>제한적</td><td>의식적</td></tr>
+        <tr><td>이동</td><td>봉인 가능</td><td>영역 분리</td></tr>
+        <tr><td>최종</td><td>불못으로 이동</td><td>부활·심판 후 불못 또는 생명</td></tr>
+      </tbody>
+    </table>
+
+    <p class="body-text fade-up" style="color:var(--amber2); font-weight:600;">📌 중요</p>
+    <p class="body-text fade-up">👉 <strong style="color:var(--ash)">무저갱에는 사람이 들어가지 않는다</strong><br>
+    👉 <strong style="color:var(--ash)">음부에는 인간의 영혼만 있다</strong></p>
+
+    <!-- 부자와 나사로 다이어그램 -->
+    <div class="sub-label fade-up" style="color:var(--amber2);">누가복음 16장 — 부자와 나사로의 비유</div>
+    <p class="body-text fade-up" style="color:rgba(232,224,208,.6); font-size:.88rem;">⚠️ 예수님의 비유지만 사후 세계 구조를 왜곡하지 않는 비유입니다.</p>
+
+    <div class="hades-diagram fade-up">
+      <span class="hd-title">음부의 내부 구조 · 눅 16:19–31</span>
+      <div class="hd-grid">
+        <div class="hd-side comfort">
+          <span class="hd-label">위로의 영역</span>
+          <div class="hd-name">나사로</div>
+          <p class="hd-desc">아브라함의 품<br>의인의 안식처</p>
+        </div>
+        <div class="hd-wall">
+          <span class="hd-wall-text">큰 구렁 · 이동 불가</span>
+        </div>
+        <div class="hd-side torment">
+          <span class="hd-label">고통의 영역</span>
+          <div class="hd-name">부자</div>
+          <p class="hd-desc">불꽃 가운데<br>의식적 고통</p>
+        </div>
+      </div>
+
+      <div class="hd-features">
+        <div class="hd-feat">
+          <span class="hd-feat-num">특징 ①</span>
+          <div class="hd-feat-title">의식이 있다</div>
+          <p class="hd-feat-body">인식·기억·감정·대화 가능. 무의식도 소멸도 아닙니다.</p>
+        </div>
+        <div class="hd-feat">
+          <span class="hd-feat-num">특징 ②</span>
+          <div class="hd-feat-title">고통이 있다</div>
+          <p class="hd-feat-body">최종 심판 전임에도 이미 고통의 실재가 존재합니다.</p>
+        </div>
+        <div class="hd-feat">
+          <span class="hd-feat-num">특징 ③</span>
+          <div class="hd-feat-title">생전 삶이 반영됨</div>
+          <p class="hd-feat-body">도덕적·영적 구분은 이미 완료되었습니다.</p>
+        </div>
+        <div class="hd-feat">
+          <span class="hd-feat-num">특징 ④</span>
+          <div class="hd-feat-title">이동 불가</div>
+          <p class="hd-feat-body">큰 구렁텅이가 가로놓여 있어 죽은 후에는 이동이 불가합니다.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-label fade-up" style="color:var(--amber2);">무저갱과 음부의 결정적 차이</div>
+
+    <table class="comp-table fade-up">
+      <thead>
+        <tr>
+          <th class="th-gray">항목</th>
+          <th class="th-blue">무저갱</th>
+          <th class="th-amber">음부</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>거주자</td><td>악한 영</td><td>사람의 영혼</td></tr>
+        <tr><td>목적</td><td>통제·봉인</td><td>대기·구분</td></tr>
+        <tr><td>감정/의식</td><td>성경상 명확하지 않음</td><td>명확히 존재</td></tr>
+        <tr><td>이동성</td><td>열쇠로 개폐</td><td>완전 차단</td></tr>
+        <tr><td>복음 기회</td><td>없음</td><td>없음</td></tr>
+        <tr><td>최종 행선</td><td>불못</td><td>심판 후 결정</td></tr>
+      </tbody>
+    </table>
+
+    <div class="sub-label fade-up" style="color:var(--amber2);">성경적으로 분명한 결론</div>
+    <p class="body-text fade-up"><strong style="color:var(--ash)">누가복음 16장은 말한다</strong> — 죽음 이후는 연속된 삶의 결과이지 새로운 기회의 시작이 아닙니다.</p>
+
+    <p class="body-text fade-up" style="color:var(--amber2); font-weight:600;">무저갱과 음부를 혼동하면 생기는 오류</p>
+    <ul class="dot-list dl-amber fade-up">
+      <li>귀신 들린 사람 → "죽은 영혼"으로 오해</li>
+      <li>사후 구원의 가능성 주장</li>
+      <li>윤회·중간 회심 교리 혼합</li>
+    </ul>
+    <p class="body-text fade-up" style="color:rgba(232,224,208,.6);">👉 모두 성경에 기록된 것과 상반되며 충돌됩니다.</p>
+
+    <div class="verse-block vb-amber fade-up">
+      <span class="verse-ref">히브리서 9:27</span>
+      <p class="verse-text">"한 번 죽는 것은 사람들에게 정해진 운명이고, 그 후에는 심판이 있습니다."</p>
+    </div>
+
+    <div class="declaration decl-amber fade-up">
+      <p class="declaration-text">살아 있을 때의 선택이<br>죽음 이후의 상황을 변경할 수 없습니다.<br>복음을 듣고 구원을 받는 것은 지금 응답하여야 합니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 지층 전환 3 -->
+<svg viewBox="0 0 1440 36" preserveAspectRatio="none" style="display:block;height:36px;background:#100800;position:relative;z-index:3;">
+  <path d="M0,0 Q720,36 1440,0 L1440,36 L0,36 Z" fill="#180600"/>
+</svg>
+
+<!-- ══ III. 불못·계시록 20 ══ -->
+<section class="sec-fire">
+  <div class="fire-particles" id="fireParts"></div>
+  <div class="sec-wrap">
+
+    <div class="sec-tag tag-fire fade-up">Chapter Ⅲ · Lake of Fire</div>
+    <h2 class="sec-title fade-up">📖 음부는 요한계시록 20장에서<br><span class="accent-fire">어떻게 처리되는가</span></h2>
+    <div class="sec-rule rule-fire"></div>
+
+    <div class="sub-label fade-up" style="color:var(--ember2);">종말의 단계 구조</div>
+
+    <div class="flow-diagram fade-up">
+      <div class="flow-step">
+        <div class="flow-node fn-earth">현세</div>
+        <div class="flow-text"><strong>현세의 삶</strong> — 믿음의 선택이 이루어지는 때</div>
+      </div>
+      <div class="flow-arrow"></div>
+      <div class="flow-step">
+        <div class="flow-node fn-hades">음부</div>
+        <div class="flow-text"><strong>음부(Hades)</strong> — 임시 대기 상태. 아직 심판 전.</div>
+      </div>
+      <div class="flow-arrow"></div>
+      <div class="flow-step">
+        <div class="flow-node fn-rise">부활</div>
+        <div class="flow-text"><strong>부활</strong> — 음부가 죽은 자를 내어놓음 (계 20:13)</div>
+      </div>
+      <div class="flow-arrow"></div>
+      <div class="flow-step">
+        <div class="flow-node fn-judge">심판</div>
+        <div class="flow-text"><strong>백보좌 심판</strong> — 각자 자기 행위에 따라</div>
+      </div>
+      <div class="flow-arrow"></div>
+      <div class="flow-step">
+        <div class="flow-node fn-fire">불못</div>
+        <div class="flow-text"><strong>불못 또는 생명</strong> — 영원한 최종 결정</div>
+      </div>
+    </div>
+
+    <p class="body-text fade-up" style="color:rgba(240,96,48,.8);">👉 음부는 중간 대기 영역이지 '최종 목적지'가 아닙니다.</p>
+
+    <div class="verse-block vb-fire fade-up">
+      <span class="verse-ref">요한계시록 20:13–14</span>
+      <p class="verse-text">"바다가 그 안에 있던 죽은 자들을 내주었고, 죽음과 음부도 그 안에 있던 죽은 사람들을 내주었습니다. 그들은 각자 자기 행위에 따라 심판을 받았고, 죽음과 음부도 불 못에 던져졌습니다. 이것이 둘째 죽음, 곧 불 못입니다."</p>
+    </div>
+
+    <div class="sub-label fade-up" style="color:var(--ember2);">본문이 말하는 핵심 사실 4가지</div>
+
+    <div class="fire-facts">
+      <div class="fire-fact">
+        <span class="ff-num">① 핵심 사실</span>
+        <div class="ff-title">음부는 "사람을 내어놓는다"</div>
+        <p class="ff-body">음부는 사람을 가두는 최종 장소가 아닙니다. 부활 이전에 임시로 거하는 장소입니다. 누가복음 16장과 정확히 연결됨 → 부자도 영원히 음부에 머무는 것이 아닙니다. 이후에 부활하여 심판을 받을 것입니다.</p>
+        <div class="ff-verse">"죽음과 음부도 그 안에 있던 죽은 사람들을 내주었습니다."</div>
+      </div>
+      <div class="fire-fact">
+        <span class="ff-num">② 핵심 사실</span>
+        <div class="ff-title">음부는 심판권을 갖지 않는다</div>
+        <p class="ff-body">음부는 구치소와 같은 것이지 최종 심판의 장소가 아닙니다. 음부는 심판 전에 가두는 장소이며 심판은 부활 이후 하나님만 하십니다.</p>
+        <div class="ff-verse">음부 = 법정 ❌ &nbsp; 음부 = 구치소 ⭕</div>
+      </div>
+      <div class="fire-fact">
+        <span class="ff-num">③ 핵심 사실</span>
+        <div class="ff-title">음부는 "폐기된다"</div>
+        <p class="ff-body">음부는 더 이상 필요 없는 체계로 불 못에 던져집니다. 음부는 단지 죽음 이후의 임시 거하는 장소입니다. 음부에서 고통은 있지만 그것 자체가 판결 받은 것이 아닙니다.</p>
+        <div class="ff-verse">"죽음과 음부도 불 못에 던져졌습니다." — 계 20:14</div>
+      </div>
+      <div class="fire-fact">
+        <span class="ff-num">④ 핵심 사실</span>
+        <div class="ff-title">음부의 소멸 = 죽음의 종말</div>
+        <p class="ff-body">음부가 있다는 것은 죽음이 아직 작동 중이라는 뜻입니다. 음부가 불못에 던져진 후에는 죽음 자체가 종료됩니다. 그래서 음부는 영원히 존재하지 않게 되는 것입니다.</p>
+        <div class="ff-verse">"더 이상 죽음이 있지 않을 것이고, …" — 계 21:4</div>
+      </div>
+    </div>
+
+    <div class="sub-label fade-up" style="color:var(--ember2);">누가복음 16장 ↔ 요한계시록 20장 연결</div>
+
+    <table class="comp-table fade-up">
+      <thead>
+        <tr>
+          <th class="th-amber">누가복음 16장</th>
+          <th class="th-fire">요한계시록 20장</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>음부에 있음</td><td>음부에서 나옴</td></tr>
+        <tr><td>고통 중 의식 있음</td><td>부활하여 심판</td></tr>
+        <tr><td>구렁으로 이동 불가</td><td>심판으로 최종 분리</td></tr>
+        <tr><td>임시 상태</td><td>영원한 결정</td></tr>
+      </tbody>
+    </table>
+
+    <div class="sub-label fade-up" style="color:var(--ember2);">무저갱과 음부의 마지막 행로 비교</div>
+
+    <table class="comp-table fade-up">
+      <thead>
+        <tr>
+          <th class="th-gray">구분</th>
+          <th class="th-blue">무저갱</th>
+          <th class="th-amber">음부</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>현재</td><td>악한 영 감금</td><td>불신자 영혼 대기</td></tr>
+        <tr><td>계 20장</td><td>사탄이 풀렸다 다시 결박</td><td>죽은 자를 내놓음</td></tr>
+        <tr><td>최종</td><td>불못</td><td>불못</td></tr>
+        <tr><td>결론</td><td>기능 종료</td><td>존재 자체 소멸</td></tr>
+      </tbody>
+    </table>
+
+    <div class="declaration decl-fire fade-up">
+      <p class="declaration-text">음부는 영원한 형벌이 아닙니다.<br>형벌은 '불 못'에서 시작됩니다.<br><br>음부는 사람의 영혼을 보관하는 장소이지만<br>불 못은 사람을 판단하는 곳입니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FINALE ══ -->
+<section class="finale">
+  <div class="finale-icon">⏳</div>
+  <h2 class="finale-title">
+    죽음 이후는 결정의 시간이 아닙니다.<br>
+    <em>지금이 바로 은혜의 시간입니다.</em>
+  </h2>
+
+  <div class="finale-verse fade-up">
+    <p class="finale-verse-text">"보십시오, 지금이야말로 기쁘게 받아들이시기에 좋은 때이며, 지금이야말로 구원의 날입니다."</p>
+    <p class="finale-verse-ref">— 고린도후서 6:2</p>
+  </div>
+
+  <p class="finale-msg fade-up">
+    무저갱은 악의 통제 장소이고<br>
+    음부는 살았을 때의 믿음의 선택이 확인되는 장소입니다.<br><br>
+    <strong>지금 이 순간</strong> — 복음에 응답할 수 있는<br>
+    <strong>이 시간이 은혜입니다.</strong>
+  </p>
+</section>
+
+<footer class="site-footer">
+  <div class="footer-rule"></div>
+  <p class="footer-name">부산교회 2구역</p>
+</footer>
+
+<script>
+  // 별 생성
+  const sf = document.getElementById('stars');
+  for (let i = 0; i < 100; i++) {
+    const s = document.createElement('div');
+    s.className = 's';
+    const sz = Math.random() * 1.8 + 0.4;
+    s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*80}%;width:${sz}px;height:${sz}px;--d:${2+Math.random()*4}s;--dl:${Math.random()*4}s;--lo:${0.05+Math.random()*0.2};--hi:${0.4+Math.random()*0.5};`;
+    sf.appendChild(s);
+  }
+
+  // 불꽃 파티클
+  const fp = document.getElementById('fireParts');
+  for (let i = 0; i < 30; i++) {
+    const p = document.createElement('div');
+    p.className = 'fp';
+    const hue = Math.random() > 0.5 ? 15 : 30;
+    p.style.cssText = `left:${Math.random()*100}%;bottom:${Math.random()*20}%;--d:${5+Math.random()*7}s;--dl:${Math.random()*6}s;--op:${0.4+Math.random()*0.4};background:hsl(${hue},90%,55%);`;
+    fp.appendChild(p);
+  }
+
+  // 스크롤 애니메이션
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up, .fire-fact, .flow-step').forEach(el => io.observe(el));
+
+  // 플로우 스텝 지연
+  document.querySelectorAll('.flow-step').forEach((el, i) => {
+    el.style.transitionDelay = (i * 0.15) + 's';
+  });
+
+  // 파이어 팩트 지연
+  document.querySelectorAll('.fire-fact').forEach((el, i) => {
+    el.style.transitionDelay = (i * 0.12) + 's';
+  });
+</script>
+
+</body>
+</html>

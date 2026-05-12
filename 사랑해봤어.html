@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>사랑해 봤어? — 루카스 이야기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700;900&family=Noto+Sans+KR:wght@300;400&family=Caveat:wght@400;500;600;700&family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+:root {
+  --paper:   #f9f6f0;
+  --ruled:   rgba(100,140,200,0.13);
+  --margin:  rgba(220,80,80,0.18);
+  --ink:     #1c1a18;
+  --pencil:  #4a4540;
+  --blue:    #2a4a7a;
+  --red-m:   #c43030;
+  --smudge:  rgba(80,70,60,0.06);
+  --worn:    #e8e0d0;
+  --gold:    #b07828;
+  --sky:     #dce8f5;
+}
+
+body {
+  background: var(--paper);
+  font-family: 'Noto Serif KR', serif;
+  color: var(--ink);
+  overflow-x: hidden;
+}
+
+/* ══ NOTEBOOK LINES — FIXED BG ══ */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    /* Ruled lines */
+    repeating-linear-gradient(
+      transparent 0px,
+      transparent 39px,
+      var(--ruled) 39px,
+      var(--ruled) 40px
+    ),
+    /* Left red margin line */
+    linear-gradient(90deg, transparent 71px, var(--margin) 71px, var(--margin) 73px, transparent 73px),
+    /* Paper color */
+    var(--paper);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Hole punches */
+body::after {
+  content: '';
+  position: fixed;
+  left: 24px;
+  top: 0; bottom: 0;
+  width: 24px;
+  background:
+    radial-gradient(circle 10px at 50% 80px, var(--worn) 8px, transparent 9px),
+    radial-gradient(circle 10px at 50% calc(50% + 0px), var(--worn) 8px, transparent 9px),
+    radial-gradient(circle 10px at 50% calc(100% - 80px), var(--worn) 8px, transparent 9px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ══ HERO ══ */
+#hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 90px 80px 110px;
+  z-index: 1;
+  overflow: hidden;
+}
+
+/* Big faint LUCAS letters behind everything */
+.hero-bg-word {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Caveat', cursive;
+  font-size: clamp(120px, 28vw, 320px);
+  font-weight: 700;
+  color: rgba(44,74,122,0.04);
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+  transform: translate(-50%, -50%) rotate(-3deg);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 680px;
+  width: 100%;
+}
+
+/* Sticker-style label */
+.hero-sticker {
+  display: inline-block;
+  background: var(--sky);
+  border: 1px solid rgba(44,74,122,0.2);
+  padding: 5px 16px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 10px;
+  font-weight: 300;
+  letter-spacing: 0.4em;
+  color: var(--blue);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  transform: rotate(-0.5deg);
+  opacity: 0;
+  animation: fadeUp 0.6s ease 0.3s forwards;
+}
+
+/* Hero title — like someone learning to write */
+.hero-title {
+  font-family: 'Caveat', cursive;
+  font-size: clamp(48px, 10vw, 100px);
+  font-weight: 700;
+  line-height: 1.05;
+  color: var(--ink);
+  margin-bottom: 8px;
+  opacity: 0;
+  animation: fadeUp 1s cubic-bezier(0.16,1,0.3,1) 0.5s forwards;
+}
+
+.hero-title .question {
+  display: block;
+  color: var(--red-m);
+  transform: rotate(-1.5deg);
+  display: inline-block;
+  margin-left: 8px;
+}
+
+.hero-sub {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(13px, 1.8vw, 16px);
+  line-height: 2;
+  color: rgba(28,26,24,0.55);
+  margin-top: 16px;
+  padding-left: 2px;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 1s forwards;
+}
+
+/* Tape piece decoration */
+.tape {
+  position: absolute;
+  background: rgba(220,200,150,0.35);
+  border: 1px solid rgba(180,160,100,0.2);
+  width: 60px;
+  height: 20px;
+}
+.tape-tl { top: 60px; right: 80px; transform: rotate(8deg); }
+.tape-br { bottom: 100px; left: 200px; transform: rotate(-5deg); }
+
+/* Small sketch */
+.hero-sketch {
+  position: absolute;
+  bottom: 60px;
+  right: 80px;
+  opacity: 0;
+  animation: fadeIn 1s ease 1.5s forwards;
+}
+
+.scroll-down {
+  position: absolute;
+  bottom: 28px;
+  left: 110px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  animation: fadeIn 1s ease 2s forwards;
+}
+
+.scroll-down span {
+  font-family: 'Caveat', cursive;
+  font-size: 14px;
+  color: rgba(28,26,24,0.3);
+  letter-spacing: 0.1em;
+}
+
+.scroll-arrow-right {
+  font-size: 18px;
+  color: rgba(28,26,24,0.25);
+  animation: arrowBounce 2s ease-in-out infinite;
+}
+
+@keyframes arrowBounce {
+  0%,100%{ transform:translateY(0); }
+  50%{ transform:translateY(4px); }
+}
+
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(16px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes fadeIn { to { opacity:1; } }
+
+/* ══ MAIN NOTEBOOK PAGES ══ */
+.nb-page {
+  position: relative;
+  z-index: 1;
+  padding: 60px 90px 60px 110px;
+}
+
+@media(max-width:680px){
+  #hero, .nb-page { padding-left: 90px; padding-right: 24px; }
+}
+@media(max-width:480px){
+  #hero, .nb-page { padding-left: 80px; padding-right: 20px; }
+  body::after { left: 16px; }
+  body::before {
+    background:
+      repeating-linear-gradient(transparent 0px, transparent 39px, var(--ruled) 39px, var(--ruled) 40px),
+      linear-gradient(90deg, transparent 59px, var(--margin) 59px, var(--margin) 61px, transparent 61px),
+      var(--paper);
+  }
+}
+
+/* Section header — written on the paper */
+.nb-head {
+  margin-bottom: 32px;
+}
+
+.nb-tag {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 9px;
+  font-weight: 300;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: var(--red-m);
+  display: block;
+  margin-bottom: 8px;
+}
+
+.nb-title {
+  font-family: 'Caveat', cursive;
+  font-size: clamp(28px, 5vw, 48px);
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+/* Body text */
+.nb-p {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(14px, 1.9vw, 16px);
+  line-height: 2.5;   /* matches ruled lines */
+  color: var(--pencil);
+  margin-bottom: 0;
+}
+
+.nb-p + .nb-p {
+  margin-top: 4px;
+}
+
+/* Handwritten annotation — red ink in margin or inline */
+.annot {
+  font-family: 'Caveat', cursive;
+  font-size: clamp(15px, 2vw, 18px);
+  color: var(--red-m);
+  display: block;
+  margin: 8px 0;
+  transform: rotate(-0.8deg);
+}
+
+/* Underline — like pencil underline */
+.u-pencil {
+  text-decoration: underline;
+  text-decoration-color: rgba(44,74,122,0.3);
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+}
+
+/* Cross-out — like struck through with pencil */
+.strikethrough {
+  text-decoration: line-through;
+  text-decoration-color: rgba(200,60,60,0.5);
+}
+
+/* People words */
+.cruelword {
+  background: rgba(200,60,60,0.1);
+  border-bottom: 1px solid rgba(200,60,60,0.3);
+  padding: 0 2px;
+  font-family: 'Noto Serif KR', serif;
+}
+
+/* ══ 17 DAYS COUNTER ══ */
+.days-section {
+  position: relative;
+  z-index: 1;
+  padding: 0 90px 0 110px;
+  margin: 20px 0 60px;
+}
+
+@media(max-width:480px){ .days-section { padding-left:80px; padding-right:20px; } }
+
+.days-label {
+  font-family: 'Caveat', cursive;
+  font-size: 13px;
+  color: rgba(28,26,24,0.35);
+  letter-spacing: 0.1em;
+  margin-bottom: 12px;
+}
+
+.days-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-width: 560px;
+}
+
+.day-mark {
+  width: 36px; height: 36px;
+  border: 1.5px solid rgba(44,74,122,0.25);
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Caveat', cursive;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--blue);
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.4s ease;
+  position: relative;
+}
+
+.day-mark.lit {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Final day — gold */
+.day-mark.final {
+  background: rgba(176,120,40,0.1);
+  border-color: var(--gold);
+  color: var(--gold);
+  font-size: 16px;
+}
+
+/* Cross mark through early days */
+.day-mark::after {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  background:
+    linear-gradient(45deg, transparent calc(50% - 0.5px), rgba(44,74,122,0.15) calc(50% - 0.5px), rgba(44,74,122,0.15) calc(50% + 0.5px), transparent calc(50% + 0.5px));
+  opacity: 0;
+  transition: opacity 0.3s ease 0.4s;
+}
+.day-mark.crossed::after { opacity: 1; }
+
+/* ══ PRAYER CARD ══ */
+.prayer-card {
+  position: relative;
+  z-index: 1;
+  margin: 0 90px 60px 110px;
+  padding: 36px 32px;
+  background: var(--sky);
+  border: 1px solid rgba(44,74,122,0.15);
+  transform: rotate(0.5deg);
+  box-shadow: 3px 4px 16px rgba(44,74,122,0.08);
+  opacity: 0;
+  transform: rotate(0.5deg) translateY(20px);
+  transition: all 0.8s cubic-bezier(0.16,1,0.3,1);
+}
+
+.prayer-card.visible {
+  opacity: 1;
+  transform: rotate(0.5deg) translateY(0);
+}
+
+.prayer-label {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 16px;
+  opacity: 0.6;
+}
+
+.prayer-text {
+  font-family: 'Caveat', cursive;
+  font-size: clamp(18px, 2.8vw, 26px);
+  font-weight: 500;
+  line-height: 1.8;
+  color: var(--blue);
+}
+
+@media(max-width:480px){
+  .prayer-card { margin-left:80px; margin-right:20px; }
+}
+
+/* ══ LUCAS NAME PRACTICE ══ */
+.name-section {
+  position: relative;
+  z-index: 1;
+  padding: 60px 90px 60px 110px;
+  overflow: hidden;
+}
+
+@media(max-width:480px){ .name-section { padding-left:80px; padding-right:20px; } }
+
+.name-practice-wrap {
+  margin: 32px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Each practice line */
+.name-line {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: all 0.5s ease;
+}
+
+.name-line.visible { opacity:1; transform:translateX(0); }
+.name-line:nth-child(2){ transition-delay:0.1s; }
+.name-line:nth-child(3){ transition-delay:0.2s; }
+.name-line:nth-child(4){ transition-delay:0.3s; }
+.name-line:nth-child(5){ transition-delay:0.4s; }
+.name-line:nth-child(6){ transition-delay:0.5s; }
+
+.name-attempt {
+  font-family: 'Caveat', cursive;
+  font-size: clamp(20px, 4vw, 36px);
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--pencil);
+}
+
+.name-attempt.messy { transform: rotate(2deg); color: rgba(74,69,64,0.5); font-size: 0.85em; }
+.name-attempt.better { transform: rotate(0.5deg); color: rgba(74,69,64,0.7); }
+.name-attempt.good { transform: rotate(-0.3deg); color: var(--pencil); }
+.name-attempt.final-name {
+  font-size: clamp(28px, 5.5vw, 52px);
+  color: var(--blue);
+  transform: rotate(-0.5deg);
+  letter-spacing: 0.25em;
+}
+
+.name-note {
+  font-family: 'Caveat', cursive;
+  font-size: 13px;
+  color: var(--red-m);
+  opacity: 0.7;
+}
+
+/* Official box for final name */
+.name-official {
+  margin: 40px 0 0;
+  border: 1.5px solid rgba(28,26,24,0.15);
+  padding: 24px 28px;
+  display: inline-block;
+  position: relative;
+  max-width: 400px;
+}
+
+.name-official::before {
+  content: '출생신고서 · Birth Certificate';
+  position: absolute;
+  top: -10px; left: 16px;
+  background: var(--paper);
+  padding: 0 8px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 9px;
+  font-weight: 300;
+  letter-spacing: 0.3em;
+  color: rgba(28,26,24,0.35);
+}
+
+.name-final-big {
+  font-family: 'Caveat', cursive;
+  font-size: clamp(36px, 7vw, 64px);
+  font-weight: 700;
+  color: var(--blue);
+  letter-spacing: 0.3em;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.name-ko {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 14px;
+  color: rgba(28,26,24,0.4);
+  letter-spacing: 0.2em;
+}
+
+/* ══ THE QUESTION ══ */
+.question-section {
+  position: relative;
+  z-index: 1;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  background: var(--ink);
+  padding: 100px 90px 100px 110px;
+  overflow: hidden;
+}
+
+@media(max-width:480px){ .question-section { padding-left:80px; padding-right:20px; } }
+
+/* Lined paper effect on dark bg */
+.question-section::before {
+  content:'';
+  position:absolute; inset:0;
+  background:
+    repeating-linear-gradient(
+      transparent 0px, transparent 39px,
+      rgba(255,255,255,0.03) 39px, rgba(255,255,255,0.03) 40px
+    );
+  pointer-events:none;
+}
+
+.question-section::after {
+  content:'';
+  position:absolute;
+  left:109px; top:0; bottom:0;
+  width:2px;
+  background:rgba(200,60,60,0.15);
+}
+
+.question-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 640px;
+}
+
+.q-label {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 9px;
+  font-weight: 300;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.2);
+  display: block;
+  margin-bottom: 32px;
+}
+
+.q-speaker {
+  font-family: 'Caveat', cursive;
+  font-size: 13px;
+  color: rgba(255,255,255,0.3);
+  margin-bottom: 8px;
+}
+
+.q-text {
+  font-family: 'Caveat', cursive;
+  font-size: clamp(32px, 7vw, 72px);
+  font-weight: 700;
+  line-height: 1.15;
+  color: #fff;
+  margin-bottom: 16px;
+  opacity: 0;
+  transform: translateY(24px);
+  transition: all 0.9s cubic-bezier(0.16,1,0.3,1);
+}
+
+.q-text.visible { opacity:1; transform:translateY(0); }
+.q-text:nth-child(3){ transition-delay:0.2s; }
+.q-text:nth-child(4){ transition-delay:0.4s; }
+
+.q-follow {
+  font-family: 'Caveat', cursive;
+  font-size: clamp(18px, 3vw, 28px);
+  font-weight: 500;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.6);
+  margin-top: 24px;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: all 0.8s ease 0.6s;
+}
+.q-follow.visible { opacity:1; transform:translateY(0); }
+
+/* ══ SCRIPTURE ══ */
+.scripture-page {
+  position: relative;
+  z-index: 1;
+  padding: 80px 90px 80px 110px;
+  background: var(--paper);
+}
+
+@media(max-width:480px){ .scripture-page { padding-left:80px; padding-right:20px; } }
+
+.sc-stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 36px;
+}
+
+.sc-sq {
+  width: 44px; height: 44px;
+  border: 2px solid rgba(28,26,24,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Caveat', cursive;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--pencil);
+}
+
+.sc-meta { display:flex; flex-direction:column; gap:4px; }
+
+.sc-book {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0.4em;
+  color: rgba(28,26,24,0.5);
+  text-transform: uppercase;
+}
+
+.sc-ref {
+  font-family: 'Caveat', cursive;
+  font-size: 16px;
+  color: var(--pencil);
+}
+
+.sc-verse {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(15px, 2vw, 18px);
+  line-height: 2.5;
+  color: var(--pencil);
+  max-width: 700px;
+  border-left: 3px solid rgba(28,26,24,0.12);
+  padding-left: 28px;
+  margin-bottom: 16px;
+}
+
+.sc-verse strong { font-weight: 700; color: var(--ink); }
+
+.sc-ref-line {
+  font-family: 'Caveat', cursive;
+  font-size: 15px;
+  color: rgba(28,26,24,0.4);
+  padding-left: 31px;
+}
+
+/* ══ CLOSING ══ */
+.closing-page {
+  position: relative;
+  z-index: 1;
+  padding: 80px 90px 120px 110px;
+}
+
+@media(max-width:480px){ .closing-page { padding-left:80px; padding-right:20px; } }
+
+.closing-pull {
+  font-family: 'Caveat', cursive;
+  font-size: clamp(20px, 4vw, 38px);
+  font-weight: 600;
+  line-height: 1.6;
+  color: var(--ink);
+  margin-bottom: 40px;
+  max-width: 620px;
+}
+
+.closing-pull .accent { color: var(--red-m); }
+
+.closing-p {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(14px, 1.9vw, 16px);
+  line-height: 2.5;
+  color: var(--pencil);
+  max-width: 640px;
+  margin-bottom: 4px;
+}
+
+/* Final note — torn paper look */
+.final-note {
+  margin-top: 60px;
+  padding: 32px 36px;
+  background: rgba(220,200,150,0.2);
+  border: 1px solid rgba(180,150,80,0.25);
+  max-width: 560px;
+  transform: rotate(-0.8deg);
+  position: relative;
+  opacity: 0;
+  transform: rotate(-0.8deg) translateY(20px);
+  transition: all 0.9s cubic-bezier(0.16,1,0.3,1);
+}
+
+.final-note.visible { opacity:1; transform:rotate(-0.8deg) translateY(0); }
+
+/* Torn top edge */
+.final-note::before {
+  content: '';
+  position: absolute;
+  top: -1px; left: -1px; right: -1px;
+  height: 6px;
+  background: var(--paper);
+  clip-path: polygon(0% 100%, 2% 0%, 5% 80%, 8% 10%, 12% 90%, 15% 20%, 20% 70%, 25% 0%, 30% 80%, 35% 15%, 40% 65%, 45% 5%, 50% 75%, 55% 20%, 60% 85%, 65% 10%, 70% 70%, 75% 0%, 80% 80%, 85% 20%, 90% 60%, 95% 5%, 98% 70%, 100% 0%, 100% 100%);
+}
+
+.final-note-text {
+  font-family: 'Caveat', cursive;
+  font-size: clamp(16px, 2.5vw, 22px);
+  font-weight: 500;
+  line-height: 1.8;
+  color: var(--pencil);
+}
+
+/* Dividers */
+.nb-divider {
+  margin: 0 90px 0 110px;
+  height: 1px;
+  background: repeating-linear-gradient(90deg, rgba(28,26,24,0.12) 0px, rgba(28,26,24,0.12) 4px, transparent 4px, transparent 8px);
+  position: relative;
+  z-index: 1;
+}
+
+@media(max-width:480px){ .nb-divider { margin-left:80px; } }
+
+/* Scroll reveals */
+.sr {
+  opacity:0; transform:translateY(20px);
+  transition: all 0.6s ease;
+}
+.sr.visible { opacity:1; transform:translateY(0); }
+.sr:nth-child(2){ transition-delay:0.08s; }
+.sr:nth-child(3){ transition-delay:0.16s; }
+.sr:nth-child(4){ transition-delay:0.24s; }
+</style>
+</head>
+<body>
+
+<!-- ══ HERO ══ -->
+<section id="hero">
+  <div class="tape tape-tl"></div>
+  <div class="tape tape-br"></div>
+  <div class="hero-bg-word">LUCAS</div>
+
+  <div class="hero-content">
+    <div class="hero-sticker">2001 · Toronto Daybreak Community · 실화</div>
+
+    <h1 class="hero-title">
+      사랑해<br>봤어<span class="question">?</span>
+    </h1>
+
+    <p class="hero-sub">
+      앤디와 줄리, 그리고 17일을 살다 간 아들 루카스의 이야기<br>
+      뮤지컬 〈루카스〉(Lucas)의 원작
+    </p>
+  </div>
+
+  <!-- Tiny Lucas sketch -->
+  <div class="hero-sketch">
+    <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Simple baby figure sketch -->
+      <circle cx="40" cy="22" r="13" stroke="rgba(74,69,64,0.2)" stroke-width="1.5" fill="none"/>
+      <!-- Body -->
+      <path d="M28 40 Q40 52 52 40" stroke="rgba(74,69,64,0.2)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <!-- Arms -->
+      <path d="M30 45 Q24 50 22 56" stroke="rgba(74,69,64,0.18)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <path d="M50 45 Q56 50 58 56" stroke="rgba(74,69,64,0.18)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <!-- Halo suggestion -->
+      <path d="M30 14 Q40 8 50 14" stroke="rgba(176,120,40,0.25)" stroke-width="1" fill="none" stroke-dasharray="2,2"/>
+    </svg>
+  </div>
+
+  <div class="scroll-down">
+    <span>아래로 내려가세요</span>
+    <span class="scroll-arrow-right">↓</span>
+  </div>
+</section>
+
+<!-- ══ PAGE 1: COMMUNITY ══ -->
+<section class="nb-page">
+  <div class="nb-head">
+    <span class="nb-tag">The Story Begins · 이야기의 시작</span>
+    <h2 class="nb-title sr">토론토의 데이브레이크 공동체</h2>
+  </div>
+
+  <p class="nb-p sr">2001년 캐나다 토론토의 한 공동체에서 실제로 있었던 이야기입니다. 이 이야기는 나중에 뮤지컬 〈루카스〉(Lucas) 로 만들어졌습니다.</p>
+  <p class="nb-p sr">토론토의 데이브레이크(Daybreak) 공동체에는 발달장애를 가진 부부가 살고 있었습니다. 남편 앤디, 아내 줄리. 둘은 아이를 기다리고 있었습니다. 하지만 주변 사람들은 그 소식을 듣고 기뻐하지 않았습니다.</p>
+
+  <p class="nb-p sr">사람들은 이렇게 말했습니다.</p>
+  <p class="annot sr"><span class="cruelword">"자기 이름도 제대로 못 쓰는 사람들이 무슨 애를 키워?"</span></p>
+  <p class="annot sr"><span class="cruelword">"애 낳아서 뭐 하려고 그래?"</span></p>
+  <br>
+  <p class="nb-p sr">그 말은 칼처럼 부부의 마음을 찔렀습니다.</p>
+</section>
+
+<div class="nb-divider"></div>
+
+<!-- ══ PAGE 2: DIAGNOSIS ══ -->
+<section class="nb-page">
+  <div class="nb-head">
+    <span class="nb-tag">The Diagnosis · 진단</span>
+    <h2 class="nb-title sr">15분</h2>
+  </div>
+
+  <p class="nb-p sr">그러던 어느 날 병원에서 충격적인 말을 듣습니다. 아기가 무뇌증(anencephaly) 이라는 진단을 받은 것입니다. 의사는 조심스럽게 말했습니다.</p>
+  <p class="annot sr">"아이가 태어나도… 아마 15분 정도밖에 살지 못할 것입니다."</p>
+  <br>
+  <p class="nb-p sr">줄리는 무너졌습니다. "차라리 포기하는 게 낫지 않을까…"</p>
+  <p class="nb-p sr">그러나 앤디는 포기하지 않았습니다. 지능이 여덟 살 수준이었던 그는 그저 단순하고 진심 어린 마음으로 하나님께 기도했습니다.</p>
+</section>
+
+<!-- Prayer card -->
+<div class="prayer-card sr" style="margin:0 90px 0 110px;">
+  <div class="prayer-label">앤디의 기도 · Andy's Prayer</div>
+  <p class="prayer-text">
+    "하나님… 저 한 번도 떼쓴 적 없죠.<br>
+    이번이 처음이에요.<br>
+    조금만… 조금만 더 시간을<br>
+    주실 수 없나요?"
+  </p>
+</div>
+<br>
+
+<div class="nb-divider"></div>
+
+<!-- ══ PAGE 3: PREPARATION ══ -->
+<section class="nb-page">
+  <div class="nb-head">
+    <span class="nb-tag">The Preparation · 준비</span>
+    <h2 class="nb-title sr">100가지 놀이</h2>
+  </div>
+
+  <p class="nb-p sr">앤디는 아들이 태어날 날을 기다리며 100가지가 넘는 놀이를 준비했습니다. 실로 만드는 놀이, 손으로 하는 놀이, 노래 부르는 놀이… 아이가 오래 살지 못할지도 모른다는 것을 알면서도 그는 준비했습니다.</p>
+  <p class="annot sr">"나는… 아들에게 좋은 아빠가 되고 싶어요."</p>
+  <br>
+  <p class="nb-p sr">앤디는 글을 잘 쓰지 못했습니다. 그래서 매일같이 연습했습니다. 아들의 이름을 쓰기 위해서였습니다. 출생 신고서에 그 이름을 직접 쓰는 것이 그에게는 세상에서 가장 큰 꿈이었습니다.</p>
+</section>
+
+<!-- ══ NAME PRACTICE ══ -->
+<section class="name-section">
+  <div class="nb-head">
+    <span class="nb-tag">Name Practice · 이름 연습</span>
+  </div>
+
+  <div class="name-practice-wrap">
+    <div class="name-line sr">
+      <span class="name-attempt messy">L u k a s</span>
+      <span class="name-note">← 처음엔 이랬어요</span>
+    </div>
+    <div class="name-line sr">
+      <span class="name-attempt messy">LUKAS</span>
+      <span class="name-note">← 다시</span>
+    </div>
+    <div class="name-line sr">
+      <span class="name-attempt better">LUCas</span>
+    </div>
+    <div class="name-line sr">
+      <span class="name-attempt better">LUCAS</span>
+    </div>
+    <div class="name-line sr">
+      <span class="name-attempt good">LUCAS</span>
+    </div>
+    <div class="name-line sr">
+      <span class="name-attempt final-name">L U C A S</span>
+    </div>
+  </div>
+
+  <div class="name-official sr">
+    <span class="name-final-big">L U C A S</span>
+    <span class="name-ko">루카스 — 앤디가 직접 쓴 이름</span>
+  </div>
+</section>
+
+<div class="nb-divider"></div>
+
+<!-- ══ PAGE 4: 17 DAYS ══ -->
+<section class="nb-page">
+  <div class="nb-head">
+    <span class="nb-tag">17 Days · 17일</span>
+    <h2 class="nb-title sr">모두가 생각했습니다, "이제 곧 끝이겠구나…"</h2>
+  </div>
+
+  <p class="nb-p sr">그리고 마침내 아이가 태어났습니다. 의사가 말했던 것처럼 루카스의 상태는 매우 위중했습니다.</p>
+  <p class="nb-p sr">하지만 시간이 지나도 아이는 숨을 쉬고 있었습니다.</p>
+  <p class="annot sr">15분이 지나고 — 한 시간이 지나고 — 하루가 지나고…</p>
+</section>
+
+<!-- 17 days counter -->
+<div class="days-section">
+  <p class="days-label">루카스가 살았던 날들 · Days Lucas lived</p>
+  <div class="days-grid" id="daysGrid">
+    <!-- Filled by JS -->
+  </div>
+</div>
+
+<section class="nb-page" style="padding-top:0;">
+  <p class="nb-p sr">그 짧은 시간 동안 앤디는 아들을 품에 안고 세상에서 가장 아름다운 노래를 불러 주었습니다.</p>
+  <p class="annot sr">"루카스… 아빠가 너 정말 사랑해."</p>
+</section>
+
+<div class="nb-divider"></div>
+
+<!-- ══ THE QUESTION ══ -->
+<section class="question-section">
+  <div class="question-inner">
+    <span class="q-label">The Question · 그 질문</span>
+    <p class="q-speaker">어느 날 지쳐서 눈물을 흘리던 줄리에게 앤디가 조용히 말했습니다.</p>
+    <p class="q-text">"줄리…"</p>
+    <p class="q-text">"사랑해 봤어?"</p>
+    <p class="q-follow">"사랑하는 사람이 아프다고 해서… 버릴 수 있어?"</p>
+  </div>
+</section>
+
+<div class="nb-divider"></div>
+
+<!-- ══ REFLECTION ══ -->
+<section class="nb-page">
+  <div class="nb-head">
+    <span class="nb-tag">Reflection · 묵상</span>
+    <h2 class="nb-title sr">가장 진실한 것</h2>
+  </div>
+
+  <p class="nb-p sr">그 말 앞에서 줄리는 아무 말도 할 수 없었습니다.</p>
+  <br>
+  <p class="nb-p sr">우리가 서로에게 줄 수 있는 것 가운데 가장 진실한 것은 사랑입니다.</p>
+  <p class="nb-p sr">능력도 아닙니다. 돈도 아닙니다. 성공도 아닙니다.</p>
+  <p class="annot sr">사랑입니다.</p>
+</section>
+
+<div class="nb-divider"></div>
+
+<!-- ══ SCRIPTURE ══ -->
+<section class="scripture-page">
+  <div class="sc-stamp sr">
+    <div class="sc-sq">롬</div>
+    <div class="sc-meta">
+      <span class="sc-book">로마서 · Romans</span>
+      <span class="sc-ref">8장 38-39절</span>
+    </div>
+  </div>
+
+  <blockquote class="sc-verse sr">
+    "나는 확신합니다. 죽음이나 생명이나 천사들이나 권세자들이나 현재 일이나 장래 일이나 능력들이나 높음이나 깊음이나 다른 어떤 피조물이라도 <strong>우리를 우리 주 그리스도 예수님 안에 있는 하나님의 사랑에서 끊을 수 없습니다.</strong>"
+  </blockquote>
+  <p class="sc-ref-line sr">— 로마서 8:38-39</p>
+</section>
+
+<div class="nb-divider"></div>
+
+<!-- ══ CLOSING ══ -->
+<section class="closing-page">
+  <p class="closing-pull sr">
+    앤디의 사랑은 어쩌면 세상 기준으로는<br>
+    <span class="accent">부족해 보였을지 모릅니다.</span>
+  </p>
+
+  <p class="closing-p sr">하지만 하나님이 보시기에는 그 사랑이 세상에서 가장 큰 사랑이었습니다. 그리고 그 사랑은 하나님이 우리를 사랑하시는 사랑을 조금 보여 주는 이야기인지도 모릅니다.</p>
+
+  <div class="final-note sr">
+    <p class="final-note-text">
+      사랑해 봤어?<br>
+      사랑하는 사람이 아프다고 해서…<br>
+      버릴 수 있어?
+    </p>
+  </div>
+</section>
+
+<script>
+// ══ 17 DAYS GRID ══
+const grid = document.getElementById('daysGrid');
+for(let i = 1; i <= 17; i++){
+  const d = document.createElement('div');
+  d.className = 'day-mark' + (i === 17 ? ' final' : '');
+  d.textContent = i;
+  grid.appendChild(d);
+}
+
+// Animate days on scroll
+const daysObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      const marks = grid.querySelectorAll('.day-mark');
+      marks.forEach((m, i) => {
+        setTimeout(() => {
+          m.classList.add('lit');
+          if(i < 16) setTimeout(() => m.classList.add('crossed'), 600);
+        }, i * 90);
+      });
+      daysObs.disconnect();
+    }
+  });
+}, { threshold: 0.3 });
+daysObs.observe(grid);
+
+// ══ QUESTION SECTION ══
+const qObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.q-text, .q-follow').forEach(el => el.classList.add('visible'));
+    }
+  });
+}, { threshold: 0.2 });
+document.querySelectorAll('.question-section').forEach(el => qObs.observe(el));
+
+// ══ SCROLL REVEAL ══
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting) e.target.classList.add('visible');
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+
+document.querySelectorAll('.sr, .prayer-card, .name-line, .final-note').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

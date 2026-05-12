@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>나는 너를 위하여 — 진젠도르프</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600&family=Cormorant+Garamond:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Noto Serif KR', serif;
+  overflow-x: hidden;
+  background: #0e0c08;
+}
+
+/* ══════════════════════════════════
+   HERO — 미술관 벽, 액자만
+══════════════════════════════════ */
+#hero {
+  width: 100vw;
+  min-height: 100vh;
+  background: #1a1712;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 미술관 벽 질감 */
+#hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(255,255,255,0.012) 79px, rgba(255,255,255,0.012) 80px),
+    repeating-linear-gradient(0deg,  transparent, transparent 79px, rgba(255,255,255,0.012) 79px, rgba(255,255,255,0.012) 80px);
+}
+
+/* 천장 조명 */
+#hero::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 70%;
+  background: radial-gradient(ellipse 40% 60% at 50% 0%, rgba(255,240,190,0.07) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+/* 액자 */
+.empty-frame {
+  position: relative;
+  width: min(420px, 86vw);
+  z-index: 2;
+}
+
+/* 액자 테두리 */
+.frame-border {
+  padding: 24px;
+  background: linear-gradient(135deg, #3a2808, #5a4010, #3a2808, #4a3010);
+  box-shadow:
+    inset 0 0 0 1px rgba(220,180,80,0.5),
+    inset 0 0 0 4px rgba(20,14,4,0.8),
+    inset 0 0 0 6px rgba(180,140,50,0.25),
+    0 12px 60px rgba(0,0,0,0.8),
+    0 4px 20px rgba(0,0,0,0.6);
+}
+
+/* 액자 안 — 어둠 속 텍스트만 */
+.frame-inside {
+  background: #0a0806;
+  aspect-ratio: 3/4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 28px;
+  position: relative;
+  border: 1px solid rgba(180,140,50,0.1);
+}
+
+/* 미세한 캔버스 결 */
+.frame-inside::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent, transparent 3px,
+    rgba(255,255,255,0.008) 3px, rgba(255,255,255,0.008) 4px
+  );
+  pointer-events: none;
+}
+
+.frame-ko {
+  font-size: 10px;
+  letter-spacing: 4px;
+  color: rgba(200,165,70,0.45);
+  margin-bottom: 24px;
+  font-weight: 300;
+  text-transform: uppercase;
+}
+
+.frame-verse1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(17px, 4vw, 22px);
+  font-weight: 600;
+  color: rgba(240,225,185,0.9);
+  line-height: 1.7;
+  text-align: center;
+  margin-bottom: 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.frame-divider {
+  width: 40px;
+  height: 1px;
+  background: rgba(200,165,70,0.35);
+  margin: 0 auto 24px;
+}
+
+.frame-verse2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(15px, 3.5vw, 19px);
+  font-weight: 400;
+  color: rgba(210,195,155,0.75);
+  line-height: 1.8;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+/* 액자 하단 명판 */
+.frame-plate {
+  background: linear-gradient(90deg, #2a1c06, #4a3410, #2a1c06);
+  padding: 10px 0;
+  text-align: center;
+  border-top: 1px solid rgba(200,165,70,0.2);
+}
+.plate-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 10px;
+  letter-spacing: 4px;
+  color: rgba(200,165,70,0.45);
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+/* 스크롤 유도 */
+.scroll-cue {
+  position: absolute;
+  bottom: 32px; left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  z-index: 10;
+  animation: cue 2.5s ease-in-out infinite;
+}
+.scroll-line {
+  width: 1px; height: 36px;
+  background: linear-gradient(180deg, rgba(200,165,70,0.5), transparent);
+}
+@keyframes cue {
+  0%,100% { opacity:.4; transform:translateX(-50%) translateY(0); }
+  50%      { opacity:.9; transform:translateX(-50%) translateY(8px); }
+}
+
+/* ══════════════════════════════════
+   챕터 공통
+══════════════════════════════════ */
+.chapter {
+  padding: 100px 0;
+  position: relative;
+}
+
+/* 각 챕터 배경 */
+.ch-1 { background: #f2e8d4; color: #18120a; }
+.ch-2 { background: #faf6ee; color: #18120a; }
+.ch-3 { background: #ece0c8; color: #18120a; }
+.ch-4 { background: #182018; color: #e0e8dc; }
+.ch-5 { background: #f5f0e2; color: #18120a; }
+.ch-6 { background: #0e0c08; color: #e8d8b0; }
+
+.inner {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0 52px;
+}
+
+/* 챕터 헤더 */
+.ch-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 40px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid;
+}
+.ch-1 .ch-header, .ch-2 .ch-header, .ch-3 .ch-header, .ch-5 .ch-header { border-color: rgba(160,100,10,0.2); }
+.ch-4 .ch-header { border-color: rgba(80,160,60,0.2); }
+.ch-6 .ch-header { border-color: rgba(200,165,70,0.2); }
+
+.ch-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 72px;
+  font-weight: 300;
+  line-height: 0.85;
+  flex-shrink: 0;
+}
+.ch-1 .ch-num, .ch-2 .ch-num, .ch-3 .ch-num, .ch-5 .ch-num { color: rgba(160,100,10,0.2); }
+.ch-4 .ch-num { color: rgba(80,160,60,0.2); }
+.ch-6 .ch-num { color: rgba(200,165,70,0.18); }
+
+.ch-head-right { flex: 1; }
+
+.ch-label {
+  font-size: 10px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  font-weight: 400;
+  margin-bottom: 6px;
+}
+.ch-1 .ch-label, .ch-2 .ch-label, .ch-3 .ch-label, .ch-5 .ch-label { color: #a06410; }
+.ch-4 .ch-label { color: #60b040; }
+.ch-6 .ch-label { color: #c8a840; }
+
+.ch-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.ch-1 .ch-title, .ch-2 .ch-title, .ch-3 .ch-title, .ch-5 .ch-title { color: #18120a; }
+.ch-4 .ch-title { color: #e0e8dc; }
+.ch-6 .ch-title { color: #f0e0b0; }
+
+/* 본문 */
+.p {
+  font-size: 16px;
+  line-height: 2.4;
+  font-weight: 300;
+  word-break: keep-all;
+  margin-bottom: 20px;
+}
+.ch-1 .p, .ch-2 .p, .ch-3 .p, .ch-5 .p { color: #18120a; }
+.ch-4 .p { color: #c8d8c0; }
+.ch-6 .p { color: #d0c090; }
+.p b { font-weight: 600; }
+.ch-4 .p b { color: #e8f0e0; }
+.ch-6 .p b { color: #f0e8c0; }
+
+/* 인용 블록 */
+.q {
+  margin: 24px 0;
+  padding: 20px 20px 20px 24px;
+  border-left: 3px solid;
+  font-size: 16px;
+  line-height: 2.3;
+  font-weight: 300;
+  word-break: keep-all;
+}
+.ch-1 .q, .ch-3 .q { border-color: #b87c10; background: rgba(184,124,16,0.07); color: #18120a; }
+.ch-2 .q            { border-color: #7a9840; background: rgba(122,152,64,0.06); color: #18120a; }
+.ch-4 .q            { border-color: #60b040; background: rgba(96,176,64,0.07); color: #c8d8c0; }
+.ch-5 .q            { border-color: #b87c10; background: rgba(184,124,16,0.07); color: #18120a; }
+.ch-6 .q            { border-color: #c8a840; background: rgba(200,168,64,0.07); color: #d8c898; }
+.q b { font-weight: 600; }
+.ch-4 .q b { color: #e0ecd8; }
+.ch-6 .q b { color: #f8f0d0; }
+
+/* 강조 박스 */
+.box {
+  margin: 28px 0;
+  padding: 36px 32px;
+  border: 1px solid;
+  text-align: center;
+  position: relative;
+}
+.ch-1 .box, .ch-2 .box, .ch-3 .box, .ch-5 .box { border-color: rgba(184,124,16,0.3); background: rgba(184,124,16,0.05); }
+.ch-4 .box { border-color: rgba(96,176,64,0.25); background: rgba(96,176,64,0.05); }
+.ch-6 .box { border-color: rgba(200,168,64,0.3); background: rgba(200,168,64,0.06); }
+
+.box-sub {
+  font-size: 10px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  font-weight: 400;
+  margin-bottom: 14px;
+}
+.ch-1 .box-sub, .ch-2 .box-sub, .ch-3 .box-sub, .ch-5 .box-sub { color: #a06410; }
+.ch-4 .box-sub { color: #60b040; }
+.ch-6 .box-sub { color: #c8a840; }
+
+.box-main {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.65;
+}
+.ch-1 .box-main, .ch-2 .box-main, .ch-3 .box-main, .ch-5 .box-main { color: #18120a; }
+.ch-4 .box-main { color: #e0ecd8; }
+.ch-6 .box-main { color: #f0e8c0; }
+
+/* 구분선 */
+.rule {
+  height: 1px;
+  margin: 32px 0;
+}
+.ch-1 .rule, .ch-2 .rule, .ch-3 .rule, .ch-5 .rule { background: rgba(184,124,16,0.18); }
+.ch-4 .rule { background: rgba(96,176,64,0.18); }
+.ch-6 .rule { background: rgba(200,168,64,0.18); }
+
+/* ── 헤른후트 지명 ── */
+.place-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 28px 48px;
+  background: #0e1610;
+  border: 1px solid rgba(96,176,64,0.25);
+  margin: 28px 0;
+}
+.place-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 44px;
+  font-weight: 700;
+  color: #e0ecd8;
+  margin-bottom: 6px;
+  line-height: 1;
+}
+.place-meaning {
+  font-size: 12px;
+  letter-spacing: 4px;
+  color: #60b040;
+  font-weight: 300;
+}
+
+/* ── 찬송 가사 ── */
+.hymn {
+  margin: 28px 0;
+  border: 1px solid rgba(184,124,16,0.22);
+  background: #fdfaf2;
+}
+.hymn-top {
+  padding: 18px 28px;
+  background: rgba(184,124,16,0.07);
+  border-bottom: 1px solid rgba(184,124,16,0.15);
+}
+.hymn-en { font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:700; color:#18120a; }
+.hymn-ko { font-size:12px; color:#7a5820; font-weight:300; letter-spacing:1px; margin-top:2px; }
+.hymn-verses {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: rgba(184,124,16,0.1);
+}
+.verse {
+  background: #fdfaf2;
+  padding: 22px 24px;
+}
+.v-num {
+  font-family:'Cormorant Garamond',serif;
+  font-size:28px; font-weight:700;
+  color: rgba(184,124,16,0.3);
+  line-height:1; margin-bottom:10px;
+}
+.v-text {
+  font-size:14px; line-height:2.2;
+  color: #2a200e; font-weight:300;
+  word-break:keep-all;
+}
+
+/* ── 로마서 박스 ── */
+.scripture {
+  text-align:center;
+  padding: 52px 44px;
+  margin: 32px 0;
+  border: 2px solid rgba(200,168,64,0.4);
+  position: relative;
+}
+.scripture::before,
+.scripture::after {
+  content:''; position:absolute;
+  left:50%; transform:translateX(-50%);
+  width:56px; height:2px; background:#c8a840;
+}
+.scripture::before { top:0; }
+.scripture::after  { bottom:0; }
+.s-ref {
+  font-size:11px; letter-spacing:5px; text-transform:uppercase;
+  color:#c8a840; margin-bottom:20px;
+  font-family:'Cormorant Garamond',serif; font-weight:600;
+}
+.s-text {
+  font-size:20px; line-height:2.1;
+  color:#e8d8a8; font-weight:300; word-break:keep-all;
+}
+.s-text b { font-weight:600; color:#fff; }
+
+/* ── 마지막 질문 ── */
+.final {
+  text-align:center;
+  padding: 60px 0 20px;
+  max-width:560px;
+  margin: 0 auto;
+}
+.f-from {
+  font-size:10px; letter-spacing:5px; text-transform:uppercase;
+  color:rgba(200,168,64,0.5); margin-bottom:32px; font-weight:300;
+}
+.f-q1 {
+  font-family:'Cormorant Garamond',serif;
+  font-size:24px; font-weight:600;
+  color:#e8d8a8; line-height:1.8; margin-bottom:28px;
+}
+.f-line { width:48px; height:1px; background:#c8a840; margin:0 auto 28px; }
+.f-q2 {
+  font-family:'Cormorant Garamond',serif;
+  font-size:34px; font-weight:700;
+  color:#fff8e8; line-height:1.7; margin-bottom:48px;
+}
+.f-ans {
+  font-family:'Cormorant Garamond',serif;
+  font-size:80px; font-weight:700;
+  color:#c8a840; line-height:1; letter-spacing:6px;
+}
+.f-vline {
+  width:1px; height:56px;
+  background:linear-gradient(180deg,#c8a840,transparent);
+  margin:40px auto 0;
+}
+
+/* 페이드인 */
+.fi { opacity:0; transform:translateY(20px); transition:opacity .85s ease,transform .85s ease; }
+.fi.in { opacity:1; transform:translateY(0); }
+
+/* 반응형 */
+@media(max-width:640px){
+  .inner { padding:0 24px; }
+  .chapter { padding:72px 0; }
+  .ch-title { font-size:28px; }
+  .hymn-verses { grid-template-columns:1fr; }
+  .f-q2 { font-size:26px; }
+  .f-ans { font-size:56px; }
+  .scripture { padding:36px 24px; }
+  .place-card { padding:24px 28px; }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO: 액자만, 그림 없음 -->
+<section id="hero">
+  <div class="empty-frame">
+    <div class="frame-border">
+      <div class="frame-inside">
+        <div class="frame-ko">Düsseldorf · 1719</div>
+        <div class="frame-verse1">
+          나는 너를 위하여<br>이 모든 것을 하였노라.
+        </div>
+        <div class="frame-divider"></div>
+        <div class="frame-verse2">
+          그러나 너는 나를 위하여<br>무엇을 하느냐?
+        </div>
+      </div>
+      <div class="frame-plate">
+        <div class="plate-text">Ecce Homo · Düsseldorf Kunstmuseum</div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-cue"><div class="scroll-line"></div></div>
+</section>
+
+<!-- CH 1 -->
+<section class="chapter ch-1">
+  <div class="inner">
+    <div class="ch-header fi">
+      <div class="ch-num">I</div>
+      <div class="ch-head-right">
+        <div class="ch-label">1719년 · 뒤셀도르프</div>
+        <div class="ch-title">나는 너를 위하여<br>이 모든 것을 하였노라</div>
+      </div>
+    </div>
+    <p class="p fi">18세기 초, 한 젊은 귀족이 유럽을 여행하고 있었습니다.</p>
+    <div class="q fi">대학을 갓 졸업한 19세의 루드비히 진젠도르프는 견문을 넓히고 사회 생활을 준비하기 위해 덴마크, 프랑스, 독일의 여러 지방을 여행하고 있던 중 독일의 뒤셀도르프에 들렀다.</div>
+    <p class="p fi">여행 중이던 그는 어느 날 뒤셀도르프의 한 미술관에 들어가게 됩니다.</p>
+    <div class="q fi">뒤셀도르프의 어느 미술관에 들어선 그는 문득 한 그림을 뚫어지게 바라보았다. 그의 시선은 그 그림에서 좀처럼 떠날 줄 몰랐다.</div>
+    <p class="p fi">그 그림은 가시 면류관을 쓰고 고난을 당하시는 예수 그리스도의 모습이었습니다. 그림 아래에는 이런 글이 적혀 있었습니다.</p>
+    <div class="box fi">
+      <div class="box-sub">그림 속 문장</div>
+      <div class="box-main">"나는 너를 위하여 이 모든 것을 하였노라.<br>그러나 너는 나를 위하여 무엇을 하느냐?"</div>
+    </div>
+    <p class="p fi">그 순간 진젠도르프의 마음이 멈춘 것 같았습니다.</p>
+    <div class="q fi">그는 호흡을 할 수가 없었다. 그는 '아무것도…'라며 실어증에 걸린 사람처럼 고개를 저을 뿐 말을 잇지 못했다.</div>
+    <p class="p fi">그는 마음속으로 깨달았습니다.</p>
+    <div class="q fi">'나는 오랫동안 그분을 사랑해 왔다고 생각했지만 그분을 위해 한 일은 아무것도 없다.'</div>
+    <p class="p fi">그래서 그는 조용히 결심합니다.</p>
+    <div class="q fi">"지금부터 나는 그분께서 이끄시는 대로 모든 것을 할 것이다."</div>
+    <p class="p fi">그는 고개를 들어 다시 예수님을 바라보며 마음속으로 대답했습니다.</p>
+    <div class="box fi">
+      <div class="box-sub">진젠도르프의 대답</div>
+      <div class="box-main" style="font-size:60px; letter-spacing:8px;">"예!"</div>
+    </div>
+    <p class="p fi">이 젊은 귀족의 마음속에서는 그 순간 조용한 혁명이 시작되고 있었습니다.</p>
+  </div>
+</section>
+
+<!-- CH 2 -->
+<section class="chapter ch-2">
+  <div class="inner">
+    <div class="ch-header fi">
+      <div class="ch-num">II</div>
+      <div class="ch-head-right">
+        <div class="ch-label">1700년 · 작센</div>
+        <div class="ch-title">어린 시절부터 준비된 마음</div>
+      </div>
+    </div>
+    <p class="p fi">사실 진젠도르프의 마음에는 이미 오래전부터 하나님을 향한 갈망이 있었습니다.</p>
+    <div class="q fi">진젠도르프는 1700년 5월 26일 독일의 작센주 내각 의원의 아들로 태어났다. 백작인 그의 부친은 그가 태어난 지 6주 만에 세상을 떠났다.</div>
+    <p class="p fi">그는 어린 나이에 아버지를 잃었고 외조모에게서 자라게 됩니다.</p>
+    <div class="q fi">그의 외조모와 숙모가 독일 경건주의의 영향을 받고 믿음을 지켜왔기 때문에 그는 어렸을 때부터 경건한 분위기 속에서 성경도 많이 읽고 기도도 열심히 하였다.</div>
+    <p class="p fi">그는 어린 시절을 이렇게 회상합니다.</p>
+    <div class="q fi">"나는 한참 동안 울었고, 나를 위하여 자신의 목숨을 버리신 분을 따라 순종하는 삶을 살아가겠다는 굳은 결심을 했다."</div>
+    <p class="p fi">어린 진젠도르프의 마음은 늘 예수님을 향해 있었습니다. 심지어 이런 일도 있었습니다.</p>
+    <div class="q fi">어느 날은 예수님을 극히 사모한 나머지 예수님께 편지를 써서 창가에서 하늘로 던졌는데, 이런 진젠도르프는 그리스도께서 그 편지를 읽어 주실 것을 믿었다.</div>
+    <p class="p fi">그의 마음속에는 이미 예수님을 향한 사랑이 자리 잡고 있었던 것입니다.</p>
+  </div>
+</section>
+
+<!-- CH 3 -->
+<section class="chapter ch-3">
+  <div class="inner">
+    <div class="ch-header fi">
+      <div class="ch-num">III</div>
+      <div class="ch-head-right">
+        <div class="ch-label">할레 · 비텐베르크</div>
+        <div class="ch-title">학문과 갈등의 시간</div>
+      </div>
+    </div>
+    <p class="p fi">그는 할레에서 교육을 받으며 경건주의 지도자 프랑케 교수에게 영향을 받습니다.</p>
+    <div class="q fi">그는 15세에 벌써 그리스어로 된 고전과 신약성경을 독파하고 라틴어와 프랑스어를 유창하게 구사하였다.</div>
+    <p class="p fi">그러나 그의 가족들은 그가 목회자가 되는 것을 원하지 않았습니다. 귀족 가문이었기 때문입니다. 그래서 그는 비텐베르크에서 법률을 공부하게 됩니다. 하지만 그의 마음은 여전히 하나님을 향해 있었습니다.</p>
+    <div class="q fi">이런 반대에도 불구하고 그는 친척들 몰래 신학을 연구했다.</div>
+    <p class="p fi">그리고 바로 그때, 유럽 여행 중에 뒤셀도르프 미술관 사건을 만나게 된 것입니다. 그는 나중에 이렇게 고백했습니다.</p>
+    <div class="q fi">"지식적으로 아는 것과 마음을 가지는 것의 차이를 나중에야 비로소 깨닫게 되었다."</div>
+  </div>
+</section>
+
+<!-- CH 4 -->
+<section class="chapter ch-4">
+  <div class="inner">
+    <div class="ch-header fi">
+      <div class="ch-num">IV</div>
+      <div class="ch-head-right">
+        <div class="ch-label">헤른후트 · Herrnhut</div>
+        <div class="ch-title">결단 이후의 삶</div>
+      </div>
+    </div>
+    <p class="p fi">여행에서 돌아온 그는 평범한 귀족의 삶을 선택하지 않았습니다.</p>
+    <div class="q fi">그는 먼저 조상으로부터 물려받은 재산의 일부로 자유롭게 예배드릴 수 있는 집을 마련하여 개방하였다.</div>
+    <p class="p fi">그리고 하나님께서 그에게 한 일을 맡기십니다. 바로 핍박받던 모라비아 신자들이 찾아온 것입니다.</p>
+    <div class="q fi">바로 이러한 때, 핍박을 피해 이리저리 쫓겨 다니던 모라비아 교도들이 진젠도르프에게 왔다.</div>
+    <p class="p fi">그는 그들을 받아들이고 새로운 공동체를 세웁니다. 그 마을의 이름은</p>
+    <div class="place-card fi">
+      <div class="place-name">헤른후트</div>
+      <div class="place-meaning">Herrnhut · 주의 보호 아래</div>
+    </div>
+    <p class="p fi">그곳에서 기도와 예배가 끊이지 않았고 세계 선교 운동이 시작되었습니다. 사람들은 그를 이렇게 불렀습니다.</p>
+    <div class="box fi">
+      <div class="box-sub">그를 부르는 이름</div>
+      <div class="box-main">"움직여 일하는 그리스도인"</div>
+    </div>
+    <p class="p fi">그는 재산을 내어놓고 선교사를 돕고 핍박받는 사람들에게 피난처를 제공했습니다. 그리고 그 공동체의 신앙은 훗날 요한 웨슬리에게도 큰 영향을 주게 됩니다.</p>
+  </div>
+</section>
+
+<!-- CH 5 -->
+<section class="chapter ch-5">
+  <div class="inner">
+    <div class="ch-header fi">
+      <div class="ch-num">V</div>
+      <div class="ch-head-right">
+        <div class="ch-label">Frances Ridley Havergal</div>
+        <div class="ch-title">한 장의 그림이 만든 찬송</div>
+      </div>
+    </div>
+    <p class="p fi">진젠도르프의 인생을 바꾼 바로 그 그림. 그 그림은 훗날 또 한 사람의 마음을 움직였습니다.</p>
+    <p class="p fi">영국의 신앙 시인이었던 프랜시스 리들리 해버갈(Frances Ridley Havergal)이 그 그림을 보고 큰 감동을 받았습니다. 그녀는 그림 아래에 적힌 문장을 읽고 시를 쓰게 됩니다. 그 시가 바로</p>
+    <div class="box fi">
+      <div class="box-sub">찬송가</div>
+      <div class="box-main">「내 너를 위하여」<br><span style="font-size:16px; font-weight:300; letter-spacing:2px;">I Gave My Life for Thee</span></div>
+    </div>
+    <p class="p fi">가사는 바로 그 질문을 담고 있습니다.</p>
+    <div class="hymn fi">
+      <div class="hymn-top">
+        <div class="hymn-en">I Gave My Life for Thee</div>
+        <div class="hymn-ko">내 너를 위하여</div>
+      </div>
+      <div class="hymn-verses">
+        <div class="verse">
+          <div class="v-num">1</div>
+          <div class="v-text">내 너를 위하여 몸 버려 피 흘려 네 죄를 속하여 살길을 주었다 너 위해 몸을 주건만 날 무엇 주느냐 너 위해 몸을 주건만 날 무엇 주느냐</div>
+        </div>
+        <div class="verse">
+          <div class="v-num">2</div>
+          <div class="v-text">아버지 보좌와 그 영광 떠나서 밤 같은 세상에 만백성 구하려 내몸을 희생했건만 너 무엇 하느냐 내 몸을 희생했건만 너 무엇 하느냐</div>
+        </div>
+        <div class="verse">
+          <div class="v-num">3</div>
+          <div class="v-text">죄 중에 빠져서 영 죽을 인생을 구하여 주려고 나 피를 흘렸다 네 죄를 대속했건만 너 무엇 하느냐 네 죄를 대속했건만 너 무엇 하느냐</div>
+        </div>
+        <div class="verse">
+          <div class="v-num">4</div>
+          <div class="v-text">한없는 용서와 참사랑 가지고 세상에 내려와 값없이 주었다 이것이 귀중하건만 날 무엇 주느냐 이것이 귀중하건만 날 무엇 주느냐</div>
+        </div>
+      </div>
+    </div>
+    <p class="p fi">이 찬송은 예수님께서 우리에게 조용히 묻는 질문입니다.</p>
+  </div>
+</section>
+
+<!-- CH 6 -->
+<section class="chapter ch-6">
+  <div class="inner">
+    <div class="ch-header fi">
+      <div class="ch-num">VI</div>
+      <div class="ch-head-right">
+        <div class="ch-label">로마서 5:8</div>
+        <div class="ch-title">오늘 우리에게도<br>들려오는 질문</div>
+      </div>
+    </div>
+    <div class="scripture fi">
+      <div class="s-ref">로마서 5:8</div>
+      <p class="s-text">"우리가 아직 죄인이었을 때에 그리스도께서 우리를 위하여 죽으심으로 <b>하나님께서 우리에 대한 자기 사랑을 확증하셨느니라.</b>"</p>
+    </div>
+    <div class="final fi">
+      <div class="f-from">진젠도르프의 인생을 바꾼 질문은 오늘 우리에게도 들려옵니다</div>
+      <div class="f-q1">"나는 너를 위하여 이것을 하였다."</div>
+      <div class="f-line"></div>
+      <div class="f-q2">"그런데 너는 나를 위하여<br>무엇을 하느냐?"</div>
+      <div class="f-ans">예!</div>
+      <div class="f-vline"></div>
+    </div>
+  </div>
+</section>
+
+<script>
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+  });
+}, { threshold: 0.07 });
+document.querySelectorAll('.fi').forEach(el => io.observe(el));
+</script>
+</body>
+</html>

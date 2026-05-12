@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>등대지기의 기름</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700;900&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --night:   #060a12;
+      --deep:    #0a1020;
+      --navy:    #0d1830;
+      --ocean:   #0f2040;
+      --wave:    #1a3560;
+      --foam:    #2a5090;
+      --amber:   #f0a030;
+      --amber2:  #ffcc60;
+      --amber3:  #ffe0a0;
+      --beam:    rgba(255, 200, 80, 0.12);
+      --sand:    #f5ecd8;
+      --cream:   #fdf8f0;
+      --ink:     #1a1208;
+      --muted:   rgba(245,236,216,0.55);
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--night);
+      color: var(--sand);
+      font-family: 'Noto Serif KR', serif;
+      overflow-x: hidden;
+    }
+
+    /* ══ HERO ══ */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: linear-gradient(180deg,#020408 0%,#060a12 25%,#08101e 55%,#0d1830 80%,#0f2040 100%);
+    }
+
+    .stars { position: absolute; inset: 0; pointer-events: none; }
+    .star {
+      position: absolute; border-radius: 50%; background: white;
+      animation: twinkle var(--d,3s) ease-in-out infinite var(--delay,0s);
+    }
+    @keyframes twinkle {
+      0%,100%{ opacity:var(--lo,0.2); transform:scale(1); }
+      50%    { opacity:var(--hi,0.9); transform:scale(1.3); }
+    }
+
+    .lighthouse-wrap {
+      position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+      width: clamp(160px,30vw,260px); z-index: 10;
+    }
+
+    .beam-container {
+      position: absolute; bottom: clamp(140px,26vw,230px); left: 50%;
+      width: 0; height: 0; z-index: 5; pointer-events: none;
+    }
+    .beam {
+      position: absolute; bottom: 0; left: 0;
+      width: 900px; height: 600px; transform-origin: 0% 100%;
+      background: conic-gradient(from 0deg at 0% 100%,transparent 0deg,rgba(255,210,80,0.18) 8deg,rgba(255,210,80,0.08) 18deg,transparent 22deg);
+      animation: sweep 4s linear infinite; filter: blur(2px);
+    }
+    .beam2 {
+      position: absolute; bottom: 0; left: 0;
+      width: 900px; height: 600px; transform-origin: 0% 100%;
+      background: conic-gradient(from 0deg at 0% 100%,transparent 0deg,rgba(255,210,80,0.10) 6deg,transparent 14deg);
+      animation: sweep 4s linear infinite -2s; filter: blur(4px);
+    }
+    @keyframes sweep { from{transform:rotate(-60deg);} to{transform:rotate(120deg);} }
+
+    .waves-container {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: clamp(100px,18vw,160px); overflow: hidden; z-index: 8;
+    }
+    .wave-svg {
+      position: absolute; bottom: 0; width: 200%;
+      animation: wave-move var(--spd,8s) linear infinite;
+    }
+    .wave-svg.w2 { animation-delay:-4s; opacity:0.6; }
+    .wave-svg.w3 { animation-delay:-2s; opacity:0.4; bottom:-8px; }
+    @keyframes wave-move { from{transform:translateX(0);} to{transform:translateX(-50%);} }
+
+    .hero-content {
+      position: relative; z-index: 20; text-align: center;
+      padding: 0 24px; margin-bottom: clamp(120px,22vw,200px);
+    }
+    .hero-kicker {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: clamp(0.6rem,1.8vw,0.72rem); font-weight: 500;
+      letter-spacing: 0.35em; text-transform: uppercase;
+      color: var(--amber); opacity: 0.8; margin-bottom: 20px; display: block;
+    }
+    .hero-title {
+      font-size: clamp(2rem,7.5vw,4.5rem); font-weight: 900;
+      line-height: 1.15; letter-spacing: -0.03em; margin-bottom: 16px;
+    }
+    .hero-title .glow {
+      color: var(--amber2);
+      text-shadow: 0 0 40px rgba(255,200,80,0.5),0 0 80px rgba(255,200,80,0.2);
+    }
+    .hero-sub {
+      font-size: clamp(0.85rem,2.3vw,1rem); font-weight: 300;
+      color: var(--muted); line-height: 1.9; max-width: 420px;
+      margin: 0 auto 32px;
+    }
+    .hero-verse {
+      display: inline-block; padding: 10px 20px;
+      border: 1px solid rgba(240,160,48,0.35); border-radius: 20px;
+      font-size: clamp(0.75rem,2vw,0.85rem); color: var(--amber); letter-spacing: 0.08em;
+    }
+
+    /* ══ STORY SECTION ══ */
+    .story-section { background: var(--deep); position: relative; }
+    .section-wave  { display: block; width: 100%; background: transparent; }
+
+    .content-wrap { max-width: 680px; margin: 0 auto; padding: 0 22px; }
+
+    .intro-block { padding: 64px 0 52px; }
+
+    .section-label {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 28px;
+    }
+    .section-label span {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 0.62rem; font-weight: 500;
+      letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--amber); opacity: 0.7;
+    }
+    .section-label::after {
+      content:''; flex:1; height:1px;
+      background: linear-gradient(90deg,rgba(240,160,48,0.3),transparent);
+    }
+
+    .block-title {
+      font-size: clamp(1.4rem,4.5vw,2rem); font-weight: 900;
+      line-height: 1.3; letter-spacing: -0.025em;
+      color: var(--sand); margin-bottom: 24px;
+    }
+    .body-text {
+      font-size: clamp(0.95rem,2.5vw,1.07rem); font-weight: 400;
+      line-height: 2.2; color: rgba(245,236,216,0.82); margin-bottom: 18px;
+    }
+
+    .origin-box {
+      margin: 28px 0; padding: 20px 22px;
+      background: rgba(240,160,48,0.06);
+      border: 1px solid rgba(240,160,48,0.2); border-radius: 10px;
+    }
+    .origin-label {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 0.62rem; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--amber); opacity: 0.7; margin-bottom: 10px;
+    }
+    .origin-quote {
+      font-style: italic; font-size: clamp(0.85rem,2.2vw,0.95rem);
+      color: rgba(245,236,216,0.75); line-height: 1.9; margin-bottom: 8px;
+    }
+    .origin-trans { font-size: 0.82rem; color: rgba(245,236,216,0.45); line-height: 1.8; }
+
+    /* 기름 게이지 */
+    .oil-scene { padding: 52px 0 60px; border-top: 1px solid rgba(255,255,255,0.06); }
+    .oil-gauge-wrap {
+      margin: 36px 0; display: flex; flex-direction: column;
+      align-items: center; gap: 10px;
+    }
+    .oil-label-row {
+      display: flex; justify-content: space-between;
+      width: 100%; max-width: 340px;
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 0.72rem; color: rgba(245,236,216,0.5); letter-spacing: 0.08em;
+    }
+    .gauge-track {
+      width: 100%; max-width: 340px; height: 18px;
+      background: rgba(255,255,255,0.06); border-radius: 9px;
+      border: 1px solid rgba(255,255,255,0.1); overflow: hidden; position: relative;
+    }
+    .gauge-fill {
+      height: 100%; border-radius: 9px;
+      background: linear-gradient(90deg,var(--amber),var(--amber2));
+      box-shadow: 0 0 12px rgba(255,200,80,0.4);
+      transition: width 1.5s ease; width: 0;
+    }
+    .gauge-fill.animated { width: var(--target-w,100%); }
+    .gauge-events {
+      width: 100%; max-width: 340px;
+      display: flex; flex-direction: column; gap: 8px; margin-top: 6px;
+    }
+    .gauge-event {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 0.8rem; color: rgba(245,236,216,0.55);
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+    .event-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+    .dot-amber { background: var(--amber2); }
+    .dot-red   { background: #e05050; }
+
+    /* 성경 인용 */
+    .big-quote {
+      margin: 44px 0; padding: 32px 28px 28px;
+      background: linear-gradient(135deg,rgba(240,160,48,0.08),rgba(240,160,48,0.03));
+      border-radius: 14px; border: 1px solid rgba(240,160,48,0.2); position: relative;
+    }
+    .big-quote::before {
+      content:'"'; font-family: Georgia,serif; font-size: 6rem;
+      color: var(--amber); opacity: 0.12;
+      position: absolute; top:-20px; left:12px; line-height:1; pointer-events:none;
+    }
+    .big-quote-text {
+      font-size: clamp(0.95rem,2.6vw,1.08rem); font-weight: 600;
+      color: rgba(245,236,216,0.95); line-height: 2.1; margin-bottom: 12px;
+      position: relative; z-index:1;
+    }
+    .big-quote-ref {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 0.75rem; color: var(--amber); letter-spacing: 0.1em;
+    }
+
+    /* 핵심 선언 */
+    .declaration {
+      margin: 32px 0; padding: 24px; text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .declaration-text {
+      font-size: clamp(1.05rem,3vw,1.25rem); font-weight: 700;
+      color: var(--amber2); line-height: 1.85;
+    }
+
+    /* 포인트 섹션 */
+    .points-section {
+      padding: 52px 22px 60px; background: var(--navy);
+    }
+    .points-grid {
+      display: flex; flex-direction: column; gap: 0;
+      max-width: 680px; margin: 28px auto 0;
+    }
+    .point-item {
+      display: grid; grid-template-columns: 72px 1fr; gap: 0 24px;
+      padding: 32px 0; border-bottom: 1px solid rgba(255,255,255,0.07);
+      opacity: 0; transform: translateX(-20px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .point-item:last-child { border-bottom: none; }
+    .point-item.vis { opacity:1; transform:translateX(0); }
+    .point-num-col { display:flex; flex-direction:column; align-items:center; padding-top:4px; }
+    .point-num {
+      font-family:'Noto Serif KR',serif; font-size:2.2rem; font-weight:900;
+      color: rgba(240,160,48,0.2); line-height:1; margin-bottom:8px;
+    }
+    .point-vline { width:1px; flex:1; background:rgba(240,160,48,0.15); }
+    .point-heading {
+      font-size: clamp(1rem,2.8vw,1.15rem); font-weight:700;
+      color:var(--sand); margin-bottom:12px; line-height:1.4;
+    }
+    .point-body {
+      font-size: clamp(0.88rem,2.3vw,0.97rem); font-weight:300;
+      color: rgba(245,236,216,0.68); line-height:2.0; margin-bottom:12px;
+    }
+    .point-tag {
+      display:inline-flex; align-items:center; gap:6px; padding:5px 12px;
+      background:rgba(240,160,48,0.1); border:1px solid rgba(240,160,48,0.25);
+      border-radius:14px; font-family:'Noto Sans KR',sans-serif;
+      font-size:0.75rem; color:var(--amber); letter-spacing:0.05em; margin-right:6px;
+    }
+
+    /* 인물 말풍선 */
+    .speech-box {
+      margin: 18px 0; padding: 18px 22px;
+      background: rgba(255,255,255,0.04);
+      border-left: 3px solid rgba(240,160,48,0.4);
+      border-radius: 0 10px 10px 0;
+      font-style: italic;
+      font-size: clamp(0.88rem,2.3vw,0.97rem);
+      color: rgba(245,236,216,0.75);
+      line-height: 2;
+    }
+    .speech-who {
+      font-style: normal; font-family:'Noto Sans KR',sans-serif;
+      font-size: 0.65rem; letter-spacing:0.18em;
+      color: var(--amber); opacity:0.7; margin-bottom:8px; display:block;
+    }
+
+    /* 대조 섹션 */
+    .contrast-section { padding: 52px 22px 60px; background: var(--deep); }
+    .contrast-inner { max-width: 680px; margin: 0 auto; }
+    .contrast-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 28px 0;
+    }
+    @media (max-width:520px) { .contrast-grid{grid-template-columns:1fr;} }
+    .contrast-card {
+      border-radius: 12px; padding: 24px 20px;
+      opacity:0; transform:translateY(18px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .contrast-card.vis { opacity:1; transform:translateY(0); }
+    .contrast-card.red   { background:rgba(180,40,40,0.12); border:1px solid rgba(180,40,40,0.3); }
+    .contrast-card.amber { background:rgba(240,160,48,0.08); border:1px solid rgba(240,160,48,0.25); }
+    .contrast-icon  { font-size:1.8rem; margin-bottom:12px; display:block; }
+    .contrast-name  { font-size:0.95rem; font-weight:700; color:var(--sand); margin-bottom:8px; }
+    .contrast-desc  { font-family:'Noto Sans KR',sans-serif; font-size:0.82rem; font-weight:300; color:rgba(245,236,216,0.6); line-height:1.9; }
+    .contrast-verdict { display:inline-block; margin-top:10px; font-size:0.75rem; font-weight:600; padding:3px 10px; border-radius:10px; }
+    .verdict-red   { background:rgba(180,40,40,0.2); color:#f08080; }
+
+    /* 신실함 정의 박스 */
+    .definition-box {
+      margin: 28px 0; padding: 24px 22px;
+      background: linear-gradient(135deg, rgba(240,160,48,0.1), rgba(240,160,48,0.04));
+      border: 1px solid rgba(240,160,48,0.3);
+      border-radius: 12px;
+    }
+    .definition-term {
+      font-family:'Noto Sans KR',sans-serif;
+      font-size:0.65rem; letter-spacing:0.28em; text-transform:uppercase;
+      color:var(--amber); margin-bottom:12px; display:block;
+    }
+    .definition-text {
+      font-size:clamp(0.92rem,2.5vw,1.02rem); font-weight:600;
+      color:rgba(245,236,216,0.95); line-height:2.1;
+    }
+
+    /* 피날레 */
+    .finale {
+      min-height: 100vh; display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      text-align:center; padding:80px 28px;
+      background:var(--night); position:relative; overflow:hidden;
+    }
+    .finale-glow {
+      position:absolute; top:35%; left:50%;
+      transform:translate(-50%,-50%);
+      width:600px; height:600px; border-radius:50%;
+      background:radial-gradient(ellipse,rgba(255,210,80,0.18) 0%,rgba(255,180,40,0.08) 30%,transparent 70%);
+      animation:finale-pulse 3s ease-in-out infinite; pointer-events:none;
+    }
+    @keyframes finale-pulse {
+      0%,100%{transform:translate(-50%,-50%) scale(1); opacity:0.7;}
+      50%    {transform:translate(-50%,-50%) scale(1.15); opacity:1;}
+    }
+    .finale-lamp {
+      font-size:clamp(4rem,12vw,7rem); margin-bottom:28px;
+      position:relative; z-index:1;
+      animation:lamp-glow 3s ease-in-out infinite;
+      filter:drop-shadow(0 0 30px rgba(255,200,60,0.5));
+    }
+    @keyframes lamp-glow {
+      0%,100%{filter:drop-shadow(0 0 20px rgba(255,200,60,0.4));}
+      50%    {filter:drop-shadow(0 0 50px rgba(255,200,60,0.8));}
+    }
+    .finale-label {
+      font-family:'Noto Sans KR',sans-serif; font-size:0.65rem;
+      letter-spacing:0.3em; text-transform:uppercase;
+      color:rgba(240,160,48,0.6); margin-bottom:24px; position:relative; z-index:1;
+    }
+    .finale-title {
+      font-size:clamp(1.8rem,6vw,3.5rem); font-weight:900;
+      line-height:1.25; letter-spacing:-0.03em; color:var(--sand);
+      margin-bottom:32px; position:relative; z-index:1;
+    }
+    .finale-title em { font-style:normal; color:var(--amber2); }
+    .finale-verse {
+      background:rgba(240,160,48,0.08); border:1px solid rgba(240,160,48,0.25);
+      border-radius:14px; padding:28px 26px; max-width:520px;
+      margin:0 auto 36px; position:relative; z-index:1;
+    }
+    .finale-verse-text {
+      font-size:clamp(0.92rem,2.5vw,1.05rem); font-weight:600;
+      color:rgba(245,236,216,0.95); line-height:2.1; margin-bottom:12px;
+    }
+    .finale-verse-ref {
+      font-family:'Noto Sans KR',sans-serif;
+      font-size:0.75rem; color:var(--amber); letter-spacing:0.1em;
+    }
+    .finale-prayer {
+      font-size:clamp(0.9rem,2.4vw,1rem); font-weight:400;
+      color:rgba(245,236,216,0.6); line-height:2.2;
+      max-width:500px; margin:0 auto 32px;
+      position:relative; z-index:1; font-style:italic;
+    }
+    .finale-prayer strong { color:var(--amber2); font-style:normal; font-weight:600; }
+    .finale-closing {
+      max-width:520px; margin:0 auto; position:relative; z-index:1;
+      background:rgba(240,160,48,0.06); border:1px solid rgba(240,160,48,0.2);
+      border-radius:14px; padding:24px 22px;
+      font-size:clamp(0.92rem,2.5vw,1.05rem); font-weight:600;
+      color:rgba(245,236,216,0.95); line-height:2.1;
+    }
+
+    /* 푸터 */
+    .site-footer {
+      background:#020406; padding:34px 24px 42px; text-align:center;
+      border-top:1px solid rgba(240,160,48,0.12);
+    }
+    .footer-rule { width:36px; height:1px; background:var(--amber); margin:0 auto 18px; opacity:0.35; }
+    .footer-name { font-size:0.9rem; font-weight:600; color:rgba(245,236,216,0.6); letter-spacing:0.18em; }
+
+    /* 스크롤 애니메이션 */
+    .fade-up {
+      opacity:0; transform:translateY(24px);
+      transition:opacity 0.75s ease, transform 0.75s ease;
+    }
+    .fade-up.vis { opacity:1; transform:translateY(0); }
+
+    @media(max-width:480px){
+      .points-section{padding:36px 22px 44px;}
+      .finale{padding:60px 20px;}
+      .finale-verse{padding:22px 18px;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ HERO ══ -->
+<section class="hero" id="hero">
+  <div class="stars" id="stars"></div>
+  <div class="beam-container" id="beamOrigin">
+    <div class="beam"></div>
+    <div class="beam2"></div>
+  </div>
+
+  <div class="hero-content">
+    <span class="hero-kicker">부산교회 2구역 · 마태복음 25장 14–30절</span>
+    <h1 class="hero-title">등대지기의<br><span class="glow">기름</span></h1>
+    <p class="hero-sub">맡은 사명에 신실하라<br>— 청지기의 본분과 하나님의 뜻 —</p>
+    <span class="hero-verse">고린도전서 4:2 · 마태복음 25:21</span>
+  </div>
+
+  <div class="lighthouse-wrap">
+    <svg viewBox="0 0 200 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="100" cy="308" rx="88" ry="14" fill="#0d1830"/>
+      <path d="M30 308 Q60 295 100 293 Q140 295 170 308 Z" fill="#0f2040"/>
+      <path d="M72 295 L68 180 L132 180 L128 295 Z" fill="#1a2a4a"/>
+      <path d="M72 295 L68 180 L76 180 L78 295 Z" fill="#1e3258"/>
+      <rect x="83" y="182" width="6" height="112" rx="3" fill="rgba(255,255,255,0.06)"/>
+      <rect x="111" y="182" width="6" height="112" rx="3" fill="rgba(255,255,255,0.06)"/>
+      <rect x="67" y="220" width="66" height="5" rx="2" fill="#0d1830"/>
+      <rect x="67" y="255" width="66" height="4" rx="2" fill="#0d1830"/>
+      <rect x="58" y="172" width="84" height="10" rx="3" fill="#1a2a4a"/>
+      <rect x="56" y="178" width="88" height="4" rx="2" fill="#0d1830"/>
+      <rect x="66" y="120" width="68" height="54" rx="4" fill="#1e3060"/>
+      <rect x="70" y="124" width="60" height="46" rx="3" fill="url(#lampGlow)"/>
+      <rect x="74" y="128" width="52" height="38" rx="2" fill="rgba(255,220,100,0.15)" stroke="rgba(255,220,100,0.3)" stroke-width="1"/>
+      <line x1="100" y1="128" x2="100" y2="166" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+      <line x1="74" y1="147" x2="126" y2="147" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+      <path d="M62 120 L100 92 L138 120 Z" fill="#1a2a4a"/>
+      <path d="M62 120 L68 120 L100 95 L132 120 L138 120 L100 90 Z" fill="#162040"/>
+      <line x1="100" y1="90" x2="100" y2="72" stroke="#1a2a4a" stroke-width="3"/>
+      <circle cx="100" cy="70" r="3" fill="#2a4060"/>
+      <rect x="56" y="118" width="88" height="4" rx="2" fill="#0d1830"/>
+      <rect x="85" y="230" width="30" height="20" rx="2" fill="rgba(255,220,100,0.08)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+      <rect x="85" y="262" width="30" height="16" rx="2" fill="rgba(255,220,100,0.06)" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+      <path d="M86 294 L86 276 Q100 270 114 276 L114 294 Z" fill="#0d1830"/>
+      <defs>
+        <radialGradient id="lampGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%"   stop-color="rgba(255,220,100,0.9)"/>
+          <stop offset="40%"  stop-color="rgba(255,200,60,0.5)"/>
+          <stop offset="100%" stop-color="rgba(255,180,20,0.1)"/>
+          <animate attributeName="cx" values="40%;60%;40%" dur="4s" repeatCount="indefinite"/>
+        </radialGradient>
+      </defs>
+    </svg>
+  </div>
+
+  <div class="waves-container">
+    <svg class="wave-svg w1" viewBox="0 0 1440 100" preserveAspectRatio="none" style="--spd:9s">
+      <path d="M0,50 C180,20 360,80 540,50 C720,20 900,80 1080,50 C1260,20 1440,60 1440,50 L1440,100 L0,100 Z" fill="#0f2040" opacity="0.9"/>
+    </svg>
+    <svg class="wave-svg w2" viewBox="0 0 1440 100" preserveAspectRatio="none" style="--spd:12s">
+      <path d="M0,60 C200,30 400,90 600,55 C800,25 1000,75 1200,55 C1320,42 1440,65 1440,55 L1440,100 L0,100 Z" fill="#0d1830" opacity="0.7"/>
+    </svg>
+    <svg class="wave-svg w3" viewBox="0 0 1440 100" preserveAspectRatio="none" style="--spd:7s">
+      <path d="M0,70 C240,45 480,90 720,65 C960,42 1200,78 1440,60 L1440,100 L0,100 Z" fill="#0a1020" opacity="0.95"/>
+    </svg>
+  </div>
+</section>
+
+<svg class="section-wave" viewBox="0 0 1440 40" preserveAspectRatio="none" style="height:40px;display:block;background:#0a1020;">
+  <path d="M0,20 C360,40 1080,0 1440,20 L1440,40 L0,40 Z" fill="#060a12"/>
+</svg>
+
+
+<!-- ══ 서론 ══ -->
+<section class="story-section">
+  <div class="content-wrap">
+    <div class="intro-block">
+
+      <div class="section-label fade-up"><span>Prologue · 서론</span></div>
+      <h2 class="block-title fade-up">🐤 등대의 불이<br>꺼진 밤</h2>
+
+      <div class="origin-box fade-up">
+        <p class="origin-label">역사적 기원 · Historical Source</p>
+        <p class="origin-quote">"The oil is supplied for the purpose of keeping the light burning; it must not be used for any other reason."</p>
+        <p class="origin-trans">기름은 등불을 밝히기 위해서만 지급된다. 그 어떤 다른 목적으로도 사용되어서는 안 된다.<br>— Lighthouse Keeper's Manual, 19세기 영국 해안경비대 교육지침서</p>
+      </div>
+
+      <p class="body-text fade-up">이 이야기는 19세기 후반 영국 해안지대의 등대 근무 윤리 교육 교재에서 유래된 것으로, 미국 해안경비대(US Coast Guard) 등에서도 훈련용 사례로 전해져 오고 있는 이야기입니다.</p>
+
+      <p class="body-text fade-up">바닷가 바위 위에 세워진 등대는 언제나 어둠 속의 희망입니다. 바다가 굽이치는 험준한 해안가, 어둠 속을 항해하는 배들의 유일한 희망인 등대를 지키는 한 등대지기가 있었습니다. 그는 정부로부터 매달 기름을 정량대로 공급받았습니다.</p>
+
+      <div class="declaration fade-up">
+        <p class="declaration-text">그의 사명은 단 하나 —<br>밤새도록 등대의 불이 꺼지지 않게 하는 것.</p>
+      </div>
+
+      <p class="body-text fade-up">어느 날 저녁, 한 여인이 찾아와 간청했습니다. "등대지기님, 아이들이 추위에 떨고 있습니다. 저희 집 난로에 불을 지필 기름을 조금만 나누어 주십시오." 그는 불쌍한 마음에 기름을 조금 덜어주었습니다.</p>
+
+      <p class="body-text fade-up">며칠 후에는 한 농부가 찾아와 등불을 밝힐 기름을 구했고, 또 다른 날에는 나그네가 삐걱거리는 수레바퀴에 바를 기름을 청했습니다. 마음이 약했던 등대지기는 그들의 간청을 외면하지 못하고 매번 기름을 나누어 주었습니다. 그는 스스로를 <em style="color:var(--amber2)">선한 일을 하는 착한 사람</em>이라 여겼습니다.</p>
+
+      <!-- 기름 게이지 -->
+      <div class="oil-gauge-wrap fade-up">
+        <div class="oil-label-row"><span>기름 잔량</span><span id="gaugePercent">0%</span></div>
+        <div class="gauge-track">
+          <div class="gauge-fill" id="gaugeFill" style="--target-w:0%"></div>
+        </div>
+        <div class="gauge-events">
+          <div class="gauge-event"><span class="event-dot dot-amber"></span><span>여인에게 — 난로 기름</span></div>
+          <div class="gauge-event"><span class="event-dot dot-amber"></span><span>농부에게 — 등잔 기름</span></div>
+          <div class="gauge-event"><span class="event-dot dot-amber"></span><span>나그네에게 — 수레바퀴 기름</span></div>
+          <div class="gauge-event"><span class="event-dot dot-red"></span><span style="color:#f08080;">⚠ 폭풍우 — 기름 고갈, 등대 소등</span></div>
+        </div>
+      </div>
+
+      <p class="body-text fade-up">그러던 어느 폭풍우 치는 밤, 비극이 찾아왔습니다. 등대의 기름이 모두 소진되어 불이 꺼져버린 것입니다. 칠흑 같은 어둠 속에서 방향을 잃은 여러 척의 배들이 해안의 암초에 부딪혀 산산조각이 났고, 수많은 사람들이 목숨을 잃었습니다.</p>
+
+      <p class="body-text fade-up">사고를 조사하기 위해 파견된 조사관은 처참한 광경과 슬픔에 잠긴 등대지기 앞에서 단호하게 결론을 내렸습니다.</p>
+
+      <div class="big-quote fade-up">
+        <p class="big-quote-text">"당신이 받은 기름은 오직 한 가지 목적 — 등대를 밝히기 위한 것이었습니다."</p>
+        <span class="big-quote-ref">— 사고 조사관의 결론</span>
+      </div>
+
+      <p class="body-text fade-up">그리스도인에게 하나님께서 주신 '기름' — 시간, 은사, 물질, 복음은 내 마음이 움직이는 대로 나누라고 주신 것이 아니라, 하나님의 뜻을 밝히기 위해 주신 사명적 자원입니다.</p>
+
+      <div class="big-quote fade-up">
+        <p class="big-quote-text">"너는 맡은 것을 주인의 뜻대로 사용하고 있는가?"</p>
+        <span class="big-quote-ref">— 마태복음 25:14–30</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ 본론 3포인트 ══ -->
+<div class="points-section">
+  <div style="max-width:680px;margin:0 auto;">
+    <div class="section-label fade-up"><span>Main · 본론</span></div>
+    <h2 class="block-title fade-up">🔥 청지기의 본분과<br>책임</h2>
+  </div>
+
+  <div class="points-grid">
+
+    <!-- 포인트 1 -->
+    <div class="point-item" data-delay="0">
+      <div class="point-num-col">
+        <div class="point-num">01</div>
+        <div class="point-vline"></div>
+      </div>
+      <div class="point-content">
+        <div class="point-heading">주인은 떠나셨지만,<br>소유는 여전히 그의 것</div>
+        <p class="point-body">달란트 비유에서 주인은 종들에게 각기 다른 양의 달란트를 맡겼습니다. 주인은 멀리 떠났지만, 그가 떠난 것은 책임의 종료가 아니라 시험의 시작이었습니다. 등대지기에게 맡겨진 기름도 그의 것이 아니었습니다. 그것은 <strong style="color:var(--amber2)">'위임된 것'</strong>이었습니다.</p>
+        <div class="big-quote" style="margin:16px 0 0;padding:18px 18px 14px;">
+          <p class="big-quote-text" style="font-size:0.9rem;">우리 인생의 시간, 재능, 건강, 직분 — 다 하나님이 위탁하신 자원입니다. 그분의 목적을 위해 존재하는 것입니다.</p>
+          <span class="big-quote-ref">마태복음 25:14</span>
+        </div>
+        <div style="margin-top:14px;"><span class="point-tag">🏺 위임된 자원</span></div>
+      </div>
+    </div>
+
+    <!-- 포인트 2 -->
+    <div class="point-item" data-delay="120">
+      <div class="point-num-col">
+        <div class="point-num">02</div>
+        <div class="point-vline"></div>
+      </div>
+      <div class="point-content">
+        <div class="point-heading">청지기의 본질은<br>'선의'가 아니라 '사명'</div>
+        <p class="point-body">'청지기'란 자신의 것이 아닌 주인의 소유를 위임받아 관리하는 사람입니다. 소유권은 주인에게 있지만, 관리의 책임은 청지기에게 있습니다. '사명'이란 청지기에게 자원이 맡겨진 구체적인 목적을 말합니다. 자원은 이유 없이 주어지지 않으며, 그 안에는 주인의 분명한 뜻이 담겨 있습니다.</p>
+
+        <p class="point-body">두 이야기 속 주인공들은 모두 청지기입니다 — 달란트 비유의 노예들, 그리고 기름을 공급받은 등대지기.</p>
+
+        <div class="big-quote" style="margin:12px 0;padding:18px 18px 14px;">
+          <p class="big-quote-text" style="font-size:0.9rem;">천국은 마치 타국으로 떠나면서 노예들을 불러 자기 소유를 맡긴 어떤 사람과 같습니다.</p>
+          <span class="big-quote-ref">마태복음 25:14</span>
+        </div>
+
+        <p class="point-body">한 달란트 받은 종은 이렇게 말했습니다.</p>
+        <div class="speech-box">
+          <span class="speech-who">한 달란트 종의 변명</span>
+          "주인님, 주인님은 심지 않으신 데서 거두시고 키질하지 않으신 데서 모으시는, 마음이 굳은 분이신 줄 알았으므로, 두려워하며 물러가서, 주인님의 달란트를 땅에 감추어 두었습니다. 보십시오, 주인님의 것이 여기 그대로 있습니다."
+        </div>
+
+        <p class="point-body">그는 겉으로 보면 '신중'했습니다. 그러나 주인은 그를 <strong style="color:#f08080">"악하고 게으른 노예"</strong>라고 부르셨습니다. 노예가 '결과'를 내지 못했기 때문이 아니라, <strong style="color:var(--amber2)">사명을 외면했기 때문</strong>입니다.</p>
+
+        <p class="point-body">등대지기는 '착한 사람'이었습니다. 그러나 그의 선의가 사명을 가렸습니다. 그 결과, 빛이 꺼지고 생명을 잃었습니다.</p>
+
+        <div class="declaration" style="margin:16px 0;">
+          <p class="declaration-text" style="font-size:clamp(0.9rem,2.5vw,1.05rem);">"너는 맡은 것을 주인의 뜻대로 사용하고 있는가?"</p>
+        </div>
+
+        <div class="definition-box">
+          <span class="definition-term">신실함 (信實) · Faithfulness</span>
+          <p class="definition-text">맡겨진 일이 크든 작든, 주인의 뜻을 믿고 즉시 행동으로 옮기는 믿음직한 태도. 달란트 비유는 '착하고 신실한 노예'와 '악하고 게으른 노예'를 극명하게 대조하며 신실함이 무엇인지 보여줍니다. 신실함은 두려움 때문에 행동하지 않는 게으름의 정반대입니다.</p>
+        </div>
+
+        <div style="margin-top:14px;">
+          <span class="point-tag">🕯 목적 있는 사용</span>
+          <span class="point-tag">⚡ 신실함</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 포인트 3 -->
+    <div class="point-item" data-delay="240">
+      <div class="point-num-col">
+        <div class="point-num">03</div>
+        <div class="point-vline"></div>
+      </div>
+      <div class="point-content">
+        <div class="point-heading">주인은 반드시<br>돌아오신다</div>
+        <div class="big-quote" style="margin:0 0 18px;padding:18px 18px 14px;">
+          <p class="big-quote-text" style="font-size:0.9rem;">오랜 시간이 지난 후, 노예들의 주인이 돌아와 그들과 결산하였는데.</p>
+          <span class="big-quote-ref">마태복음 25:19</span>
+        </div>
+        <p class="point-body">주인은 반드시 돌아옵니다. 그날은 "의의 심판 날"입니다. 우리의 '감정'이 아니라 '청지기적 신실'이 기준이 되어, 우리가 '기름'을 어떻게 썼는지, '빛'을 꺼트리지 않았는지가 결산의 기준이 될 것입니다.</p>
+        <p class="point-body">이 세상에서 우리는 모두 어두운 바다 가운데 선박의 길잡이가 되는 등대를 밝히는 등대지기입니다. 각자에게 주어진 등불이 꺼지지 않도록 기름을 잘 지키는 것이 우리의 사명입니다.</p>
+        <div style="margin-top:14px;"><span class="point-tag">⚖ 청지기적 결산</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══ 두 종류의 실패 ══ -->
+<section class="contrast-section">
+  <div class="contrast-inner">
+    <div class="section-label fade-up"><span>Contrast · 두 실패</span></div>
+    <h2 class="block-title fade-up">같은 실패,<br>다른 이유</h2>
+
+    <div class="contrast-grid">
+      <div class="contrast-card red" data-delay="0">
+        <span class="contrast-icon">🏮</span>
+        <div class="contrast-name">등대지기</div>
+        <p class="contrast-desc">기름을 엉뚱한 곳에 사용했습니다. 착한 마음으로 나누었지만, 사명을 위한 목적을 벗어났습니다. 목적 이탈의 실패입니다.</p>
+        <span class="contrast-verdict verdict-red">목적 이탈</span>
+      </div>
+      <div class="contrast-card red" data-delay="100">
+        <span class="contrast-icon">💰</span>
+        <div class="contrast-name">한 달란트 종</div>
+        <p class="contrast-desc">기름을 아예 사용하지 않았습니다. 두려움으로 땅에 묻어두고 행동을 포기했습니다. 미사용의 실패입니다.</p>
+        <span class="contrast-verdict verdict-red">두려움과 미사용</span>
+      </div>
+    </div>
+
+    <div class="declaration fade-up">
+      <p class="declaration-text">목적을 벗어난 사용과<br>두려움으로 인한 미사용 —<br>둘 다 주인의 뜻을 거스르는 치명적인 실패입니다.</p>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══ 결론 피날레 ══ -->
+<section class="finale">
+  <div class="finale-glow"></div>
+  <p class="finale-label">Conclusion · 결론</p>
+  <div class="finale-lamp">🔦</div>
+
+  <h2 class="finale-title fade-up">🌅 다시 기름을 채워<br><em>등대를 밝히라</em></h2>
+
+  <div class="finale-verse fade-up">
+    <p class="finale-verse-text">여기에서 청지기들에게 무엇보다도 요구되는 것은 신실한 사람으로 발견되는 것입니다.</p>
+    <p class="finale-verse-ref">— 고린도전서 4:2</p>
+  </div>
+
+  <p class="finale-prayer fade-up">
+    하나님은 우리에게 <strong>'성공'</strong>을 요구하지 않으십니다.<br>
+    <strong>'신실'</strong>을 요구하십니다.<br><br>
+    등대지기의 실패는 기술의 부족이 아니라<br>
+    목적의 상실에서 비롯되었습니다.<br><br>
+    우리가 복음의 빛을 맡은 자로서 세상을 밝히지 않는다면,<br>
+    그 어둠 속에서 방황하는 영혼들은 방향을 잃게 됩니다.<br><br>
+    그러므로 오늘 우리 모두 다시금<br>
+    신실한 청지기로 마음을 돌이켜야 합니다.
+  </p>
+
+  <div class="finale-verse fade-up" style="font-style:italic;">
+    <p class="finale-verse-text">"주여, 내게 맡기신 기름으로<br>내 욕심의 불을 밝히지 않고,<br>주의 등불을 다시 비추게 하소서."</p>
+    <p class="finale-verse-ref">— 결단의 기도</p>
+  </div>
+
+  <div class="finale-closing fade-up">
+    "잘하였다, 착하고 신실한 노예야.<br>
+    네가 적은 일에 신실하였으니,<br>
+    내가 많은 일을 너에게 맡길 것이다."<br>
+    <span style="display:block;margin-top:12px;font-family:'Noto Sans KR',sans-serif;font-size:0.75rem;color:var(--amber);letter-spacing:0.1em;font-style:normal;">— 마태복음 25:21</span>
+  </div>
+</section>
+
+
+<!-- ══ FOOTER ══ -->
+<footer class="site-footer">
+  <div class="footer-rule"></div>
+  <p class="footer-name">부산교회 2구역</p>
+</footer>
+
+
+<script>
+  // 별 생성
+  const starsEl = document.getElementById('stars');
+  for (let i = 0; i < 120; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random() * 2.2 + 0.6;
+    s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*65}%;width:${size}px;height:${size}px;--d:${2+Math.random()*4}s;--delay:${Math.random()*4}s;--lo:${0.1+Math.random()*0.3};--hi:${0.5+Math.random()*0.5};`;
+    starsEl.appendChild(s);
+  }
+
+  // 등대 빛줄기 위치
+  function positionBeam() {
+    const lhWrap = document.querySelector('.lighthouse-wrap');
+    const beamC  = document.getElementById('beamOrigin');
+    if (!lhWrap || !beamC) return;
+    const rect = lhWrap.getBoundingClientRect();
+    const heroRect = document.getElementById('hero').getBoundingClientRect();
+    const cx = rect.left + rect.width / 2 - heroRect.left;
+    const lampY = rect.top + rect.height * 0.37 - heroRect.top;
+    beamC.style.left = cx + 'px';
+    beamC.style.bottom = (heroRect.height - lampY) + 'px';
+  }
+  window.addEventListener('load', positionBeam);
+  window.addEventListener('resize', positionBeam);
+
+  // 스크롤 애니메이션
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const delay = +(e.target.dataset.delay || 0);
+      setTimeout(() => e.target.classList.add('vis'), delay);
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up, .point-item, .contrast-card').forEach(el => io.observe(el));
+
+  // 기름 게이지
+  const gaugeObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const fill = document.getElementById('gaugeFill');
+      const pct  = document.getElementById('gaugePercent');
+      if (!fill || fill.classList.contains('animated')) return;
+      fill.style.setProperty('--target-w', '100%');
+      fill.classList.add('animated');
+      let v = 0;
+      const up = setInterval(() => {
+        v = Math.min(v + 2, 100);
+        pct.textContent = v + '%';
+        if (v >= 100) {
+          clearInterval(up);
+          setTimeout(() => {
+            fill.style.transition = 'width 2.5s ease';
+            fill.style.setProperty('--target-w', '0%');
+            fill.style.background = 'linear-gradient(90deg,#e05050,#c03030)';
+            fill.style.boxShadow = '0 0 12px rgba(220,60,60,0.4)';
+            let w = 100;
+            const down = setInterval(() => {
+              w = Math.max(w - 1, 0);
+              pct.textContent = w + '%';
+              if (w <= 0) { clearInterval(down); pct.textContent = '⚠ 0%'; }
+            }, 25);
+          }, 800);
+        }
+      }, 15);
+    });
+  }, { threshold: 0.4 });
+  const gaugeWrap = document.querySelector('.oil-gauge-wrap');
+  if (gaugeWrap) gaugeObserver.observe(gaugeWrap);
+</script>
+
+</body>
+</html>

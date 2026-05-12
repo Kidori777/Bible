@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>무저갱과 음부의 차이 그리고 부활</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700;900&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --void:   #04050a;
+      --blue:   #4070c0; --blue2: #6090e0;
+      --amber:  #c07820; --amber2:#e09840;
+      --ember:  #c03010; --ember2:#f06030;
+      --green:  #2a7a40; --green2:#50b870;
+      --purple: #6030a0; --purple2:#9060d0;
+      --lava:   #f04800; --lava2: #ff7020;
+      --ash:    #e8e0d0; --ash2:  #c8c0b0;
+      --muted:  rgba(232,224,208,0.5);
+      --gold:   #d4a820;
+      --line:   rgba(255,255,255,0.07);
+    }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--void);color:var(--ash);font-family:'Noto Serif KR',serif;overflow-x:hidden;}
+
+    /* ── 별 파티클 ── */
+    .star-field{position:absolute;inset:0;pointer-events:none;}
+    .s{position:absolute;border-radius:50%;background:#fff;
+       animation:twinkle var(--d,3s) ease-in-out infinite var(--dl,0s);}
+    @keyframes twinkle{0%,100%{opacity:var(--lo,.1);}50%{opacity:var(--hi,.6);}}
+
+    /* ── COVER ── */
+    .cover{
+      position:relative;min-height:100vh;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      text-align:center;padding:60px 24px 80px;overflow:hidden;
+      background:radial-gradient(ellipse 80% 60% at 50% 30%,#0c1428 0%,#04050a 70%);
+      z-index:1;
+    }
+    .cover-crack{
+      position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+      width:2px;height:45%;pointer-events:none;
+      background:linear-gradient(180deg,transparent,rgba(100,70,200,.25),rgba(200,64,16,.15),transparent);
+    }
+    .cover-crack::before,.cover-crack::after{
+      content:'';position:absolute;bottom:0;width:1px;background:inherit;
+    }
+    .cover-crack::before{left:-28px;height:55%;transform:rotate(8deg);transform-origin:bottom;}
+    .cover-crack::after{right:-28px;height:55%;transform:rotate(-8deg);transform-origin:bottom;}
+
+    .cover-kicker{
+      font-family:'Noto Sans KR',sans-serif;
+      font-size:.62rem;font-weight:500;letter-spacing:.35em;text-transform:uppercase;
+      color:rgba(180,150,255,.5);margin-bottom:28px;position:relative;z-index:1;
+    }
+    .cover-title{
+      font-size:clamp(1.8rem,7vw,4.5rem);font-weight:900;
+      line-height:1.2;letter-spacing:-.04em;
+      position:relative;z-index:1;margin-bottom:14px;
+    }
+    .w-blue {color:var(--blue2);text-shadow:0 0 50px rgba(64,112,192,.6);}
+    .w-dim  {color:rgba(232,224,208,.5);}
+    .w-red  {color:var(--ember2);text-shadow:0 0 50px rgba(240,96,48,.5);}
+    .w-green{color:var(--green2);text-shadow:0 0 40px rgba(80,184,112,.4);}
+    .cover-sub{
+      font-family:'Noto Sans KR',sans-serif;
+      font-size:clamp(.82rem,2.2vw,.95rem);font-weight:300;
+      color:var(--muted);line-height:1.9;max-width:420px;margin:0 auto 44px;
+      position:relative;z-index:1;
+    }
+    .cover-badges{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;}
+    .c-badge{padding:7px 16px;border-radius:18px;font-family:'Noto Sans KR',sans-serif;font-size:.72rem;letter-spacing:.08em;}
+    .b-blue  {border:1px solid rgba(64,112,192,.4);color:var(--blue2);background:rgba(64,112,192,.08);}
+    .b-amber {border:1px solid rgba(192,120,32,.4);color:var(--amber2);background:rgba(192,120,32,.08);}
+    .b-red   {border:1px solid rgba(208,64,16,.4);color:var(--ember2);background:rgba(208,64,16,.08);}
+    .b-green {border:1px solid rgba(42,122,64,.4);color:var(--green2);background:rgba(42,122,64,.08);}
+    .b-purple{border:1px solid rgba(96,48,160,.4);color:var(--purple2);background:rgba(96,48,160,.08);}
+
+    /* ── 공통 섹션 ── */
+    .sec{position:relative;z-index:2;overflow:hidden;padding:64px 22px 72px;}
+    .sec-wrap{max-width:680px;margin:0 auto;}
+    .sec-bg-abyss {background:linear-gradient(180deg,#060a18 0%,#0a1228 50%,#081020 100%);}
+    .sec-bg-hades {background:linear-gradient(180deg,#100800 0%,#1a0e04 50%,#140a02 100%);}
+    .sec-bg-fire  {background:linear-gradient(180deg,#0e0400 0%,#180600 40%,#200800 100%);}
+    .sec-bg-rise  {background:linear-gradient(180deg,#04100a 0%,#081a10 50%,#061208 100%);}
+    .sec-bg-map   {background:linear-gradient(180deg,#0c0818 0%,#140c22 50%,#0a0614 100%);}
+
+    .sec-bg-abyss::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 30%,rgba(32,64,160,.1),transparent);pointer-events:none;}
+    .sec-bg-hades::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 30%,rgba(180,100,20,.08),transparent);pointer-events:none;}
+    .sec-bg-fire::before {content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 40% at 50% 80%,rgba(240,72,0,.1),transparent);pointer-events:none;}
+    .sec-bg-rise::before {content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 30%,rgba(42,122,64,.1),transparent);pointer-events:none;}
+    .sec-bg-map::before  {content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 30%,rgba(96,48,160,.1),transparent);pointer-events:none;}
+
+    /* 배경 대형 글자 */
+    .bg-num{
+      position:absolute;font-family:'Noto Serif KR',serif;
+      font-size:clamp(14rem,40vw,28rem);font-weight:900;
+      top:50%;right:-5%;transform:translateY(-50%);
+      line-height:.85;pointer-events:none;letter-spacing:-.05em;opacity:.03;
+    }
+
+    /* 섹션 태그 */
+    .sec-tag{
+      font-family:'Noto Sans KR',sans-serif;
+      font-size:.6rem;font-weight:500;letter-spacing:.28em;text-transform:uppercase;
+      display:flex;align-items:center;gap:12px;margin-bottom:16px;
+    }
+    .sec-tag::after{content:'';flex:1;height:1px;}
+    .tag-blue  {color:var(--blue2);}  .tag-blue::after  {background:linear-gradient(90deg,rgba(64,112,192,.3),transparent);}
+    .tag-amber {color:var(--amber2);} .tag-amber::after {background:linear-gradient(90deg,rgba(192,120,32,.3),transparent);}
+    .tag-fire  {color:var(--ember2);} .tag-fire::after  {background:linear-gradient(90deg,rgba(208,64,16,.3),transparent);}
+    .tag-green {color:var(--green2);} .tag-green::after {background:linear-gradient(90deg,rgba(42,122,64,.3),transparent);}
+    .tag-purple{color:var(--purple2);}  .tag-purple::after{background:linear-gradient(90deg,rgba(96,48,160,.3),transparent);}
+
+    .sec-title{font-size:clamp(1.4rem,4.5vw,2.2rem);font-weight:900;line-height:1.2;letter-spacing:-.03em;margin-bottom:8px;}
+    .sec-rule{width:50px;height:2px;margin:16px 0 36px;border-radius:1px;}
+    .rule-blue  {background:linear-gradient(90deg,var(--blue2),transparent);}
+    .rule-amber {background:linear-gradient(90deg,var(--amber2),transparent);}
+    .rule-fire  {background:linear-gradient(90deg,var(--ember),transparent);}
+    .rule-green {background:linear-gradient(90deg,var(--green2),transparent);}
+    .rule-purple{background:linear-gradient(90deg,var(--purple2),transparent);}
+
+    /* 본문 */
+    .body-text{font-size:clamp(.95rem,2.5vw,1.05rem);font-weight:400;line-height:2.2;color:rgba(232,224,208,.8);margin-bottom:18px;}
+
+    /* 성경 구절 */
+    .vb{margin:22px 0;padding:20px 22px 18px 26px;border-radius:0 10px 10px 0;position:relative;}
+    .vb-blue  {background:rgba(64,112,192,.06);border-left:3px solid var(--blue2);}
+    .vb-amber {background:rgba(192,120,32,.06);border-left:3px solid var(--amber2);}
+    .vb-fire  {background:rgba(208,64,16,.07);border-left:3px solid var(--ember);}
+    .vb-green {background:rgba(42,122,64,.07);border-left:3px solid var(--green2);}
+    .vb-purple{background:rgba(96,48,160,.07);border-left:3px solid var(--purple2);}
+    .vb-ref{font-family:'Noto Sans KR',sans-serif;font-size:.62rem;font-weight:600;letter-spacing:.18em;margin-bottom:8px;display:block;}
+    .vb-blue   .vb-ref{color:var(--blue2);opacity:.7;}
+    .vb-amber  .vb-ref{color:var(--amber2);opacity:.7;}
+    .vb-fire   .vb-ref{color:var(--ember2);opacity:.7;}
+    .vb-green  .vb-ref{color:var(--green2);opacity:.7;}
+    .vb-purple .vb-ref{color:var(--purple2);opacity:.7;}
+    .vb-text{font-size:clamp(.9rem,2.4vw,1rem);font-weight:500;color:rgba(232,224,208,.9);line-height:2.05;}
+
+    /* 테이블 */
+    .ctbl{width:100%;border-collapse:collapse;margin:22px 0;font-size:clamp(.75rem,2vw,.85rem);border-radius:10px;overflow:hidden;}
+    .ctbl th{padding:11px 10px;font-weight:600;letter-spacing:.05em;border:1px solid rgba(255,255,255,.06);}
+    .ctbl td{padding:10px;text-align:center;border:1px solid rgba(255,255,255,.06);color:rgba(232,224,208,.75);background:rgba(255,255,255,.02);}
+    .ctbl tr:hover td{background:rgba(255,255,255,.04);}
+    .th-gray  {background:rgba(255,255,255,.08);color:var(--ash2);}
+    .th-blue  {background:rgba(64,112,192,.3);color:var(--ash);}
+    .th-amber {background:rgba(192,120,32,.3);color:var(--ash);}
+    .th-fire  {background:rgba(208,64,16,.3);color:var(--ash);}
+    .th-green {background:rgba(42,122,64,.3);color:var(--ash);}
+    .th-purple{background:rgba(96,48,160,.3);color:var(--ash);}
+
+    /* 리스트 */
+    .dl{list-style:none;margin:14px 0;}
+    .dl li{position:relative;padding-left:20px;margin-bottom:10px;font-size:clamp(.88rem,2.3vw,.97rem);color:rgba(232,224,208,.75);line-height:1.9;font-family:'Noto Sans KR',sans-serif;font-weight:300;}
+    .dl li::before{content:'◈';position:absolute;left:0;font-size:.72rem;top:3px;}
+    .dl-blue  li::before{color:var(--blue2);}
+    .dl-amber li::before{color:var(--amber2);}
+    .dl-fire  li::before{color:var(--ember2);}
+    .dl-green li::before{color:var(--green2);}
+    .dl-purple li::before{color:var(--purple2);}
+
+    /* 선언 */
+    .decl{margin:28px 0;padding:20px;text-align:center;border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+    .decl p{font-size:clamp(.98rem,2.8vw,1.15rem);font-weight:700;line-height:1.85;}
+    .decl-blue   p{color:var(--blue2);}
+    .decl-amber  p{color:var(--amber2);}
+    .decl-fire   p{color:var(--ember2);}
+    .decl-green  p{color:var(--green2);}
+    .decl-purple p{color:var(--purple2);}
+
+    /* 서브 레이블 */
+    .sub-lbl{font-family:'Noto Sans KR',sans-serif;font-size:.62rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;display:flex;align-items:center;gap:10px;margin:28px 0 14px;}
+    .sub-lbl::after{content:'';flex:1;height:1px;background:var(--line);}
+
+    /* ── 음부 다이어그램 ── */
+    .hd-diagram{margin:32px 0;background:rgba(255,255,255,.03);border:1px solid rgba(192,120,32,.15);border-radius:14px;padding:28px 22px;}
+    .hd-label-top{font-family:'Noto Sans KR',sans-serif;font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--amber);opacity:.7;margin-bottom:20px;display:block;}
+    .hd-grid{display:grid;grid-template-columns:1fr 40px 1fr;align-items:stretch;gap:0;}
+    @media(max-width:480px){.hd-grid{grid-template-columns:1fr;gap:14px;} .hd-wall{display:none;}}
+    .hd-side{padding:18px 14px;border-radius:10px;}
+    .hd-comfort{background:rgba(64,112,192,.08);border:1px solid rgba(64,112,192,.18);}
+    .hd-torment{background:rgba(208,64,16,.08);border:1px solid rgba(208,64,16,.18);}
+    .hd-slabel{font-family:'Noto Sans KR',sans-serif;font-size:.62rem;letter-spacing:.15em;margin-bottom:8px;display:block;}
+    .hd-comfort .hd-slabel{color:var(--blue2);opacity:.7;}
+    .hd-torment .hd-slabel{color:var(--ember2);opacity:.7;}
+    .hd-name{font-size:clamp(.9rem,2.5vw,1.05rem);font-weight:700;margin-bottom:6px;}
+    .hd-comfort .hd-name{color:var(--blue2);}
+    .hd-torment .hd-name{color:var(--ember2);}
+    .hd-desc{font-family:'Noto Sans KR',sans-serif;font-size:.78rem;font-weight:300;color:rgba(232,224,208,.6);line-height:1.85;}
+    .hd-wall{display:flex;align-items:center;justify-content:center;position:relative;}
+    .hd-wall::before{content:'';position:absolute;top:0;bottom:0;left:50%;width:1px;background:linear-gradient(180deg,transparent,rgba(255,255,255,.12),transparent);}
+    .hd-wall-text{font-family:'Noto Sans KR',sans-serif;font-size:.6rem;letter-spacing:.1em;writing-mode:vertical-rl;color:rgba(232,224,208,.25);background:#1a0e04;padding:6px 2px;position:relative;z-index:1;}
+    .hd-feats{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+    @media(max-width:480px){.hd-feats{grid-template-columns:1fr;}}
+    .hd-feat{padding:12px 14px;border-radius:8px;background:rgba(192,120,32,.06);border:1px solid rgba(192,120,32,.15);}
+    .hd-feat-num{font-family:'Noto Sans KR',sans-serif;font-size:.58rem;letter-spacing:.15em;color:var(--amber);margin-bottom:6px;display:block;}
+    .hd-feat-title{font-size:.88rem;font-weight:700;color:var(--ash);margin-bottom:4px;}
+    .hd-feat-body{font-family:'Noto Sans KR',sans-serif;font-size:.75rem;font-weight:300;color:rgba(232,224,208,.6);line-height:1.8;}
+
+    /* ── 종말 플로우 ── */
+    .flow{margin:28px 0;}
+    .flow-step{display:flex;align-items:center;gap:14px;margin-bottom:4px;opacity:0;transform:translateY(14px);transition:opacity .65s ease,transform .65s ease;}
+    .flow-step.vis{opacity:1;transform:translateY(0);}
+    .flow-node{flex-shrink:0;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;font-family:'Noto Sans KR',sans-serif;}
+    .fn-earth {background:rgba(64,112,192,.15);border:1px solid rgba(64,112,192,.3);color:var(--blue2);}
+    .fn-hades {background:rgba(192,120,32,.15);border:1px solid rgba(192,120,32,.3);color:var(--amber2);}
+    .fn-rise  {background:rgba(64,180,80,.1);border:1px solid rgba(64,180,80,.25);color:#70e080;}
+    .fn-judge {background:rgba(220,180,20,.12);border:1px solid rgba(220,180,20,.28);color:#e8d040;}
+    .fn-fire  {background:rgba(240,72,0,.15);border:1px solid rgba(240,72,0,.3);color:var(--lava2);}
+    .flow-text{font-size:clamp(.88rem,2.3vw,.97rem);color:rgba(232,224,208,.82);line-height:1.75;}
+    .flow-arrow{width:1px;height:24px;margin-left:21px;background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(255,255,255,.04));}
+
+    /* ── 핵심 사실 카드 ── */
+    .fact-cards{display:flex;flex-direction:column;gap:14px;margin:24px 0;}
+    .fact-card{padding:20px 20px 18px;border-radius:12px;opacity:0;transform:translateX(-16px);transition:opacity .65s ease,transform .65s ease;}
+    .fact-card.vis{opacity:1;transform:translateX(0);}
+    .fc1{background:rgba(208,64,16,.08);border:1px solid rgba(208,64,16,.2);}
+    .fc2{background:rgba(192,120,32,.07);border:1px solid rgba(192,120,32,.2);}
+    .fc3{background:rgba(220,40,40,.08);border:1px solid rgba(220,40,40,.2);}
+    .fc4{background:rgba(64,112,192,.07);border:1px solid rgba(64,112,192,.2);}
+    .fc-num{font-family:'Noto Sans KR',sans-serif;font-size:.58rem;letter-spacing:.2em;margin-bottom:8px;display:block;}
+    .fc1 .fc-num{color:var(--ember2);}
+    .fc2 .fc-num{color:var(--amber2);}
+    .fc3 .fc-num{color:#f06060;}
+    .fc4 .fc-num{color:var(--blue2);}
+    .fc-title{font-size:clamp(.92rem,2.5vw,1.02rem);font-weight:700;color:var(--ash);margin-bottom:8px;line-height:1.4;}
+    .fc-body{font-family:'Noto Sans KR',sans-serif;font-size:.82rem;font-weight:300;color:rgba(232,224,208,.65);line-height:1.95;}
+    .fc-verse{margin-top:10px;padding:10px 14px;background:rgba(255,255,255,.04);border-radius:8px;font-size:.8rem;font-weight:500;color:rgba(232,224,208,.8);line-height:1.85;}
+
+    /* ── 구조 변화 다이어그램 ── */
+    .struct-compare{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:24px 0;}
+    @media(max-width:480px){.struct-compare{grid-template-columns:1fr;gap:14px;}}
+    .struct-card{padding:20px 18px;border-radius:12px;}
+    .sc-before{background:rgba(192,120,32,.07);border:1px solid rgba(192,120,32,.2);}
+    .sc-after {background:rgba(42,122,64,.08);border:1px solid rgba(42,122,64,.2);}
+    .sc-label{font-family:'Noto Sans KR',sans-serif;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:14px;display:block;}
+    .sc-before .sc-label{color:var(--amber2);opacity:.7;}
+    .sc-after  .sc-label{color:var(--green2);opacity:.7;}
+    .sc-title{font-size:clamp(.88rem,2.3vw,.97rem);font-weight:700;margin-bottom:12px;}
+    .sc-before .sc-title{color:var(--amber2);}
+    .sc-after  .sc-title{color:var(--green2);}
+    .sc-body{font-family:'Noto Sans KR',sans-serif;font-size:.78rem;font-weight:300;color:rgba(232,224,208,.65);line-height:2;}
+
+    /* ── Q&A 카드 ── */
+    .qa-box{margin:24px 0;border-radius:14px;overflow:hidden;}
+    .qa-q{padding:16px 20px;font-size:clamp(.92rem,2.5vw,1rem);font-weight:700;line-height:1.65;}
+    .qa-q.qgreen{background:rgba(42,122,64,.15);color:var(--green2);border-left:3px solid var(--green2);}
+    .qa-a{padding:18px 20px;font-size:clamp(.88rem,2.3vw,.95rem);font-family:'Noto Sans KR',sans-serif;font-weight:300;line-height:2;color:rgba(232,224,208,.8);}
+    .qa-a.agreen{background:rgba(42,122,64,.06);}
+
+    /* ── 부활 타임라인 ── */
+    .rev-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0;}
+    @media(max-width:480px){.rev-grid{grid-template-columns:1fr;}}
+    .rev-card{padding:16px 14px;border-radius:10px;background:rgba(255,255,255,.03);border:1px solid var(--line);}
+    .rev-card.rc-now {border-color:rgba(42,122,64,.2);}
+    .rev-card.rc-come{border-color:rgba(80,184,112,.2);}
+    .rev-label{font-family:'Noto Sans KR',sans-serif;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;margin-bottom:10px;display:block;}
+    .rc-now  .rev-label{color:var(--green2);opacity:.7;}
+    .rc-come .rev-label{color:#80d890;opacity:.7;}
+    .rev-rows{display:flex;flex-direction:column;gap:8px;}
+    .rev-row{display:flex;gap:10px;align-items:flex-start;}
+    .rev-row-num{font-family:'Noto Sans KR',sans-serif;font-size:.7rem;font-weight:600;color:var(--green2);flex-shrink:0;margin-top:2px;}
+    .rev-row-text{font-family:'Noto Sans KR',sans-serif;font-size:.78rem;font-weight:300;color:rgba(232,224,208,.7);line-height:1.85;}
+
+    /* ── 개념 지도 ── */
+    .map-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:24px 0;}
+    @media(max-width:560px){.map-grid{grid-template-columns:1fr;gap:12px;}}
+    .map-card{padding:20px 16px;border-radius:12px;text-align:center;}
+    .mc-abyss {background:rgba(64,112,192,.08);border:1px solid rgba(64,112,192,.2);}
+    .mc-hades {background:rgba(192,120,32,.08);border:1px solid rgba(192,120,32,.2);}
+    .mc-fire  {background:rgba(208,64,16,.1);border:1px solid rgba(208,64,16,.25);}
+    .mc-icon{font-size:2rem;margin-bottom:10px;display:block;}
+    .mc-name{font-size:clamp(.95rem,2.5vw,1.1rem);font-weight:700;margin-bottom:8px;}
+    .mc-abyss .mc-name{color:var(--blue2);}
+    .mc-hades .mc-name{color:var(--amber2);}
+    .mc-fire  .mc-name{color:var(--ember2);}
+    .mc-orig{font-family:'Noto Sans KR',sans-serif;font-size:.65rem;letter-spacing:.1em;margin-bottom:10px;display:block;}
+    .mc-abyss .mc-orig{color:var(--blue2);opacity:.5;}
+    .mc-hades .mc-orig{color:var(--amber2);opacity:.5;}
+    .mc-fire  .mc-orig{color:var(--ember2);opacity:.5;}
+    .mc-rows{display:flex;flex-direction:column;gap:6px;}
+    .mc-row{font-family:'Noto Sans KR',sans-serif;font-size:.72rem;font-weight:300;color:rgba(232,224,208,.65);line-height:1.75;}
+    .mc-row strong{font-weight:500;color:rgba(232,224,208,.85);}
+
+    /* ── 계 9장/20장 비교 ── */
+    .rev-compare{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:24px 0;}
+    @media(max-width:480px){.rev-compare{grid-template-columns:1fr;gap:14px;}}
+    .rv-card{padding:20px 18px;border-radius:12px;}
+    .rv9 {background:rgba(96,48,160,.08);border:1px solid rgba(96,48,160,.2);}
+    .rv20{background:rgba(96,48,160,.14);border:1px solid rgba(96,48,160,.3);}
+    .rv-label{font-family:'Noto Sans KR',sans-serif;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--purple2);opacity:.7;margin-bottom:12px;display:block;}
+    .rv-title{font-size:clamp(.9rem,2.4vw,1rem);font-weight:700;color:var(--purple2);margin-bottom:10px;}
+    .rv-rows{display:flex;flex-direction:column;gap:8px;}
+    .rv-row{font-family:'Noto Sans KR',sans-serif;font-size:.78rem;font-weight:300;color:rgba(232,224,208,.65);line-height:1.85;}
+
+    /* ── 불꽃 파티클 ── */
+    .fire-particles{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+    .fp{position:absolute;width:2px;height:3px;border-radius:50% 50% 30% 30%;animation:fp-rise var(--d,7s) ease-in infinite var(--dl,0s);opacity:0;}
+    @keyframes fp-rise{0%{opacity:0;transform:translateY(0) scale(1);}15%{opacity:var(--op,.6);}80%{opacity:.1;}100%{opacity:0;transform:translateY(-160px) scale(.3);}}
+
+    /* ── SVG 웨이브 ── */
+    .wave{display:block;width:100%;height:36px;position:relative;z-index:3;}
+
+    /* ── FINALE ── */
+    .finale{
+      min-height:80vh;display:flex;flex-direction:column;
+      align-items:center;justify-content:center;text-align:center;
+      padding:80px 28px;
+      background:linear-gradient(180deg,#200800 0%,#0e0200 100%);
+      position:relative;z-index:2;overflow:hidden;
+    }
+    .finale::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 40% at 50% 60%,rgba(240,72,0,.08),transparent 70%);animation:fg 4s ease-in-out infinite;}
+    @keyframes fg{0%,100%{opacity:.7;}50%{opacity:1;}}
+    .finale-icon{font-size:clamp(3rem,9vw,5.5rem);margin-bottom:24px;position:relative;z-index:1;animation:fi 3s ease-in-out infinite;}
+    @keyframes fi{0%,100%{filter:drop-shadow(0 0 20px rgba(240,72,0,.3));}50%{filter:drop-shadow(0 0 50px rgba(240,72,0,.6));}}
+    .finale-title{font-size:clamp(1.6rem,5.5vw,3rem);font-weight:900;line-height:1.25;letter-spacing:-.03em;color:var(--ash);margin-bottom:28px;position:relative;z-index:1;}
+    .finale-title em{font-style:normal;color:var(--lava2);}
+    .finale-verse{background:rgba(240,72,0,.08);border:1px solid rgba(240,72,0,.2);border-radius:14px;padding:26px 24px;max-width:520px;margin:0 auto 28px;position:relative;z-index:1;}
+    .fv-text{font-size:clamp(.92rem,2.5vw,1.05rem);font-weight:600;color:rgba(232,224,208,.95);line-height:2.05;margin-bottom:10px;}
+    .fv-ref{font-family:'Noto Sans KR',sans-serif;font-size:.72rem;color:var(--ember2);letter-spacing:.1em;}
+    .finale-msg{font-size:clamp(.9rem,2.4vw,1rem);font-weight:400;color:rgba(232,224,208,.6);line-height:2.2;max-width:480px;margin:0 auto;position:relative;z-index:1;}
+    .finale-msg strong{color:var(--lava2);font-weight:600;}
+
+    /* ── 푸터 ── */
+    .site-footer{background:#020100;padding:30px 24px 38px;text-align:center;border-top:1px solid rgba(240,72,0,.1);position:relative;z-index:2;}
+    .footer-rule{width:32px;height:1px;background:var(--ember);margin:0 auto 14px;opacity:.3;}
+    .footer-name{font-size:.85rem;font-weight:600;color:rgba(232,224,208,.5);letter-spacing:.2em;}
+
+    /* ── 스크롤 ── */
+    .fu{opacity:0;transform:translateY(22px);transition:opacity .75s ease,transform .75s ease;}
+    .fu.vis{opacity:1;transform:translateY(0);}
+
+    @media(max-width:480px){.sec{padding:44px 18px 52px;}.finale{padding:60px 20px;}}
+  </style>
+</head>
+<body>
+
+<!-- COVER -->
+<section class="cover">
+  <div class="star-field" id="stars"></div>
+  <div class="cover-crack"></div>
+  <p class="cover-kicker">부산교회 2구역 · 요한계시록 · 누가복음 · 히브리서 · 에베소서</p>
+  <h1 class="cover-title">
+    <span class="w-blue">무저갱</span><span class="w-dim">과</span><br>
+    <span class="w-dim" style="font-size:.6em;">음부의 차이</span>
+    <span class="w-dim" style="font-size:.45em;"> 그리고</span>
+    <span class="w-green">부활</span>
+  </h1>
+  <p class="cover-sub">성경이 말하는 사후 세계의 구조와 종말 그리고<br>십자가 이후 변화된 구속사의 완성</p>
+  <div class="cover-badges">
+    <span class="c-badge b-blue">무저갱 · Abyss</span>
+    <span class="c-badge b-amber">음부 · Hades</span>
+    <span class="c-badge b-red">불못 · Lake of Fire</span>
+    <span class="c-badge b-green">부활 · Resurrection</span>
+    <span class="c-badge b-purple">개념 지도 · Map</span>
+  </div>
+</section>
+
+<!-- wave 1 -->
+<svg class="wave" viewBox="0 0 1440 36" preserveAspectRatio="none" style="background:#04050a;">
+  <path d="M0,0 Q720,36 1440,0 L1440,36 L0,36 Z" fill="#060a18"/>
+</svg>
+
+<!-- ══ I. 무저갱 ══ -->
+<section class="sec sec-bg-abyss">
+  <div class="bg-num" style="color:#4070c0;">Ⅰ</div>
+  <div class="sec-wrap">
+    <div class="sec-tag tag-blue fu">Chapter Ⅰ · Abyss · 무저갱</div>
+    <h2 class="sec-title fu"><span style="color:var(--blue2)">🕳️ 무저갱</span><br><span style="font-size:.6em;font-weight:300;color:rgba(232,224,208,.5);">ἄβυσσος — 바닥이 없는 심연</span></h2>
+    <div class="sec-rule rule-blue"></div>
+
+    <p class="body-text fu">무저갱(無底坑)은 문자 그대로 "바닥이 없는 구덩이", "끝을 알 수 없는 심연"이라는 뜻입니다. 성경에서는 단순한 공간 개념을 넘어 영적·종말론적 의미로 사용됩니다.</p>
+
+    <div class="sub-lbl fu" style="color:var(--blue2);">요한계시록에서의 무저갱</div>
+    <div class="vb vb-blue fu"><span class="vb-ref">요한계시록 9:1–2</span><p class="vb-text">"그에게는 무저갱의 열쇠가 주어졌습니다. 그가 무저갱을 여니, 그 구덩이에서 연기가 올라왔는데, …"</p></div>
+    <p class="body-text fu" style="color:rgba(64,112,192,.8);">➜ 악한 영적 세력이 잠시 풀려나는 장소</p>
+    <div class="vb vb-blue fu"><span class="vb-ref">요한계시록 20:1–3</span><p class="vb-text">"그의 손에는 무저갱의 열쇠와 큰 사슬이 있었습니다…무저갱에 던져 넣고 가둔 다음에 그 위에 봉인을 하여…"</p></div>
+    <p class="body-text fu" style="color:rgba(64,112,192,.8);">➜ 사탄이 일시적으로 결박되는 곳</p>
+    <div class="vb vb-blue fu"><span class="vb-ref">누가복음 8:31</span><p class="vb-text">"귀신들은 자기들에게 무저갱으로 들어가라는 명령을 하지 마시도록 예수님께 간청하였다."</p></div>
+    <p class="body-text fu" style="color:rgba(64,112,192,.8);">➜ 귀신들도 무저갱을 두려움의 장소로 인식</p>
+
+    <div class="sub-lbl fu" style="color:var(--blue2);">무저갱 vs 불못 비교</div>
+    <table class="ctbl fu">
+      <thead><tr><th class="th-gray">구분</th><th class="th-blue">무저갱</th><th class="th-fire">불못</th></tr></thead>
+      <tbody>
+        <tr><td>성격</td><td>임시적 감금</td><td>최종 심판</td></tr>
+        <tr><td>대상</td><td>악한 영, 사탄</td><td>사탄·거짓 선지자·불신자</td></tr>
+        <tr><td>시점</td><td>종말 과정 중</td><td>마지막 심판 후</td></tr>
+        <tr><td>계시록</td><td>9장, 20장</td><td>20장</td></tr>
+      </tbody>
+    </table>
+
+    <div class="sub-lbl fu" style="color:var(--blue2);">핵심 요약 & 오늘의 적용</div>
+    <ul class="dl dl-blue fu">
+      <li>무저갱은 혼돈·어둠·통제되지 않은 악의 영역</li>
+      <li>하나님이 악을 완전히 제거하기 전까지 제한적으로 묶어 두는 장소</li>
+      <li>악이 활개 치는 것처럼 보여도 → <strong style="color:var(--ash)">완전히 풀린 것이 아닙니다.</strong></li>
+      <li>하나님은 → <strong style="color:var(--ash)">열쇠를 쥐고 계신 분 (계 1:18)</strong></li>
+      <li>무저갱의 존재 자체가 → <strong style="color:var(--ash)">하나님의 통치가 여전히 작동 중임을 증명</strong></li>
+    </ul>
+    <div class="decl decl-blue fu"><p>무저갱은 악의 자유가 아니라<br>'하나님의 허락 아래 제한된 악'의 공간입니다.</p></div>
+  </div>
+</section>
+
+<!-- wave 2 -->
+<svg class="wave" viewBox="0 0 1440 36" preserveAspectRatio="none" style="background:#060a18;">
+  <path d="M0,0 Q720,36 1440,0 L1440,36 L0,36 Z" fill="#100800"/>
+</svg>
+
+<!-- ══ II. 음부 ══ -->
+<section class="sec sec-bg-hades">
+  <div class="bg-num" style="color:#c07820;">Ⅱ</div>
+  <div class="sec-wrap">
+    <div class="sec-tag tag-amber fu">Chapter Ⅱ · Hades · 음부</div>
+    <h2 class="sec-title fu"><span style="color:var(--amber2)">⚖️ 음부</span><br><span style="font-size:.6em;font-weight:300;color:rgba(232,224,208,.5);">ᾅδης — 죽은 영혼의 임시 대기 영역</span></h2>
+    <div class="sec-rule rule-amber"></div>
+
+    <div class="decl decl-amber fu"><p>무저갱: 타락한 영적 존재(사탄·악한 영)를 위한 임시 감금소<br>음부: 죽은 인간의 영혼이 최종 심판 전까지 머무는 영역</p></div>
+
+    <div class="sub-lbl fu" style="color:var(--amber2);">성경 용어 기준 비교</div>
+    <table class="ctbl fu">
+      <thead><tr><th class="th-gray">구분</th><th class="th-blue">무저갱</th><th class="th-amber">음부</th></tr></thead>
+      <tbody>
+        <tr><td>원어</td><td>ἄβυσσος</td><td>ᾅδης (Hades)</td></tr>
+        <tr><td>대상</td><td>사탄, 악한 영</td><td>사람의 영혼</td></tr>
+        <tr><td>성격</td><td>감금·봉쇄</td><td>대기·구분</td></tr>
+        <tr><td>고통</td><td>제한적</td><td>의식적</td></tr>
+        <tr><td>이동</td><td>봉인 가능</td><td>영역 분리</td></tr>
+        <tr><td>최종</td><td>불못으로 이동</td><td>부활·심판 후 불못 또는 생명</td></tr>
+      </tbody>
+    </table>
+    <p class="body-text fu">📌 <strong style="color:var(--ash)">무저갱에는 사람이 들어가지 않는다</strong> &nbsp;|&nbsp; <strong style="color:var(--ash)">음부에는 인간의 영혼만 있다</strong></p>
+
+    <div class="sub-lbl fu" style="color:var(--amber2);">누가복음 16장 — 부자와 나사로의 비유</div>
+    <p class="body-text fu" style="font-size:.88rem;color:rgba(232,224,208,.6);">⚠️ 예수님의 비유지만 사후 세계 구조를 왜곡하지 않는 비유입니다.</p>
+
+    <div class="hd-diagram fu">
+      <span class="hd-label-top">음부의 내부 구조 · 눅 16:19–31</span>
+      <div class="hd-grid">
+        <div class="hd-side hd-comfort"><span class="hd-slabel">위로의 영역</span><div class="hd-name">나사로</div><p class="hd-desc">아브라함의 품<br>의인의 안식처</p></div>
+        <div class="hd-wall"><span class="hd-wall-text">큰 구렁 · 이동 불가</span></div>
+        <div class="hd-side hd-torment"><span class="hd-slabel">고통의 영역</span><div class="hd-name">부자</div><p class="hd-desc">불꽃 가운데<br>의식적 고통</p></div>
+      </div>
+      <div class="hd-feats">
+        <div class="hd-feat"><span class="hd-feat-num">특징 ①</span><div class="hd-feat-title">의식이 있다</div><p class="hd-feat-body">인식·기억·감정·대화 가능. 무의식도 소멸도 아닙니다.</p></div>
+        <div class="hd-feat"><span class="hd-feat-num">특징 ②</span><div class="hd-feat-title">고통이 있다</div><p class="hd-feat-body">최종 심판 전임에도 이미 고통의 실재가 존재합니다.</p></div>
+        <div class="hd-feat"><span class="hd-feat-num">특징 ③</span><div class="hd-feat-title">생전 삶이 반영됨</div><p class="hd-feat-body">도덕적·영적 구분은 이미 완료되었습니다.</p></div>
+        <div class="hd-feat"><span class="hd-feat-num">특징 ④</span><div class="hd-feat-title">이동 불가</div><p class="hd-feat-body">큰 구렁텅이가 가로놓여 있어 죽은 후에는 이동이 불가합니다.</p></div>
+      </div>
+    </div>
+
+    <div class="sub-lbl fu" style="color:var(--amber2);">성경적 결론 & 오늘의 적용</div>
+    <p class="body-text fu"><strong style="color:var(--ash)">누가복음 16장은 말한다</strong> — 죽음 이후는 연속된 삶의 결과이지 새로운 기회의 시작이 아닙니다.</p>
+    <ul class="dl dl-amber fu">
+      <li>귀신 들린 사람 → "죽은 영혼"으로 오해 → 오류</li>
+      <li>사후 구원의 가능성 주장 → 오류</li>
+      <li>윤회·중간 회심 교리 혼합 → 오류</li>
+      <li>살아 있을 때의 선택이 → <strong style="color:var(--ash)">죽음 이후의 상황을 변경할 수 없습니다.</strong></li>
+    </ul>
+    <div class="vb vb-amber fu"><span class="vb-ref">히브리서 9:27</span><p class="vb-text">"한 번 죽는 것은 사람들에게 정해진 운명이고, 그 후에는 심판이 있습니다."</p></div>
+    <div class="decl decl-amber fu"><p>살아 있을 때의 선택이 죽음 이후의 상황을 변경할 수 없습니다.<br>복음을 듣고 구원을 받는 것은 지금 응답하여야 합니다.</p></div>
+  </div>
+</section>
+
+<!-- wave 3 -->
+<svg class="wave" viewBox="0 0 1440 36" preserveAspectRatio="none" style="background:#100800;">
+  <path d="M0,0 Q720,36 1440,0 L1440,36 L0,36 Z" fill="#0e0400"/>
+</svg>
+
+<!-- ══ III. 불못·계시록 20 ══ -->
+<section class="sec sec-bg-fire">
+  <div class="fire-particles" id="fireParts"></div>
+  <div class="bg-num" style="color:#c03010;">Ⅲ</div>
+  <div class="sec-wrap">
+    <div class="sec-tag tag-fire fu">Chapter Ⅲ · Revelation 20 · 불못</div>
+    <h2 class="sec-title fu"><span style="color:var(--ember2)">📖 음부는 요한계시록 20장에서</span><br><span style="color:var(--ember2);font-size:.75em;">어떻게 처리되는가</span></h2>
+    <div class="sec-rule rule-fire"></div>
+
+    <div class="sub-lbl fu" style="color:var(--ember2);">종말의 단계 구조</div>
+    <div class="flow fu">
+      <div class="flow-step"><div class="flow-node fn-earth">현세</div><div class="flow-text"><strong style="color:var(--ash)">현세의 삶</strong> — 믿음의 선택이 이루어지는 때</div></div>
+      <div class="flow-arrow"></div>
+      <div class="flow-step"><div class="flow-node fn-hades">음부</div><div class="flow-text"><strong style="color:var(--ash)">음부(Hades)</strong> — 임시 대기 상태. 아직 심판 전.</div></div>
+      <div class="flow-arrow"></div>
+      <div class="flow-step"><div class="flow-node fn-rise">부활</div><div class="flow-text"><strong style="color:var(--ash)">부활</strong> — 음부가 죽은 자를 내어놓음 (계 20:13)</div></div>
+      <div class="flow-arrow"></div>
+      <div class="flow-step"><div class="flow-node fn-judge">심판</div><div class="flow-text"><strong style="color:var(--ash)">백보좌 심판</strong> — 각자 자기 행위에 따라</div></div>
+      <div class="flow-arrow"></div>
+      <div class="flow-step"><div class="flow-node fn-fire">불못</div><div class="flow-text"><strong style="color:var(--ash)">불못 또는 생명</strong> — 영원한 최종 결정</div></div>
+    </div>
+
+    <div class="vb vb-fire fu"><span class="vb-ref">요한계시록 20:13–14</span><p class="vb-text">"바다가 그 안에 있던 죽은 자들을 내주었고, 죽음과 음부도 그 안에 있던 죽은 사람들을 내주었습니다. 그들은 각자 자기 행위에 따라 심판을 받았고, 죽음과 음부도 불 못에 던져졌습니다. 이것이 둘째 죽음, 곧 불 못입니다."</p></div>
+
+    <div class="sub-lbl fu" style="color:var(--ember2);">본문이 말하는 핵심 사실 4가지</div>
+    <div class="fact-cards">
+      <div class="fact-card fc1"><span class="fc-num">① 핵심 사실</span><div class="fc-title">음부는 "사람을 내어놓는다"</div><p class="fc-body">음부는 최종 장소가 아닙니다. 부활 이전에 임시로 거하는 장소입니다. 누가복음 16장과 정확히 연결됨 — 부자도 영원히 음부에 머무는 것이 아니라 부활하여 심판을 받을 것입니다.</p><div class="fc-verse">"죽음과 음부도 그 안에 있던 죽은 사람들을 내주었습니다."</div></div>
+      <div class="fact-card fc2"><span class="fc-num">② 핵심 사실</span><div class="fc-title">음부는 심판권을 갖지 않는다</div><p class="fc-body">음부는 구치소와 같은 것이지 최종 심판의 장소가 아닙니다. 심판은 부활 이후 하나님만 하십니다.</p><div class="fc-verse">음부 = 법정 ❌ &nbsp; 음부 = 구치소 ⭕</div></div>
+      <div class="fact-card fc3"><span class="fc-num">③ 핵심 사실</span><div class="fc-title">음부는 "폐기된다"</div><p class="fc-body">음부는 더 이상 필요 없는 체계로 불 못에 던져집니다. 음부에서 고통은 있지만 그것 자체가 판결 받은 것이 아닙니다.</p><div class="fc-verse">"죽음과 음부도 불 못에 던져졌습니다." — 계 20:14</div></div>
+      <div class="fact-card fc4"><span class="fc-num">④ 핵심 사실</span><div class="fc-title">음부의 소멸 = 죽음의 종말</div><p class="fc-body">음부가 있다는 것은 죽음이 아직 작동 중이라는 뜻입니다. 음부가 불못에 던져진 후에는 죽음 자체가 종료됩니다. 그래서 음부는 영원히 존재하지 않게 되는 것입니다.</p><div class="fc-verse">"더 이상 죽음이 있지 않을 것이고, …" — 계 21:4</div></div>
+    </div>
+
+    <div class="sub-lbl fu" style="color:var(--ember2);">누가복음 16장 ↔ 요한계시록 20장</div>
+    <table class="ctbl fu">
+      <thead><tr><th class="th-amber">누가복음 16장</th><th class="th-fire">요한계시록 20장</th></tr></thead>
+      <tbody>
+        <tr><td>음부에 있음</td><td>음부에서 나옴</td></tr>
+        <tr><td>고통 중 의식 있음</td><td>부활하여 심판</td></tr>
+        <tr><td>구렁으로 이동 불가</td><td>심판으로 최종 분리</td></tr>
+        <tr><td>임시 상태</td><td>영원한 결정</td></tr>
+      </tbody>
+    </table>
+
+    <div class="sub-lbl fu" style="color:var(--ember2);">아브라함의 품은 어떻게 되는가?</div>
+    <p class="body-text fu"><strong style="color:var(--ash)">십자가 이후의 변화</strong> — 예수님의 십자가와 부활 이후 의인은 더 이상 음부의 안식처에 머물지 않습니다.</p>
+    <div class="vb vb-fire fu"><span class="vb-ref">고린도후서 5:8</span><p class="vb-text">"우리가 원하는 것은 차라리 몸을 떠나서 주님과 함께 사는 것입니다."</p></div>
+    <div class="vb vb-fire fu"><span class="vb-ref">빌립보서 1:23</span><p class="vb-text">"내가 원하는 것은 몸을 떠나서 그리스도와 함께 있는 것입니다."</p></div>
+    <p class="body-text fu" style="color:var(--ember2);">👉 의인은 십자가의 죽음과 부활 이후에는 음부를 거치지 않고 즉시 주와 함께 있는 것입니다. 👉 음부는 지금 불신자의 영역만 남아 있습니다.</p>
+
+    <div class="decl decl-fire fu"><p>음부는 영원한 형벌이 아닙니다. 형벌은 '불 못'에서 시작됩니다.<br>음부는 사람의 영혼을 보관하는 장소이지만<br>불 못은 사람을 판단하는 곳입니다.</p></div>
+  </div>
+</section>
+
+<!-- wave 4 -->
+<svg class="wave" viewBox="0 0 1440 36" preserveAspectRatio="none" style="background:#0e0400;">
+  <path d="M0,0 Q720,36 1440,0 L1440,36 L0,36 Z" fill="#04100a"/>
+</svg>
+
+<!-- ══ IV. 부활 ══ -->
+<section class="sec sec-bg-rise">
+  <div class="bg-num" style="color:#2a7a40;">Ⅳ</div>
+  <div class="sec-wrap">
+    <div class="sec-tag tag-green fu">Chapter Ⅳ · Resurrection · 부활</div>
+    <h2 class="sec-title fu"><span style="color:var(--green2)">✨ 십자가 이후 구조의 변화</span><br><span style="color:var(--green2);font-size:.65em;font-weight:300;">그리고 구약 성도들의 부활은 언제인가</span></h2>
+    <div class="sec-rule rule-green"></div>
+
+    <!-- Q&A A -->
+    <div class="qa-box fu">
+      <div class="qa-q qgreen">질문 A 👉 십자가 이후, 부활하신 예수님은 이전 음부의 낙원에 있던 사람들을 어떻게 하셨는가? 그들은 지금 어디에 있는가?</div>
+      <div class="qa-a agreen">주님의 십자가와 부활 이후에는 음부의 '낙원(아브라함의 품)'은 비워졌고, 그곳에 있던 의인들은 그리스도와 함께 하늘로 옮겨졌습니다.</div>
+    </div>
+
+    <div class="vb vb-green fu"><span class="vb-ref">에베소서 4:8–10</span><p class="vb-text">"그분은 높은 곳으로 올라가실 때에 사로잡힌 이들을 포로로 이끌어 가셨다가, 사람들에게 은사들로 주셨습니다. … 내려오셨던 그분은 모든 것을 충만하게 하시려고 모든 하늘들 위로 올라가신 바로 그분이십니다."</p></div>
+
+    <div class="sub-lbl fu" style="color:var(--green2);">본문 해석 핵심</div>
+    <ul class="dl dl-green fu">
+      <li><strong style="color:var(--ash)">"내려오셨다"</strong> — 단순히 죽었다가 아니라 죽음 이후 영역(음부)에 내려가셨다는 것입니다.</li>
+      <li><strong style="color:var(--ash)">"사로잡혔던 자들을 사로잡고"</strong> — 죄 때문이 아니라 속죄가 아직 완성되지 않아 '대기 중'이던 의인들을 주님께서 친히 음부에 내려가셔서 모든 속죄를 완성하시고 승리를 선포하신 것입니다.</li>
+    </ul>
+
+    <div class="vb vb-green fu"><span class="vb-ref">베드로전서 3:18–19</span><p class="vb-text">"그리스도께서 또한 죄들 때문에 한 번의 고난을 받으셨으니, … 영 안에서 그분은 또한 감옥에 있는 영들에게 가시어 선포하셨습니다."</p></div>
+    <p class="body-text fu" style="color:var(--green2);">👉 중요한 점은 음부에 내려가신 것은 전도나 회심 기회를 제공하는 것이 아니라 <strong style="color:var(--ash)">구속의 완성을 선언하기 위한 것입니다.</strong></p>
+
+    <div class="vb vb-green fu"><span class="vb-ref">누가복음 23:43</span><p class="vb-text">"내가 진실로 그대에게 말합니다. 오늘 그대가 나와 함께 낙원에 있을 것입니다."</p></div>
+    <p class="body-text fu">예수님이 십자가에서 죽으신 그날, 아직 부활 전 — 낙원 = 음부의 의인 구역. 👉 예수님은 죽으신 직후 음부의 낙원으로 가셨고 그곳에 있는 자들에게 구속 완성의 실체가 되셨습니다.</p>
+
+    <div class="sub-lbl fu" style="color:var(--green2);">부활 이후, 구조의 변화</div>
+    <div class="struct-compare fu">
+      <div class="struct-card sc-before">
+        <span class="sc-label">십자가 이전</span>
+        <div class="sc-title">음부 안에 두 영역</div>
+        <div class="sc-body">
+          죽음<br>
+          └ 음부<br>
+          &nbsp;&nbsp;├ 고통의 곳 (불신자)<br>
+          &nbsp;&nbsp;└ 낙원 / 아브라함의 품 (의인)
+        </div>
+      </div>
+      <div class="struct-card sc-after">
+        <span class="sc-label">부활 이후 · 현재</span>
+        <div class="sc-title">의인은 즉시 하늘로</div>
+        <div class="sc-body">
+          죽음<br>
+          ├ 불신자 → 음부 (대기)<br>
+          └ 신자 → 즉시 그리스도와 함께<br><br>
+          <strong style="color:var(--green2)">음부에는 더 이상 의인이 없습니다</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="vb vb-green fu"><span class="vb-ref">히브리서 12:22–24</span><p class="vb-text">"여러분은 시온산과, … 온전하게 된 의인들의 영들과, 새 언약의 중보자이신 예수님과, 아벨의 피보다 더 좋은 것을 말하는 뿌려진 피에 나아간 것입니다."</p></div>
+
+    <div class="sub-lbl fu" style="color:var(--green2);">성경적 결론 (아주 중요)</div>
+    <ul class="dl dl-green fu">
+      <li><strong style="color:var(--ash)">낙원은 영원히 머무는 장소가 아니라 단계였다</strong> — 구속 이전의 임시 안식처</li>
+      <li><strong style="color:var(--ash)">십자가는 공간 구조를 바꿨다</strong> — 죄의 장벽이 제거되어 즉시 하나님의 임재 가운데 있게 하였다.</li>
+      <li><strong style="color:var(--ash)">예수님은 낙원을 폐쇄하신 것이 아니라 완성하셨다</strong> — 낙원은 역할을 다 해서 완성된 것이다.</li>
+    </ul>
+    <div class="decl decl-green fu"><p>낙원은 약속의 대기실이었지만<br>십자가로 약속이 이행되어<br>이제는 대기실에 머물 필요가 없어진 것입니다.</p></div>
+
+    <!-- Q&A B -->
+    <div class="qa-box fu" style="margin-top:40px;">
+      <div class="qa-q qgreen">질문 B 👉 구약 성도들의 '부활'은 언제인가? 영은 이미 하늘에 있는데, 몸의 부활은 어떻게 되는가?</div>
+      <div class="qa-a agreen">모든 성도의 몸의 부활은 '같은 시점'입니다. 구약 성도와 신약 성도는 서로 다른 부활을 받지 않습니다. '같은 부활', '같은 몸'을 받습니다.</div>
+    </div>
+
+    <div class="sub-lbl fu" style="color:var(--green2);">구약 성도는 어디에 포함되는가?</div>
+    <div class="vb vb-green fu"><span class="vb-ref">히브리서 11:39–40</span><p class="vb-text">"이 사람들은 모두 믿음을 통하여 좋은 증거를 지녔지만, 약속된 것은 얻지 못하였습니다. 왜냐하면 하나님께서 우리를 위하여 더 좋은 것을 예비하셨으며, 우리가 없이는 그들이 완전한 것에 이르지 못하도록 하셨기 때문입니다."</p></div>
+    <p class="body-text fu">구약 시대의 믿음의 사람들도 혼자 먼저 완성되는 것이 아닙니다. 신약 시대의 성도들과 함께, 같은 날에, 함께 완전해집니다.</p>
+
+    <div class="sub-lbl fu" style="color:var(--green2);">현재 & 재림 시 상태</div>
+    <div class="rev-grid fu">
+      <div class="rev-card rc-now">
+        <span class="rev-label">현재 상태 (지금)</span>
+        <div class="rev-rows">
+          <div class="rev-row"><span class="rev-row-num">영</span><span class="rev-row-text">그리스도와 함께 (구약/신약 동일)</span></div>
+          <div class="rev-row"><span class="rev-row-num">몸</span><span class="rev-row-text">흙으로 잠듦</span></div>
+          <div class="rev-row"><span class="rev-row-num">차이</span><span class="rev-row-text">구약/신약 차이 ❌ 없음</span></div>
+        </div>
+      </div>
+      <div class="rev-card rc-come">
+        <span class="rev-label">재림 시 (그날)</span>
+        <div class="rev-rows">
+          <div class="rev-row"><span class="rev-row-num">①</span><span class="rev-row-text">죽은 성도의 몸 부활</span></div>
+          <div class="rev-row"><span class="rev-row-num">②</span><span class="rev-row-text">살아 있는 성도 변화</span></div>
+          <div class="rev-row"><span class="rev-row-num">③</span><span class="rev-row-text">영 + 영화로운 몸 결합</span></div>
+          <div class="rev-row"><span class="rev-row-num">④</span><span class="rev-row-text">영원한 하나님 나라 진입</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vb vb-green fu"><span class="vb-ref">고린도전서 15:52</span><p class="vb-text">"순식간에, 눈 깜짝할 사이에, 마지막 나팔 소리에 그렇게 될 것입니다. 나팔 소리가 울리면, 죽은 사람들이 썩지 않을 것으로 살아나고, 우리도 변모될 것입니다."</p></div>
+
+    <div class="sub-lbl fu" style="color:var(--green2);">부활의 몸은 어떤 몸인가?</div>
+    <table class="ctbl fu">
+      <thead><tr><th class="th-gray">현재 몸</th><th class="th-green">부활의 몸</th></tr></thead>
+      <tbody>
+        <tr><td>썩음</td><td>썩지 않음</td></tr>
+        <tr><td>약함</td><td>강함</td></tr>
+        <tr><td>육의 몸</td><td>영광의 몸</td></tr>
+        <tr><td>시간에 속함</td><td>영원에 속함</td></tr>
+      </tbody>
+    </table>
+    <p class="body-text fu" style="color:var(--green2);">👉 <strong style="color:var(--ash)">예수님의 부활 몸이 모델</strong></p>
+
+    <div class="vb vb-green fu"><span class="vb-ref">고린도전서 15:58</span><p class="vb-text">"그러므로 내 사랑하는 형제님들, 여러분은 견고하여 흔들리지 말며, 항상 주님의 일을 더욱 많이 하십시오. 여러분이 아는 대로, 여러분의 수고가 주님 안에서 헛되지 않습니다."</p></div>
+    <div class="decl decl-green fu"><p>구원은 이미 완성되었지만<br>부활의 영광스러운 몸은 그날에 완성될 것입니다.<br><br>부활은 죽은 후 이야기만이 아니라<br>오늘의 삶을 지탱하는 힘이 됩니다.</p></div>
+  </div>
+</section>
+
+<!-- wave 5 -->
+<svg class="wave" viewBox="0 0 1440 36" preserveAspectRatio="none" style="background:#04100a;">
+  <path d="M0,0 Q720,36 1440,0 L1440,36 L0,36 Z" fill="#0c0818"/>
+</svg>
+
+<!-- ══ V. 개념 지도 ══ -->
+<section class="sec sec-bg-map">
+  <div class="bg-num" style="color:#6030a0;">Ⅴ</div>
+  <div class="sec-wrap">
+    <div class="sec-tag tag-purple fu">Chapter Ⅴ · Concept Map · 개념 지도</div>
+    <h2 class="sec-title fu"><span style="color:var(--purple2)">🧭 무저갱 · 지옥 · 불못</span><br><span style="color:var(--purple2);font-size:.65em;font-weight:300;">혼동 정리 — 개념 지도</span></h2>
+    <div class="sec-rule rule-purple"></div>
+
+    <p class="body-text fu">세 공간은 "심판의 단계"입니다 — 타락 → 활동 → 제한 → 최종 심판 (무저갱 → 불못)</p>
+
+    <div class="map-grid fu">
+      <div class="map-card mc-abyss">
+        <span class="mc-icon">🕳️</span>
+        <div class="mc-name">무저갱</div>
+        <span class="mc-orig">Abyss · ἄβυσσος</span>
+        <div class="mc-rows">
+          <div class="mc-row"><strong>성격</strong> 임시 감금</div>
+          <div class="mc-row"><strong>대상</strong> 사탄, 악한 영</div>
+          <div class="mc-row"><strong>통제</strong> 열쇠로 잠김</div>
+          <div class="mc-row"><strong>시간</strong> 종말 과정 중</div>
+        </div>
+      </div>
+      <div class="map-card mc-hades">
+        <span class="mc-icon">⚖️</span>
+        <div class="mc-name">지옥 / 음부</div>
+        <span class="mc-orig">Hades / Sheol · ᾅδης</span>
+        <div class="mc-rows">
+          <div class="mc-row"><strong>성격</strong> 죽은 자의 영역</div>
+          <div class="mc-row"><strong>대상</strong> 불신자의 영혼</div>
+          <div class="mc-row"><strong>통제</strong> 죽음의 권세</div>
+          <div class="mc-row"><strong>시간</strong> 현재~심판 전</div>
+        </div>
+      </div>
+      <div class="map-card mc-fire">
+        <span class="mc-icon">🔥</span>
+        <div class="mc-name">불못</div>
+        <span class="mc-orig">Lake of Fire</span>
+        <div class="mc-rows">
+          <div class="mc-row"><strong>성격</strong> 최종 심판</div>
+          <div class="mc-row"><strong>대상</strong> 사탄, 거짓 선지자, 사망</div>
+          <div class="mc-row"><strong>통제</strong> 영원한 형벌</div>
+          <div class="mc-row"><strong>시간</strong> 영원</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="decl decl-purple fu"><p>무저갱 ≠ 지옥 ≠ 불못<br>무저갱은 '악의 자유 공간'이 아니라<br>하나님이 악을 통제하며 봉인해 두는 장소입니다.</p></div>
+
+    <div class="sub-lbl fu" style="color:var(--purple2);">요한계시록 9장 & 20장 집중 강해</div>
+
+    <div class="vb vb-purple fu"><span class="vb-ref">요한계시록 9:11</span><p class="vb-text">"그 메뚜기들에게는 그것들을 다스리는 왕이 있으니, 곧 무저갱의 천사입니다. 그의 이름은 히브리어로 아바돈이고, 헬라어로는 아폴리온입니다."</p></div>
+    <ul class="dl dl-purple fu">
+      <li>열쇠를 '받았다' — 악은 스스로 무저갱을 열 수 없습니다.</li>
+      <li>메뚜기들은 사람을 죽이지 못함 — 파괴는 제한되어 있습니다.</li>
+      <li>무저갱 = 심판의 도구 — 회개를 촉구하는 하나님의 경고 장치</li>
+    </ul>
+
+    <div class="vb vb-purple fu"><span class="vb-ref">요한계시록 20:3</span><p class="vb-text">"무저갱에 던져 넣고 가둔 다음에 그 위에 봉인을 하여, 천 년이 차기까지는 더 이상 민족들을 미혹시키지 못하도록 하였습니다. 그러나 사탄은 그 후에 잠시 동안 풀려나야 할 것입니다."</p></div>
+
+    <div class="rev-compare fu">
+      <div class="rv-card rv9"><span class="rv-label">계시록 9장</span><div class="rv-title">잠시 풀린 무저갱</div><div class="rv-rows"><div class="rv-row">열림</div><div class="rv-row">제한적 활동</div><div class="rv-row">경고의 심판</div></div></div>
+      <div class="rv-card rv20"><span class="rv-label">계시록 20장</span><div class="rv-title">완전히 봉인된 무저갱</div><div class="rv-rows"><div class="rv-row">완전 봉인</div><div class="rv-row">완전 차단</div><div class="rv-row">통치의 심판</div></div></div>
+    </div>
+
+    <div class="decl decl-purple fu"><p>무저갱의 목적은 '영원한 처벌'이 아니라<br>'악의 영향력 차단'하기 위함입니다.<br><br>사탄은 적이지만 동등한 존재가 아닙니다.<br>그는 언제나 묶일 수 있는 존재입니다.</p></div>
+
+    <div class="sub-lbl fu" style="color:var(--purple2);">믿는 이는 무저갱을 두려워하지 않습니다</div>
+    <p class="body-text fu">왜냐하면 우리는 → <strong style="color:var(--ash)">그리스도 안에서 이미 아들의 왕국 안으로 옮겨졌기 때문입니다.</strong></p>
+    <div class="vb vb-purple fu"><span class="vb-ref">골로새서 1:13</span><p class="vb-text">"아버지께서 우리를 어둠의 권세에서 구출하시어, 그분께서 사랑하시는 아들의 왕국 안으로 옮기셨습니다."</p></div>
+  </div>
+</section>
+
+<!-- wave 6 -->
+<svg class="wave" viewBox="0 0 1440 36" preserveAspectRatio="none" style="background:#0c0818;">
+  <path d="M0,0 Q720,36 1440,0 L1440,36 L0,36 Z" fill="#200800"/>
+</svg>
+
+<!-- FINALE -->
+<section class="finale">
+  <div class="finale-icon">⏳</div>
+  <h2 class="finale-title">죽음 이후는 결정의 시간이 아닙니다.<br><em>지금이 바로 은혜의 시간입니다.</em></h2>
+  <div class="finale-verse fu">
+    <p class="fv-text">"보십시오, 지금이야말로 기쁘게 받아들이시기에 좋은 때이며, 지금이야말로 구원의 날입니다."</p>
+    <p class="fv-ref">— 고린도후서 6:2</p>
+  </div>
+  <p class="finale-msg fu">
+    무저갱은 악의 통제 장소이고<br>음부는 살았을 때의 믿음의 선택이 확인되는 장소이며<br>불못은 영원한 최종 심판의 장소입니다.<br><br>
+    <strong>십자가 이전에는 의인이 '기다렸고'</strong><br>
+    <strong>십자가 이후에는 의인이 '곧바로 주님께 갑니다'.</strong><br><br>
+    지금 이 순간, 복음에 응답할 수 있는<br>
+    <strong>이 시간이 은혜입니다.</strong>
+  </p>
+</section>
+
+<footer class="site-footer">
+  <div class="footer-rule"></div>
+  <p class="footer-name">부산교회 2구역</p>
+</footer>
+
+<script>
+  // 별 생성
+  const sf = document.getElementById('stars');
+  for(let i=0;i<100;i++){
+    const s=document.createElement('div'); s.className='s';
+    const sz=Math.random()*1.8+.4;
+    s.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*80}%;width:${sz}px;height:${sz}px;--d:${2+Math.random()*4}s;--dl:${Math.random()*4}s;--lo:${.05+Math.random()*.2};--hi:${.4+Math.random()*.5};`;
+    sf.appendChild(s);
+  }
+
+  // 불꽃 파티클
+  const fp=document.getElementById('fireParts');
+  if(fp){ for(let i=0;i<28;i++){
+    const p=document.createElement('div'); p.className='fp';
+    const h=Math.random()>.5?15:28;
+    p.style.cssText=`left:${Math.random()*100}%;bottom:${Math.random()*20}%;--d:${5+Math.random()*7}s;--dl:${Math.random()*6}s;--op:${.4+Math.random()*.4};background:hsl(${h},90%,55%);`;
+    fp.appendChild(p);
+  }}
+
+  // 스크롤 애니메이션
+  const io=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});
+  },{threshold:.1});
+  document.querySelectorAll('.fu,.fact-card,.flow-step').forEach(el=>io.observe(el));
+
+  // 플로우 지연
+  document.querySelectorAll('.flow-step').forEach((el,i)=>{ el.style.transitionDelay=(i*.15)+'s'; });
+  document.querySelectorAll('.fact-card').forEach((el,i)=>{ el.style.transitionDelay=(i*.12)+'s'; });
+</script>
+</body>
+</html>

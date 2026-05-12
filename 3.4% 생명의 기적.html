@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>소금의 비유 — 생명의 보고</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700&family=Cinzel:wght@400;600&family=Noto+Sans+KR:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --deep-sea: #0a1628;
+    --midnight: #060e1a;
+    --ocean-mid: #1a3a5c;
+    --teal-glow: #2a7fa8;
+    --foam: #c8e8f0;
+    --salt-white: #f0f7fb;
+    --gold: #c8a84b;
+    --gold-light: #e8d08a;
+    --scripture-gold: #d4aa5a;
+    --text-light: #ddeef5;
+    --text-muted: #88aac0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--midnight);
+    color: var(--text-light);
+    font-family: 'Noto Serif KR', serif;
+    overflow-x: hidden;
+  }
+
+  /* ── 바다 배경 애니메이션 ── */
+  .ocean-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background: radial-gradient(ellipse at 30% 20%, #0d2847 0%, #060e1a 60%),
+                radial-gradient(ellipse at 70% 80%, #0a2035 0%, transparent 50%);
+  }
+
+  .stars {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    background-image:
+      radial-gradient(1px 1px at 10% 15%, rgba(200,232,240,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 25% 40%, rgba(200,232,240,0.4) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 60% 10%, rgba(212,170,90,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 80% 30%, rgba(200,232,240,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 45% 60%, rgba(200,232,240,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 90% 70%, rgba(200,232,240,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 15% 80%, rgba(200,232,240,0.3) 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 70% 55%, rgba(212,170,90,0.4) 0%, transparent 100%);
+  }
+
+  .wave-layer {
+    position: fixed;
+    bottom: 0;
+    left: -50%;
+    width: 200%;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .wave-layer svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .wave1 { animation: waveMove 18s linear infinite; opacity: 0.15; bottom: 0; }
+  .wave2 { animation: waveMove 12s linear infinite reverse; opacity: 0.10; bottom: 20px; }
+  .wave3 { animation: waveMove 22s linear infinite; opacity: 0.07; bottom: 40px; }
+
+  @keyframes waveMove {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(50%); }
+  }
+
+  /* ── 빛 번짐 효과 ── */
+  .light-orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .orb1 {
+    width: 500px; height: 500px;
+    top: -100px; left: -100px;
+    background: radial-gradient(circle, rgba(42,127,168,0.12) 0%, transparent 70%);
+    animation: orbPulse 8s ease-in-out infinite;
+  }
+  .orb2 {
+    width: 400px; height: 400px;
+    bottom: 10%; right: -50px;
+    background: radial-gradient(circle, rgba(200,168,75,0.08) 0%, transparent 70%);
+    animation: orbPulse 11s ease-in-out infinite reverse;
+  }
+  @keyframes orbPulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 0.7; }
+  }
+
+  /* ── 메인 컨테이너 ── */
+  .page {
+    position: relative;
+    z-index: 10;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 80px 40px 120px;
+  }
+
+  /* ── 헤더 ── */
+  .header {
+    text-align: center;
+    margin-bottom: 80px;
+    opacity: 0;
+    animation: fadeUp 1.2s ease forwards 0.3s;
+  }
+
+  .header-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    color: var(--teal-glow);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .header-divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    justify-content: center;
+    margin-bottom: 28px;
+  }
+
+  .divider-line {
+    height: 1px;
+    width: 80px;
+    background: linear-gradient(to right, transparent, var(--gold));
+  }
+  .divider-line.right {
+    background: linear-gradient(to left, transparent, var(--gold));
+  }
+
+  .salt-icon {
+    font-size: 1.4rem;
+    color: var(--gold);
+  }
+
+  .main-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--salt-white);
+    letter-spacing: -0.01em;
+    margin-bottom: 12px;
+  }
+
+  .sub-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    color: var(--gold-light);
+    letter-spacing: 0.3em;
+    margin-top: 16px;
+  }
+
+  .percent-badge {
+    display: inline-block;
+    margin-top: 24px;
+    padding: 8px 24px;
+    border: 1px solid rgba(200,168,75,0.4);
+    border-radius: 50px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    color: var(--gold-light);
+    background: rgba(200,168,75,0.05);
+  }
+
+  /* ── 구분선 장식 ── */
+  .ornament {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin: 50px 0;
+    opacity: 0;
+  }
+  .ornament-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(42,127,168,0.4), transparent);
+  }
+  .ornament-symbol {
+    color: var(--teal-glow);
+    font-size: 0.9rem;
+    letter-spacing: 0.3em;
+  }
+
+  /* ── 본문 섹션 ── */
+  .section {
+    opacity: 0;
+    margin-bottom: 10px;
+  }
+
+  .section-content {
+    font-size: clamp(0.95rem, 2vw, 1.08rem);
+    line-height: 2.2;
+    font-weight: 300;
+    color: var(--text-light);
+    word-break: keep-all;
+    margin-bottom: 30px;
+  }
+
+  /* ── 핵심 강조 박스 ── */
+  .highlight-box {
+    position: relative;
+    margin: 50px 0;
+    padding: 40px 44px;
+    background: linear-gradient(135deg, rgba(26,58,92,0.5) 0%, rgba(10,22,40,0.8) 100%);
+    border: 1px solid rgba(42,127,168,0.25);
+    border-left: 3px solid var(--teal-glow);
+    border-radius: 2px;
+    opacity: 0;
+  }
+
+  .highlight-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(to right, var(--teal-glow), transparent);
+  }
+
+  .highlight-number {
+    font-family: 'Cinzel', serif;
+    font-size: 3.5rem;
+    font-weight: 600;
+    color: var(--teal-glow);
+    line-height: 1;
+    margin-bottom: 12px;
+    opacity: 0.6;
+  }
+
+  .highlight-text {
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    line-height: 1.9;
+    color: var(--foam);
+    font-weight: 400;
+  }
+
+  /* ── 핵심 메시지 ── */
+  .core-message {
+    margin: 60px 0;
+    text-align: center;
+    padding: 0 20px;
+    opacity: 0;
+  }
+
+  .core-message-text {
+    font-size: clamp(1.2rem, 3vw, 1.6rem);
+    line-height: 1.8;
+    color: var(--gold-light);
+    font-weight: 600;
+    letter-spacing: 0.03em;
+  }
+
+  .core-message-text em {
+    font-style: normal;
+    color: var(--gold);
+    border-bottom: 1px solid rgba(200,168,75,0.4);
+    padding-bottom: 2px;
+  }
+
+  /* ── 성경 구절 카드 ── */
+  .scripture-section {
+    margin-top: 70px;
+    opacity: 0;
+  }
+
+  .scripture-header {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.5em;
+    color: var(--scripture-gold);
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 36px;
+  }
+
+  .scripture-card {
+    margin-bottom: 28px;
+    padding: 32px 36px;
+    background: linear-gradient(135deg, rgba(10,22,40,0.9) 0%, rgba(6,14,26,0.95) 100%);
+    border: 1px solid rgba(200,168,75,0.15);
+    border-radius: 3px;
+    position: relative;
+    transition: border-color 0.4s ease, transform 0.4s ease;
+  }
+
+  .scripture-card:hover {
+    border-color: rgba(200,168,75,0.35);
+    transform: translateX(4px);
+  }
+
+  .scripture-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 36px; right: 36px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(200,168,75,0.2), transparent);
+  }
+
+  .scripture-quote-mark {
+    font-family: 'Cinzel', serif;
+    font-size: 3rem;
+    color: rgba(200,168,75,0.15);
+    line-height: 0.5;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .scripture-text {
+    font-size: clamp(0.92rem, 2vw, 1.02rem);
+    line-height: 2.0;
+    color: var(--foam);
+    font-weight: 300;
+    margin-bottom: 16px;
+    word-break: keep-all;
+  }
+
+  .scripture-ref {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    color: var(--scripture-gold);
+    text-align: right;
+  }
+
+  /* ── 클로징 ── */
+  .closing {
+    margin-top: 80px;
+    text-align: center;
+    padding: 60px 20px;
+    border-top: 1px solid rgba(42,127,168,0.15);
+    opacity: 0;
+  }
+
+  .closing-icon {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    animation: floatIcon 4s ease-in-out infinite;
+  }
+
+  @keyframes floatIcon {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .closing-text {
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    line-height: 2.0;
+    color: var(--text-muted);
+    font-weight: 300;
+    max-width: 540px;
+    margin: 0 auto 32px;
+    word-break: keep-all;
+  }
+
+  .closing-verse {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    margin-top: 24px;
+  }
+
+  /* ── 소금 결정 장식 (SVG) ── */
+  .salt-crystal-deco {
+    text-align: center;
+    margin: 40px 0;
+    opacity: 0.3;
+  }
+
+  /* ── 스크롤 reveal 애니메이션 ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .revealed {
+    animation: fadeUp 0.9s ease forwards;
+  }
+
+  /* ── 물결 무늬 구분선 ── */
+  .wave-divider {
+    text-align: center;
+    margin: 40px 0;
+    color: rgba(42,127,168,0.3);
+    font-size: 1.2rem;
+    letter-spacing: 0.5em;
+    opacity: 0;
+  }
+
+  @media (max-width: 600px) {
+    .page { padding: 50px 24px 80px; }
+    .highlight-box { padding: 28px 24px; }
+    .scripture-card { padding: 24px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="ocean-bg"></div>
+<div class="stars"></div>
+<div class="light-orb orb1"></div>
+<div class="light-orb orb2"></div>
+
+<!-- 파도 레이어 -->
+<div class="wave-layer wave1">
+  <svg viewBox="0 0 1440 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0,60 C240,100 480,20 720,60 C960,100 1200,20 1440,60 L1440,120 L0,120 Z" fill="#1a3a5c"/>
+  </svg>
+</div>
+<div class="wave-layer wave2">
+  <svg viewBox="0 0 1440 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0,40 C360,90 720,10 1080,50 C1200,65 1320,30 1440,40 L1440,120 L0,120 Z" fill="#0a2035"/>
+  </svg>
+</div>
+<div class="wave-layer wave3">
+  <svg viewBox="0 0 1440 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0,80 C180,30 360,90 540,60 C720,30 900,80 1080,50 C1260,20 1350,70 1440,55 L1440,120 L0,120 Z" fill="#060e1a"/>
+  </svg>
+</div>
+
+<div class="page">
+
+  <!-- 헤더 -->
+  <header class="header">
+    <p class="header-label">말씀 묵상 · Devotional Message</p>
+    <div class="header-divider">
+      <div class="divider-line"></div>
+      <span class="salt-icon">✦</span>
+      <div class="divider-line right"></div>
+    </div>
+    <h1 class="main-title">소금의 비유</h1>
+    <p class="sub-title">THE PARABLE OF SALT</p>
+    <span class="percent-badge">3.4% — 생명의 기적</span>
+  </header>
+
+  <!-- 서론 -->
+  <div class="section">
+    <p class="section-content">
+      과거나 현재나 바닷가에 사는 사람들은 바다를 항해하면서 그 바다 가운데서 여러 많은 종류의 물고기를 잡아 와서 생활하였습니다. 그런데 옛날 뱃사람들은 먼 바다를 항해하다 먹는 물이 동이 나면 갈증으로 인한 많은 어려움을 겪게 됩니다.
+    </p>
+    <p class="section-content">
+      몇몇 사람들은 그들의 목마른 갈증을 이기지 못하고 바닷물을 마시게 되는데, 그러면 마시는 순간은 갈증이 해소될는지는 모르지만 그 이후에는 오히려 자신의 몸에서 더 많은 수분이 빨리 배출이 되어 갈증이 더욱 심해져 결국에는 목숨을 잃는다고 합니다.
+    </p>
+  </div>
+
+  <div class="ornament">
+    <div class="ornament-line"></div>
+    <span class="ornament-symbol">〜 〜 〜</span>
+    <div class="ornament-line"></div>
+  </div>
+
+  <!-- 소금 설명 박스 -->
+  <div class="highlight-box">
+    <div class="highlight-number">3.4%</div>
+    <p class="highlight-text">
+      흔히 바닷물은 대단히 짜다고 여기지만, 그 바닷물에 들어있는 소금 함량은 고작 <strong>3.4%에 불과</strong>합니다. 그러나 그 소금기가 하나도 없다면 바다 속에 사는 모든 생명체는 하나도 살 수 없게 되어, 어부들에게는 더 이상 생명의 보고(寶庫)가 될 수 없는 것입니다.
+    </p>
+  </div>
+
+  <div class="wave-divider">· · · · ·</div>
+
+  <!-- 적용 -->
+  <div class="section">
+    <p class="section-content">
+      예수 그리스도로 말미암아 생명을 얻은 모든 사람은 소금의 맛을 가진 그리스도인들입니다. 많은 그리스도인이 주님 앞에 아주 크고 놀라운 일을 행하고 봉사하여야만 인정받고 이기는 자가 될 것이라고 여기지만, 우리가 가지고 있는 소금의 맛을 조금만 발휘해도 그 가치는 엄청난 생명의 힘을 발휘하는 것입니다.
+    </p>
+  </div>
+
+  <!-- 핵심 메시지 -->
+  <div class="core-message">
+    <p class="core-message-text">
+      내가 누리고 가지고 있는<br>주님의 생명을 <em>3.4%</em>만 드려보십시오.<br><br>
+      그러면 나의 가정과 교회는<br>그 무엇과도 바꿀 수 없는<br><em>생명의 보화</em>로 가득찰 것입니다.
+    </p>
+  </div>
+
+  <!-- 소금 결정 장식 -->
+  <div class="salt-crystal-deco">
+    <svg width="120" height="30" viewBox="0 0 120 30" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="60,2 68,14 60,26 52,14" fill="none" stroke="#2a7fa8" stroke-width="1"/>
+      <polygon points="30,2 38,14 30,26 22,14" fill="none" stroke="#c8a84b" stroke-width="0.8" opacity="0.5"/>
+      <polygon points="90,2 98,14 90,26 82,14" fill="none" stroke="#c8a84b" stroke-width="0.8" opacity="0.5"/>
+      <line x1="0" y1="14" x2="18" y2="14" stroke="#2a7fa8" stroke-width="0.5" opacity="0.4"/>
+      <line x1="102" y1="14" x2="120" y2="14" stroke="#2a7fa8" stroke-width="0.5" opacity="0.4"/>
+    </svg>
+  </div>
+
+  <!-- 성경 구절 -->
+  <div class="scripture-section">
+    <p class="scripture-header">✦ &nbsp; Scripture &nbsp; · &nbsp; 말씀 &nbsp; ✦</p>
+
+    <div class="scripture-card">
+      <span class="scripture-quote-mark">"</span>
+      <p class="scripture-text">싱거운 것이 소금 없이 먹히겠느냐 닭의 알 흰자위가 맛이 있겠느냐</p>
+      <p class="scripture-ref">욥기 6:6</p>
+    </div>
+
+    <div class="scripture-card">
+      <span class="scripture-quote-mark">"</span>
+      <p class="scripture-text">소금은 좋은 것이지만, 소금이 짠 맛을 잃으면 무엇으로 그것을 제 맛이 나게 하겠습니까? 여러분 자신 속에 소금을 가지십시오. 그래서 서로 화평하십시오.</p>
+      <p class="scripture-ref">마가복음 9:50</p>
+    </div>
+
+    <div class="scripture-card">
+      <span class="scripture-quote-mark">"</span>
+      <p class="scripture-text">소금으로 맛을 내는 것처럼, 여러분의 말에 항상 은혜가 있도록 하십시오. 그러면 여러분은 각 사람에게 어떻게 대답해야 할지를 알게 될 것입니다.</p>
+      <p class="scripture-ref">골로새서 4:6</p>
+    </div>
+  </div>
+
+  <!-- 클로징 -->
+  <div class="closing">
+    <div class="closing-icon">🌊</div>
+    <p class="closing-text">
+      광활한 바다를 지탱하는 것은<br>
+      단 3.4%의 소금입니다.<br>
+      당신의 작은 믿음과 사랑이<br>
+      세상을 살리는 소금이 됩니다.
+    </p>
+    <div class="header-divider" style="justify-content:center; margin-top:32px;">
+      <div class="divider-line"></div>
+      <span class="salt-icon">✦</span>
+      <div class="divider-line right"></div>
+    </div>
+    <p class="closing-verse">SAL MUNDI — 세상의 소금</p>
+  </div>
+
+</div>
+
+<script>
+  // 스크롤 reveal
+  const elements = document.querySelectorAll('.section, .highlight-box, .core-message, .ornament, .wave-divider, .scripture-section, .closing');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('revealed');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  elements.forEach(el => observer.observe(el));
+
+  // 파도 애니메이션에 깊이감 추가 - 마우스 패럴랙스
+  document.addEventListener('mousemove', (e) => {
+    const x = (e.clientX / window.innerWidth - 0.5) * 20;
+    const y = (e.clientY / window.innerHeight - 0.5) * 10;
+    document.querySelector('.orb1').style.transform = `translate(${x * 0.5}px, ${y * 0.5}px)`;
+    document.querySelector('.orb2').style.transform = `translate(${-x * 0.3}px, ${-y * 0.3}px)`;
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>노란 리본 — 돌아오는 길</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Nanum+Myeongjo:wght@400;700;800&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:       #08060a;
+  --gold:      #c8890e;
+  --gold-l:    #e8b84e;
+  --ribbon-y:  #f0c70a;
+  --ribbon-lt: #ffe870;
+  --text:      #dbc8a0;
+  --text-s:    #8a7a60;
+  --paper:     #faf0dc;
+  --paper-s:   #d4b87a;
+  --vborder:   rgba(200,137,14,0.32);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--ink);color:var(--text);font-family:'Nanum Myeongjo',serif;line-height:2;overflow-x:hidden}
+
+/* ── SCENE 1 HERO ── */
+#hero{
+  min-height:100svh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  background:#0b0810;position:relative;overflow:hidden;
+  text-align:center;padding:48px 28px 80px;
+}
+/* moving landscape bands */
+.ls{position:absolute;width:300%;left:-100%;pointer-events:none}
+.ls1{bottom:14%;height:40px;
+  background:repeating-linear-gradient(90deg,#18120a 0,#18120a 110px,#0e0a05 110px,#0e0a05 220px,#160f08 220px,#160f08 360px);
+  animation:lscroll 9s linear infinite}
+.ls2{bottom:19%;height:22px;
+  background:repeating-linear-gradient(90deg,rgba(140,100,40,.10) 0,rgba(140,100,40,.10) 60px,transparent 60px,transparent 130px);
+  animation:lscroll 6s linear infinite}
+.ls3{bottom:10%;height:55px;
+  background:repeating-linear-gradient(90deg,#100c06 0,#100c06 80px,#0a0703 80px,#0a0703 160px);
+  animation:lscroll 11s linear infinite}
+@keyframes lscroll{from{transform:translateX(0)}to{transform:translateX(33.33%)}}
+
+/* window pane frame */
+.win-pane{
+  position:absolute;inset:14px;border-radius:28px;
+  border:3px solid rgba(110,80,42,.3);
+  box-shadow:inset 0 0 80px rgba(0,0,0,.45), inset 0 0 2px rgba(160,120,60,.12);
+  pointer-events:none;
+}
+.win-pane::before{
+  content:'';position:absolute;inset:6px;border-radius:22px;
+  border:1px solid rgba(110,80,42,.14);
+}
+.win-pane::after{
+  content:'';position:absolute;top:22px;left:24px;
+  width:2px;height:38%;
+  background:linear-gradient(to bottom,rgba(255,255,255,.06),transparent);
+  border-radius:2px;
+}
+
+.hero-eye{
+  font-family:'Special Elite',monospace;font-size:.7rem;
+  letter-spacing:.5em;color:var(--gold);text-transform:uppercase;
+  margin-bottom:2rem;opacity:0;animation:fadeUp 1s ease .5s forwards;
+}
+.hero-title{
+  font-family:'Playfair Display','Nanum Myeongjo',serif;
+  font-size:clamp(3rem,10vw,6.5rem);font-weight:900;
+  color:var(--ribbon-y);line-height:1.1;
+  text-shadow:0 0 60px rgba(240,199,10,.28);
+  opacity:0;animation:fadeUp 1.3s ease .9s forwards;
+  margin-bottom:.7rem;
+}
+.hero-sub{
+  font-size:clamp(1rem,2.5vw,1.28rem);color:var(--text-s);
+  font-style:italic;opacity:0;animation:fadeUp 1s ease 1.35s forwards;
+  margin-bottom:3.5rem;
+}
+.ribbon-waves{
+  display:flex;gap:7px;justify-content:center;align-items:flex-end;
+  height:60px;opacity:0;animation:fadeIn 1s ease 1.9s forwards;
+}
+.rw{width:2px;background:var(--ribbon-y);border-radius:2px;
+    animation:rwave 2.6s ease-in-out infinite;}
+.rw:nth-child(1){height:26px;animation-delay:0s}
+.rw:nth-child(2){height:42px;animation-delay:.18s}
+.rw:nth-child(3){height:32px;animation-delay:.35s}
+.rw:nth-child(4){height:54px;animation-delay:.52s}
+.rw:nth-child(5){height:38px;animation-delay:.68s}
+.rw:nth-child(6){height:50px;animation-delay:.85s}
+.rw:nth-child(7){height:28px;animation-delay:1s}
+.rw:nth-child(8){height:46px;animation-delay:1.15s}
+.rw:nth-child(9){height:33px;animation-delay:1.3s}
+@keyframes rwave{0%,100%{transform:scaleY(1) skewX(0deg);opacity:.65}50%{transform:scaleY(1.2) skewX(4deg);opacity:1}}
+
+.scroll-cue{
+  position:absolute;bottom:30px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:7px;
+  opacity:0;animation:fadeIn 1s ease 2.8s forwards;
+}
+.scroll-cue span{font-family:'Special Elite',monospace;font-size:.6rem;letter-spacing:.38em;color:rgba(200,137,14,.45);text-transform:uppercase}
+.sc-line{width:1px;height:46px;background:linear-gradient(to bottom,rgba(200,137,14,.55),transparent);animation:scPulse 2s ease-in-out infinite}
+@keyframes scPulse{0%,100%{transform:scaleY(1);opacity:.5}50%{transform:scaleY(1.15);opacity:1}}
+
+/* ── STORY SECTIONS ── */
+.prose{max-width:680px;margin:0 auto;padding:80px 32px}
+.stag{
+  display:inline-block;font-family:'Special Elite',monospace;
+  font-size:.62rem;letter-spacing:.48em;color:var(--gold);
+  text-transform:uppercase;border-bottom:1px solid rgba(200,137,14,.28);
+  padding-bottom:4px;margin-bottom:2.5rem;
+}
+.sp{font-size:clamp(1rem,2.2vw,1.1rem);line-height:2.15;color:var(--text);margin-bottom:1.5rem}
+.dl{
+  border-left:3px solid var(--ribbon-y);padding:1.2rem 1.8rem;
+  margin:2.2rem 0;background:rgba(240,199,10,.04);border-radius:0 6px 6px 0;
+}
+.dl p{font-family:'Nanum Myeongjo',serif;font-size:clamp(1.05rem,2.5vw,1.2rem);
+       color:var(--ribbon-lt);font-weight:700;line-height:1.85}
+.emph{
+  font-family:'Playfair Display',serif;font-style:italic;
+  font-size:clamp(1.1rem,3vw,1.45rem);color:var(--ribbon-lt);
+  text-align:center;padding:2.5rem 1rem;
+  border-top:1px solid rgba(240,199,10,.14);
+  border-bottom:1px solid rgba(240,199,10,.14);
+  margin:1.8rem 0;
+}
+.sep{display:flex;align-items:center;justify-content:center;padding:8px 32px;gap:14px}
+.sep-l{flex:1;max-width:110px;height:1px;background:linear-gradient(to right,transparent,rgba(200,137,14,.2))}
+.sep-r{flex:1;max-width:110px;height:1px;background:linear-gradient(to left,transparent,rgba(200,137,14,.2))}
+.sep-d{width:4px;height:4px;border-radius:50%;background:rgba(200,137,14,.35)}
+
+/* scroll reveal */
+.sr{opacity:0;transform:translateY(26px);transition:opacity .9s ease,transform .9s ease}
+.sr.on{opacity:1;transform:translateY(0)}
+
+/* ── LETTER ── */
+#letterScene{
+  background:linear-gradient(180deg,var(--ink) 0%,#100e08 55%,var(--ink) 100%);
+  padding:70px 28px;display:flex;flex-direction:column;align-items:center;
+}
+.letter-lbl{
+  font-family:'Special Elite',monospace;font-size:.62rem;
+  letter-spacing:.42em;color:rgba(200,137,14,.45);text-transform:uppercase;
+  margin-bottom:1.5rem;
+}
+.letter-wrap{width:100%;max-width:520px;cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none}
+.letter-fold{
+  background:var(--paper);border-radius:4px;overflow:hidden;
+  max-height:72px;transition:max-height 1.3s cubic-bezier(.23,1,.32,1);
+  box-shadow:0 6px 32px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.28);
+  position:relative;
+}
+.letter-fold.open{max-height:700px}
+.letter-flap{
+  background:#f0e4c4;height:72px;display:flex;align-items:center;
+  justify-content:center;border-bottom:1px solid rgba(180,140,80,.28);
+  font-family:'Special Elite',monospace;font-size:.68rem;letter-spacing:.32em;
+  color:#a08050;text-transform:uppercase;
+  position:relative;
+}
+.letter-flap::after{content:'✉';position:absolute;right:22px;font-size:1.2rem;color:#c49a50}
+.letter-hint{
+  position:absolute;bottom:12px;left:50%;transform:translateX(-50%);
+  font-family:'Special Elite',monospace;font-size:.58rem;letter-spacing:.32em;
+  color:var(--paper-s);white-space:nowrap;transition:opacity .4s;text-transform:uppercase;
+}
+.letter-fold.open .letter-hint{opacity:0}
+.letter-body{
+  padding:38px 44px 42px;background:var(--paper);position:relative;
+}
+.letter-body::before{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(transparent 0px,transparent 41px,rgba(180,140,80,.12) 41px,rgba(180,140,80,.13) 42px);
+  pointer-events:none;
+}
+.letter-txt{
+  font-family:'Special Elite',monospace;
+  font-size:clamp(.95rem,2vw,1.06rem);color:#2a1a08;
+  line-height:2.2rem;position:relative;z-index:1;font-style:italic;white-space:pre-line;
+}
+.letter-note{
+  margin-top:.8rem;font-size:.7rem;letter-spacing:.15em;
+  color:#8a7050;font-style:normal;
+}
+
+/* ── TENSION ── */
+#tensionScene{
+  background:#090608;padding:80px 28px;text-align:center;
+  display:flex;flex-direction:column;align-items:center;gap:0;
+}
+.hb-wrap{width:100%;max-width:480px;height:56px;margin-bottom:48px;position:relative}
+.hb-track{position:absolute;top:50%;left:0;right:0;height:1px;background:rgba(200,137,14,.12)}
+#hbSvg{width:100%;height:100%}
+.hb-path{stroke:var(--ribbon-y);stroke-width:2;fill:none;filter:drop-shadow(0 0 4px rgba(240,199,10,.5))}
+
+.tension-body{max-width:600px}
+.ten-p{font-size:clamp(1rem,2.2vw,1.1rem);line-height:2.15;color:var(--text);margin-bottom:1.5rem}
+.pax-block{
+  border:1px solid rgba(240,199,10,.18);border-radius:8px;
+  padding:28px 34px;margin:2.5rem auto;max-width:560px;
+  background:rgba(240,199,10,.03);text-align:left;
+}
+.pax-lbl{font-family:'Special Elite',monospace;font-size:.6rem;letter-spacing:.45em;color:var(--gold);text-transform:uppercase;margin-bottom:14px}
+.pax-txt{font-family:'Nanum Myeongjo',serif;font-size:clamp(1rem,2.2vw,1.14rem);color:var(--ribbon-lt);line-height:2;font-weight:700}
+.pax-voice{font-size:clamp(.88rem,2vw,.98rem);color:var(--text-s);margin-top:1rem;line-height:2}
+
+/* ── WINDOW MOMENT (TREE) ── */
+#windowScene{
+  min-height:100svh;background:linear-gradient(180deg,#060410 0%,#080612 100%);
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;padding:60px 24px;text-align:center;
+}
+.win-pre{
+  font-size:clamp(1rem,2.2vw,1.12rem);color:var(--text-s);
+  max-width:520px;line-height:2.1;margin-bottom:2.8rem;
+}
+.look-btn{
+  background:transparent;border:1px solid rgba(240,199,10,.42);
+  color:var(--ribbon-y);padding:16px 52px;
+  font-family:'Nanum Myeongjo',serif;font-size:1rem;letter-spacing:.18em;
+  cursor:pointer;border-radius:3px;transition:all .35s;margin-bottom:4rem;
+}
+.look-btn:hover{background:rgba(240,199,10,.07);border-color:var(--ribbon-y)}
+.look-btn.gone{opacity:0;pointer-events:none;transition:opacity .5s}
+
+#treeCtn{
+  width:100%;max-width:480px;opacity:0;
+  transform:scale(.94);transition:opacity 1.4s ease,transform 1.6s ease;
+  position:relative;
+}
+#treeCtn.show{opacity:1;transform:scale(1)}
+#treeSVG{width:100%;height:auto;overflow:visible}
+
+.tree-reveal-txt{
+  margin-top:3rem;opacity:0;transition:opacity 1.8s ease;max-width:480px;
+}
+.tree-reveal-txt.show{opacity:1}
+.trt-main{
+  font-family:'Playfair Display',serif;font-style:italic;
+  font-size:clamp(1.25rem,3.5vw,1.75rem);color:var(--ribbon-lt);line-height:1.65;
+}
+.trt-sub{
+  margin-top:1rem;font-size:clamp(.9rem,2vw,.98rem);color:var(--text-s);line-height:2;
+}
+
+/* ribbon SVG elements */
+.rb{opacity:0;transition:opacity .3s ease}
+.rb.on{opacity:1}
+
+/* ── REUNION ── */
+#reunionScene{
+  background:linear-gradient(180deg,#0a0603 0%,#150f04 60%,#0a0603 100%);
+  padding:90px 32px;
+}
+.reunion-inner{max-width:660px;margin:0 auto}
+.re-p{font-size:clamp(1rem,2.2vw,1.1rem);line-height:2.15;color:var(--text);margin-bottom:1.5rem;text-align:center}
+.THE-LINE{
+  font-family:'Nanum Myeongjo',serif;font-weight:800;
+  font-size:clamp(1.6rem,5.5vw,2.7rem);color:var(--ribbon-y);
+  text-align:center;padding:3rem 2rem;line-height:1.5;
+  text-shadow:0 0 40px rgba(240,199,10,.22);
+  position:relative;
+}
+.THE-LINE::before{
+  content:'"';font-family:'Playfair Display',serif;
+  font-size:9rem;color:rgba(240,199,10,.05);
+  position:absolute;top:-10px;left:8px;line-height:1;
+}
+.collapse-line{
+  font-family:'Nanum Myeongjo',serif;font-size:clamp(1.05rem,2.5vw,1.22rem);
+  color:var(--text-s);text-align:center;line-height:2;
+  padding:0 1rem;font-style:italic;
+}
+
+/* ── NIGHT ── */
+#nightScene{
+  min-height:75vh;background:#040610;position:relative;
+  overflow:hidden;padding:80px 32px;
+}
+#starCv{position:absolute;inset:0;z-index:0}
+.night-inner{position:relative;z-index:1;max-width:660px;margin:0 auto}
+.night-p{font-size:clamp(1rem,2.2vw,1.1rem);color:rgba(220,200,165,.82);line-height:2.2;margin-bottom:1.5rem}
+.conf{
+  border-left:2px solid rgba(240,199,10,.38);
+  padding:1.4rem 1.8rem;margin:2.5rem 0;background:rgba(240,199,10,.03);
+}
+.conf p{font-family:'Nanum Myeongjo',serif;font-size:clamp(1.1rem,2.8vw,1.3rem);color:var(--ribbon-lt);font-weight:700;line-height:1.9}
+
+/* ── SCRIPTURE ── */
+#scriptureScene{
+  background:linear-gradient(180deg,#040610 0%,#080a06 55%,#040610 100%);
+  padding:80px 32px;
+}
+.sc-inner{max-width:660px;margin:0 auto}
+.vblock{
+  border:1px solid var(--vborder);border-radius:5px;
+  padding:36px 40px 36px 48px;position:relative;
+  margin-bottom:2rem;background:rgba(8,6,4,.6);overflow:hidden;
+}
+.vblock::before{
+  content:'';position:absolute;top:0;left:0;
+  width:4px;height:100%;
+  background:linear-gradient(to bottom,var(--gold),rgba(200,137,14,.08));
+}
+.vblock::after{content:'✦';position:absolute;top:20px;right:24px;color:rgba(200,137,14,.12);font-size:1.8rem}
+.vref{font-family:'Special Elite',monospace;font-size:.6rem;letter-spacing:.45em;color:var(--gold);text-transform:uppercase;margin-bottom:1.4rem}
+.vtxt{font-family:'Nanum Myeongjo',serif;font-size:clamp(1.05rem,2.4vw,1.2rem);color:var(--ribbon-lt);line-height:1.95;font-weight:700;margin-bottom:1.4rem}
+.vrefl{font-size:clamp(.9rem,2vw,.99rem);color:var(--text-s);line-height:2.1;border-top:1px solid rgba(200,137,14,.1);padding-top:1.4rem}
+
+/* ── CLOSING / CTA ── */
+#closingScene{
+  background:linear-gradient(180deg,#040610 0%,#080806 100%);
+  padding:80px 32px 120px;text-align:center;
+}
+.closing-inner{max-width:620px;margin:0 auto}
+.ctitle{
+  font-family:'Playfair Display','Nanum Myeongjo',serif;
+  font-size:clamp(1.5rem,4.5vw,2.5rem);color:var(--ribbon-lt);
+  line-height:1.5;margin-bottom:2rem;font-weight:700;
+}
+.ctext{font-size:clamp(.97rem,2.1vw,1.08rem);color:var(--text);line-height:2.2;margin-bottom:1.4rem}
+.cbig{
+  font-family:'Nanum Myeongjo',serif;font-size:clamp(1.2rem,3.5vw,1.7rem);
+  font-weight:700;color:var(--ribbon-y);line-height:1.75;
+  padding:2.5rem 2rem;
+  border:1px solid rgba(240,199,10,.18);border-radius:6px;
+  background:rgba(240,199,10,.03);margin:2.2rem 0;position:relative;
+}
+.cbig::before{
+  content:'"';font-family:'Playfair Display',serif;
+  font-size:8rem;color:rgba(240,199,10,.05);
+  position:absolute;top:-12px;left:14px;line-height:1;
+}
+
+/* closing ribbon wave */
+.c-ribbons{display:flex;justify-content:center;gap:4px;margin-bottom:2.5rem;flex-wrap:wrap;max-width:280px;margin-left:auto;margin-right:auto}
+.crb{width:2px;border-radius:2px;background:var(--ribbon-y);animation:crwave 2.8s ease-in-out infinite;opacity:.75}
+@keyframes crwave{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.25)}}
+
+.contact-box{
+  margin-top:2.5rem;padding:28px 36px;
+  border:1px dashed rgba(200,137,14,.28);border-radius:6px;
+  font-family:'Special Elite',monospace;font-size:.75rem;
+  letter-spacing:.18em;color:rgba(200,137,14,.4);text-align:center;line-height:2;
+}
+
+/* ── KEYFRAMES ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* flutter anims (6 variants) */
+@keyframes f1{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(8deg)}}
+@keyframes f2{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(11deg)}}
+@keyframes f3{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(5deg)}}
+@keyframes f4{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(10deg)}}
+@keyframes f5{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
+@keyframes f6{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(12deg)}}
+
+/* ── RESPONSIVE ── */
+@media(max-width:600px){
+  .prose{padding:60px 22px}
+  .vblock{padding:26px 22px 26px 32px}
+  .letter-body{padding:28px 22px 32px}
+  .pax-block{padding:22px 20px}
+  .THE-LINE{padding:2.5rem 1rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════
+     SCENE 1 · HERO
+═══════════════════════════ -->
+<section id="hero">
+  <div class="ls ls1"></div>
+  <div class="ls ls2"></div>
+  <div class="ls ls3"></div>
+  <div class="win-pane"></div>
+
+  <p class="hero-eye">기차는 천천히 남쪽으로 내려가고 있었습니다</p>
+  <h1 class="hero-title">노란 리본</h1>
+  <p class="hero-sub">돌아오는 길에 대한 이야기</p>
+  <div class="ribbon-waves">
+    <div class="rw"></div><div class="rw"></div><div class="rw"></div>
+    <div class="rw"></div><div class="rw"></div><div class="rw"></div>
+    <div class="rw"></div><div class="rw"></div><div class="rw"></div>
+  </div>
+  <div class="scroll-cue">
+    <span>scroll</span>
+    <div class="sc-line"></div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════
+     SCENE 2 · THE JOURNEY
+═══════════════════════════ -->
+<section style="background:#0b0810;">
+  <div class="prose sr">
+    <p class="stag">기차 안</p>
+    <p class="sp">창밖으로는 봄이 막 올라오는 들판이 스쳐 지나갔지만, 제임스의 시선은 그 풍경에 머물지 못했습니다. 그의 손은 무릎 위에서 가만히 있지 못하고 계속 움직이고 있었습니다.</p>
+    <p class="sp"><strong style="color:var(--ribbon-lt);">3년이란 세월.</strong><br>그 시간 동안 그는 많은 것을 잃었습니다.<br>그리고 이제, 마지막으로 한 가지를 확인하러 가는 길이었습니다.</p>
+    <p class="sp">그는 주머니에서 편지 한 장을 꺼냈습니다. 이미 수없이 읽어 구겨진 종이였습니다.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════
+     LETTER INTERACTION
+═══════════════════════════ -->
+<section id="letterScene">
+  <p class="letter-lbl sr">주머니 속 편지</p>
+  <div class="letter-wrap sr" id="letterWrap" role="button" aria-label="편지 열기">
+    <div class="letter-fold" id="letterFold">
+      <div class="letter-flap">
+        <span>편지를 클릭해 열어보세요</span>
+        <span class="letter-hint">tap to open</span>
+      </div>
+      <div class="letter-body">
+        <p class="letter-txt">"만약 나를 받아줄 수 있다면,
+집 앞 참나무에 노란 리본 하나만 매달아줘.
+아무것도 없다면…
+나는 그냥 지나갈게."</p>
+        <p class="letter-note">— James</p>
+      </div>
+    </div>
+  </div>
+  <div class="prose sr" style="padding:2rem 32px 60px;">
+    <p class="sp" style="text-align:center;">하나면 충분하다고 생각했습니다.<br>아니, 하나도 사실은 과분하다고 생각하고 있었습니다.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════
+     SCENE 3 · TENSION
+═══════════════════════════ -->
+<section id="tensionScene">
+  <div class="hb-wrap">
+    <div class="hb-track"></div>
+    <svg id="hbSvg" viewBox="0 0 480 56" preserveAspectRatio="none">
+      <path class="hb-path" id="hbPath" d="
+        M0,28 L60,28 L72,14 L82,44 L92,8 L102,48 L112,28 L140,28
+        L152,28 L164,14 L174,44 L184,8 L194,48 L204,28 L232,28
+        L244,28 L256,14 L266,44 L276,8 L286,48 L296,28 L324,28
+        L336,28 L348,14 L358,44 L368,8 L378,48 L388,28 L480,28
+      "/>
+    </svg>
+  </div>
+
+  <div class="tension-body sr">
+    <p class="ten-p">기차가 마을 근처에 가까워지자<br>그의 심장은 점점 더 빠르게 뛰기 시작했습니다.</p>
+    <p class="ten-p">그는 끝내 창밖을 직접 보지 못했습니다.</p>
+
+    <div class="pax-block sr">
+      <p class="pax-lbl">제임스가 말했습니다</p>
+      <p class="pax-txt">"저… 저기 나무 하나만 봐주실 수 있나요?<br>거기 나뭇가지에 노란 리본이 하나 걸려 있는지 알고 싶어요…<br>제가… 직접 볼 수가 없어서요."</p>
+      <p class="pax-voice">승객은 고개를 끄덕였습니다.<br>기차는 점점 속도를 줄였습니다.<br>이제 곧 그 나무가 보일 시간이었습니다.</p>
+    </div>
+
+    <p class="ten-p" style="color:var(--text-s);">몇 초의 시간이 지났습니다.<br>하지만 그에게는 너무 길게 느껴졌습니다.</p>
+  </div>
+</section>
+
+<div class="sep sr">
+  <div class="sep-l"></div>
+  <div class="sep-d"></div><div class="sep-d"></div><div class="sep-d"></div>
+  <div class="sep-r"></div>
+</div>
+
+<!-- ═══════════════════════════
+     SCENE 4 · THE TREE
+═══════════════════════════ -->
+<section id="windowScene">
+  <p class="win-pre sr">승객이 창밖으로 시선을 돌렸습니다.<br>그리고 잠시 말을 멈췄습니다.<br>제임스의 숨이 멎는 것 같았습니다.</p>
+
+  <div class="dl sr" style="max-width:480px;text-align:left;">
+    <p>"있나요…?"</p>
+    <p style="font-size:.9rem;color:var(--text-s);margin-top:.8rem;font-weight:400;">그의 목소리는 거의 들리지 않을 정도였습니다.</p>
+  </div>
+
+  <button class="look-btn sr" id="lookBtn">창밖을 바라보다</button>
+
+  <div id="treeCtn">
+    <!-- SVG Tree built by JS -->
+    <svg id="treeSVG" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+          <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <!-- branches drawn by JS below, group for ribbons -->
+      <g id="branchGroup"></g>
+      <g id="ribbonGroup"></g>
+    </svg>
+    <div class="tree-reveal-txt" id="treeRevealTxt">
+      <p class="trt-main">"…하나가 아니네요.<br>나무 전체에… 리본이 달려 있어요."</p>
+      <p class="trt-sub">그 순간, 제임스의 눈에서 눈물이 쏟아졌습니다.<br>그는 더 이상 앉아 있을 수 없었습니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════
+     SCENE 5 · REUNION
+═══════════════════════════ -->
+<section id="reunionScene">
+  <div class="reunion-inner">
+    <div class="sr">
+      <p class="stag" style="display:block;text-align:center;margin-bottom:2.5rem;">나무 아래에서</p>
+      <p class="re-p">마을은 그대로였습니다.<br>하지만 그에게는 모든 것이 달라 보였습니다.</p>
+      <p class="re-p">바람이 불 때마다 수많은 리본이 함께 흔들렸습니다.<br>마치 한 목소리로 말하는 것처럼.</p>
+    </div>
+
+    <div class="dl sr" style="text-align:center;border-left:none;border-top:3px solid var(--ribbon-y);border-radius:0;padding:1.5rem 2rem;">
+      <p style="font-size:clamp(1.1rem,3vw,1.5rem);">"난 당신을 기다리고 있어요!"</p>
+    </div>
+
+    <div class="sr">
+      <p class="re-p" style="margin-top:2.5rem;">나무 아래에는 메리가 서 있었습니다.<br>그는 천천히 다가갔습니다.</p>
+    </div>
+
+    <div class="dl sr">
+      <p>"…왜 이렇게 많이 달았어?"</p>
+    </div>
+
+    <div class="THE-LINE sr">
+      "네가 못 볼까 봐."
+    </div>
+
+    <p class="collapse-line sr">그 말 한마디가<br>그의 마음 깊은 곳을 무너뜨렸습니다.</p>
+  </div>
+</section>
+
+<div class="sep sr">
+  <div class="sep-l"></div><div class="sep-d"></div><div class="sep-r"></div>
+</div>
+
+<!-- ═══════════════════════════
+     SCENE 6 · THE NIGHT
+═══════════════════════════ -->
+<section id="nightScene">
+  <canvas id="starCv"></canvas>
+  <div class="night-inner">
+    <div class="sr">
+      <p class="stag" style="display:block;text-align:center;margin-bottom:2.5rem;">자정, 참나무 아래</p>
+      <p class="night-p" style="text-align:center;">그날 밤, 그는 잠을 이루지 못했습니다.<br>모든 것이 제자리를 찾았는데도,<br>그의 마음은 오히려 더 깊은 곳으로 내려가고 있었습니다.</p>
+      <p class="night-p" style="text-align:center;">달빛 아래, 그 참나무는 여전히 서 있었습니다.<br>노란 리본들이 바람에 흔들리고 있었습니다.</p>
+    </div>
+
+    <div class="conf sr">
+      <p>"나는… 돌아올 자격이 없었어…"</p>
+    </div>
+
+    <div class="sr">
+      <p class="night-p">그 말이 입 밖으로 나오자<br>마음속에 오래 묶여 있던 것이 풀리기 시작했습니다.</p>
+      <p class="night-p">그때, 오래전 들었던 이야기가 떠올랐습니다.<br>누가복음 15장에 나오는 한 아들의 이야기였습니다.</p>
+      <p class="night-p">그 아들도 집을 떠났습니다. 자기 마음대로 살다가 결국 모든 것을 잃고 돌아오는 길에 서게 됩니다.</p>
+    </div>
+
+    <div class="conf sr">
+      <p>"나는 더 이상 아버지의 아들이라고 할 자격이 없으니,<br>나를 품꾼들 중 하나로 삼아 주십시오."<br><span style="font-size:.82rem;color:var(--text-s);font-weight:400;">— 누가복음 15장 19절</span></p>
+    </div>
+
+    <div class="dl sr">
+      <p style="font-weight:400;font-size:clamp(.95rem,2vw,1.05rem);">"나랑 똑같네…"</p>
+    </div>
+
+    <div class="sr">
+      <p class="night-p">하지만 그 이야기에는 그가 예상하지 못했던 장면이 있습니다.</p>
+      <p class="night-p"><strong style="color:var(--ribbon-lt);">아버지는 멀리서 아들을 보자마자 기다리지 않고 달려갑니다.</strong><br>그리고 그 어떤 변명의 말도 듣기 전에 그를 끌어안습니다.<br>책망도, 조건도 없이.</p>
+    </div>
+
+    <div class="emph sr" style="border-top:1px solid rgba(240,199,10,.14);border-bottom:1px solid rgba(240,199,10,.14);padding:2rem;margin:2rem 0;text-align:center;">
+      아버지에게 중요한 건<br>아들이 무엇을 했는지가 아니라<br>돌아왔다는 사실 하나였기 때문입니다.
+    </div>
+
+    <div class="conf sr">
+      <p>"나는… 이렇게까지 받아들여질 수 있다는 걸<br>믿지 못했던 거야…"</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════
+     SCENE 7 · SCRIPTURE
+═══════════════════════════ -->
+<section id="scriptureScene">
+  <div class="sc-inner">
+    <div class="sr">
+      <p class="stag" style="display:block;text-align:center;margin-bottom:2.5rem;">말씀</p>
+    </div>
+
+    <div class="vblock sr">
+      <p class="vref">에베소서 1장 7절</p>
+      <p class="vtxt">"우리가 하나님의 은혜의 풍성을 따라, 사랑하시는 분 안에서 그분의 피로 구속받고, 범죄가 용서되었습니다."</p>
+      <p class="vrefl">은혜는 우리가 생각하는 기준보다 항상 더 큽니다. 그래서 우리는 자꾸 줄이려고 합니다. "이 정도면 충분하겠지…" "여기까지만 받아주면…" 하지만 그가 본 것은 그 선을 넘는 것이었습니다.</p>
+    </div>
+
+    <div class="vblock sr">
+      <p class="vref">로마서 5장 8절</p>
+      <p class="vtxt">"그러나 우리가 아직 죄인이었을 때에, 그리스도께서 우리를 위하여 죽으심으로써, 하나님은 우리에 대한 자기의 사랑을 나타내셨습니다."</p>
+      <p class="vrefl">아직 돌아오기 전부터 이미 사랑은 준비되어 있었다는 뜻입니다.</p>
+    </div>
+
+    <div class="sr">
+      <p class="emph">바람이 다시 불었습니다.<br>리본들이 한꺼번에 흔들렸습니다.<br>"나는… 이미 용서받고 돌아오기만을 기다리고 있었구나…"</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════
+     SCENE 8 · CLOSING / CTA
+═══════════════════════════ -->
+<section id="closingScene">
+  <div class="closing-inner">
+    <div class="c-ribbons sr" id="closingRibbons"></div>
+
+    <div class="sr">
+      <h2 class="ctitle">지금 당신을 향한<br>사랑의 약속의 리본</h2>
+      <p class="ctext">우리는 모두 그 길 위에 서 있는지도 모릅니다.<br>"돌아가도 될까…" "받아줄까…"<br>그렇게 생각하며 리본 하나를 상상합니다.</p>
+      <p class="ctext">하지만—<br>조금만 더 가까이 가 보면,<br>우리가 놓칠까 봐<br>이미 가득 달려 있는 것을 보게 될지도 모릅니다.</p>
+    </div>
+
+    <div class="cbig sr">
+      하나님은 그 순간조차<br>가장 아름다운 장면으로<br>기억하고 계십니다.
+    </div>
+
+    <div class="contact-box sr">
+      아래의 연락처로 연락을 주시면<br>
+      함께 그 약속의 리본을 보실 수 있습니다.<br><br>
+      [ 연락처 / 교회 정보를 이곳에 기입하세요 ]
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════
+     JAVASCRIPT
+═══════════════════════════ -->
+<script>
+/* ── LETTER ── */
+(function(){
+  const wrap = document.getElementById('letterWrap');
+  const fold = document.getElementById('letterFold');
+  let open = false;
+  function toggle(){
+    open = !open;
+    fold.classList.toggle('open', open);
+  }
+  wrap.addEventListener('click', toggle);
+  wrap.addEventListener('touchend', e=>{ e.preventDefault(); toggle(); });
+})();
+
+/* ── HEARTBEAT PATH ANIMATION ── */
+(function(){
+  const path = document.getElementById('hbPath');
+  const len = path.getTotalLength ? path.getTotalLength() : 1200;
+  path.style.strokeDasharray = len;
+  path.style.strokeDashoffset = len;
+  path.style.transition = 'none';
+
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        path.style.transition = 'stroke-dashoffset 2.4s cubic-bezier(.4,0,.2,1)';
+        path.style.strokeDashoffset = '0';
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: .3 });
+  io.observe(document.getElementById('tensionScene'));
+})();
+
+/* ── TREE BUILD + RIBBON REVEAL ── */
+(function(){
+  /* Branch definitions: [d, strokeWidth] */
+  const branches = [
+    ['M 200,500 C 198,460 202,420 200,310', 18],
+    ['M 200,310 C 185,295 162,268 132,228', 12],
+    ['M 200,310 C 215,295 238,268 268,228', 12],
+    ['M 132,228 C 110,208 82,180 58,144', 7.5],
+    ['M 132,228 C 137,206 143,178 146,152', 6],
+    ['M 132,228 C 105,222 72,215 38,208', 5],
+    ['M 268,228 C 290,208 318,180 342,144', 7.5],
+    ['M 268,228 C 263,206 257,178 254,152', 6],
+    ['M 268,228 C 295,222 328,215 362,208', 5],
+    ['M 58,144 C 44,124 30,102 22,80', 4],
+    ['M 58,144 C 52,122 46,98 44,76', 3.2],
+    ['M 58,144 C 66,122 72,98 70,78', 3.2],
+    ['M 146,152 C 135,128 122,104 115,80', 4],
+    ['M 146,152 C 154,128 162,104 166,80', 4],
+    ['M 254,152 C 245,128 238,104 234,80', 4],
+    ['M 254,152 C 262,128 270,104 274,80', 4],
+    ['M 342,144 C 356,124 370,102 378,80', 4],
+    ['M 342,144 C 348,122 354,98 356,76', 3.2],
+    ['M 342,144 C 334,122 328,98 330,78', 3.2],
+    ['M 38,208 C 20,202 6,195 0,188', 3],
+    ['M 38,208 C 32,192 27,175 25,160', 2.5],
+    ['M 362,208 C 380,202 394,195 400,188', 3],
+    ['M 362,208 C 368,192 373,175 375,160', 2.5],
+    ['M 200,285 C 190,264 176,238 166,212', 5],
+    ['M 200,285 C 210,264 224,238 234,212', 5],
+    ['M 166,212 C 155,190 144,166 138,142', 3.5],
+    ['M 234,212 C 245,190 256,166 262,142', 3.5],
+  ];
+
+  /* Ribbon attachment points [x, y] */
+  const pts = [
+    [22,80],[44,76],[70,78],[30,100],[52,94],
+    [115,80],[166,80],[135,105],[158,105],
+    [234,80],[274,80],[245,105],[262,105],
+    [378,80],[356,76],[330,78],[370,100],[348,94],
+    [0,188],[25,160],[400,188],[375,160],
+    [138,138],[262,138],
+    [58,138],[342,138],
+    [146,145],[254,145],
+    [82,175],[318,175],
+    [38,202],[362,202],
+    [166,208],[234,208],
+    [132,222],[268,222],
+    [105,230],[295,230],
+    [175,250],[225,250],[190,270],[210,270],
+    [155,178],[245,178],
+  ];
+
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const branchG = document.getElementById('branchGroup');
+  const ribbonG = document.getElementById('ribbonGroup');
+  const flutters = ['f1','f2','f3','f4','f5','f6'];
+
+  /* Draw branches */
+  branches.forEach(([d, sw]) => {
+    const p = document.createElementNS(svgNS, 'path');
+    p.setAttribute('d', d);
+    p.setAttribute('stroke', '#6b4422');
+    p.setAttribute('stroke-width', sw);
+    p.setAttribute('stroke-linecap', 'round');
+    p.setAttribute('stroke-linejoin', 'round');
+    p.setAttribute('fill', 'none');
+    branchG.appendChild(p);
+  });
+
+  /* Build ribbon elements (hidden) */
+  pts.forEach(([x, y]) => {
+    const g = document.createElementNS(svgNS, 'g');
+    g.classList.add('rb');
+    g.setAttribute('transform', `translate(${x},${y})`);
+    g.setAttribute('filter', 'url(#glow)');
+    // knot
+    const knot = document.createElementNS(svgNS, 'ellipse');
+    knot.setAttribute('cx', '0'); knot.setAttribute('cy', '0');
+    knot.setAttribute('rx', '4.5'); knot.setAttribute('ry', '3.5');
+    knot.setAttribute('fill', '#f0c70a');
+    // bow left
+    const bL = document.createElementNS(svgNS, 'path');
+    bL.setAttribute('d', 'M-3.5,-0.5 Q-10,-8 -8,-14 Q-1,-6 -3.5,-0.5');
+    bL.setAttribute('fill', '#f0c70a');
+    // bow right
+    const bR = document.createElementNS(svgNS, 'path');
+    bR.setAttribute('d', 'M3.5,-0.5 Q10,-8 8,-14 Q1,-6 3.5,-0.5');
+    bR.setAttribute('fill', '#f0c70a');
+    // tail left
+    const tL = document.createElementNS(svgNS, 'path');
+    tL.setAttribute('d', 'M-2,3 Q-6,14 -4,26');
+    tL.setAttribute('stroke', '#e8b800'); tL.setAttribute('stroke-width', '2');
+    tL.setAttribute('fill', 'none'); tL.setAttribute('stroke-linecap', 'round');
+    // tail right
+    const tR = document.createElementNS(svgNS, 'path');
+    tR.setAttribute('d', 'M2,3 Q7,16 5,28');
+    tR.setAttribute('stroke', '#e8b800'); tR.setAttribute('stroke-width', '2');
+    tR.setAttribute('fill', 'none'); tR.setAttribute('stroke-linecap', 'round');
+    g.append(knot, bL, bR, tL, tR);
+    ribbonG.appendChild(g);
+  });
+
+  /* Reveal on button click */
+  const btn = document.getElementById('lookBtn');
+  const treeCtn = document.getElementById('treeCtn');
+  const revealTxt = document.getElementById('treeRevealTxt');
+  let revealed = false;
+
+  function revealTree() {
+    if (revealed) return;
+    revealed = true;
+    btn.classList.add('gone');
+    treeCtn.classList.add('show');
+
+    const ribbons = document.querySelectorAll('.rb');
+    const total = ribbons.length;
+    ribbons.forEach((r, i) => {
+      setTimeout(() => {
+        r.classList.add('on');
+        // apply flutter animation after appearing
+        const fl = flutters[Math.floor(Math.random()*6)];
+        const dur = (1.6 + Math.random()*1.4).toFixed(1);
+        const dly = (Math.random()*1.2).toFixed(1);
+        r.style.animation = `${fl} ${dur}s ease-in-out ${dly}s infinite`;
+        r.style.transformOrigin = '0px 0px';
+      }, 120 + i * 72);
+    });
+
+    setTimeout(() => {
+      revealTxt.classList.add('show');
+    }, 120 + total * 72 + 900);
+  }
+
+  btn.addEventListener('click', revealTree);
+  btn.addEventListener('touchend', e => { e.preventDefault(); revealTree(); });
+})();
+
+/* ── STARFIELD ── */
+(function(){
+  const cv = document.getElementById('starCv');
+  const ctx = cv.getContext('2d');
+  function resize(){
+    cv.width = cv.offsetWidth;
+    cv.height = cv.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const stars = Array.from({length:180}, () => ({
+    x: Math.random(), y: Math.random(),
+    r: .4 + Math.random() * 1.2,
+    phase: Math.random() * Math.PI * 2,
+    speed: .008 + Math.random() * .016,
+  }));
+
+  let running = false;
+  function draw(){
+    if(!running) return;
+    ctx.clearRect(0,0,cv.width,cv.height);
+    stars.forEach(s => {
+      s.phase += s.speed;
+      const op = .2 + .55 * (.5 + .5 * Math.sin(s.phase));
+      ctx.beginPath();
+      ctx.arc(s.x * cv.width, s.y * cv.height, s.r, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(230,218,175,${op})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if(e.isIntersecting && !running){
+        running = true;
+        draw();
+      }
+    });
+  }, {threshold:.1});
+  io.observe(document.getElementById('nightScene'));
+})();
+
+/* ── CLOSING RIBBONS ── */
+(function(){
+  const container = document.getElementById('closingRibbons');
+  const heights = [28,42,34,52,38,48,30,44,36,54,32,46,40,50,26,43,37,51,29,45];
+  heights.forEach((h, i) => {
+    const d = document.createElement('div');
+    d.className = 'crb';
+    d.style.height = h + 'px';
+    d.style.animationDelay = (i * 0.1) + 's';
+    container.appendChild(d);
+  });
+})();
+
+/* ── SCROLL REVEAL ── */
+(function(){
+  const els = document.querySelectorAll('.sr');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        e.target.classList.add('on');
+        io.unobserve(e.target);
+      }
+    });
+  }, {threshold:.1, rootMargin:'0px 0px -30px 0px'});
+  els.forEach(el => io.observe(el));
+})();
+</script>
+</body>
+</html>

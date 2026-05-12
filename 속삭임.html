@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>속삭임 — I wish you were my little girl</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;900&family=Cormorant+Garamond:wght@300;400;600;700&family=IM+Fell+English&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cold: #1a1f2e;
+    --cold2: #242b3d;
+    --warm: #2d1f14;
+    --warm2: #3d2a1a;
+    --skin: #f5e6d3;
+    --gold: #c9965a;
+    --gold2: #e8b87a;
+    --ash: #8a8fa0;
+    --whisper-white: #fdf6ee;
+    --ink: #0d0f14;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cold);
+    color: var(--ash);
+    font-family: 'Noto Serif KR', serif;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* ── 육각형 청각실 배경 ── */
+  #hex-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    transition: opacity 2s ease;
+  }
+
+  /* ── 따뜻한 오버레이 (속삭임 이후 켜짐) ── */
+  #warm-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: radial-gradient(ellipse at 50% 60%, rgba(201,150,90,0.18) 0%, rgba(45,31,20,0.0) 70%);
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 3s ease;
+    pointer-events: none;
+  }
+
+  /* ── 음파 장식 SVG ── */
+  #wave-line {
+    position: fixed;
+    left: 0; right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.07;
+  }
+
+  /* ── 스크롤 컨테이너 ── */
+  main {
+    position: relative;
+    z-index: 2;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* ── 여백 섹션 ── */
+  .spacer { height: 14vh; }
+  .spacer-sm { height: 6vh; }
+
+  /* ── 헤더 타이틀 ── */
+  .title-block {
+    padding-top: 18vh;
+    text-align: center;
+    position: relative;
+  }
+
+  .ear-icon {
+    display: block;
+    margin: 0 auto 28px;
+    opacity: 0;
+    animation: fadeUp 1.2s 0.3s forwards;
+  }
+
+  .title-en {
+    font-family: 'IM Fell English', serif;
+    font-size: clamp(11px, 1.4vw, 15px);
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0;
+    animation: fadeUp 1s 0.6s forwards;
+  }
+
+  .title-kr {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(52px, 10vw, 110px);
+    font-weight: 300;
+    color: var(--whisper-white);
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    opacity: 0;
+    animation: fadeUp 1.2s 0.9s forwards;
+    margin: 14px 0 10px;
+  }
+
+  .title-sub {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 13px;
+    color: var(--ash);
+    letter-spacing: 0.1em;
+    opacity: 0;
+    animation: fadeUp 1s 1.2s forwards;
+  }
+
+  /* ── 구분선 ── */
+  .rule {
+    width: 1px;
+    height: 80px;
+    background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+    margin: 48px auto;
+    opacity: 0;
+    animation: fadeIn 1.5s 1.5s forwards;
+  }
+
+  /* ── 본문 블록 공통 ── */
+  .text-block {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 1s ease, transform 1s ease;
+  }
+  .text-block.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── 본문 단락 ── */
+  p.body {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15.5px;
+    line-height: 2.1;
+    color: #9ba3b8;
+    word-break: keep-all;
+    margin-bottom: 1.4em;
+  }
+
+  /* ── 대사 블록 (아이들 대사 등) ── */
+  .dialogue {
+    border-left: 2px solid #3a4060;
+    padding: 10px 0 10px 24px;
+    margin: 24px 0;
+  }
+  .dialogue p {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15px;
+    line-height: 2;
+    color: #7a8096;
+  }
+
+  /* ── 내면 독백 ── */
+  .inner-voice {
+    background: rgba(26,31,46,0.7);
+    border: 1px solid #2a3050;
+    border-radius: 2px;
+    padding: 24px 30px;
+    margin: 28px 0;
+    position: relative;
+  }
+  .inner-voice::before {
+    content: '';
+    position: absolute;
+    top: -1px; left: 30px; right: 30px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #3a4060, transparent);
+  }
+  .inner-voice p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 400;
+    color: #6a7090;
+    line-height: 1.8;
+    text-align: center;
+    letter-spacing: 0.02em;
+  }
+
+  /* ── 선생님 묘사 ── */
+  .teacher-desc {
+    padding: 28px 0;
+    border-top: 1px solid #222840;
+    border-bottom: 1px solid #222840;
+    margin: 32px 0;
+  }
+
+  /* ── 시험 장면 라벨 ── */
+  .scene-label {
+    font-family: 'IM Fell English', serif;
+    font-size: 11px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 20px;
+    opacity: 0.7;
+  }
+
+  /* ── 시험 예시 (청각 시험 문장들) ── */
+  .test-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 20px 0 28px;
+  }
+  .test-line {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .test-line-bar {
+    height: 1px;
+    background: linear-gradient(to right, #3a4060, transparent);
+    flex: 1;
+  }
+  .test-line p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    color: #606580;
+    white-space: nowrap;
+  }
+
+  /* ── 속삭임 장면 — 핵심 ── */
+  #whisper-scene {
+    position: relative;
+    margin: 60px 0;
+    padding: 0;
+  }
+
+  .whisper-setup {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .whisper-setup p {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15px;
+    line-height: 2.2;
+    color: #9ba3b8;
+  }
+
+  /* ── 속삭임 텍스트 핵심 연출 ── */
+  .whisper-core {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 80px 0 60px;
+    overflow: hidden;
+  }
+
+  /* 음파 원들 */
+  .whisper-rings {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px; height: 600px;
+    pointer-events: none;
+  }
+  .ring {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    border: 1px solid rgba(201,150,90,0.12);
+    animation: ringPulse 4s ease-out infinite;
+  }
+  .ring:nth-child(1) { width: 120px; height: 120px; animation-delay: 0s; }
+  .ring:nth-child(2) { width: 220px; height: 220px; animation-delay: 0.6s; }
+  .ring:nth-child(3) { width: 340px; height: 340px; animation-delay: 1.2s; }
+  .ring:nth-child(4) { width: 480px; height: 480px; animation-delay: 1.8s; }
+  .ring:nth-child(5) { width: 600px; height: 600px; animation-delay: 2.4s; }
+
+  @keyframes ringPulse {
+    0% { opacity: 0; transform: translate(-50%,-50%) scale(0.7); }
+    30% { opacity: 1; }
+    100% { opacity: 0; transform: translate(-50%,-50%) scale(1.1); }
+  }
+
+  /* 속삭임 문장 — 글자 하나씩 등장 */
+  .whisper-text-kr {
+    position: relative;
+    z-index: 2;
+    font-family: 'Noto Serif KR', serif;
+    font-size: clamp(22px, 4.5vw, 42px);
+    font-weight: 600;
+    color: var(--whisper-white);
+    text-align: center;
+    line-height: 1.6;
+    letter-spacing: 0.04em;
+    margin-bottom: 20px;
+  }
+
+  .whisper-text-en {
+    position: relative;
+    z-index: 2;
+    font-family: 'IM Fell English', serif;
+    font-size: clamp(14px, 2.2vw, 22px);
+    color: var(--gold);
+    text-align: center;
+    letter-spacing: 0.12em;
+  }
+
+  /* 글자 등장 애니메이션 */
+  .char {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .char.revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── 회고 블록 ── */
+  .retrospect {
+    border: 1px solid #2a3050;
+    padding: 36px 40px;
+    margin: 48px 0;
+    position: relative;
+    background: rgba(18,22,36,0.6);
+  }
+  .retrospect::after {
+    content: '"';
+    position: absolute;
+    top: -30px; right: 20px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 140px;
+    color: #1e2440;
+    line-height: 1;
+    pointer-events: none;
+  }
+  .retrospect p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 21px;
+    line-height: 1.85;
+    color: #c0c8d8;
+    position: relative;
+    z-index: 1;
+  }
+  .retrospect .attr {
+    font-family: 'IM Fell English', serif;
+    font-size: 12px;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    display: block;
+    margin-top: 20px;
+    text-transform: uppercase;
+    opacity: 0.8;
+  }
+
+  /* ── 온도 전환 구분 ── */
+  .thermal-divide {
+    height: 2px;
+    background: linear-gradient(to right, #1e2440, var(--gold), #3d2a1a);
+    margin: 64px 0;
+    position: relative;
+  }
+  .thermal-divide::before {
+    content: '✦';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    background: var(--cold);
+    padding: 0 16px;
+    color: var(--gold);
+    font-size: 12px;
+    transition: background 3s ease;
+  }
+
+  /* ── 신학적 전환 (따뜻한 섹션) ── */
+  .theology-section {
+    padding: 20px 0 40px;
+  }
+
+  .god-voice {
+    background: linear-gradient(135deg, rgba(45,31,20,0.8), rgba(36,24,14,0.9));
+    border: 1px solid rgba(201,150,90,0.3);
+    padding: 48px 44px;
+    margin: 40px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .god-voice::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+  }
+  .god-voice::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+  }
+  .god-voice p {
+    font-family: 'Noto Serif KR', serif;
+    font-size: clamp(18px, 3vw, 26px);
+    font-weight: 600;
+    color: var(--skin);
+    line-height: 1.9;
+    text-align: center;
+    letter-spacing: 0.06em;
+  }
+  .god-voice .line-accent {
+    color: var(--gold2);
+  }
+
+  /* ── 성경 구절 ── */
+  .scripture {
+    text-align: center;
+    padding: 48px 20px 40px;
+  }
+  .scripture-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(24px, 4vw, 40px);
+    font-weight: 400;
+    color: var(--whisper-white);
+    line-height: 1.55;
+    letter-spacing: 0.03em;
+    margin-bottom: 20px;
+  }
+  .scripture-ref {
+    font-family: 'IM Fell English', serif;
+    font-size: 13px;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
+
+  /* ── 푸터 ── */
+  footer {
+    text-align: center;
+    padding: 40px 0 80px;
+    font-family: 'IM Fell English', serif;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: #3a4060;
+    text-transform: uppercase;
+  }
+
+  /* ── 공통 애니메이션 ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* 따뜻해진 이후 body 색상 전환 */
+  body.warmed {
+    --cold: #1e1610;
+    background: #1a1208;
+  }
+  body.warmed .rule { background: linear-gradient(to bottom, transparent, var(--gold), transparent); }
+
+  /* 스크롤바 */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #2a3050; border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<!-- 육각형 캔버스 배경 -->
+<canvas id="hex-canvas"></canvas>
+
+<!-- 따뜻한 글로우 오버레이 -->
+<div id="warm-overlay"></div>
+
+<!-- 음파 SVG 장식 -->
+<svg id="wave-line" viewBox="0 0 1200 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+  <polyline points="0,60 50,55 100,65 150,50 200,70 250,45 300,65 350,52 400,68 450,48 500,72 550,58 600,62 650,45 700,70 750,52 800,65 850,48 900,68 950,55 1000,65 1050,50 1100,58 1150,62 1200,60"
+    fill="none" stroke="#c9965a" stroke-width="1.5"/>
+</svg>
+
+<main>
+  <!-- 타이틀 -->
+  <div class="title-block text-block">
+    <!-- 귀 아이콘 SVG -->
+    <svg class="ear-icon" width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="24" cy="24" rx="14" ry="20" stroke="#c9965a" stroke-width="1" opacity="0.5"/>
+      <path d="M24 10 C16 10 12 17 12 24 C12 31 16 36 22 36 L22 32 C18 32 16 28 16 24 C16 20 18 14 24 14 C30 14 32 20 32 24 C32 27 30 30 28 31 L26 33 C24 35 24 38 24 38" stroke="#c9965a" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      <circle cx="26" cy="26" r="2.5" fill="#c9965a" opacity="0.6"/>
+    </svg>
+    <span class="title-en">The Whisper Test</span>
+    <div class="title-kr">속삭임</div>
+    <div class="title-sub">Mary Ann Bird, 1926–2007</div>
+  </div>
+
+  <div class="rule"></div>
+
+  <!-- 도입 -->
+  <div class="text-block">
+    <p class="body">이 이야기는 미국 작가 메리 앤 버드(Mary Ann Bird, 1926–2007)가 자신의 어린 시절을 회상하며 쓴 에세이에서 나온 실제 경험담입니다.</p>
+    <p class="body">메리 앤 버드는 구순구개열을 가지고 태어났습니다.</p>
+    <p class="body">학교에 다니기 시작했을 때 친구들은 그녀가 다른 아이들과 다르다는 사실을 분명히 느끼게 해 주었습니다.</p>
+    <p class="body">그녀의 입술은 일그러져 있었고 코는 약간 휘어 있었으며 치아도 가지런하지 않았습니다. 말을 할 때마다 발음이 또렷하지 않아 더듬거리곤 했습니다. 그래서 아이들은 종종 물었습니다.</p>
+
+    <div class="dialogue">
+      <p>"네 입술은 왜 그래?"</p>
+    </div>
+
+    <p class="body">그때마다 그녀는 사실을 말하지 못하고 이렇게 대답했습니다.</p>
+
+    <div class="dialogue">
+      <p>"어릴 때 넘어져서 유리 조각에 찢어졌어."</p>
+    </div>
+
+    <p class="body">다르게 태어났다고 말하는 것보다 그렇게 말하는 것이 덜 부끄러웠기 때문입니다.</p>
+    <p class="body">그녀는 마음속으로 늘 이렇게 생각했습니다.</p>
+
+    <div class="inner-voice">
+      <p>'우리 가족 말고는 아무도 나를 사랑하지 않을 거야.'</p>
+    </div>
+  </div>
+
+  <div class="spacer-sm"></div>
+
+  <!-- 선생님 -->
+  <div class="text-block">
+    <p class="body">그녀가 2학년이 되었을 때, 레오나르드 선생님(Mrs. Leonard)을 만나게 되었습니다.</p>
+
+    <div class="teacher-desc">
+      <p class="body" style="margin-bottom:0;">작고 통통한 체격의 선생님은 언제나 밝은 미소를 띠고 있었고 아이들에게 따뜻한 사랑을 베푸는 분이었습니다. 학생들은 모두 그 선생님을 존경했습니다.</p>
+    </div>
+  </div>
+
+  <div class="spacer-sm"></div>
+
+  <!-- 속삭임 듣기 시험 -->
+  <div class="text-block">
+    <span class="scene-label">The Test</span>
+    <p class="body">매년 학급에서는 '속삭임 듣기 시험(whisper test)'을 보았습니다.</p>
+    <p class="body">학생이 문을 등지고 서서 한쪽 귀를 막으면, 선생님이 작은 목소리로 한 문장을 속삭입니다. 그리고 학생은 그 말을 그대로 따라 말합니다.</p>
+    <p class="body">보통 이런 말들이었습니다.</p>
+
+    <div class="test-lines">
+      <div class="test-line">
+        <div class="test-line-bar"></div>
+        <p>"하늘은 파랗단다."</p>
+      </div>
+      <div class="test-line">
+        <div class="test-line-bar" style="width:40%"></div>
+        <p>"새 신발을 신었구나."</p>
+      </div>
+      <div class="test-line">
+        <div class="test-line-bar" style="width:60%"></div>
+        <p>"오늘 날씨가 참 좋다."</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 속삭임 핵심 장면 -->
+  <div id="whisper-scene" class="text-block">
+    <div class="whisper-setup">
+      <p>드디어 메리 앤 버드의 차례가 되었습니다.</p>
+      <p>그녀는 문을 등지고 서서 한쪽 귀를 막았습니다.</p>
+      <p>그리고 조용히 선생님의 목소리를 기다렸습니다.</p>
+      <p>잠시 후 선생님의 입술이 그녀의 귀 가까이 다가왔습니다.</p>
+    </div>
+
+    <div class="whisper-core">
+      <div class="whisper-rings">
+        <div class="ring"></div>
+        <div class="ring"></div>
+        <div class="ring"></div>
+        <div class="ring"></div>
+        <div class="ring"></div>
+      </div>
+      <div class="whisper-text-kr" id="whisper-kr">
+        나는 네가 내 딸이었으면 좋겠구나.
+      </div>
+      <div class="whisper-text-en" id="whisper-en">
+        I  wish  you  were  my  little  girl.
+      </div>
+    </div>
+  </div>
+
+  <!-- 회고 -->
+  <div class="text-block retrospect">
+    <p>메리 앤 버드는 훗날 이렇게 회고했습니다.</p>
+    <p style="margin-top:16px;">그 다섯 마디의 말이 내 인생을 바꾸었다고.</p>
+    <span class="attr">Mary Ann Bird — Memoir</span>
+  </div>
+
+  <!-- 온도 전환선 -->
+  <div class="thermal-divide" id="thermal-divide"></div>
+
+  <!-- 신학적 전환 -->
+  <div class="theology-section text-block">
+    <p class="body">하나님도 우리에게 그렇게 말씀하십니다.</p>
+    <p class="body">상처와 열등감 속에 살아가는 우리에게 하나님은 십자가를 통해 말씀하십니다.</p>
+
+    <div class="god-voice">
+      <p>
+        <span class="line-accent">"너는 내 것이다.</span><br>
+        내가 너를 택했단다."
+      </p>
+    </div>
+
+    <p class="body">그래서 성경은 이렇게 말합니다.</p>
+
+    <div class="scripture">
+      <div class="scripture-text">
+        "나는 내 사랑하는 이의 것,<br>
+        내 사랑하는 이는 나의 것."
+      </div>
+      <div class="scripture-ref">아가서 6장 3절</div>
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <footer>Whisper Test &nbsp;·&nbsp; Mary Ann Bird &nbsp;·&nbsp; Song of Songs 6:3</footer>
+</main>
+
+<script>
+// ── 육각형 캔버스 ──────────────────────────────
+const canvas = document.getElementById('hex-canvas');
+const ctx = canvas.getContext('2d');
+let W, H, hexes = [];
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+  buildHexes();
+}
+
+function buildHexes() {
+  hexes = [];
+  const R = 28, dx = R * Math.sqrt(3), dy = R * 1.5;
+  for (let row = -1; row < Math.ceil(H / dy) + 2; row++) {
+    for (let col = -1; col < Math.ceil(W / dx) + 2; col++) {
+      const x = col * dx + (row % 2 === 0 ? 0 : dx / 2);
+      const y = row * dy;
+      hexes.push({ x, y, R, opacity: Math.random() * 0.04 + 0.01, phase: Math.random() * Math.PI * 2 });
+    }
+  }
+}
+
+function hexPath(x, y, r) {
+  ctx.beginPath();
+  for (let i = 0; i < 6; i++) {
+    const angle = Math.PI / 180 * (60 * i - 30);
+    const px = x + r * Math.cos(angle);
+    const py = y + r * Math.sin(angle);
+    i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+  }
+  ctx.closePath();
+}
+
+let t = 0, warmRatio = 0, targetWarm = 0;
+
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+  t += 0.008;
+
+  // 배경 그라디언트
+  const grad = ctx.createLinearGradient(0, 0, 0, H);
+  grad.addColorStop(0, `rgba(26,31,46,${1 - warmRatio * 0.6})`);
+  grad.addColorStop(1, `rgba(18,22,36,${1 - warmRatio * 0.6})`);
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, W, H);
+
+  // 따뜻한 배경
+  if (warmRatio > 0) {
+    const warmGrad = ctx.createRadialGradient(W/2, H*0.6, 0, W/2, H*0.6, W*0.8);
+    warmGrad.addColorStop(0, `rgba(60,30,10,${warmRatio * 0.5})`);
+    warmGrad.addColorStop(1, `rgba(20,12,6,${warmRatio * 0.3})`);
+    ctx.fillStyle = warmGrad;
+    ctx.fillRect(0, 0, W, H);
+  }
+
+  warmRatio += (targetWarm - warmRatio) * 0.005;
+
+  hexes.forEach(h => {
+    const pulse = Math.sin(t + h.phase) * 0.02;
+    const baseColor = warmRatio > 0
+      ? `rgba(${Math.round(120 + warmRatio * 80)},${Math.round(90 + warmRatio * 20)},${Math.round(50 + warmRatio * 10)},${h.opacity + pulse})`
+      : `rgba(80,95,140,${h.opacity + pulse})`;
+    ctx.strokeStyle = baseColor;
+    ctx.lineWidth = 0.5;
+    hexPath(h.x, h.y, h.R);
+    ctx.stroke();
+  });
+
+  requestAnimationFrame(draw);
+}
+
+window.addEventListener('resize', resize);
+resize();
+draw();
+
+// ── Intersection Observer — 스크롤 표시 ──────────
+const blocks = document.querySelectorAll('.text-block');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+blocks.forEach(b => observer.observe(b));
+
+// ── 속삭임 장면 감지 → 따뜻해짐 ──────────────────
+const whisperScene = document.getElementById('whisper-scene');
+const warmOverlay = document.getElementById('warm-overlay');
+const thermalDivide = document.getElementById('thermal-divide');
+let warmed = false;
+
+const whisperObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting && !warmed) {
+      warmed = true;
+      targetWarm = 1;
+
+      // 속삭임 텍스트 글자 등장
+      revealWhisper();
+
+      // 따뜻한 오버레이
+      setTimeout(() => {
+        warmOverlay.style.opacity = '1';
+        document.body.classList.add('warmed');
+      }, 600);
+    }
+  });
+}, { threshold: 0.4 });
+
+whisperObserver.observe(whisperScene);
+
+// 글자별 등장 애니메이션
+function revealWhisper() {
+  const krEl = document.getElementById('whisper-kr');
+  const enEl = document.getElementById('whisper-en');
+
+  const krText = krEl.textContent.trim();
+  const enText = enEl.textContent.trim();
+
+  krEl.innerHTML = '';
+  enEl.innerHTML = '';
+
+  // 한국어
+  [...krText].forEach((ch, i) => {
+    const span = document.createElement('span');
+    span.className = 'char';
+    span.textContent = ch;
+    krEl.appendChild(span);
+    setTimeout(() => span.classList.add('revealed'), 800 + i * 80);
+  });
+
+  // 영어 (한국어 끝난 후)
+  const delay = 800 + krText.length * 80 + 400;
+  [...enText].forEach((ch, i) => {
+    const span = document.createElement('span');
+    span.className = 'char';
+    span.textContent = ch;
+    enEl.appendChild(span);
+    setTimeout(() => span.classList.add('revealed'), delay + i * 60);
+  });
+}
+
+// 타이틀 블록 초기 표시
+setTimeout(() => {
+  document.querySelector('.title-block').classList.add('visible');
+}, 100);
+</script>
+</body>
+</html>

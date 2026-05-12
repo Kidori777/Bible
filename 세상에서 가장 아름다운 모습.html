@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>세상에서 가장 아름다운 모습</title>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg-deep:    #090f18;
+  --bg-mid:     #0d1a2a;
+  --gold-bright:#d4a84b;
+  --gold-pale:  #f0dfa0;
+  --gold-dim:   #a07a30;
+  --glass-blue: rgba(80, 140, 200, 0.15);
+  --text-main:  #ede4cc;
+  --text-soft:  #b8a888;
+  --rain-drop:  rgba(130, 190, 240, 0.22);
+  --line:       rgba(212, 168, 75, 0.25);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg-deep);
+  color: var(--text-main);
+  font-family: 'Noto Serif KR', serif;
+  font-weight: 300;
+  line-height: 2;
+  overflow-x: hidden;
+}
+
+/* ── RAIN CANVAS ── */
+#rc {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ── CONTENT LAYER ── */
+.layer {
+  position: relative;
+  z-index: 1;
+}
+
+/* ══════════════════
+   HERO
+══════════════════ */
+.hero {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 28px 80px;
+  position: relative;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 55% at 50% 50%,
+    rgba(212, 168, 75, 0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-tag {
+  font-size: 0.68rem;
+  letter-spacing: 0.45em;
+  color: var(--gold-bright);
+  text-transform: uppercase;
+  margin-bottom: 2.2rem;
+  opacity: 0;
+  animation: riseIn 1.2s ease forwards 0.6s;
+}
+
+.hero-title {
+  font-family: 'Nanum Myeongjo', serif;
+  font-weight: 800;
+  font-size: clamp(2.4rem, 8vw, 5rem);
+  line-height: 1.2;
+  color: var(--gold-pale);
+  margin-bottom: 1.8rem;
+  opacity: 0;
+  animation: riseIn 1.4s ease forwards 1s;
+}
+
+.hero-sub {
+  font-size: clamp(0.9rem, 2.2vw, 1.1rem);
+  color: var(--text-soft);
+  max-width: 420px;
+  margin: 0 auto 3rem;
+  opacity: 0;
+  animation: riseIn 1.4s ease forwards 1.4s;
+}
+
+.hero-umbrellas {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  font-size: 1.8rem;
+  opacity: 0;
+  animation: riseIn 1.2s ease forwards 1.8s;
+}
+
+.scroll-cue {
+  position: absolute;
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  opacity: 0;
+  animation: fadeIn 1s ease forwards 2.8s;
+}
+
+.scroll-cue-line {
+  width: 1px;
+  height: 48px;
+  background: linear-gradient(to bottom, var(--gold-bright), transparent);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.scroll-cue-text {
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  color: rgba(212, 168, 75, 0.45);
+}
+
+/* ══════════════════
+   STORY PROSE
+══════════════════ */
+.prose {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 64px 28px;
+}
+
+.tag {
+  display: inline-block;
+  font-size: 0.62rem;
+  letter-spacing: 0.45em;
+  color: var(--gold-bright);
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--gold-dim);
+  padding-bottom: 4px;
+  margin-bottom: 2rem;
+  opacity: 0.85;
+}
+
+.p {
+  font-size: clamp(0.97rem, 2vw, 1.08rem);
+  line-height: 2.1;
+  color: var(--text-main);
+  margin-bottom: 1.4rem;
+}
+
+/* dialogue */
+.quote-block {
+  border-left: 3px solid var(--gold-bright);
+  padding: 1.2rem 1.6rem;
+  margin: 2rem 0;
+  background: rgba(212, 168, 75, 0.05);
+  border-radius: 0 6px 6px 0;
+}
+
+.quote-block p {
+  font-family: 'Nanum Myeongjo', serif;
+  font-size: clamp(1rem, 2.5vw, 1.18rem);
+  color: var(--gold-pale);
+  line-height: 1.85;
+}
+
+/* emphasis */
+.emph {
+  font-family: 'Nanum Myeongjo', serif;
+  font-size: clamp(1.1rem, 3vw, 1.35rem);
+  color: var(--gold-pale);
+  font-weight: 700;
+  line-height: 1.75;
+  padding: 2rem 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  margin: 1.8rem 0;
+}
+
+/* ── scroll reveal ── */
+.sr {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+.sr.on {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* wipe-reveal overlay */
+.wipe {
+  position: relative;
+  overflow: hidden;
+}
+.wipe::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--bg-deep);
+  transform-origin: left;
+  transform: scaleX(1);
+  transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1) 0.2s;
+}
+.wipe.on::after {
+  transform: scaleX(0);
+  transform-origin: right;
+}
+
+/* ══════════════════
+   SEPARATOR
+══════════════════ */
+.sep {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 28px;
+  gap: 14px;
+}
+.sep-ln {
+  flex: 1;
+  max-width: 110px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--line));
+}
+.sep-ln.r {
+  background: linear-gradient(to left, transparent, var(--line));
+}
+.sep-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--gold-dim); }
+
+/* ══════════════════
+   RAINY SCENE STRIP
+══════════════════ */
+.rain-strip {
+  background: linear-gradient(180deg, transparent 0%, rgba(8, 22, 40, 0.55) 100%);
+  padding: 80px 28px;
+}
+
+/* ══════════════════
+   WINDOW INTERACTIVE
+══════════════════ */
+.window-wrap {
+  padding: 70px 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 36px;
+}
+
+.window-label {
+  font-size: 0.62rem;
+  letter-spacing: 0.45em;
+  color: var(--gold-bright);
+  text-transform: uppercase;
+}
+
+.window {
+  width: 100%;
+  max-width: 500px;
+  aspect-ratio: 4/3;
+  position: relative;
+  border: 4px solid #2a4a6a;
+  border-radius: 3px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow:
+    0 0 0 1px rgba(42,74,106,0.4),
+    inset 0 0 50px rgba(0,0,0,0.5),
+    0 24px 70px rgba(0,0,0,0.6);
+  background: #030c14;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* cross frame */
+.win-cross {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+}
+.win-cross::before {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  left: calc(50% - 2px);
+  width: 4px;
+  background: #2a4a6a;
+}
+.win-cross::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  top: calc(50% - 2px);
+  height: 4px;
+  background: #2a4a6a;
+}
+
+/* inside warm scene */
+.win-inside {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 70% at 50% 80%,
+    #1a0d00 0%, #0a0600 60%, #030200 100%);
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 18%;
+}
+
+/* daughter at upper window */
+.daughter-at-window {
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 2;
+}
+.daughter-at-window .face { font-size: clamp(1.6rem, 5vw, 2.2rem); }
+.daughter-at-window .wave-text {
+  font-size: clamp(0.7rem, 2vw, 0.85rem);
+  color: rgba(232, 201, 106, 0.6);
+  letter-spacing: 0.1em;
+  margin-top: 4px;
+}
+
+/* outside scene (mother) */
+.mother-below {
+  position: absolute;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 1.4s ease 0.4s;
+}
+.mother-below.show { opacity: 1; }
+.mother-figure-icon { font-size: clamp(1.8rem, 5vw, 2.4rem); display: block; }
+.umbrella-row {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  margin-top: 2px;
+  font-size: clamp(1rem, 3vw, 1.3rem);
+}
+.mother-label {
+  font-size: 0.6rem;
+  color: rgba(212, 168, 75, 0.5);
+  letter-spacing: 0.15em;
+  margin-top: 4px;
+}
+
+/* rain streaks on glass */
+.win-streaks {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  overflow: hidden;
+}
+.streak {
+  position: absolute;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent 0%,
+    rgba(140, 200, 250, 0.35) 40%, rgba(140, 200, 250, 0.25) 70%, transparent 100%);
+  animation: falling linear infinite;
+  top: -120%;
+}
+
+/* condensation glass */
+.win-fog {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background: rgba(12, 30, 55, 0.82);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  transition: opacity 1.6s ease;
+  backdrop-filter: blur(2px);
+}
+.win-fog.clear {
+  opacity: 0;
+  pointer-events: none;
+}
+.fog-text {
+  font-size: clamp(0.8rem, 2.2vw, 0.92rem);
+  color: rgba(180, 215, 245, 0.6);
+  text-align: center;
+  line-height: 2;
+  letter-spacing: 0.08em;
+}
+.fog-hint {
+  font-size: 0.7rem;
+  letter-spacing: 0.25em;
+  color: rgba(140, 190, 230, 0.4);
+  animation: blink 2.2s ease-in-out infinite;
+}
+
+/* small window condensation circles */
+.fog-circles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.fog-circle {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(180,215,250,0.06) 0%, transparent 70%);
+}
+
+.window-note {
+  max-width: 500px;
+  text-align: center;
+  font-size: clamp(0.92rem, 2vw, 1rem);
+  color: var(--text-soft);
+  line-height: 2;
+}
+
+/* ══════════════════
+   PAINTING REVEAL
+══════════════════ */
+.painting-wrap {
+  padding: 70px 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 38px;
+}
+
+.canvas-frame {
+  width: 100%;
+  max-width: 580px;
+  min-height: 280px;
+  border: 2px solid rgba(212, 168, 75, 0.3);
+  border-radius: 3px;
+  position: relative;
+  overflow: hidden;
+  background: #050300;
+  box-shadow:
+    0 0 0 8px rgba(212, 168, 75, 0.04),
+    0 0 0 18px rgba(212, 168, 75, 0.02),
+    0 30px 80px rgba(0,0,0,0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 44px 32px;
+}
+
+.canvas-bg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 75% at 50% 60%,
+    #3a1e00 0%, #1c0e00 40%, #060300 80%, #020100 100%);
+  opacity: 0;
+  transition: opacity 2.4s ease;
+}
+.canvas-bg.on { opacity: 1; }
+
+.canvas-gold {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 55% at 50% 45%,
+    rgba(212, 168, 75, 0.22) 0%,
+    rgba(180, 130, 50, 0.1) 50%, transparent 78%);
+  opacity: 0;
+  transition: opacity 3.2s ease 0.8s;
+}
+.canvas-gold.on { opacity: 1; }
+
+.canvas-text {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 1.6s ease 1.8s;
+}
+.canvas-text.on { opacity: 1; }
+
+.award-tag {
+  display: inline-block;
+  font-size: 0.65rem;
+  letter-spacing: 0.5em;
+  color: var(--gold-bright);
+  border: 1px solid rgba(212,168,75,0.4);
+  padding: 5px 18px;
+  border-radius: 2px;
+  margin-bottom: 1.8rem;
+  background: rgba(212,168,75,0.06);
+}
+
+.canvas-title {
+  font-family: 'Nanum Myeongjo', serif;
+  font-weight: 800;
+  font-size: clamp(1.5rem, 5vw, 2.3rem);
+  color: var(--gold-pale);
+  line-height: 1.4;
+  margin-bottom: 1.8rem;
+  text-shadow: 0 0 28px rgba(212, 168, 75, 0.45);
+}
+
+.canvas-desc {
+  font-size: clamp(0.88rem, 1.8vw, 0.98rem);
+  color: rgba(240, 223, 160, 0.78);
+  line-height: 2;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.reveal-btn {
+  background: transparent;
+  border: 1px solid rgba(212, 168, 75, 0.4);
+  color: var(--gold-bright);
+  padding: 14px 44px;
+  font-family: 'Noto Serif KR', serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.2em;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: border-color 0.3s, color 0.3s, background 0.3s;
+}
+.reveal-btn:hover {
+  border-color: var(--gold-bright);
+  color: var(--gold-pale);
+  background: rgba(212,168,75,0.07);
+}
+.reveal-btn.gone {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s;
+}
+
+/* ══════════════════
+   SCRIPTURE
+══════════════════ */
+.scripture-wrap {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 60px 28px;
+}
+
+.verse-card {
+  position: relative;
+  background: linear-gradient(135deg,
+    rgba(12, 24, 44, 0.85) 0%, rgba(8, 16, 32, 0.92) 100%);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 36px 36px 36px 46px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+.verse-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 4px; height: 100%;
+  background: linear-gradient(to bottom, var(--gold-bright), transparent);
+}
+.verse-ref {
+  font-size: 0.68rem;
+  letter-spacing: 0.38em;
+  color: var(--gold-bright);
+  text-transform: uppercase;
+  margin-bottom: 1.3rem;
+}
+.verse-text {
+  font-family: 'Nanum Myeongjo', serif;
+  font-size: clamp(1.02rem, 2.4vw, 1.2rem);
+  line-height: 1.92;
+  color: var(--gold-pale);
+}
+.verse-reflect {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(212, 168, 75, 0.12);
+  font-size: clamp(0.9rem, 1.9vw, 1rem);
+  color: var(--text-soft);
+  line-height: 2.1;
+}
+
+/* ══════════════════
+   CLOSING
+══════════════════ */
+.closing-wrap {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 60px 28px 120px;
+  text-align: center;
+}
+
+.closing-p {
+  font-size: clamp(0.97rem, 2vw, 1.08rem);
+  line-height: 2.15;
+  color: var(--text-main);
+  margin-bottom: 1.5rem;
+}
+
+.closing-final {
+  font-family: 'Nanum Myeongjo', serif;
+  font-size: clamp(1.25rem, 3.5vw, 1.7rem);
+  font-weight: 700;
+  color: var(--gold-pale);
+  line-height: 1.8;
+  padding: 2.5rem 2rem;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: rgba(212, 168, 75, 0.04);
+  position: relative;
+  margin-top: 2rem;
+}
+.closing-final::before {
+  content: '"';
+  position: absolute;
+  top: -16px; left: 24px;
+  font-size: 5rem;
+  color: rgba(212, 168, 75, 0.1);
+  font-family: 'Nanum Myeongjo', serif;
+  line-height: 1;
+}
+
+/* ══════════════════
+   KEYFRAMES
+══════════════════ */
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes pulse {
+  0%,100% { opacity: 0.4; }
+  50%      { opacity: 1; }
+}
+@keyframes blink {
+  0%,100% { opacity: 0.25; }
+  50%      { opacity: 0.75; }
+}
+@keyframes falling {
+  0%   { top: -120%; opacity: 0; }
+  8%   { opacity: 1; }
+  88%  { opacity: 1; }
+  100% { top: 160%; opacity: 0; }
+}
+
+/* ══════════════════
+   RESPONSIVE
+══════════════════ */
+@media (max-width: 560px) {
+  .verse-card { padding: 28px 24px 28px 34px; }
+  .canvas-frame { min-height: 230px; padding: 32px 22px; }
+  .closing-final { padding: 2rem 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="rc"></canvas>
+
+<div class="layer">
+
+  <!-- ═══ HERO ═══ -->
+  <section class="hero">
+    <p class="hero-tag">가장 아름다운 시선</p>
+    <h1 class="hero-title">세상에서<br>가장 아름다운 모습</h1>
+    <p class="hero-sub">비 오는 날, 우산 두 개를 들고 서 있던 어머니의 이야기</p>
+    <div class="hero-umbrellas">
+      <span>☂</span><span>☂</span>
+    </div>
+    <div class="scroll-cue">
+      <div class="scroll-cue-line"></div>
+      <span class="scroll-cue-text">scroll</span>
+    </div>
+  </section>
+
+  <!-- ═══ 어머니 이야기 ═══ -->
+  <section class="prose">
+    <div class="sr wipe">
+      <p class="tag">어머니의 이야기</p>
+      <p class="p">남편을 먼저 떠나보내고, 어린 딸 하나를 홀로 키우며 살아가는 어머니가 있었습니다. 어머니는 작은 분식점을 운영하며 하루하루를 힘겹게 버텨냈습니다.</p>
+      <p class="p">그런데 딸에게는 특별한 재능이 있었습니다. 바로 '미술'이었습니다.</p>
+      <p class="p">어머니는 형편이 넉넉하지 않았지만, 딸의 재능을 포기시키고 싶지 않았습니다. 그래서 어렵게 돈을 모아 미술학원에 보내기 시작했습니다.</p>
+    </div>
+  </section>
+
+  <div class="sep">
+    <div class="sep-ln"></div>
+    <div class="sep-dot"></div><div class="sep-dot"></div><div class="sep-dot"></div>
+    <div class="sep-ln r"></div>
+  </div>
+
+  <!-- ═══ 비 오는 날 ═══ -->
+  <section class="rain-strip">
+    <div class="prose" style="padding:0 28px;">
+      <div class="sr wipe">
+        <p class="tag">비 오는 날</p>
+        <p class="p">어느 날이었습니다. 갑자기 하늘이 어두워지더니 장대비가 쏟아지기 시작했습니다.</p>
+        <div class="quote-block"><p>"아차… 우리 딸…"</p></div>
+        <p class="p">어머니는 딸이 돌아올 시간이 된 것을 알고 급히 우산 두 개를 챙겨 들고 분식점 앞치마도 미처 벗지 못한 채 그대로 학원으로 달려갔습니다.</p>
+        <p class="p">밀가루가 묻은 옷, 흐트러진 모습… 문 앞에 도착하고 나서야 자신의 모습이 눈에 들어왔습니다.</p>
+        <div class="emph">"이런 모습으로 왔네… 우리 딸이 부끄러워하겠지…"</div>
+        <p class="p">그러나 이미 늦었습니다. 어머니는 그저 처마 밑에 서서 딸을 기다릴 수밖에 없었습니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 창문 너머 (INTERACTIVE) ═══ -->
+  <section class="window-wrap">
+    <div class="sr" style="text-align:center; width:100%;">
+      <p class="window-label" style="margin-bottom:24px;">창문 너머</p>
+
+      <!-- WINDOW -->
+      <div style="display:flex;flex-direction:column;align-items:center;gap:28px;width:100%;">
+        <div class="window" id="win" role="button" aria-label="창문 열기">
+
+          <!-- inside warm room -->
+          <div class="win-inside">
+            <!-- daughter upstairs -->
+            <div class="daughter-at-window">
+              <span class="face">👧</span>
+              <p class="wave-text">"엄마!"</p>
+            </div>
+            <!-- mother below (revealed on click) -->
+            <div class="mother-below" id="motherBelow">
+              <span class="mother-figure-icon">🧍</span>
+              <div class="umbrella-row"><span>☂</span><span>☂</span></div>
+              <p class="mother-label">어머니</p>
+            </div>
+          </div>
+
+          <!-- rain streaks on glass -->
+          <div class="win-streaks" id="winStreaks"></div>
+
+          <!-- condensation fog -->
+          <div class="win-fog" id="winFog">
+            <div class="fog-circles" id="fogCircles"></div>
+            <p class="fog-text">그때, 2층 창문에서<br>딸이 내려다보며<br>손을 흔듭니다</p>
+            <p class="fog-hint">▽ 창문을 클릭해 보세요</p>
+          </div>
+
+          <!-- cross frame overlay -->
+          <div class="win-cross"></div>
+        </div>
+
+        <p class="window-note sr">하지만 딸은 내려오지 않았습니다.<br>어머니는 마음이 무너졌습니다.<br>"역시… 창피해서 안 나오는구나…"<br>결국 아무 말도 하지 못한 채 돌아섰습니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 한 달의 침묵 ═══ -->
+  <section class="prose" style="padding-top:20px;">
+    <div class="sr wipe">
+      <p class="tag">한 달의 침묵</p>
+      <p class="p">그날 이후, 어머니는 속이 상해 한 달 동안 딸과 거의 말을 하지 않았습니다.</p>
+    </div>
+  </section>
+
+  <div class="sep">
+    <div class="sep-ln"></div>
+    <div class="sep-dot"></div>
+    <div class="sep-ln r"></div>
+  </div>
+
+  <!-- ═══ 발표회 ═══ -->
+  <section class="prose">
+    <div class="sr wipe">
+      <p class="tag">미술 발표회</p>
+      <p class="p">한 달 후, 미술 발표회 날이 되었습니다.</p>
+      <p class="p">딸이 상을 받는다는 소식을 듣고 어머니는 학원으로 갔습니다. 그리고 딸은 '특상'을 받게 됩니다.</p>
+      <p class="p">작품의 제목은 "세상에서 가장 아름다운 모습"</p>
+    </div>
+  </section>
+
+  <!-- ═══ 그림 공개 (INTERACTIVE) ═══ -->
+  <section class="painting-wrap">
+    <div class="sr" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:28px;">
+      <p class="window-label">특상 수상작</p>
+
+      <div class="canvas-frame" id="cf">
+        <div class="canvas-bg" id="cbg"></div>
+        <div class="canvas-gold" id="cgold"></div>
+        <div class="canvas-text" id="ctxt">
+          <div class="award-tag">✦ 특상 ✦</div>
+          <h2 class="canvas-title">"세상에서<br>가장 아름다운 모습"</h2>
+          <p class="canvas-desc">그 그림 속에는 비 오는 날, 우산 두 개를 들고 서 있던 한 여인의 모습이 그려져 있었습니다. 앞치마를 두르고, 밀가루가 묻은 채 비를 맞으며 딸을 기다리던 바로 그 어머니의 모습이었습니다.</p>
+        </div>
+      </div>
+
+      <button class="reveal-btn" id="revealBtn">그림을 펼쳐보다</button>
+    </div>
+  </section>
+
+  <!-- ═══ 깨달음 ═══ -->
+  <section class="prose">
+    <div class="sr wipe">
+      <p class="tag">깨달음</p>
+      <p class="p">딸은 말없이 그날의 장면을 마음에 담고 있었던 것입니다.</p>
+      <div class="emph">
+        딸은 부끄러워서 나오지 않은 것이 아니라<br>
+        그 모습을 잊지 않기 위해,<br>
+        가장 아름다운 모습으로 간직하고 있었던 것입니다.
+      </div>
+      <p class="p">그 순간, 어머니는 모든 것을 깨닫습니다.</p>
+      <p class="p">어머니는 딸을 꼭 끌어안았습니다. 눈물과 함께, 깊은 행복이 가슴에 밀려왔습니다.</p>
+    </div>
+  </section>
+
+  <div class="sep">
+    <div class="sep-ln"></div>
+    <div class="sep-dot"></div><div class="sep-dot"></div><div class="sep-dot"></div>
+    <div class="sep-ln r"></div>
+  </div>
+
+  <!-- ═══ 성경 말씀 1 ═══ -->
+  <section class="scripture-wrap">
+    <div class="sr wipe">
+      <p class="tag" style="margin-bottom:1.8rem;">하나님의 시선</p>
+      <p class="p" style="margin-bottom:2rem;">이 이야기는 '겉모습'이 아니라 '마음'을 보시는 하나님의 시선을 떠올리게 합니다.</p>
+      <div class="verse-card">
+        <p class="verse-ref">사무엘기상 16장 7절</p>
+        <p class="verse-text">"중요한 것은 사람이 어떻게 보는가가 아니다. 왜냐하면 사람은 겉모양을 보나 여호와는 마음을 보기 때문이다."</p>
+        <div class="verse-reflect">
+          사람의 눈에는 밀가루가 묻은 초라한 앞치마, 지친 얼굴이 보일 수 있습니다. 그러나 하나님이 보시는 것은 비를 맞으면서도 딸을 향해 달려가는 사랑, 자신을 돌보지 않고 자녀를 먼저 생각하는 마음입니다.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="sep">
+    <div class="sep-ln"></div>
+    <div class="sep-dot"></div>
+    <div class="sep-ln r"></div>
+  </div>
+
+  <!-- ═══ 성경 말씀 2 ═══ -->
+  <section class="scripture-wrap" style="padding-top:30px;">
+    <div class="sr wipe">
+      <p class="tag" style="margin-bottom:1.8rem;">하나님의 사랑</p>
+      <p class="p" style="margin-bottom:2rem;">또한 이 장면은 하나님의 사랑과도 닮아 있습니다.</p>
+      <div class="verse-card">
+        <p class="verse-ref">이사야 49장 15절</p>
+        <p class="verse-text">"여인이 자기 젖먹이를 잊을 수 있느냐? 자기 태에서 난 아들을 불쌍히 여기지 않겠느냐? 설령 그들은 잊는다 하더라도 나는 너를 잊지 않으리라."</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 마무리 ═══ -->
+  <section class="closing-wrap">
+    <div class="sr">
+      <p class="closing-p">비 오는 날, 우산 두 개를 들고 서 있는 어머니처럼 하나님은 언제나 우리를 향해 기다리고 계십니다.</p>
+      <p class="closing-p">우리는 때로 그 사랑을 오해하고 부끄러워하거나 피하려 할 때도 있지만,</p>
+      <div class="closing-final">
+        하나님은 그 순간조차<br>가장 아름다운 장면으로<br>기억하고 계십니다.
+      </div>
+    </div>
+  </section>
+
+</div><!-- /layer -->
+
+<script>
+/* ── BACKGROUND RAIN CANVAS ── */
+(function(){
+  const c = document.getElementById('rc');
+  const ctx = c.getContext('2d');
+  let W, H, drops = [];
+
+  function init() {
+    W = c.width  = window.innerWidth;
+    H = c.height = window.innerHeight;
+    drops = [];
+    const N = Math.min(90, Math.floor(W / 10));
+    for (let i = 0; i < N; i++) spawn(true);
+  }
+
+  function spawn(rand) {
+    drops.push({
+      x: Math.random() * (W + 200),
+      y: rand ? Math.random() * H : -30,
+      len: 14 + Math.random() * 22,
+      spd: 4.5 + Math.random() * 5.5,
+      op:  0.08 + Math.random() * 0.16,
+      th:  0.5 + Math.random() * 0.8
+    });
+  }
+
+  const ANGLE_X = 0.18;
+
+  function frame() {
+    ctx.clearRect(0, 0, W, H);
+    drops.forEach((d, i) => {
+      ctx.beginPath();
+      ctx.moveTo(d.x, d.y);
+      ctx.lineTo(d.x - d.len * ANGLE_X, d.y + d.len);
+      ctx.strokeStyle = `rgba(130,190,240,${d.op})`;
+      ctx.lineWidth = d.th;
+      ctx.stroke();
+      d.y += d.spd;
+      d.x -= d.spd * ANGLE_X;
+      if (d.y > H + 40) { drops.splice(i, 1); spawn(false); }
+    });
+    requestAnimationFrame(frame);
+  }
+
+  init();
+  window.addEventListener('resize', init);
+  frame();
+})();
+
+/* ── WINDOW STREAKS ── */
+(function(){
+  const c = document.getElementById('winStreaks');
+  for (let i = 0; i < 14; i++) {
+    const s = document.createElement('div');
+    s.className = 'streak';
+    s.style.left   = (4 + Math.random() * 92) + '%';
+    s.style.height = (28 + Math.random() * 70) + 'px';
+    s.style.animationDuration = (0.7 + Math.random() * 1.6) + 's';
+    s.style.animationDelay   = (Math.random() * 3) + 's';
+    c.appendChild(s);
+  }
+})();
+
+/* ── FOG CIRCLES ── */
+(function(){
+  const fc = document.getElementById('fogCircles');
+  for (let i = 0; i < 6; i++) {
+    const div = document.createElement('div');
+    div.className = 'fog-circle';
+    const sz = 60 + Math.random() * 100;
+    div.style.cssText = `
+      width:${sz}px; height:${sz}px;
+      top:${Math.random()*90}%;
+      left:${Math.random()*90}%;
+      transform:translate(-50%,-50%);
+    `;
+    fc.appendChild(div);
+  }
+})();
+
+/* ── WINDOW INTERACTION ── */
+(function(){
+  const win  = document.getElementById('win');
+  const fog  = document.getElementById('winFog');
+  const mom  = document.getElementById('motherBelow');
+  let opened = false;
+
+  function open() {
+    if (opened) return;
+    opened = true;
+    fog.classList.add('clear');
+    setTimeout(() => mom.classList.add('show'), 600);
+  }
+
+  win.addEventListener('click', open);
+  win.addEventListener('touchend', e => { e.preventDefault(); open(); });
+})();
+
+/* ── PAINTING REVEAL ── */
+(function(){
+  const btn  = document.getElementById('revealBtn');
+  const cbg  = document.getElementById('cbg');
+  const cgold= document.getElementById('cgold');
+  const ctxt = document.getElementById('ctxt');
+  let done   = false;
+
+  btn.addEventListener('click', () => {
+    if (done) return;
+    done = true;
+    cbg.classList.add('on');
+    cgold.classList.add('on');
+    ctxt.classList.add('on');
+    btn.classList.add('gone');
+  });
+})();
+
+/* ── SCROLL REVEAL ── */
+(function(){
+  const blocks = document.querySelectorAll('.sr');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('on'); }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  blocks.forEach(b => io.observe(b));
+})();
+</script>
+
+</body>
+</html>

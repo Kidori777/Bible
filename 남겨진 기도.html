@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>남겨진 기도</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700&family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --sea:     #b8d4e8;
+      --sea-deep:#2a5a78;
+      --sand:    #f0e8d8;
+      --sand2:   #e8dcc8;
+      --dusk:    #7a9cb8;
+      --sky:     #deeaf5;
+      --ink:     #0e0c08;
+      --ink-soft:#1e1810;
+      --muted:   #3a2e20;
+      --gold:    #7a5008;
+      --gold-lt: #9a7020;
+      --warm:    #c4705a;
+      --warm-lt: #e88a70;
+      --divine:  #3a1a58;
+      --divine-lt:#5e3080;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--sky);
+      font-family: 'Gowun Batang', 'Noto Serif KR', serif;
+      color: var(--ink);
+      overflow-x: hidden;
+    }
+
+    /* ─────────────────────────────────────────
+       하늘 / 바다 배경
+    ───────────────────────────────────────── */
+    .sky-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        linear-gradient(
+          180deg,
+          #c8dff5 0%,
+          #deeaf5 30%,
+          #e8f0f8 55%,
+          #d4e4c8 75%,
+          #c8d8b8 85%,
+          #b8cca8 100%
+        );
+    }
+
+    /* 물결 SVG */
+    .waves {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* 빛 원 */
+    .light-orb {
+      position: fixed;
+      top: -120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(ellipse, rgba(255,240,200,0.35) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ─────────────────────────────────────────
+       메인 레이아웃
+    ───────────────────────────────────────── */
+    .page {
+      position: relative;
+      z-index: 2;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 22px 120px;
+    }
+
+    /* ─────────────────────────────────────────
+       히어로
+    ───────────────────────────────────────── */
+    .hero {
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 0 40px;
+    }
+
+    .hero-leaf {
+      font-size: 4rem;
+      margin-bottom: 24px;
+      display: block;
+      animation: sway 4s ease-in-out infinite;
+    }
+    @keyframes sway {
+      0%,100% { transform: rotate(-5deg) scale(1); }
+      50%      { transform: rotate(5deg) scale(1.05); }
+    }
+
+    .hero-title {
+      font-size: clamp(2.2rem, 8vw, 3.8rem);
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.2;
+      letter-spacing: -0.03em;
+      margin-bottom: 18px;
+    }
+
+    .hero-sub {
+      font-size: clamp(0.85rem, 2.5vw, 1rem);
+      color: #3a2e20;
+      letter-spacing: 0.2em;
+      font-weight: 400;
+    }
+
+    .scroll-hint {
+      margin-top: 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: #3a2e20;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      animation: fadeUpDown 2s ease-in-out infinite;
+    }
+    .scroll-hint svg { opacity: 0.5; }
+    @keyframes fadeUpDown {
+      0%,100% { opacity: 0.5; transform: translateY(0); }
+      50%      { opacity: 1;   transform: translateY(6px); }
+    }
+
+    /* ─────────────────────────────────────────
+       스토리 섹션 — 카드 없음, 완전 내러티브
+    ───────────────────────────────────────── */
+    .story-beat {
+      margin-bottom: 70px;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .story-beat.visible { opacity: 1; transform: translateY(0); }
+
+    /* 장면 번호 */
+    .beat-num {
+      display: block;
+      font-size: 0.68rem;
+      letter-spacing: 0.28em;
+      color: var(--sea-deep);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      opacity: 1;
+    }
+
+    /* 본문 */
+    .beat-body {
+      font-size: clamp(1rem, 2.8vw, 1.15rem);
+      line-height: 2.1;
+      color: var(--ink-soft);
+      font-weight: 400;
+    }
+    .beat-body p { margin-bottom: 18px; }
+    .beat-body p:last-child { margin-bottom: 0; }
+
+    /* 감정 강조 */
+    .em-line {
+      display: block;
+      width: 32px;
+      height: 1.5px;
+      background: var(--gold);
+      margin: 32px auto;
+      opacity: 0.6;
+    }
+
+    /* ─────────────────────────────────────────
+       대화 — 인물 말풍선
+    ───────────────────────────────────────── */
+    .dialogue {
+      margin: 28px 0;
+      padding: 22px 24px 22px 28px;
+      position: relative;
+      font-size: clamp(0.95rem, 2.6vw, 1.05rem);
+      line-height: 2;
+      font-style: italic;
+      color: #1a140a;
+    }
+
+    .dialogue.human {
+      border-left: 2px solid var(--sea-deep);
+      background: rgba(184,212,232,0.25);
+      border-radius: 0 10px 10px 0;
+    }
+
+    .dialogue.divine {
+      border-left: 2px solid var(--divine-lt);
+      background: rgba(94,48,128,0.08);
+      border-radius: 0 10px 10px 0;
+      color: var(--divine);
+      font-weight: 500;
+    }
+
+    .dialogue-label {
+      display: block;
+      font-size: 0.68rem;
+      font-style: normal;
+      letter-spacing: 0.2em;
+      margin-bottom: 10px;
+      opacity: 0.85;
+    }
+    .dialogue.human .dialogue-label { color: var(--sea-deep); }
+    .dialogue.divine .dialogue-label { color: var(--divine); }
+
+    /* ─────────────────────────────────────────
+       섬 풍경 일러스트 (CSS만으로)
+    ───────────────────────────────────────── */
+    .scene-illustration {
+      text-align: center;
+      margin: 36px 0;
+      font-size: 3.5rem;
+      opacity: 0.45;
+      letter-spacing: 8px;
+      animation: breathe 4s ease-in-out infinite;
+    }
+    @keyframes breathe {
+      0%,100% { opacity: 0.45; }
+      50%      { opacity: 0.65; }
+    }
+
+    /* ─────────────────────────────────────────
+       계시 — 중앙 강조 박스
+    ───────────────────────────────────────── */
+    .revelation-wrap {
+      margin: 48px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .revelation-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(180deg, transparent, var(--divine-lt));
+      margin-bottom: 0;
+    }
+
+    .revelation-box {
+      background: rgba(94,48,128,0.09);
+      border: 1px solid rgba(94,48,128,0.35);
+      border-radius: 16px;
+      padding: 32px 28px;
+      text-align: center;
+      font-family: 'Noto Serif KR', serif;
+      font-size: clamp(1rem, 3vw, 1.18rem);
+      font-weight: 700;
+      color: var(--divine);
+      line-height: 2;
+      position: relative;
+      width: 100%;
+    }
+
+    .revelation-box::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(160,122,184,0.2), rgba(184,212,232,0.2));
+      z-index: -1;
+    }
+
+    .revelation-quote {
+      font-size: 3.5rem;
+      color: var(--divine-lt);
+      opacity: 0.25;
+      line-height: 0.5;
+      display: block;
+      margin-bottom: 12px;
+      font-family: Georgia, serif;
+    }
+
+    /* ─────────────────────────────────────────
+       메시지 — 결론
+    ───────────────────────────────────────── */
+    .message-section {
+      margin-top: 70px;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .message-section.visible { opacity: 1; transform: translateY(0); }
+
+    .message-eyebrow {
+      display: block;
+      text-align: center;
+      font-size: 0.72rem;
+      letter-spacing: 0.25em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 32px;
+    }
+
+    .message-line {
+      width: 40px;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0.5;
+      margin: 0 auto 32px;
+    }
+
+    .message-body {
+      font-size: clamp(0.95rem, 2.6vw, 1.05rem);
+      line-height: 2.1;
+      color: var(--ink-soft);
+      font-weight: 400;
+    }
+    .message-body p { margin-bottom: 16px; }
+
+    .message-truth {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin: 32px 0;
+    }
+
+    .truth-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 16px 18px;
+      background: rgba(255,255,255,0.7);
+      border-radius: 10px;
+      border: 1px solid rgba(42,90,120,0.25);
+      font-size: clamp(0.9rem, 2.4vw, 1rem);
+      color: #1e1810;
+      line-height: 1.9;
+      font-weight: 400;
+      backdrop-filter: blur(4px);
+    }
+
+    .truth-dot {
+      flex-shrink: 0;
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--gold);
+      margin-top: 10px;
+    }
+
+    .final-words {
+      margin-top: 40px;
+      padding: 30px;
+      background: rgba(255,255,255,0.75);
+      border-radius: 14px;
+      border: 1px solid rgba(42,90,120,0.25);
+      text-align: center;
+      font-size: clamp(1rem, 2.8vw, 1.12rem);
+      font-weight: 500;
+      color: #0e0c08;
+      line-height: 2.1;
+      backdrop-filter: blur(6px);
+    }
+
+    /* ─────────────────────────────────────────
+       푸터
+    ───────────────────────────────────────── */
+    .footer {
+      text-align: center;
+      margin-top: 70px;
+      padding: 24px 0 40px;
+      font-size: 0.85rem;
+      color: #3a2e20;
+      letter-spacing: 0.12em;
+      font-family: 'Noto Serif KR', sans-serif;
+      font-weight: 400;
+    }
+
+    /* ─────────────────────────────────────────
+       수평선 구분
+    ───────────────────────────────────────── */
+    .horizon {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 60px 0;
+      opacity: 0.4;
+    }
+    .horizon::before,
+    .horizon::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--sea-deep);
+    }
+    .horizon-icon { color: var(--sea-deep); font-size: 0.85rem; }
+
+    @media (max-width: 480px) {
+      .revelation-box { padding: 24px 18px; }
+      .final-words    { padding: 22px 18px; }
+      .truth-item     { padding: 14px 14px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- 배경 -->
+<div class="sky-bg"></div>
+<div class="light-orb"></div>
+
+<!-- 물결 -->
+<svg class="waves" viewBox="0 0 1440 80" preserveAspectRatio="none" style="height:80px;">
+  <path fill="rgba(184,212,232,0.35)" d="M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80 Z"/>
+  <path fill="rgba(184,212,232,0.2)" d="M0,55 C480,20 960,70 1440,45 L1440,80 L0,80 Z"/>
+</svg>
+
+<div class="page">
+
+  <!-- 히어로 -->
+  <div class="hero">
+    <span class="hero-leaf">🌿</span>
+    <h1 class="hero-title">남겨진<br>기도</h1>
+    <p class="hero-sub">무인도에서 발견된 하나의 진실</p>
+    <div class="scroll-hint">
+      <span>아래로 내려가며 읽으세요</span>
+      <svg width="16" height="24" viewBox="0 0 16 24" fill="none">
+        <path d="M8 4 L8 20 M3 15 L8 20 L13 15" stroke="#8a7a6a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- 장면 1 -->
+  <div class="story-beat">
+    <span class="beat-num">― 첫 번째 장면</span>
+    <div class="beat-body">
+      <p>거센 폭풍 끝에 기적처럼 살아남은 두 사람. 그들은 작은 무인도에 도착했고, 서로에게 이렇게 말했습니다.</p>
+    </div>
+
+    <div class="dialogue human">
+      <span class="dialogue-label">사람들의 말</span>
+      "우린 아무것도 할 수 없어. 남은 건… 하나님께 기도하는 것뿐이야."
+    </div>
+
+    <div class="beat-body">
+      <p>그리고 문득 마음속에 이상한 경쟁심이 싹텄습니다. "누구의 기도가 더 강한지 확인해 보자." 그들은 섬을 둘로 나누어 각각 기도에 들어갔습니다.</p>
+    </div>
+  </div>
+
+  <div class="scene-illustration">🏝️ 🌊</div>
+  <div class="horizon"><span class="horizon-icon">· · ·</span></div>
+
+  <!-- 장면 2 -->
+  <div class="story-beat">
+    <span class="beat-num">― 두 번째 장면</span>
+    <div class="beat-body">
+      <p>며칠 뒤, 한쪽에서는 열매가 맺힌 나무가 발견되었습니다. 다른 한쪽은… 아무것도 없었습니다.</p>
+      <p>조금 후 한 사람은 외로워 아내를 달라고 기도했고, 다음 날 난파된 배에서 살아남은 한 여인이 그의 구역으로 떠밀려왔습니다.</p>
+      <p>그는 집을 기도했고, 의복을 기도했고, 배까지 기도했습니다. 그리고 그의 기도는 모두 응답되었습니다.</p>
+      <p>반면, 섬 반대편 사내는 여전히 빈손이었습니다.</p>
+    </div>
+  </div>
+
+  <div class="scene-illustration">⛵ ✨</div>
+  <div class="horizon"><span class="horizon-icon">· · ·</span></div>
+
+  <!-- 장면 3 -->
+  <div class="story-beat">
+    <span class="beat-num">― 세 번째 장면</span>
+    <div class="beat-body">
+      <p>배가 준비되자 그는 떠날 결심을 했습니다. 그리고 중얼거렸습니다.</p>
+    </div>
+
+    <div class="dialogue human">
+      <span class="dialogue-label">그 사람의 생각</span>
+      "응답받지 못하는 기도를 드리는 사람과 나눌 축복은 없어."
+    </div>
+
+    <div class="beat-body">
+      <p>그가 떠나려는 순간, 하늘에서 음성이 들려왔습니다.</p>
+    </div>
+
+    <div class="dialogue divine">
+      <span class="dialogue-label">하늘의 음성</span>
+      "왜 너는 너와 함께 살아남은 동료를 남겨두고 떠나려 하느냐?"
+    </div>
+
+    <div class="beat-body">
+      <p>그는 당당하게 대답했습니다.</p>
+    </div>
+
+    <div class="dialogue human">
+      <span class="dialogue-label">그 사람의 대답</span>
+      "내가 받은 축복은 내가 기도했기 때문에 얻은 것입니다. 그는 아무 응답도 받지 못했으니 축복 받을 자격이 없습니다."
+    </div>
+  </div>
+
+  <div class="horizon"><span class="horizon-icon">· · ·</span></div>
+
+  <!-- 장면 4 — 계시 -->
+  <div class="story-beat">
+    <span class="beat-num">― 네 번째 장면</span>
+    <div class="beat-body">
+      <p>그러자 하늘의 목소리는 조용히, 그러나 단호하게 말했습니다.</p>
+    </div>
+
+    <div class="dialogue divine">
+      <span class="dialogue-label">하늘의 음성</span>
+      "헛된 말을 하지 마라. 내가 응답한 모든 기도는 네가 아니라… 그가 너를 위해 드린 기도였다."
+    </div>
+
+    <div class="beat-body">
+      <p>그는 벙어리가 된 듯 말이 막혔습니다.</p>
+    </div>
+
+    <div class="revelation-wrap">
+      <div class="revelation-line"></div>
+      <div class="revelation-box">
+        <span class="revelation-quote">"</span>
+        그의 기도는 단 한 가지였다.<br>
+        <strong>네 모든 기도가 이루어지게 해달라는 기도였다.</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="horizon"><span class="horizon-icon">✦</span></div>
+
+  <!-- 메시지 -->
+  <div class="message-section">
+    <span class="message-eyebrow">이야기가 전하는 진실</span>
+    <div class="message-line"></div>
+
+    <div class="message-body">
+      <p>우리는 종종 생각합니다. "내 기도가 응답되면, 내가 더 믿음이 좋은 것이겠지."</p>
+      <p>그러나 하나님은 기도의 결과보다 하나님을 향한 온전하고 순수한 마음을 먼저 보십니다.</p>
+    </div>
+
+    <div class="message-truth">
+      <div class="truth-item">
+        <span class="truth-dot"></span>
+        기도는 거래가 아니라 사랑의 표현입니다.
+      </div>
+      <div class="truth-item">
+        <span class="truth-dot"></span>
+        믿음은 축복을 쌓는 것이 아니라 흘려보내는 것입니다.
+      </div>
+      <div class="truth-item">
+        <span class="truth-dot"></span>
+        응답은 능력이 아니라 은혜로 오는 것입니다.
+      </div>
+    </div>
+
+    <div class="final-words">
+      진짜 신앙은 기도로 세상을 얻는 것이 아니라,<br>
+      기도로 한 사람을 더 사랑할 수 있는 마음입니다.
+    </div>
+  </div>
+
+  <footer class="footer">
+    이 이야기가 당신의 마음에 평안을 가져다주기를 기도합니다 🙏
+  </footer>
+
+</div>
+
+<script>
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible');
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.story-beat, .message-section').forEach(el => io.observe(el));
+</script>
+</body>
+</html>

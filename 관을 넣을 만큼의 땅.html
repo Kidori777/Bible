@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관을 넣을 만큼의 땅: 어리석은 부자의 비유</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&family=Noto+Serif+KR:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --surface-color: #161b22;
+            --gold: #d4a017;
+            --text-main: #e6edf3;
+            --text-muted: #8b949e;
+            --accent-red: #f85149;
+            --accent-blue: #58a6ff;
+            --border-color: #30363d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(circle at 2px 2px, rgba(212, 160, 23, 0.05) 1px, transparent 0);
+            background-size: 40px 40px;
+            color: var(--text-main);
+            font-family: 'Noto Sans KR', sans-serif;
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 80px 0 60px;
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 4px 16px;
+            background: rgba(248, 81, 73, 0.1);
+            border: 1px solid var(--accent-red);
+            color: var(--accent-red);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .hero h1 {
+            font-family: 'Noto Serif KR', serif;
+            font-size: clamp(1.8rem, 5vw, 3rem);
+            color: var(--gold);
+            margin-bottom: 20px;
+            font-weight: 900;
+        }
+
+        .hero-divider {
+            width: 60px;
+            height: 4px;
+            background: var(--gold);
+            margin: 0 auto 30px;
+        }
+
+        /* Typography & Layout */
+        h2 {
+            font-family: 'Noto Serif KR', serif;
+            font-size: 1.8rem;
+            color: var(--gold);
+            margin: 60px 0 30px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        /* Verse Card */
+        .verse-card {
+            background: var(--surface-color);
+            border-left: 5px solid var(--gold);
+            padding: 30px;
+            margin: 30px 0;
+            position: relative;
+            border-radius: 0 12px 12px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .bible-text {
+            font-weight: 700;
+            color: #ffffff;
+            font-size: 1.1rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .bible-ref {
+            color: var(--gold);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Narrative Box */
+        .story-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            font-style: italic;
+            color: #d1d5db;
+        }
+
+        .highlight {
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        .critical {
+            color: var(--accent-red);
+            font-weight: 700;
+        }
+
+        /* Reflection Card */
+        .reflection-card {
+            background: linear-gradient(145deg, #1c2128, #161b22);
+            border: 1px solid var(--accent-blue);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 30px 0;
+        }
+
+        /* Footer */
+        .footer-text {
+            text-align: center;
+            margin-top: 80px;
+            padding: 40px 0;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+        }
+
+        /* Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 1.8rem; }
+            .story-box { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header class="hero">
+        <span class="hero-badge">VANITY OF VANITIES</span>
+        <h1>🌾 관을 넣을 만큼의 땅</h1>
+        <div class="hero-divider"></div>
+        <p class="highlight">인생의 끝에서 우리가 마주할 진정한 소유</p>
+    </header>
+
+    <section class="reveal">
+        <div class="story-box">
+            <p>미국 개발 시절, 한 대지주가 특별한 제안을 했습니다. **“하루 천 달러에 해가 질 때까지 달려 밟은 땅을 모두 주겠소. 단, 해 지기 전 출발점으로 돌아와야 하오.”**</p>
+            <p>한 청년이 온 힘을 다해 달렸습니다. 정오의 배고픔도, 오후의 갈증도 참으며 오직 더 넓은 땅을 위해 달리고 또 달렸습니다. 해가 저물 무렵, 그는 죽을힘을 다해 출발점으로 돌아왔지만 결국 쓰러져 다시 일어나지 못했습니다.</p>
+            <p>그가 얻은 땅은 결국 <span class="critical">너비 60cm, 길이 180cm</span>. 그가 누운 관 하나 들어갈 만큼의 땅뿐이었습니다.</p>
+        </div>
+    </section>
+
+    <section class="reveal">
+        <h2>⚠️ 어리석은 부자의 경고</h2>
+        <p>이 이야기는 인간 삶의 진정한 가치에 대한 비유입니다. 우리는 돈, 명예, 권력을 향해 평생을 달리지만, 해 지는 노을 앞에서 아무것도 손에 쥐지 못한 채 죽음에 이르곤 합니다.</p>
+
+        <div class="verse-card">
+            <span class="bible-text">“어리석은 사람아, 오늘 밤에 너에게서 너의 혼을 도로 찾아갈 것이다. 그러면 네가 장만해 둔 것이 누구의 것이 되겠느냐?”</span>
+            <span class="bible-ref">— 누가복음 12장 20절</span>
+        </div>
+
+        <p>어리석은 부자는 자신의 혼에게만 말할 뿐, 하나님과는 대화하지 않았습니다. 이는 <span class="highlight">하나님과의 영적 교제가 단절된 내면의 고립</span>을 상징합니다. 자신을 주인 삼는 삶은 결국 허무로 끝납니다.</p>
+    </section>
+
+    <section class="reveal">
+        <h2>💎 보물을 어디에 쌓고 있습니까?</h2>
+        <div class="reflection-card">
+            <p>지금 당신의 혼 생명은 어디에 투자되어 있습니까? 세상의 행복과 즐거움을 위해 평생을 바치고 있지는 않나요? 성경은 우리에게 분명한 방향을 제시합니다.</p>
+        </div>
+
+        <div class="verse-card">
+            <span class="bible-text">“여러분 자신을 위하여 보물을 땅에 쌓아 두지 마십시오... 그러므로 여러분 자신을 위하여 보물을 하늘에 쌓아 두십시오. 거기에서는 좀이 먹거나 녹이 슬지도 않으며, 도둑이 구멍을 뚫지 못하고 훔쳐 가지도 못합니다.”</span>
+            <span class="bible-ref">— 마태복음 6장 19절~20절</span>
+        </div>
+
+        <p>자기를 위해서는 재물을 쌓으면서 하나님을 향하여 부유하지 못한 사람은 이와 같습니다. 우리는 사단을 두려워할 것이 아니라, <span class="highlight">나의 혼과 영을 주관하시는 하나님을 경외해야 합니다.</span></p>
+    </section>
+
+    <section class="reveal">
+        <h2>🧭 돌이킴의 결단</h2>
+        <div class="story-box" style="font-style: normal; border-left: 5px solid var(--accent-blue);">
+            <p>정상적인 그리스도인의 생활은 나의 혼 생명을 스스로 위로하는 것이 아니라, <span class="highlight">주님을 위해 혼을 잃어버리는 삶</span>입니다. 몸 된 교회 안에서 연합하고, 하늘에 보물을 쌓는 삶으로 돌이켜야 합니다.</p>
+        </div>
+
+        <div class="verse-card">
+            <span class="bible-text">“그대의 보물이 있는 그곳에, 그대의 마음도 있습니다.”</span>
+            <span class="bible-ref">— 마태복음 6장 21절</span>
+        </div>
+
+        <p style="text-align: center; font-weight: bold; margin-top: 40px;">
+            당신의 보물이 땅에 있다면, 이제 대가를 지불해서라도 <br>
+            <span class="highlight">하나님을 향해 부유한 자</span>가 되시기를 바랍니다.
+        </p>
+    </section>
+
+    <div class="footer-text">
+        부산교회 2구역
+    </div>
+</div>
+
+<script>
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add('active');
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

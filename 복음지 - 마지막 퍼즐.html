@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>마지막 퍼즐 — 우주 가운데 당신이 존재하는 이유</title>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --teal:        #2A9D8F;
+  --teal-light:  #52B8AC;
+  --teal-dark:   #1A6B60;
+  --teal-pale:   #E0F5F3;
+  --amber:       #E9C46A;
+  --amber-dark:  #C99A30;
+  --coral:       #E76F51;
+  --sand:        #F4F1E8;
+  --ink:         #1A2A28;
+  --muted:       #5A7A76;
+  --white:       #FFFFFF;
+  --sky:         #A8D8EA;
+  --puzzle-1:    #2A9D8F;
+  --puzzle-2:    #E9C46A;
+  --puzzle-3:    #52B8AC;
+  --puzzle-4:    #F4A261;
+  --puzzle-5:    #264653;
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+
+body{
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--sand);
+  color: var(--ink);
+  overflow-x: hidden;
+}
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  background: linear-gradient(145deg, #264653 0%, #2A9D8F 55%, #52B8AC 100%);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  padding: 60px 24px 80px;
+  position: relative; overflow: hidden;
+}
+
+/* Animated floating puzzle pieces */
+.puzzle-bg {
+  position: absolute; inset: 0; pointer-events: none;
+}
+.p-piece {
+  position: absolute;
+  opacity: 0.08;
+  animation: floatPiece linear infinite;
+}
+@keyframes floatPiece {
+  0%   { transform: translateY(0) rotate(0deg); opacity:0.06; }
+  50%  { opacity:0.12; }
+  100% { transform: translateY(-120px) rotate(180deg); opacity:0.04; }
+}
+
+.hero-eyebrow {
+  font-size: 11px; font-weight:700; letter-spacing:5px;
+  color: rgba(255,255,255,0.7);
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 7px 22px; border-radius:40px;
+  margin-bottom: 36px;
+  opacity:0; animation: fadeUp .8s .2s forwards;
+}
+
+.hero-title {
+  font-size: clamp(34px, 9vw, 70px);
+  font-weight: 900;
+  color: white;
+  line-height: 1.15;
+  letter-spacing: -1px;
+  text-shadow: 0 4px 30px rgba(0,0,0,0.3);
+  opacity:0; animation: fadeUp .9s .4s forwards;
+}
+.hero-title em {
+  font-style: normal;
+  color: var(--amber);
+}
+
+.hero-sub {
+  margin-top: 16px;
+  font-size: clamp(18px,4vw,26px);
+  font-weight: 700;
+  color: rgba(255,255,255,0.85);
+  letter-spacing: 2px;
+  opacity:0; animation: fadeUp .8s .55s forwards;
+}
+
+/* Big puzzle illustration */
+.hero-puzzle {
+  margin-top: 52px;
+  opacity:0; animation: fadeUp 1s .7s forwards;
+  position: relative;
+}
+
+.question-box {
+  margin-top: 40px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 24px;
+  padding: 28px 36px;
+  max-width: 500px;
+  font-size: 17px; line-height: 1.9;
+  color: rgba(255,255,255,0.9);
+  opacity:0; animation: fadeUp .9s .9s forwards;
+}
+.question-box strong { color: var(--amber); font-weight:900; }
+
+.scroll-hint {
+  position:absolute; bottom:32px;
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+  color:rgba(255,255,255,0.5); font-size:11px; letter-spacing:3px;
+  opacity:0; animation: fadeUp .8s 1.3s forwards;
+}
+.scroll-arr {
+  width:18px; height:18px;
+  border-right:2px solid rgba(255,255,255,0.5);
+  border-bottom:2px solid rgba(255,255,255,0.5);
+  transform:rotate(45deg);
+  animation: bounce 1.5s infinite;
+}
+
+/* ── SECTION ── */
+.wrap { max-width: 720px; margin: 0 auto; padding: 0 24px; }
+
+.reveal {
+  opacity:0; transform:translateY(36px);
+  transition: opacity .8s cubic-bezier(.22,.68,0,.99), transform .8s cubic-bezier(.22,.68,0,.99);
+}
+.reveal.visible { opacity:1; transform:translateY(0); }
+
+/* ── CHAPTER CARD ── */
+.chapter {
+  border-radius: 28px;
+  padding: 52px 44px;
+  margin: 56px 0;
+  position: relative; overflow: hidden;
+  box-shadow: 0 12px 60px rgba(0,0,0,0.08);
+}
+
+/* puzzle piece number badge */
+.ch-badge {
+  position: absolute;
+  top: 28px; right: 28px;
+  width: 52px; height: 52px;
+}
+
+.ch-num {
+  display: inline-flex; align-items:center; gap:10px;
+  font-size:11px; font-weight:700; letter-spacing:4px;
+  margin-bottom: 14px;
+}
+.ch-num::before {
+  content:'';
+  display:inline-block; width:24px; height:2px;
+  border-radius:2px;
+}
+
+.ch-title {
+  font-size: clamp(22px,5.5vw,32px);
+  font-weight: 800;
+  line-height: 1.3;
+  margin-bottom: 28px;
+  letter-spacing: -0.5px;
+}
+
+.ch-body {
+  font-size: 16px; line-height: 2;
+}
+
+/* ── CHAPTER 1 ── */
+.ch-1 { background: linear-gradient(135deg, #F7FFFE 0%, #E8FAF8 100%); border-top: 5px solid var(--teal); }
+.ch-1 .ch-num { color: var(--teal); }
+.ch-1 .ch-num::before { background: var(--teal); }
+.ch-1 .ch-title { color: var(--teal-dark); }
+.ch-1 .ch-body { color: #2A4A46; }
+
+.big-question {
+  margin-top: 28px;
+  background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+  border-radius: 18px;
+  padding: 24px 28px;
+  color: white;
+  font-size: 17px; line-height: 1.9; font-weight:500;
+}
+.big-question strong { color: var(--amber); font-weight:900; }
+
+/* ── CHAPTER 2 ── */
+.ch-2 { background: linear-gradient(135deg, #FFFDF0 0%, #FFF8DC 100%); border-top: 5px solid var(--amber-dark); }
+.ch-2 .ch-num { color: var(--amber-dark); }
+.ch-2 .ch-num::before { background: var(--amber-dark); }
+.ch-2 .ch-title { color: #6A4800; }
+.ch-2 .ch-body { color: #3A3010; }
+
+.dirac-quote {
+  margin: 28px 0;
+  background: linear-gradient(135deg, #264653, #2A6050);
+  border-radius: 18px;
+  padding: 28px 32px;
+  color: white;
+  position: relative;
+}
+.dirac-quote::before {
+  content: '"';
+  position:absolute; top:-10px; left:20px;
+  font-size: 80px; color: rgba(255,255,255,0.15);
+  font-family: 'Nanum Myeongjo', serif;
+  line-height:1;
+}
+.dirac-name {
+  font-size:12px; color: var(--amber); font-weight:700;
+  letter-spacing:2px; margin-bottom:10px;
+}
+.dirac-text {
+  font-family: 'Nanum Myeongjo', serif;
+  font-size:17px; line-height:1.9; color:rgba(255,255,255,0.92);
+  font-style:italic;
+}
+.bible-box {
+  margin-top: 24px;
+  background: rgba(233,196,106,0.15);
+  border-left: 4px solid var(--amber-dark);
+  border-radius: 0 14px 14px 0;
+  padding: 18px 20px;
+  font-family: 'Nanum Myeongjo', serif;
+  font-size:16px; line-height:1.9; color:#4A3800;
+  font-style:italic; font-weight:700;
+}
+
+/* ── CHAPTER 3 ── */
+.ch-3 { background: linear-gradient(135deg, #F0FBF8 0%, #E0F7F2 100%); border-top: 5px solid var(--teal); }
+.ch-3 .ch-num { color: var(--teal-dark); }
+.ch-3 .ch-num::before { background: var(--teal-dark); }
+.ch-3 .ch-title { color: var(--teal-dark); }
+
+.three-features {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px; margin: 28px 0;
+}
+.feature-card {
+  background: white;
+  border-radius: 18px;
+  padding: 24px 18px;
+  text-align:center;
+  box-shadow: 0 4px 20px rgba(42,157,143,0.1);
+  transition: transform .3s;
+}
+.feature-card:hover { transform:translateY(-6px); }
+.feat-icon { margin-bottom:12px; }
+.feat-title { font-size:14px; font-weight:700; color:var(--teal-dark); margin-bottom:8px; }
+.feat-desc { font-size:13px; line-height:1.7; color:#5A7A76; }
+
+.pascal-box {
+  background: linear-gradient(135deg, var(--teal-dark), #1A4A40);
+  border-radius:18px; padding:28px 32px; color:white; margin-top:24px;
+}
+.pascal-name { font-size:11px; letter-spacing:3px; color:var(--amber); font-weight:700; margin-bottom:10px; }
+.pascal-text { font-size:16px; line-height:1.9; color:rgba(255,255,255,0.9); }
+.pascal-text strong { color:var(--amber); }
+
+/* ── CHAPTER 4 ── */
+.ch-4 { background: linear-gradient(135deg, #FFF5F0 0%, #FFE8E0 100%); border-top: 5px solid var(--coral); }
+.ch-4 .ch-num { color: #C04020; }
+.ch-4 .ch-num::before { background: var(--coral); }
+.ch-4 .ch-title { color: #6A2010; }
+.ch-4 .ch-body { color: #3A2010; }
+
+.problem-highlight {
+  margin-top:24px;
+  background: linear-gradient(135deg, #C04020, #8A2010);
+  border-radius:18px; padding:24px 28px; color:white;
+  font-size:16px; line-height:2;
+}
+.problem-highlight strong { color:#FFD0B0; font-weight:900; }
+
+/* God's plan diagram */
+.plan-diagram {
+  margin: 36px 0;
+  background: white;
+  border-radius: 20px;
+  padding: 32px 24px;
+  box-shadow: 0 4px 24px rgba(200,80,30,0.1);
+}
+.plan-diagram-title {
+  text-align:center; font-size:13px; font-weight:700;
+  letter-spacing:3px; color:var(--coral); margin-bottom:24px;
+}
+.plan-steps {
+  display:flex; flex-wrap:wrap; justify-content:center;
+  align-items:center; gap:8px;
+}
+.plan-step {
+  background: linear-gradient(135deg, #264653, #2A6050);
+  color:white; border-radius:12px;
+  padding:10px 16px; font-size:13px; font-weight:600;
+  text-align:center; line-height:1.4;
+}
+.plan-arrow {
+  color: var(--coral); font-size:18px; font-weight:700;
+}
+.plan-step.highlight {
+  background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+  border: 2px solid var(--amber);
+  font-weight:900;
+}
+
+/* ── CHAPTER 5 ── */
+.ch-5 { background: linear-gradient(135deg, #F0F4FF 0%, #E4EEFF 100%); border-top: 5px solid #264653; }
+.ch-5 .ch-num { color: #264653; }
+.ch-5 .ch-num::before { background: #264653; }
+.ch-5 .ch-title { color: #1A2A40; }
+.ch-5 .ch-body { color: #2A3A4A; }
+
+.jesus-highlight {
+  margin-top:24px;
+  background: linear-gradient(135deg, #264653, #1A3A4A);
+  border-radius:18px; padding:28px 32px; color:white;
+}
+.jesus-highlight p { font-size:16px; line-height:2; }
+.jesus-highlight strong { color:var(--amber); font-weight:900; }
+
+.call-box {
+  margin-top:24px;
+  background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+  border-radius:18px; padding:24px 28px; text-align:center; color:white;
+}
+.call-label { font-size:12px; letter-spacing:3px; color:rgba(255,255,255,0.65); margin-bottom:12px; }
+.call-name {
+  font-size:clamp(28px,7vw,44px);
+  font-weight:900;
+  color: var(--amber);
+  text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+  letter-spacing:2px;
+}
+.call-sub { font-size:14px; color:rgba(255,255,255,0.8); margin-top:8px; }
+
+.bible-box-blue {
+  margin-top:20px;
+  background: rgba(42,157,143,0.1);
+  border-left:4px solid var(--teal);
+  border-radius: 0 14px 14px 0;
+  padding:18px 20px;
+  font-family: 'Nanum Myeongjo', serif;
+  font-size:16px; line-height:1.9; color:#1A3A36;
+  font-style:italic; font-weight:700;
+}
+
+/* ── PRAYER ── */
+.prayer-section {
+  background: linear-gradient(145deg, #264653 0%, #1A3A30 100%);
+  border-radius:32px; padding:64px 44px;
+  text-align:center; color:white;
+  position:relative; overflow:hidden;
+  margin: 56px 0;
+}
+.prayer-section::before {
+  content:'';
+  position:absolute; inset:0;
+  background: radial-gradient(circle at 50% 20%, rgba(233,196,106,.1), transparent 60%);
+}
+.prayer-eyebrow {
+  font-size:11px; font-weight:700; letter-spacing:4px;
+  color:var(--amber); margin-bottom:20px;
+}
+.prayer-intro {
+  font-size:clamp(17px,4vw,22px); font-weight:700;
+  color:white; line-height:1.6; margin-bottom:36px;
+}
+.prayer-intro em { font-style:normal; color:var(--amber); }
+.prayer-box {
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.15);
+  border-radius:24px; padding:40px 36px;
+  position:relative;
+}
+.prayer-box::before {
+  content:'기 도';
+  position:absolute; top:-14px; left:50%; transform:translateX(-50%);
+  background:var(--amber); color:#3A2A00;
+  font-size:11px; font-weight:900; letter-spacing:3px;
+  padding:5px 20px; border-radius:20px;
+}
+.prayer-text {
+  font-family: 'Nanum Myeongjo', serif;
+  font-size:clamp(15px,3.5vw,18px); line-height:2.4;
+  color:rgba(255,255,255,0.92); text-align:center;
+}
+.prayer-text em { color:var(--amber); font-style:normal; font-weight:700; }
+
+/* ── FINAL ── */
+.final {
+  background: linear-gradient(135deg, var(--teal-dark) 0%, #1A3A30 100%);
+  border-radius:32px; padding:60px 40px;
+  text-align:center; color:white; margin:0 0 80px;
+  position:relative; overflow:hidden;
+}
+.final::before {
+  content:'';
+  position:absolute; inset:0;
+  background: radial-gradient(circle at 70% 50%, rgba(233,196,106,.07), transparent 50%);
+}
+.final-puzzle-word {
+  font-size:13px; letter-spacing:4px; color:rgba(255,255,255,0.6);
+  margin-bottom:16px;
+}
+.final-phrase {
+  font-size:clamp(22px,6vw,38px);
+  font-weight:900; color:white; line-height:1.4; margin-bottom:8px;
+}
+.final-phrase span { color:var(--amber); }
+.final-sub { font-size:15px; color:rgba(255,255,255,0.7); margin-bottom:32px; }
+
+.final-info {
+  border-top: 1px solid rgba(255,255,255,0.15);
+  padding-top:24px; margin-top:8px;
+}
+.final-church { font-size:18px; font-weight:700; color:var(--amber); margin-bottom:8px; }
+.final-addr { font-size:13px; color:rgba(255,255,255,0.6); line-height:1.8; }
+
+/* ── DIVIDER ── */
+.divider {
+  display:flex; align-items:center; gap:14px;
+  padding:4px 24px; max-width:720px; margin:0 auto;
+}
+.div-line { flex:1; height:1px; background:linear-gradient(90deg,transparent,#B0D8D4,transparent); }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from{ opacity:0; transform:translateY(24px); }
+  to  { opacity:1; transform:translateY(0); }
+}
+@keyframes bounce {
+  0%,100%{ transform:rotate(45deg) translateY(0); }
+  50%    { transform:rotate(45deg) translateY(6px); }
+}
+@keyframes wobble {
+  0%,100%{ transform:rotate(0deg); }
+  25%    { transform:rotate(-5deg); }
+  75%    { transform:rotate(5deg); }
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:540px){
+  .chapter{ padding:36px 22px; margin:40px 0; }
+  .three-features{ grid-template-columns:1fr; }
+  .plan-steps{ flex-direction:column; }
+  .prayer-section{ padding:44px 22px; }
+  .prayer-box{ padding:28px 16px; }
+  .final{ padding:44px 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════ HERO ════ -->
+<div class="hero">
+  <!-- floating puzzle pieces -->
+  <div class="puzzle-bg">
+    <svg class="p-piece" style="width:80px;top:8%;left:5%;animation-duration:14s;" viewBox="0 0 60 60"><path d="M10 10 H30 Q30 10 35 15 Q40 10 50 10 V30 Q50 30 45 35 Q50 40 50 50 H30 Q30 50 25 45 Q20 50 10 50 V30 Q10 30 15 25 Q10 20 10 10Z" fill="white"/></svg>
+    <svg class="p-piece" style="width:60px;top:15%;right:8%;animation-duration:18s;animation-delay:3s;" viewBox="0 0 60 60"><path d="M10 10 H30 Q30 10 35 15 Q40 10 50 10 V30 Q50 30 45 35 Q50 40 50 50 H30 Q30 50 25 45 Q20 50 10 50 V30 Q10 30 15 25 Q10 20 10 10Z" fill="white"/></svg>
+    <svg class="p-piece" style="width:100px;bottom:20%;left:12%;animation-duration:22s;animation-delay:6s;" viewBox="0 0 60 60"><path d="M10 10 H30 Q30 10 35 15 Q40 10 50 10 V30 Q50 30 45 35 Q50 40 50 50 H30 Q30 50 25 45 Q20 50 10 50 V30 Q10 30 15 25 Q10 20 10 10Z" fill="white"/></svg>
+    <svg class="p-piece" style="width:70px;bottom:30%;right:6%;animation-duration:16s;animation-delay:9s;" viewBox="0 0 60 60"><path d="M10 10 H30 Q30 10 35 15 Q40 10 50 10 V30 Q50 30 45 35 Q50 40 50 50 H30 Q30 50 25 45 Q20 50 10 50 V30 Q10 30 15 25 Q10 20 10 10Z" fill="white"/></svg>
+    <svg class="p-piece" style="width:55px;top:45%;left:2%;animation-duration:20s;animation-delay:2s;" viewBox="0 0 60 60"><path d="M10 10 H30 Q30 10 35 15 Q40 10 50 10 V30 Q50 30 45 35 Q50 40 50 50 H30 Q30 50 25 45 Q20 50 10 50 V30 Q10 30 15 25 Q10 20 10 10Z" fill="white"/></svg>
+  </div>
+
+  <div class="hero-eyebrow">THE LAST PUZZLE OF YOUR LIFE</div>
+
+  <h1 class="hero-title">
+    우주 가운데<br>당신이 존재하는<br><em>이유</em>
+  </h1>
+  <p class="hero-sub">— 마지막 퍼즐 —</p>
+
+  <!-- Hero puzzle SVG -->
+  <div class="hero-puzzle">
+    <svg width="280" height="130" viewBox="0 0 280 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Puzzle pieces assembled except one -->
+      <!-- Piece 1 -->
+      <path d="M10 10 H60 Q60 10 68 20 Q76 10 90 10 V60 Q90 60 80 68 Q90 76 90 90 H40 Q40 90 32 80 Q24 90 10 90 V40 Q10 40 20 32 Q10 24 10 10Z" fill="rgba(255,255,255,0.25)" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+      <text x="48" y="52" text-anchor="middle" font-family="Noto Sans KR,sans-serif" font-size="9" fill="white" font-weight="700">당신은</text>
+      <text x="48" y="64" text-anchor="middle" font-family="Noto Sans KR,sans-serif" font-size="9" fill="rgba(255,255,255,.8)">누구?</text>
+      <!-- Piece 2 -->
+      <path d="M90 10 H140 Q140 10 148 20 Q156 10 170 10 V60 Q170 60 160 68 Q170 76 170 90 H120 Q120 90 112 80 Q104 90 90 90 V40 Q90 40 100 32 Q90 24 90 10Z" fill="rgba(233,196,106,0.3)" stroke="rgba(233,196,106,0.6)" stroke-width="1.5"/>
+      <text x="128" y="52" text-anchor="middle" font-family="Noto Sans KR,sans-serif" font-size="9" fill="white" font-weight="700">왜 사는가</text>
+      <!-- Piece 3 -->
+      <path d="M170 10 H220 Q220 10 228 20 Q236 10 250 10 V60 Q250 60 240 68 Q250 76 250 90 H200 Q200 90 192 80 Q184 90 170 90 V40 Q170 40 180 32 Q170 24 170 10Z" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+      <text x="208" y="52" text-anchor="middle" font-family="Noto Sans KR,sans-serif" font-size="9" fill="white" font-weight="700">어디로?</text>
+      <!-- Missing piece - dashed -->
+      <path d="M90 90 H140 Q140 90 148 100 Q156 90 170 90 V130 H90 Z" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="5 3"/>
+      <text x="130" y="118" text-anchor="middle" font-family="Noto Sans KR,sans-serif" font-size="9" fill="rgba(255,255,255,.5)">마지막 퍼즐?</text>
+    </svg>
+  </div>
+
+  <div class="question-box">
+    당신의 삶에서 아직 채워지지 않은<br>
+    <strong>마지막 퍼즐 한 조각</strong>이 있지 않으신가요?
+  </div>
+
+  <div class="scroll-hint">
+    <span>SCROLL</span>
+    <div class="scroll-arr"></div>
+  </div>
+</div>
+
+<!-- ════ CH 1 ════ -->
+<div class="wrap">
+<div class="chapter ch-1 reveal">
+  <div class="ch-num">PIECE 01</div>
+  <h2 class="ch-title">당신이 존재하는<br>이유를 아십니까?</h2>
+
+  <!-- SVG: person with question mark -->
+  <div style="display:flex;justify-content:center;margin-bottom:28px;">
+    <svg width="200" height="120" viewBox="0 0 200 120" fill="none">
+      <!-- people silhouettes -->
+      <circle cx="40" cy="30" r="14" fill="#2A9D8F" opacity=".7"/>
+      <path d="M26 80 Q26 55 40 55 Q54 55 54 80" fill="#2A9D8F" opacity=".7"/>
+      <circle cx="80" cy="30" r="14" fill="#52B8AC" opacity=".6"/>
+      <path d="M66 80 Q66 55 80 55 Q94 55 94 80" fill="#52B8AC" opacity=".6"/>
+      <circle cx="120" cy="30" r="14" fill="#2A9D8F" opacity=".5"/>
+      <path d="M106 80 Q106 55 120 55 Q134 55 134 80" fill="#2A9D8F" opacity=".5"/>
+      <!-- big question mark -->
+      <text x="158" y="76" font-size="60" font-weight="900" fill="#E9C46A" opacity=".9" font-family="sans-serif">?</text>
+    </svg>
+  </div>
+
+  <p class="ch-body">
+    많은 사람들이 취업, 경력, 더 나은 삶을 위해 분주히 살아가지만, 여전히 삶이 <strong>무의미하고 자신이 왜 사는지 모르겠다</strong>고 말합니다.<br><br>
+    어떤 철학자들은 사람이 이 우주 가운데 아무런 이유 없이 <strong>우연히 던져진 존재</strong>라고 말합니다. 삶의 궁극적인 목적에 대한 답은 없으며, 그저 하루하루 최선을 다하라는 것입니다.
+  </p>
+
+  <div class="big-question">
+    정말 우리가 이 땅에 살아야 하는<br>
+    <strong>궁극적인 이유가 없는 것일까요?</strong><br>
+    단지 매일 주어지는 일에만 충실하면 되는 것일까요?
+  </div>
+</div>
+</div>
+
+<!-- ════ CH 2 ════ -->
+<div class="divider"><div class="div-line"></div><svg width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" stroke="#2A9D8F" stroke-width="1.5" fill="none"/><circle cx="10" cy="10" r="3" fill="#E9C46A"/></svg><div class="div-line"></div></div>
+
+<div class="wrap">
+<div class="chapter ch-2 reveal">
+  <div class="ch-num">PIECE 02</div>
+  <h2 class="ch-title">하나님의 뜻에 따라<br>창조된 우주</h2>
+
+  <div style="display:flex;justify-content:center;margin-bottom:24px;">
+    <svg width="220" height="110" viewBox="0 0 220 110" fill="none">
+      <!-- cosmos rings -->
+      <ellipse cx="110" cy="55" rx="100" ry="45" stroke="#E9C46A" stroke-width="1" opacity=".3" stroke-dasharray="6 4"/>
+      <ellipse cx="110" cy="55" rx="72" ry="32" stroke="#E9C46A" stroke-width="1" opacity=".4" stroke-dasharray="5 4"/>
+      <ellipse cx="110" cy="55" rx="44" ry="20" stroke="#E9C46A" stroke-width="1.5" opacity=".6"/>
+      <!-- sun center -->
+      <circle cx="110" cy="55" r="16" fill="rgba(233,196,106,.8)"/>
+      <circle cx="110" cy="55" r="10" fill="#E9C46A"/>
+      <!-- stars -->
+      <circle cx="30" cy="20" r="2" fill="#E9C46A" opacity=".6"/>
+      <circle cx="185" cy="15" r="1.5" fill="#E9C46A" opacity=".5"/>
+      <circle cx="200" cy="80" r="2" fill="#E9C46A" opacity=".4"/>
+      <circle cx="18" cy="90" r="1.5" fill="#E9C46A" opacity=".6"/>
+      <circle cx="150" cy="100" r="2" fill="#E9C46A" opacity=".5"/>
+      <!-- planet -->
+      <circle cx="175" cy="45" r="8" fill="rgba(42,157,143,.5)" stroke="#2A9D8F" stroke-width="1"/>
+      <ellipse cx="175" cy="45" rx="14" ry="4" stroke="#2A9D8F" stroke-width="1" fill="none" opacity=".5"/>
+      <!-- "하나님의 뜻" label -->
+      <text x="110" y="59" text-anchor="middle" font-family="Noto Sans KR,sans-serif" font-size="8" font-weight="700" fill="#6A4800">뜻</text>
+    </svg>
+  </div>
+
+  <p class="ch-body">
+    사람을 둘러싸고 있는 광활한 우주를 바라봅시다. 자연의 질서는 참으로 <strong>정교하고 아름답습니다.</strong><br><br>
+    이렇게 광활하고 정교하고 아름다운 우주가 과연 아무 목적 없이 생겨나고 존재하는 것일까요?
+  </p>
+
+  <div class="dirac-quote">
+    <div class="dirac-name">폴 디랙 — 노벨 물리학상 수상자 (31세)</div>
+    <p class="dirac-text">
+      "하나님께서 그렇게 만드셨기 때문이다."<br>
+      <span style="font-size:13px;color:rgba(255,255,255,.65);font-style:normal;">— 자신의 묘비에 남긴 단 한 마디</span>
+    </p>
+    <p style="font-size:13px;color:rgba(255,255,255,.7);margin-top:14px;line-height:1.8;">
+      젊었을 때 무신론자였던 그가 60대에 이르러 자연 속에 숨은 <strong style="color:var(--amber)">아름다운 질서</strong>를 보고 결국 하나님의 창조를 인정하게 되었습니다.
+    </p>
+  </div>
+
+  <div class="bible-box">
+    "왜냐하면 주님께서 만물을 창조하셨고, 주님의 뜻에 따라 만물이 존재하며 창조되었기 때문입니다."<br>
+    <span style="font-size:13px;font-style:normal;color:#8A6820;font-weight:700;">— 요한계시록 4장 11절</span>
+  </div>
+</div>
+</div>
+
+<!-- ════ CH 3 ════ -->
+<div class="divider"><div class="div-line"></div><svg width="20" height="20" viewBox="0 0 20 20"><path d="M10 2 C5 2 2 6 2 10 C2 14 5 18 10 18 C15 18 18 14 18 10 C18 6 15 2 10 2Z" stroke="#2A9D8F" stroke-width="1.5" fill="rgba(42,157,143,.15)"/><circle cx="10" cy="10" r="3" fill="#2A9D8F"/></svg><div class="div-line"></div></div>
+
+<div class="wrap">
+<div class="chapter ch-3 reveal">
+  <div class="ch-num">PIECE 03</div>
+  <h2 class="ch-title">사람이 창조된 목적</h2>
+
+  <p class="ch-body" style="color:#2A4A46;">
+    하나님의 창조 가운데 가장 중심인 사람에게도 분명한 <strong style="color:var(--teal-dark)">존재 목적</strong>이 있습니다.
+  </p>
+
+  <div class="three-features">
+    <div class="feature-card">
+      <div class="feat-icon">
+        <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+          <circle cx="22" cy="22" r="20" fill="rgba(42,157,143,.1)" stroke="#2A9D8F" stroke-width="1.5"/>
+          <path d="M22 10 L24.5 17.5 L32 17.5 L26 22.5 L28.5 30 L22 25 L15.5 30 L18 22.5 L12 17.5 L19.5 17.5 Z" fill="#2A9D8F" opacity=".8"/>
+        </svg>
+      </div>
+      <div class="feat-title">하나님의 형상</div>
+      <div class="feat-desc">하나님과 닮은 모습으로 창조되었습니다 — 창 1:26</div>
+    </div>
+    <div class="feature-card">
+      <div class="feat-icon">
+        <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+          <circle cx="22" cy="22" r="20" fill="rgba(233,196,106,.1)" stroke="#C99A30" stroke-width="1.5"/>
+          <ellipse cx="22" cy="28" rx="10" ry="8" stroke="#C99A30" stroke-width="1.5" fill="rgba(233,196,106,.15)"/>
+          <path d="M16 20 Q16 10 22 10 Q28 10 28 20" stroke="#C99A30" stroke-width="1.5" fill="none"/>
+        </svg>
+      </div>
+      <div class="feat-title">하나님을 담는 그릇</div>
+      <div class="feat-desc">하나님을 받아들이도록 만들어진 존재 — 롬 9:23</div>
+    </div>
+    <div class="feature-card">
+      <div class="feat-icon">
+        <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+          <circle cx="22" cy="22" r="20" fill="rgba(42,157,143,.1)" stroke="#2A9D8F" stroke-width="1.5"/>
+          <circle cx="22" cy="22" r="8" stroke="#2A9D8F" stroke-width="1.5" fill="rgba(42,157,143,.2)"/>
+          <circle cx="22" cy="22" r="3" fill="#2A9D8F"/>
+          <path d="M22 6 L22 14 M22 30 L22 38 M6 22 L14 22 M30 22 L38 22" stroke="#2A9D8F" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="feat-title">영 (Spirit)</div>
+      <div class="feat-desc">하나님만이 채울 수 있는 영이 있습니다 — 살전 5:23</div>
+    </div>
+  </div>
+
+  <div class="pascal-box">
+    <div class="pascal-name">블레즈 파스칼 — 철학자·수학자</div>
+    <p class="pascal-text">
+      사람에게는 <strong>하나님만이 채울 수 있는 빈 공간</strong>이 있습니다.<br>
+      이 공간이 바로 사람의 <strong>영(Spirit)</strong>입니다.<br><br>
+      따라서 사람은 그의 <strong>영 안에 하나님을 담아 하나님으로 충만하게 되어 하나님을 표현</strong>하도록 창조되었습니다.
+    </p>
+  </div>
+</div>
+</div>
+
+<!-- ════ CH 4 ════ -->
+<div class="divider"><div class="div-line"></div><svg width="20" height="20" viewBox="0 0 20 20"><path d="M10 2 L18 18 L2 18 Z" stroke="#E76F51" stroke-width="1.5" fill="rgba(231,111,81,.15)"/></svg><div class="div-line"></div></div>
+
+<div class="wrap">
+<div class="chapter ch-4 reveal">
+  <div class="ch-num">PIECE 04</div>
+  <h2 class="ch-title">하나님의 목적에서<br>떠난 사람</h2>
+
+  <p class="ch-body">
+    그러나 이렇게 놀라운 목적을 위해 창조된 사람에게 문제가 생겼습니다. 사람이 <strong>하나님의 원래 목적에서 벗어난 것</strong>—성경은 이것을 <strong>죄</strong>라고 말합니다.
+  </p>
+
+  <div class="problem-highlight">
+    만일 오늘 당신의 삶이 <strong>공허하게 느껴진다면,</strong><br>
+    그것은 바로 당신이 <strong>하나님의 목적에서 벗어나 있기 때문</strong>입니다.<br>
+    사람은 오직 <strong>하나님의 목적으로 돌아갈 때에만</strong> 삶의 참된 의미를 되찾게 됩니다.
+  </div>
+
+  <div class="plan-diagram">
+    <div class="plan-diagram-title">하나님의 계획 요약</div>
+    <div class="plan-steps">
+      <div class="plan-step">GOD<br>하나님</div>
+      <div class="plan-arrow">→</div>
+      <div class="plan-step">육체가 되심<br>(인생)</div>
+      <div class="plan-arrow">→</div>
+      <div class="plan-step">십자가에<br>못 박혀 죽으심</div>
+      <div class="plan-arrow">→</div>
+      <div class="plan-step">부활</div>
+      <div class="plan-arrow">→</div>
+      <div class="plan-step">생명 주시는 영</div>
+      <div class="plan-arrow">→</div>
+      <div class="plan-step highlight">
+        <svg width="60" height="24" viewBox="0 0 60 24" fill="none" style="display:block;margin:0 auto 4px;">
+          <rect x="1" y="1" width="18" height="22" rx="4" fill="rgba(255,255,255,.2)" stroke="rgba(255,255,255,.5)" stroke-width="1"/>
+          <rect x="21" y="1" width="18" height="22" rx="4" fill="rgba(255,255,255,.15)" stroke="rgba(255,255,255,.4)" stroke-width="1"/>
+          <rect x="41" y="1" width="18" height="22" rx="4" fill="rgba(255,255,255,.15)" stroke="rgba(255,255,255,.4)" stroke-width="1"/>
+          <text x="10" y="16" text-anchor="middle" font-size="9" fill="#E9C46A" font-weight="700">영</text>
+          <text x="30" y="16" text-anchor="middle" font-size="9" fill="white" opacity=".8">혼</text>
+          <text x="50" y="16" text-anchor="middle" font-size="9" fill="white" opacity=".8">몸</text>
+        </svg>
+        당신의 영 안으로!
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ════ CH 5 ════ -->
+<div class="divider"><div class="div-line"></div><svg width="20" height="20" viewBox="0 0 20 20"><path d="M10 3 C6 3 3 6 3 10 C3 14 6 17 10 17 C14 17 17 14 17 10" stroke="#264653" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M13 7 L17 10 L13 13" stroke="#264653" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="div-line"></div></div>
+
+<div class="wrap">
+<div class="chapter ch-5 reveal">
+  <div class="ch-num">PIECE 05</div>
+  <h2 class="ch-title">하나님의 목적에 따른<br>삶으로 돌아가는 길</h2>
+
+  <div class="jesus-highlight">
+    <p>주 예수님은 <strong>하나님께서 사람이 되어 오신 분</strong>입니다. 그분은 인류의 죄를 짊어지고 <strong>십자가에서 죽으셨고,</strong> 부활하심으로 우리가 받아들일 수 있는 <strong>생명 주시는 영이 되셨습니다.</strong></p>
+    <p style="margin-top:16px;">부활하신 주 예수님은 오늘 <strong>우리를 충만히 채우시는 참 하나님</strong>이십니다!</p>
+  </div>
+
+  <div class="call-box" style="margin-top:24px;">
+    <div class="call-label">지금 이렇게 부르십시오</div>
+    <div class="call-name">"주 예수님!"</div>
+    <div class="call-sub">당신의 마음을 열고 깊은 곳에서부터</div>
+  </div>
+
+  <div class="bible-box-blue">
+    "누구든지 주의 이름을 부르는 자는 구원을 받을 것이다."<br>
+    <span style="font-size:13px;color:#2A6050;font-weight:700;font-style:normal;">— 로마서 10장 13절</span>
+  </div>
+</div>
+</div>
+
+<!-- ════ PRAYER ════ -->
+<div class="wrap">
+<div class="prayer-section reveal">
+  <div class="prayer-eyebrow">PRAYER · 기도</div>
+  <p class="prayer-intro">
+    이제 당신의 마음을 열고<br>
+    <em>주님께 기도하십시오.</em>
+  </p>
+  <div class="prayer-box">
+    <p class="prayer-text">
+      주 예수님,<br>
+      저는 하나님의 목적에서 <em>떠나 있었습니다.</em><br>
+      그러나 이제 제 마음을 주님께 <em>돌이켜</em><br>
+      주님의 이름을 부릅니다.<br><br>
+      주 예수님, 저를 <em>충만히 채워</em> 주십시오.<br>
+      저의 삶이 하나님의 영원한 목적에 따른<br>
+      삶이 되게 해 주십시오.<br><br>
+      저를 채워 주시고 저에게<br>
+      <em>삶의 의미를 되찾게</em> 해 주심에 감사드립니다.<br><br>
+      <em>아멘.</em>
+    </p>
+  </div>
+</div>
+</div>
+
+<!-- ════ FINAL ════ -->
+<div class="wrap">
+<div class="final reveal">
+  <!-- final assembled puzzle -->
+  <div style="display:flex;justify-content:center;margin-bottom:32px;">
+    <svg width="200" height="100" viewBox="0 0 200 100" fill="none">
+      <path d="M10 10 H55 Q55 10 62 18 Q69 10 80 10 V55 Q80 55 72 62 Q80 69 80 80 H35 Q35 80 28 72 Q21 80 10 80 V35 Q10 35 18 28 Q10 21 10 10Z" fill="rgba(255,255,255,.2)" stroke="rgba(255,255,255,.4)" stroke-width="1.5"/>
+      <path d="M80 10 H125 Q125 10 132 18 Q139 10 150 10 V55 Q150 55 142 62 Q150 69 150 80 H105 Q105 80 98 72 Q91 80 80 80 V35 Q80 35 88 28 Q80 21 80 10Z" fill="rgba(233,196,106,.35)" stroke="rgba(233,196,106,.6)" stroke-width="1.5"/>
+      <text x="115" y="48" text-anchor="middle" font-family="Noto Sans KR,sans-serif" font-size="10" fill="white" font-weight="700">예수</text>
+      <text x="115" y="62" text-anchor="middle" font-family="Noto Sans KR,sans-serif" font-size="9" fill="rgba(255,255,255,.8)">그리스도</text>
+      <path d="M150 10 H190 V80 H150 V55 Q150 55 142 62 Q150 69 150 80" fill="rgba(255,255,255,.15)" stroke="rgba(255,255,255,.35)" stroke-width="1.5"/>
+      <!-- snap effect lines -->
+      <path d="M78 45 L82 45" stroke="rgba(233,196,106,.8)" stroke-width="2" stroke-linecap="round"/>
+      <path d="M80 43 L80 47" stroke="rgba(233,196,106,.8)" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <div class="final-puzzle-word">THE LAST PUZZLE</div>
+  <h2 class="final-phrase">
+    당신의 마지막 퍼즐,<br>
+    <span>예수 그리스도!</span>
+  </h2>
+  <p class="final-sub">당신의 삶을 완성하는 마지막 한 조각</p>
+
+  <div class="final-info">
+    <div class="final-church">부산교회 2구역</div>
+    <div class="final-addr">
+      부산광역시 사하구 하신번영로 강변프라자 201호<br>상담 전화 : 010-9362-7642
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+const reveals = document.querySelectorAll('.reveal');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+},{threshold:0.1});
+reveals.forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

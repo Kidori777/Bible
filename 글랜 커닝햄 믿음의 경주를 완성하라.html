@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>교회 집회 말씀 개요 - 글렌 커닝햄</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&family=Noto+Serif+KR:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --surface-color: #161b22;
+            --gold: #d4a017;
+            --gold-light: #f1c40f;
+            --blue: #58a6ff;
+            --green: #3fb950;
+            --text-main: #c9d1d9;
+            --text-dim: #8b949e;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(circle at 50% 50%, rgba(212, 160, 23, 0.05) 0%, transparent 80%);
+            color: var(--text-main);
+            font-family: 'Noto Sans KR', sans-serif;
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Noto Serif KR', serif;
+            color: var(--gold);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 60px 0;
+            border-bottom: 1px solid rgba(212, 160, 23, 0.3);
+            margin-bottom: 50px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(212, 160, 23, 0.15);
+            color: var(--gold);
+            border: 1px solid var(--gold);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            margin: 0;
+            letter-spacing: -1px;
+            word-break: keep-all;
+        }
+
+        /* Fade-in Animation Classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Verse Card */
+        .verse-card {
+            background: var(--surface-color);
+            border-left: 4px solid var(--gold);
+            padding: 25px 35px;
+            margin: 30px 0;
+            position: relative;
+            border-radius: 0 8px 8px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .verse-card::before {
+            content: '"';
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            font-size: 80px;
+            color: rgba(212, 160, 23, 0.1);
+            font-family: 'Noto Serif KR', serif;
+        }
+
+        .verse-card .content {
+            font-family: 'Noto Serif KR', serif;
+            font-size: 1.1rem;
+            color: #ffffff;
+            word-break: break-all;
+            white-space: normal;
+        }
+
+        .verse-card .content b {
+            font-weight: 700;
+        }
+
+        /* Cards */
+        .front-card, .person-card {
+            background: var(--surface-color);
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .person-card {
+            border-left: 5px solid var(--blue);
+        }
+
+        .front-card:hover, .person-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold);
+        }
+
+        /* Dialogue Style */
+        .dialogue {
+            background: rgba(88, 166, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: var(--blue);
+            border-left: 2px solid var(--blue);
+        }
+
+        /* Mission List */
+        .mission-list {
+            list-style: none;
+            padding-left: 10px;
+        }
+
+        .mission-list li {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 12px;
+        }
+
+        .mission-list li::before {
+            content: '✦';
+            position: absolute;
+            left: 0;
+            color: var(--gold);
+        }
+
+        /* Section Dividers */
+        hr {
+            border: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--gold), transparent);
+            margin: 50px 0;
+        }
+
+        .footer-district {
+            text-align: center;
+            margin-top: 80px;
+            padding: 40px 0;
+            color: var(--gold);
+            font-family: 'Noto Serif KR', serif;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            border-top: 1px solid rgba(212, 160, 23, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.2rem; }
+            .container { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header class="hero reveal">
+        <div class="badge">믿음의 실화</div>
+        <h1>불가능을 이겨낸 의지, 글렌 커닝햄 이야기</h1>
+    </header>
+
+    <section class="reveal">
+        <div class="front-card">
+            <p>작은 시골 학교가 있었다. 겨울철이면 학교는 항아리처럼 배가 불룩한 구식 석탄 난로에 불을 지펴 교실 난방을 해결했다. 날마다 한 어린 소년이 맨 먼저 등교해서 교사와 다른 학생들이 오기 전에 난로를 지펴 교실을 따뜻하게 만들었다. 어느 날 아침, 교사와 학생들이 등교해서 보니 학교가 불길에 휩싸여 있었다. 불타는 교실 안에는 그 어린 소년이 정신을 잃고 쓰러져 있었다. 사람들은 서둘러 소년을 밖으로 끌어냈다.</p>
+            <p>소년은 살아날 가망이 희박해 보였다. 하체 부위가 끔찍한 화상을 입어 형체를 알아보기 힘들 정도였다. 사람들은 곧바로 소년을 근처의 시립병원으로 옮겼다. 심한 화상을 입은 채 희미한 의식으로 병원 침대에 누워있던 소년은 의사가 엄마에게 하는 말을 들었다. 의사는 말했다. 불길이 소년의 하반신을 온통 망가뜨렸기 때문에 살아날 가능성이 거의 없으며, 어쩌면 이 상태에선 그것이 최선의 선택일지도 모른다고.</p>
+            <p>소년은 죽고 싶지 않았다. 꼭 살아나겠다고 소년은 굳게 마음을 먹었다. 아무튼 의사에게 큰 놀라움을 선사하며, 소년은 죽지 않고 소생했다. 위험한 고비를 일단 넘겼을 때 소년은 또다시 의사가 엄마에게 하는 얘기를 들었다. 의사는 말했다. 하반신의 신경과 근육들이 화상으로 다 파괴되었기 때문에 소년을 위해선 차라리 죽는 편이 더 나을 뻔 했으며, 이제 하체 부위를 전혀 쓸 수 없으니 평생을 휠체어에서 불구자로 지내야만 한다고.</p>
+            <p>소년은 다시금 마음을 굳게 먹었다. 결코 불구자가 되지 않기로…. 언젠가는 다시 정상적으로 걸으리라고 소년은 결심했다. 하지만 불행하게도 허리 아래쪽에는 운동 신경이 하나도 살아남아 있지 않았다. 가느다란 두 다리가 힘없이 매달려 있을 뿐이었다.</p>
+            <p>마침내 소년은 퇴원을 했다. 엄마가 날마다 소년의 다리에 마사지를 해 주었다. 아무 느낌, 아무 감각, 아무 반응이 없었다. 하지만 다시 걷고야 말겠다는 소년의 의지는 전보다 더 강해졌다. 소년은 침대에 누워 있지 않으면 좁은 휠체어에 갇혀 지내야만 했다. 어느 햇빛이 맑은 날 아침, 엄마는 신선한 공기를 마시게 해 주려고 소년을 휠체어에 태워 앞마당으로 나갔다. 소년은 엄마가 집 안으로 들어간 틈을 타 휠체어에서 몸을 던져 마당의 잔디밭에 엎드렸다. 그러고는 다리를 잡아 끌면서 두 팔의 힘으로 잔디밭을 가로질러 기어가기 시작했다.</p>
+            <p>마당가에 세워진 흰색 담장까지 기어간 소년은 온 힘을 다해 담장의 말뚝을 붙들고 일어섰다. 그런 다음 말뚝에서 말뚝으로 담장을 따라 무감각한 다리를 옮기기 시작했다. 꼭 다시 걷겠다는 소년의 강한 의지를 꺾을 사람은 아무도 없었다. 소년은 날마다 그 일을 반복했다. 마침내는 담장 밑을 따라 잔디밭 위에 하얀 길이 생겨날 정도였다. 자신의 두 다리에 생명을 불어 넣는 일만큼 중요한 것은 소년에게 없었다.</p>
+            <p>날마다 반복되는 마사지와 소년의 강한 의지, 흔들림 없는 결심 덕분에 마침내 소년은 혼자 힘으로 일어설 수 있게 되었다. 그 다음엔 더듬거리며 발을 옮겨 놓을 수 있게 되었고… 그 다음에는 혼자 힘으로 걸을 수 있게 되었으며, 그리고 그 다음에는 달릴 수 있게 되었다.</p>
+            <p>소년은 다시 걸어서 학교를 다니기 시작했다. 그 다음에는 달려서 학교를 다니기 시작했다. 소년은 달리는 것에서 오는 순수한 기쁨 때문에 끝없이 달리고 또 달렸다. 훗날 대학에 들어간 소년은 육상부에 소속되었다. 더 훗날, 한때는 살아날 가망성이 희박했으며, 결코 걸을 수 없고 뛰어다닐 희망이 없었던, 불굴의 의지를 가진 이 사람 <b>글렌 커닝햄 박사</b>는 매디슨 스퀘어 가든에서 벌어진 1마일 달리기 경기에서 세계 신기록을 달성하며 결승선을 통과했다.</p>
+        </div>
+
+        <div class="person-card">
+            <h3>🏃 참고: 글렌 커닝햄(Glenn Cunningham)</h3>
+            <p>학교 육상부원들을 부러워하고, 육상 선수가 되기를 바랐으나 하반신의 화상으로 다리를 사용 할 수 없다는 절망적인 장애를 가지고 있던 소년. 그러나 1934년 1마일(1.6093km) 달리기에서 4분 6.7초로 세계 신기록을 수립하게 된 청년, 글렌 커닝햄의 일화입니다.</p>
+        </div>
+    </section>
+
+    <hr>
+
+    <section class="reveal">
+        <h2>🏃 믿음의 경주를 완주하라</h2>
+        <div class="verse-card">
+            <div class="content">
+                <b>그러므로 이렇게 많은 구름 같은 증인들이 우리를 둘러싸고 있으니, 우리도 모든 무거운 짐과 우리를 쉽게 얽어매는 죄를 떨쳐 버리고, 인내로 우리 앞에 놓인 경주를 합시다. 우리 믿음의 창시자이시며 완성자이신 예수님을 주목합시다. 그분은 자기 앞에 있는 기쁨을 위하여 십자가를 견디시고 수치를 보잘것없는 것으로 여기셨습니다. 그래서 그분은 하나님의 보좌 오른편에 앉으셨습니다. - 히브리서 12장 1절~2절 -</b>
+            </div>
+        </div>
+
+        <p>우리의 믿음의 경주에는 많은 장애물들이 있습니다. 첫째는 <b>모든 무거운 짐들</b>입니다. 이러한 무거운 짐들은 경주에 있어서 큰 방해가 됩니다. 경주를 하기 위해서는 최대한 몸을 가볍게 하여야 하는데, 내가 살아가는 인생에 있어서 직장이라는 무거운 짐, 내 집 마련이라는 무거운 짐, 결혼이라는 무거운 짐 등 여러 무거운 짐들이 나의 걸음을 무겁게 하고 있습니다.</p>
+        
+        <p>또 <b>우리를 쉽게 얽어매는 죄</b>라는 것이 항상 우리의 발목을 걸어 넘어뜨리려고 하고 있습니다. 쉽게 얽어매는 죄는 무엇일까요? 도둑, 살인, 질투 같은 것은 우리가 생각하는 일반적인 죄의 범주입니다. 그러나 여기서 쉽게 얽어매는 죄는 믿음의 경주를 방해한다는 것입니다.</p>
+
+        <p>우리에게는 개인의 영성에 대한 추구도 있겠지만 단체적인 교회 생활의 전진도 있을 것입니다. 단체적인 복음 실행에 앞서 많은 것들이 합당한 이유로 나를 이 경주에서 함께하지 못하게 합니다. "난 가족들을 데려다주어야 해서요." "난 평상시 개인 전도해요." "난 오늘 감정이 다운이 되어서…" 아마 여러 가지 쉽게 옭아매는 합당한 이유가 우리를 믿음의 경주에서 발목을 잡을 것입니다. 이러한 무거운 짐과 얽어매는 죄는 어떻게 해결할 수 있을까요? 주님 앞에 섰을 때도 나의 사정을 하소연하며 변명할 것인가요? 이럴 때일수록 우리는 <b>믿음의 창시자이시며 완성자이신 예수님을 주목할 필요</b>가 있습니다.</p>
+
+        <p>왜 우리가 이러한 경주에서 힘들어하고 도망가려 하는가? 그것은 <b>예수님을 주목하지 않기 때문에</b> 무거운 짐과 쉽게 얽어매는 죄 가운데 머물러서 나의 형편을 하소연하는 것입니다. 우리의 믿음의 경주에는 <b>인내</b>가 필요합니다. 인내가 필요하다는 것은 그 과정이 순탄치 않고 길며 여러 어려움이 있다는 것입니다.</p>
+
+        <p>그럴 때 우리에게 있는 무거운 짐과 쉽게 얽어매는 죄를 벗어 던질 수 있는 유일한 방법은 <b>믿음의 창시자요 완성자이신 예수님을 주목하며 달려가는 것</b>입니다. 그분은 우리의 본으로서 그 길을 가셨고 십자가에서 승리하셨으며, 장사지낸 바 되었고 사흘 만에 부활하시어 지금은 하나님의 보좌 우편에 앉으셨습니다. 매 순간 우리는 <b>예수님을 주목하며 이 믿음의 경주를 인내로써 달려가야</b> 할 것입니다.</p>
+    </section>
+
+    <div class="footer-district">
+        부산교회 2구역
+    </div>
+</div>
+
+<script>
+    const observerOptions = {
+        threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal').forEach(el => {
+        observer.observe(el);
+    });
+</script>
+
+</body>
+</html>

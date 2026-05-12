@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>막혀있는 혈관을 푸는 약, 스타틴과 복음</title>
+    <style>
+        :root {
+            --bg-color: #0d1a10; /* Deep Forest Green */
+            --accent-gold: #c5a059;
+            --accent-rust: #8b4513;
+            --text-cream: #f5f5dc;
+            --card-bg: rgba(255, 255, 255, 0.05);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nanum Myeongjo', serif;
+            background-color: var(--bg-color);
+            color: var(--text-cream);
+            line-height: 1.8;
+            overflow-x: hidden;
+            word-break: keep-all;
+        }
+
+        /* Noise Texture Overlay */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 9999;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3%3Ffilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Lighthouse Beam Effect */
+        .header-visual {
+            position: relative;
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at 50% 30%, rgba(197, 160, 89, 0.15) 0%, transparent 70%);
+            text-align: center;
+            padding: 20px;
+        }
+
+        .main-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            text-shadow: 0 0 20px rgba(197, 160, 89, 0.3);
+            letter-spacing: -1px;
+            z-index: 10;
+        }
+
+        /* Scroll Animation Class */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 0 25px 100px;
+        }
+
+        /* Reference Section */
+        .reference-box {
+            border: 1px solid var(--accent-gold);
+            padding: 25px;
+            margin-bottom: 60px;
+            background: rgba(197, 160, 89, 0.03);
+            position: relative;
+        }
+
+        .reference-box::before {
+            content: "REFERENCE";
+            position: absolute;
+            top: -12px; left: 20px;
+            background: var(--bg-color);
+            padding: 0 10px;
+            font-size: 0.75rem;
+            color: var(--accent-gold);
+            letter-spacing: 2px;
+        }
+
+        /* Content Sections */
+        .topic-section {
+            margin-bottom: 100px;
+            position: relative;
+        }
+
+        .topic-number {
+            font-family: serif;
+            font-size: 4rem;
+            color: rgba(197, 160, 89, 0.1);
+            position: absolute;
+            top: -40px; left: -20px;
+            z-index: -1;
+        }
+
+        .sub-title {
+            font-size: 1.6rem;
+            color: var(--accent-gold);
+            margin-bottom: 25px;
+            border-bottom: 1px solid rgba(197, 160, 89, 0.2);
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        blockquote {
+            font-size: 1.4rem;
+            color: #fff;
+            text-align: center;
+            margin: 40px 0;
+            padding: 20px;
+            border-left: 2px solid var(--accent-rust);
+            background: rgba(139, 69, 19, 0.05);
+        }
+
+        /* Bible Verse Box */
+        .verse-box {
+            background: linear-gradient(to right, rgba(139, 69, 19, 0.1), transparent);
+            border-left: 3px solid var(--accent-rust);
+            padding: 20px 30px;
+            margin: 30px 0;
+            font-weight: 600;
+            color: #e0bb84;
+            position: relative;
+        }
+
+        /* Floating Decoration */
+        .spine-dot {
+            width: 8px; height: 8px;
+            background: var(--accent-gold);
+            border-radius: 50%;
+            margin: 40px auto;
+            box-shadow: 0 0 10px var(--accent-gold);
+        }
+
+        /* Footer */
+        .footer {
+            background: #050a06;
+            padding: 60px 20px;
+            text-align: center;
+            border-top: 1px solid var(--accent-rust);
+        }
+
+        .contact-info {
+            color: var(--accent-gold);
+            font-size: 1.1rem;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .main-title { font-size: 1.6rem; }
+            .sub-title { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header-visual">
+        <h1 class="main-title reveal">“막혀있는 혈관을 푸는 약,<br>스타틴과 복음”</h1>
+    </header>
+
+    <div class="container">
+        
+        <div class="reference-box reveal">
+            <p><strong>*참조 : 콜레스테롤 지질단백질(lipoprotein)</strong></p><br>
+            <p><strong>LDL(Low Density Lipoprotein)</strong> – 저밀도 지질단백질, 간에서 세포로 콜레스테롤을 이동하는 운반선 역할</p>
+            <p><strong>HDL(High Density Lipoprotein)</strong> – 고밀도 지질 단백질로 세포에서 간으로 콜레스테롤을 회수하는 운반선 역할</p>
+        </div>
+
+        <section class="topic-section reveal">
+            <span class="topic-number">01</span>
+            <h2 class="sub-title">1. 침묵 속에서 막히는 길</h2>
+            <p>우리는 늘 바쁘게 살아가죠.</p>
+            <p>회사 일, 인간관계, 스트레스, 경쟁 속에서 마음이 답답하고 곤고해도 “괜찮겠지” 하며 그냥 넘깁니다.</p>
+            <p>그런데, 조용히 우리 안에서는 보이지 않는 변화가 일어나고 있습니다.</p>
+            <p>혈관 속에는 콜레스테롤이 서서히 쌓이고, 영혼 속에는 죄와 교만이 조금씩 켜켜이 쌓입니다.</p>
+            <p>혈관이 막히면 생명이 끊어지듯, 영혼이 막히면 하나님과의 관계가 끊어집니다.</p>
+            
+            <blockquote>“혈관은 조용히 막힌다.”</blockquote>
+            
+            <p>성경도 말합니다.</p>
+            <div class="verse-box">
+                “죄의 대가는 죽음이지만.” - 로마서 6장 23절 -
+            </div>
+            <p>우리의 육신도, 영혼도, 미처 생각지 않았던 ‘막힘’ 속에서 서서히 죽어가고 있었던 것입니다.</p>
+        </section>
+
+        <div class="spine-dot"></div>
+
+        <section class="topic-section reveal">
+            <span class="topic-number">02</span>
+            <h2 class="sub-title">2. 콜레스테롤의 역할과 문제 — “필요하지만 넘치면 치명적”</h2>
+            <p>콜레스테롤은 나쁜 것만은 아닙니다.</p>
+            <p>세포막을 만들고, 호르몬과 비타민 D를 만드는 데 꼭 필요하죠.</p>
+            <p>그러나 “너무 많아지면” 그것이 문제입니다.</p>
+            <p>영혼의 세계도 마찬가지입니다.</p>
+            <p>율법은 선하고 좋은 것이지만 율법의 행위 아래에 있는 사람은 저주 아래 있다고 하였습니다.</p>
+            <div class="verse-box">
+                율법의 행위에 속한 사람들은 다 저주 아래 있습니다. – 갈라디아서3장 26절 -
+            </div>
+            <p>율법은 우리의 영혼을 치료 받을 수 있게끔 하는 인솔자인 것입니다.</p>
+            <div class="verse-box">
+                그러므로 율법은 우리가 믿음으로 의롭게 되도록, 우리를 그리스도께 이끄는 어린이 인솔자가 되었습니다 – 갈라디아서 3장24절 -
+            </div>
+            <p>“나는 괜찮아.나는 착하게 살고 있어.” 그 말 속에는 이미 **영적 LDL(자기 의)**이 쌓이고 있습니다.</p>
+            <p>그 결과, 하나님의 은혜가 흘러 들어올 길이 점점 좁아집니다.</p>
+        </section>
+
+        <div class="spine-dot"></div>
+
+        <section class="topic-section reveal">
+            <span class="topic-number">03</span>
+            <h2 class="sub-title">3. 스타틴의 작용 — “내 안의 불신과 교만을 낮추는 복음”</h2>
+            <p>스타틴은 간에서 콜레스테롤을 만드는 과정을 차단합니다.</p>
+            <p>넘쳐나는 LDL이 혈관에 쌓여 막히는 것을 방지하기 위하여 스타틴이 약효를 발휘하면 LDL, 즉 ‘저밀도 콜레스테롤’의 생성을 줄여 줌으로해서 혈관에 쌓이는 찌꺼기가 없도록 하는 것입니다.</p>
+            <p>복음도 마찬가지입니다.</p>
+            <p>예수님의 십자가는 인간의 교만과 자기의(義)를 잘라냅니다.</p>
+            <p>내가 쌓아온 ‘의로움의 콜레스테롤’을 제거하고 오직 은혜의 피가 흐르도록 합니다.</p>
+            <p>내가 아무리 식단을 조절하고 운동을 해도 혈관 속 찌꺼기가 완전히 사라지지 않듯, 인간의 노력만으로는 죄의 막힘을 풀 수 없습니다.</p>
+            <p>그래서 하나님은 말씀하십니다.</p>
+            <div class="verse-box">
+                사람이 의롭게 되는 것이 율법의 행위로써가 아니라 예수 그리스도를 믿음으로 말미암는다는 것을 알고, 우리도 그리스도 예수님을 믿었습니다. – 갈라디아서2장 16절 –
+            </div>
+            <p>스타틴이 간의 합성 효소를 억제하듯, 복음은 내 안의 불신과 교만의 효소를 억제하고 차단합니다.</p>
+            <p>그때 비로소 영혼의 혈관에 그리스도의 생명의 피가 흐르기 시작합니다.</p>
+            <p>난 예수님을 믿고 싶은데 어떻게 믿을 수 있나요?</p>
+            <div class="verse-box">
+                왜냐하면 사람이 마음으로 믿어 의에 이르고, 입으로 시인하여 구원에 이르기 때문입니다. – 로마서 10장 10절 –
+            </div>
+            <div class="verse-box">
+                “누구든지 주님의 이름을 부르는 사람은 구원을 받을 것입니다.” - 로마서 10장 13절 -
+            </div>
+            <p>지금 이 순간 나의 영혼을 두고 주님 앞에 나와서 주님의 이름을 불러보세요. 그러면 주님은 당신에게 생명의 생수를 주실 것입니다.</p>
+        </section>
+
+    </div>
+
+    <footer class="footer">
+        <p>🙏 부산교회2구역</p>
+        <p class="contact-info">신앙상담 : <strong>010-9362-7642</strong></p>
+    </footer>
+
+    <script>
+        // Intersection Observer for Scroll Animations
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

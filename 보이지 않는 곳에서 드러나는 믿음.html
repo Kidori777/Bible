@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>보이지 않는 곳에서 드러나는 믿음</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --bg-light: #1e293b;
+            --accent-gold: #d4af37;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --border-glow: rgba(212, 175, 55, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Serif KR', serif;
+            background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-light) 100%);
+            color: var(--text-main);
+            line-height: 1.8;
+            overflow-x: hidden;
+            word-break: keep-all;
+        }
+
+        /* Background Light Orbs */
+        .orb {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.2;
+            animation: breathe 8s infinite alternate ease-in-out;
+        }
+        .orb-1 { background: var(--accent-gold); top: 10%; left: -100px; }
+        .orb-2 { background: #6366f1; bottom: 10%; right: -100px; animation-delay: -4s; }
+
+        @keyframes breathe {
+            from { transform: scale(1); opacity: 0.15; }
+            to { transform: scale(1.2); opacity: 0.25; }
+        }
+
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Hero Section */
+        header {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 2.2rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+            letter-spacing: -0.02em;
+            color: var(--accent-gold);
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            animation: bounce 2s infinite;
+            font-size: 1.5rem;
+            opacity: 0.6;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        /* Sections */
+        section {
+            padding: 100px 0;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .intro-text {
+            font-size: 1.15rem;
+            text-align: center;
+            font-style: italic;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-glow);
+            border-bottom: 1px solid var(--border-glow);
+            padding: 40px 0;
+        }
+
+        /* Character Cards */
+        .character-box {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 24px;
+            margin: 40px 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .faithful { border-left: 4px solid #10b981; }
+        .hypocrite { border-left: 4px solid #ef4444; }
+
+        .label {
+            display: inline-block;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 10px;
+            padding: 2px 10px;
+            border-radius: 4px;
+        }
+        .faithful .label { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+        .hypocrite .label { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+
+        .name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .highlight {
+            color: var(--accent-gold);
+            font-weight: 700;
+            background: linear-gradient(transparent 70%, rgba(212, 175, 55, 0.2) 0%);
+        }
+
+        /* Scripture Box */
+        .scripture-container {
+            background: rgba(212, 175, 55, 0.08);
+            border: 1px solid var(--border-glow);
+            padding: 40px;
+            border-radius: 20px;
+            position: relative;
+        }
+
+        .scripture-container::before {
+            content: "“";
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-size: 4rem;
+            color: var(--accent-gold);
+            opacity: 0.3;
+        }
+
+        .scripture-title {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--accent-gold);
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+
+        .scripture-verse {
+            font-size: 1.1rem;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .verse-ref {
+            text-align: right;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Climax & Judgment */
+        .story-beat {
+            text-align: center;
+            padding: 60px 0;
+        }
+
+        .divider {
+            width: 40px;
+            height: 2px;
+            background: var(--accent-gold);
+            margin: 30px auto;
+        }
+
+        /* Conclusion */
+        .conclusion-box {
+            text-align: center;
+            padding: 80px 40px;
+            background: radial-gradient(circle at center, rgba(212,175,55,0.15) 0%, transparent 70%);
+        }
+
+        .conclusion-icon {
+            font-size: 3rem;
+            margin-bottom: 30px;
+            display: block;
+        }
+
+        .conclusion-text {
+            font-size: 1.3rem;
+            font-weight: 700;
+            line-height: 2;
+        }
+
+        /* Prayer Section */
+        .prayer-section {
+            background: var(--card-bg);
+            border-radius: 100px 100px 0 0;
+            text-align: center;
+            padding-bottom: 120px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Tablet/Mobile adjustment */
+        @media (max-width: 600px) {
+            .hero-title { font-size: 1.8rem; }
+            .conclusion-text { font-size: 1.1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <div class="container">
+        <header>
+            <h1 class="hero-title">⚖️ 보이지 않는 곳에서<br>드러나는 믿음</h1>
+            <p class="hero-subtitle">두 머슴의 이야기를 통해 본 신실함과 위선자</p>
+            <div class="scroll-indicator">↓</div>
+        </header>
+
+        <section class="reveal">
+            <div class="intro-text">
+                옛날 한 고을에 두 머슴이 있었습니다. 둘은 같은 주인의 집에 속한 사람들로, 같은 밭을 갈고 같은 일을 맡았지만 그들의 마음은 전혀 같지 않았습니다.
+            </div>
+        </section>
+
+        <section class="reveal">
+            <div class="character-box faithful">
+                <span class="label">첫 번째 머슴</span>
+                <h2 class="name">신실한 종</h2>
+                <p>첫 번째 머슴은 주인이 곁에 있든 멀리 있든 관계없이 늘 똑같은 태도로 충성을 다했습니다. 그에게 일은 "주인이 보는 앞에서만 잘해야 하는 연기"가 아니라, <span class="highlight">"보이지 않아도 책임지는 신앙의 표현"</span>이었습니다.</p>
+                <br>
+                <p>그는 혼자 있을 때도 거짓 없이 땀을 흘렸고, 주인의 집에 속한 자로 살아가는 것을 은혜로 여겼습니다.</p>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <div class="character-box hypocrite">
+                <span class="label">두 번째 머슴</span>
+                <h2 class="name">악한 종 : 위선자</h2>
+                <p>그러나 두 번째 머슴은 달랐습니다. 그는 눈으로 보이는 순간에는 부지런했습니다. 그러나 아무도 보지 않는 듯하면 게을렀습니다.</p>
+                <br>
+                <p>그는 속으로 말했습니다. "주인이 지금 없는데 왜 힘을 들여야 하지? 사람들 앞에서만 잘 보이면 되는 것 아니겠나?"</p>
+                <br>
+                <p>그가 섬김을 실천한 이유는 주인을 사랑해서가 아니라, <span class="highlight">보여주기 위한 가짜 신앙</span>이었기 때문입니다. 그의 노동은 일처럼 보였으나, 그의 마음은 주인에게 속하지 않았습니다.</p>
+                <br>
+                <p>성경은 이런 자를 가리켜 <strong>위선자(假善者, hypocrite)</strong>라 부릅니다.</p>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <div class="scripture-container">
+                <h2 class="scripture-title">📖 성경은 위선자를 어떻게 말하는가?</h2>
+                <p class="scripture-verse">'이 백성이 입술로는 나를 공경하지만, 마음은 나에게서 멀리 떠나 있다. 사람의 계명을 교훈으로 가르치니, 나에게 헛되이 경배하고 있다.'</p>
+                <p class="verse-ref">- 마태복음 15장 8~9절 -</p>
+                <div class="divider"></div>
+                <p>위선자는 말은 믿음을 외치나 행동은 하나님과 멀리 떨어져 있습니다. 그들은 주님의 이름을 부르고, 기도하며, 봉사하지만 하나님이 아닌 사람의 시선을 의식합니다.</p>
+                <br>
+                <p>예수님은 그런 자들에 대해 이렇게 말씀하셨습니다. "위선자들이라고..." (마 15:7)</p>
+                <br>
+                <p>겉모습은 경건해 보이지만 속은 거짓, 교만, 자기 욕심으로 가득찬 삶—그것이 바로 위선자의 삶입니다.</p>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <div class="story-beat">
+                <h2 class="hero-title" style="font-size: 1.5rem;">🧷 마지막 시험 — 새끼줄</h2>
+                <div class="divider"></div>
+                <p>오랜 세월이 지난 뒤 주인은 두 머슴을 불러 말했습니다. "이제 품삯을 줄 때가 되었네. 오늘 마지막으로 새끼줄을 하나씩 꼬아오게."</p>
+                <br>
+                <p>첫 번째 머슴은 마지막 순간까지 늘 해왔던 그대로 정성을 다해 새끼를 꼬았습니다.</p>
+                <br>
+                <p>그러나 위선적인 머슴은 투덜대며 얼마 되지 않는 줄을 대충 꼬고 잠들었습니다.</p>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <div class="character-box" style="border-left: none; border: 1px solid var(--accent-gold);">
+                <h2 class="scripture-title" style="margin-bottom: 20px;">💰 심판의 날</h2>
+                <p>다음 날 주인은 말했습니다. "자네들이 꼰 새끼줄의 길이만큼 엽전을 꿰어 가져가게."</p>
+                <br>
+                <p>그 말은 마지막 평가이자 심판이었습니다.</p>
+                <br>
+                <p>성실한 머슴은 길고 단단한 줄에 수많은 엽전을 받고 떠났습니다.</p>
+                <br>
+                <p>그러나 위선자는 짧고 볼품없는 새끼줄에 엽전을 가득 꿰어지만 어느새 새끼줄은 끊어지고 엽전은 땅바닥에 쏟아지고 말았습니다.</p>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <div class="scripture-container" style="background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3);">
+                <h2 class="scripture-title" style="color: #ef4444;">⚠️ 예수님의 결론</h2>
+                <p class="scripture-verse" style="font-weight: 700;">"주인이 돌아와 그 악한 종을 엄하게 처벌하고 위선자들과 함께 벌을 받게 하리니 거기서 슬피 울며 이를 갈리라."</p>
+                <p class="verse-ref">(마태복음 24:51)</p>
+                <div class="divider" style="background: #ef4444;"></div>
+                <p>여기서 예수님은 <strong>악한 종 = 위선자</strong>라고 말씀하십니다.</p>
+                <br>
+                <p>그는 주인의 종이었지만 그의 삶은 주인과 무관했습니다. 그는 종의 옷을 입었지만 종의 마음은 없었습니다.</p>
+            </div>
+        </section>
+
+        <section class="reveal">
+            <div class="conclusion-box">
+                <span class="conclusion-icon">🕯️</span>
+                <p class="conclusion-text">
+                    하나님은 위선자를 싫어하시는 이유는<br>
+                    그들에게 마음을 요구하시고,<br>
+                    그들은 사람을 의식하고 연기(演技)를 드리기 때문입니다.
+                </p>
+                <div class="divider"></div>
+                <p class="conclusion-text">
+                    하나님은 우리가 겉으로 보이는 신앙이 아니라<br>
+                    <span class="highlight">보이지 않는 자리에서 살아내는 믿음</span>을 보십니다.
+                </p>
+            </div>
+        </section>
+
+        <section class="reveal prayer-section">
+            <br><br>
+            <p>우리는 이러한 말씀이 경고가 되어<br>
+            우리의 삶이 신실하고 현명한 노예로서<br>
+            주님 앞에 살아가길 바랍니다.</p>
+        </section>
+
+        <footer>
+            &copy; 보이지 않는 곳에서 드러나는 믿음. All Rights Reserved.
+        </footer>
+    </div>
+
+    <script>
+        // Scroll Reveal Implementation
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>

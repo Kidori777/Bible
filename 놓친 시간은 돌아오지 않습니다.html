@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>남겨진 기도 - 놓친 시간은 돌아오지 않습니다</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Serif+KR:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-grad-top: #f0f4f8;
+            --bg-grad-bottom: #d9e2ec;
+            --text-main: #243b53;
+            --text-sub: #486581;
+            --accent: #627d98;
+            --highlight: rgba(188, 204, 220, 0.4);
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(180deg, var(--bg-grad-top) 0%, var(--bg-grad-bottom) 100%);
+            color: var(--text-main);
+            font-family: 'Gowun Batang', serif;
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        /* Background Orbs */
+        .light-orb {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+            filter: blur(50px);
+            z-index: -1;
+            animation: breathe 8s infinite alternate ease-in-out;
+        }
+        .orb-1 { top: 10%; left: -100px; }
+        .orb-2 { bottom: 20%; right: -100px; opacity: 0.6; }
+
+        @keyframes breathe {
+            0% { transform: scale(1); opacity: 0.4; }
+            100% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        /* Layout */
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Scroll Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease-out;
+            margin-bottom: 80px;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Hero Section */
+        header {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .scroll-hint {
+            margin-top: 50px;
+            font-size: 0.9rem;
+            color: var(--accent);
+            animation: sway 2s infinite ease-in-out;
+        }
+
+        @keyframes sway {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
+        }
+
+        /* Typography & Styles */
+        h2 {
+            font-size: 1.4rem;
+            color: var(--text-sub);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .horizon {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            margin: 40px 0;
+            border: none;
+        }
+
+        /* Dialogue Box */
+        .dialogue {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--accent);
+            margin: 20px 0;
+        }
+
+        .speaker {
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: var(--accent);
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* Revelation Box */
+        .revelation {
+            background: var(--highlight);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            font-style: italic;
+            border: 1px dashed var(--accent);
+        }
+
+        .truth-list {
+            list-style: none;
+            padding: 20px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 15px;
+        }
+
+        .truth-item {
+            margin-bottom: 15px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .truth-item::before {
+            content: '✦';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+
+        .bible-ref {
+            font-size: 0.9rem;
+            color: var(--accent);
+            display: block;
+            margin-top: 10px;
+            text-align: right;
+        }
+
+        footer {
+            padding: 100px 0 50px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--accent);
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 480px) {
+            .hero-title { font-size: 1.5rem; }
+            .dialogue { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="light-orb orb-1"></div>
+    <div class="light-orb orb-2"></div>
+
+    <header>
+        <div class="reveal">
+            <p style="letter-spacing: 0.3em; font-size: 0.8rem; margin-bottom: 10px;">SILENT PRAYER</p>
+            <h1 class="hero-title">⟡ 놓친 시간은 돌아오지 않습니다</h1>
+            <div class="scroll-hint">아래로 천천히 스크롤 해주세요 ↓</div>
+        </div>
+    </header>
+
+    <div class="container">
+        <section class="reveal">
+            <p>의과대학 수업 중, 한 교수가 극도로 치명적인 약품의 이름을 말하며 학생들에게 질문했습니다.</p>
+            <div class="dialogue">
+                <span class="speaker">교수</span>
+                “이 약을 치료 목적으로 사용할 때 적당량은 얼마나 될까요?”
+            </div>
+            <p>그러자 한 학생이 자신 있게 대답했습니다.</p>
+            <div class="dialogue" style="border-left-color: #9fb3c8;">
+                <span class="speaker">학생</span>
+                “작은 스푼 하나, 약 15cc 정도입니다.”
+            </div>
+            <p>교수는 아무 말 없이 수업을 계속했습니다.</p>
+        </section>
+
+        <section class="reveal">
+            <p>그런데 15분이 지나자 그 학생은 자신의 실수를 깨닫고 다시 말했습니다.</p>
+            <div class="dialogue" style="border-left-color: #9fb3c8;">
+                <span class="speaker">학생</span>
+                “교수님, 제 답을 수정하고 싶습니다.”
+            </div>
+            <p>그때 교수는 시계를 보고 담담히 말했습니다.</p>
+            <div class="dialogue">
+                <span class="speaker">교수</span>
+                “이미 늦었네. 자네 환자는 14분 전에 죽었네.”
+            </div>
+        </section>
+
+        <section class="reveal">
+            <div class="revelation">
+                그 학생은 정답을 알고 있었지만,<br>
+                그 정답은 너무 늦게 도착했습니다.<br><br>
+                <strong>때를 놓친 진실은 아무 힘도 없습니다.<br>
+                늦은 깨달음은 더 이상 문을 열 수 없습니다.</strong>
+            </div>
+        </section>
+
+        <hr class="horizon">
+
+        <section class="reveal">
+            <h2>🌿 성경에도 같은 경고가 있습니다</h2>
+            <p>성경 속 인물들도 기회를 놓쳐버린 사람들이 있었습니다.</p>
+            
+            <h3 style="margin: 30px 0 15px;">✦ 롯의 사위들</h3>
+            <p>천사가 소돔과 고모라를 멸망시키기 전, 롯은 사위들에게 말했습니다.</p>
+            <div class="dialogue">
+                “일어나 이 곳을 떠나거라. 여호와께서 이 성을 멸망시키실 것이다.”
+            </div>
+            <p style="text-align: center; font-weight: bold; margin: 20px 0;">
+                “그들은 롯의 말을 농담으로 여겼더라.”(창 19:14)
+            </p>
+            <p>그들은 경고를 들었지만 그 기회를 가볍게 여겼습니다. 그들에게는 다른 사람들보다 더 많은 은혜와 기회가 주어졌음에도, 결국 그 성의 사람들과 함께 불 가운데 사라지고 말았습니다.</p>
+        </section>
+
+        <section class="reveal">
+            <h3 style="margin: 30px 0 15px;">✦ 에서</h3>
+            <p>또 다른 사람은 에서였습니다. 그는 장자의 명분을 한 끼 식사로 바꾸었습니다. 그리고 나중에 축복을 되찾으려 했지만, 이미 늦었습니다.</p>
+            <div class="revelation" style="background: rgba(255,255,255,0.3); border-style: solid;">
+                그는 울며 간구했지만,<br>
+                그의 선택이 가져온 결과를 되돌릴 회개의 여지가 없었습니다.<br>
+                <span class="bible-ref">“한 그릇의 음식을 위하여 장자권을 팔아 버린 에서와 같은 속된 사람이 없도록 하십시오. … 그가 눈물을 흘리며 구하였지만, 마음을 바꾸어 놓을 여지가 없었던 것입니다.”— 히브리서 12:16–17</span>
+            </div>
+        </section>
+
+        <hr class="horizon">
+
+        <section class="reveal">
+            <h2>🌊 우리의 삶에도 ‘지금만 가능한 시간’이 있습니다</h2>
+            <div class="truth-list">
+                <div class="truth-item">하나님이 부르실 때</div>
+                <div class="truth-item">주님과 함께 동역할 기회가 우리 앞에 있을 때</div>
+                <div class="truth-item">성령의 감동이 우리 마음을 두드릴 때</div>
+            </div>
+            <p style="text-align: center; margin-top: 30px; font-weight: bold; font-size: 1.1rem;">
+                그때 미루지 말아야 합니다.<br>
+                언젠가는 아닙니다.<br>
+                오늘입니다. 지금입니다.
+            </p>
+            <p style="margin-top: 20px;">
+                우리가 해야 할 순종, 회개, 결단, 사랑, 용서는 미루면 미룰수록 더 어려워지고, 때로는 다시 오지 않을 수도 있습니다.
+            </p>
+        </section>
+
+        <section class="reveal" style="margin-bottom: 150px;">
+            <div class="revelation" style="background: var(--text-main); color: var(--white); border: none;">
+                <h2 style="color: var(--white); justify-content: center;">⟡ 결론</h2>
+                <p style="font-size: 1.2rem; margin-bottom: 20px;">정답을 아는 것보다 더 중요한 것은<br><strong>지금 실행하는 것입니다.</strong></p>
+                <p style="font-size: 0.95rem; opacity: 0.9;">“오늘 너희가 그분의 음성을 듣거든, 그분을 노여우시게 하던 것처럼 너희 마음을 굳어지게 하지 마라.”(히브리서 3:15)</p>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>© 남겨진 기도 - Moment of Truth</p>
+    </footer>
+
+    <script>
+        // Intersection Observer for Scroll Reveal
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

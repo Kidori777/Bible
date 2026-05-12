@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>성경은 어떻게 우리 손에 오게 되었을까?</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sand:   #f5edd8;
+  --sand2:  #ede0c4;
+  --sand3:  #dfd0a8;
+  --papyrus:#f0e6c8;
+  --papyrus2:#e8d8b0;
+  --ink:    #1e1408;
+  --ink2:   #3e2c14;
+  --ink3:   #6e5030;
+  --gold:   #a07020;
+  --gold2:  #c89030;
+  --gold3:  #e8b848;
+  --rust:   #7a2c10;
+  --rust2:  #c04820;
+  --olive:  #4a6020;
+  --olive2: #6a8830;
+  --teal:   #1a5060;
+  --teal2:  #2a7888;
+  --purple: #4a1870;
+  --purple2:#7830a8;
+  --sepia:  rgba(30,20,8,.08);
+  --vein:   rgba(30,20,8,.07);
+}
+
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:#1e1008;
+  color:var(--ink);
+  font-family:'Noto Serif KR',serif;
+  overflow-x:hidden;
+}
+
+/* ══ 전역 파피루스 패턴 배경 ══ */
+.papyrus-ground {
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:
+    repeating-linear-gradient(90deg,
+      transparent 0, transparent 60px,
+      var(--vein) 60px, var(--vein) 61px
+    ),
+    repeating-linear-gradient(0deg,
+      transparent 0, transparent 80px,
+      var(--vein) 80px, var(--vein) 81px
+    ),
+    var(--sand);
+  opacity:.08;
+}
+
+/* ══════════ COVER ══════════ */
+.cover {
+  position:relative; z-index:1;
+  min-height:100vh;
+  background:
+    radial-gradient(ellipse 70% 50% at 30% 40%, rgba(160,112,32,.2) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 60%, rgba(26,80,96,.15) 0%, transparent 60%),
+    linear-gradient(160deg, #2a1808 0%, #1a1008 50%, #0e1018 100%);
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  padding:60px 24px 80px; overflow:hidden;
+  text-align:center;
+}
+
+/* 배경 양피지 텍스처 원 */
+.cover-orb {
+  position:absolute; border-radius:50%; pointer-events:none;
+  filter:blur(60px);
+}
+.orb1 { width:500px; height:500px; top:-100px; left:-80px; background:rgba(160,112,32,.12); }
+.orb2 { width:400px; height:400px; bottom:-80px; right:-60px; background:rgba(26,80,96,.1); }
+.orb3 { width:300px; height:300px; top:40%; left:50%; transform:translate(-50%,-50%); background:rgba(200,144,48,.07); }
+
+/* 방사형 빛살 */
+.cover-rays {
+  position:absolute; inset:0; pointer-events:none;
+  background:conic-gradient(
+    from 200deg at 50% 45%,
+    transparent 0deg, rgba(200,144,48,.04) 12deg, transparent 24deg,
+    transparent 40deg, rgba(200,144,48,.03) 52deg, transparent 64deg,
+    transparent 90deg, rgba(200,144,48,.04) 102deg, transparent 114deg
+  );
+  animation:ray-spin 60s linear infinite;
+}
+@keyframes ray-spin { to { transform:rotate(360deg); } }
+
+/* 고대 문서 균열 선 */
+.cover-vein {
+  position:absolute; pointer-events:none; opacity:.15;
+  background:linear-gradient(180deg, transparent, rgba(200,144,48,.6), transparent);
+}
+.cv1 { left:18%; top:0; width:1px; height:60%; transform:rotate(4deg); transform-origin:top; }
+.cv2 { left:22%; top:30%; width:1px; height:40%; transform:rotate(-8deg); transform-origin:top; }
+.cv3 { right:20%; top:10%; width:1px; height:55%; transform:rotate(-5deg); transform-origin:top; }
+
+.cover-badge {
+  display:inline-block;
+  font-family:'Cinzel', serif;
+  font-size:.65rem; letter-spacing:.55em; text-transform:uppercase;
+  color:rgba(200,144,48,.55);
+  border-top:1px solid rgba(200,144,48,.2);
+  border-bottom:1px solid rgba(200,144,48,.2);
+  padding:6px 20px; margin-bottom:32px;
+  position:relative; z-index:1;
+}
+
+.cover-icon {
+  font-size:clamp(2.5rem,8vw,4.5rem);
+  margin-bottom:24px; position:relative; z-index:1;
+  filter:drop-shadow(0 0 40px rgba(200,144,48,.5));
+  animation:icon-float 5s ease-in-out infinite;
+}
+@keyframes icon-float {
+  0%,100%{ transform:translateY(0); filter:drop-shadow(0 0 30px rgba(200,144,48,.4)); }
+  50%    { transform:translateY(-8px); filter:drop-shadow(0 0 50px rgba(200,144,48,.7)); }
+}
+
+.cover-title {
+  font-family:'Cinzel', serif;
+  font-size:clamp(1.3rem,4.5vw,3rem); font-weight:700;
+  color:var(--sand); line-height:1.3; letter-spacing:.04em;
+  margin-bottom:12px; position:relative; z-index:1;
+  text-shadow:0 0 40px rgba(200,144,48,.3);
+}
+.cover-subtitle {
+  font-family:'Noto Serif KR',serif;
+  font-size:clamp(.85rem,2.3vw,1.05rem); font-weight:300;
+  color:rgba(245,237,216,.6); line-height:1.9; margin-bottom:40px;
+  position:relative; z-index:1;
+}
+
+/* 타임라인 미니 프리뷰 */
+.cover-timeline {
+  display:flex; align-items:center; gap:0;
+  position:relative; z-index:1; margin-bottom:36px;
+  max-width:560px; width:100%;
+}
+.ctl-item {
+  display:flex; flex-direction:column; align-items:center; gap:6px; flex:1;
+  opacity:0; animation:ctl-in .6s ease forwards;
+}
+.ctl-item:nth-child(1){ animation-delay:.2s; }
+.ctl-item:nth-child(2){ animation-delay:.35s; }
+.ctl-item:nth-child(3){ animation-delay:.5s; }
+.ctl-item:nth-child(4){ animation-delay:.65s; }
+.ctl-item:nth-child(5){ animation-delay:.8s; }
+@keyframes ctl-in { to { opacity:1; } }
+
+.ctl-dot {
+  width:clamp(36px,6vw,48px); height:clamp(36px,6vw,48px); border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:clamp(1rem,2.5vw,1.4rem); border:2px solid;
+  position:relative;
+}
+.ctl-dot::before {
+  content:''; position:absolute; inset:-4px; border-radius:50%;
+  border:1px solid; opacity:.3;
+}
+.cd-1 { background:rgba(122,44,16,.2);  border-color:rgba(122,44,16,.5);  }
+.cd-1::before { border-color:var(--rust2); }
+.cd-2 { background:rgba(26,80,96,.2);   border-color:rgba(26,80,96,.5);   }
+.cd-2::before { border-color:var(--teal2); }
+.cd-3 { background:rgba(74,24,112,.2);  border-color:rgba(74,24,112,.5);  }
+.cd-3::before { border-color:var(--purple2); }
+.cd-4 { background:rgba(74,96,32,.2);   border-color:rgba(74,96,32,.5);   }
+.cd-4::before { border-color:var(--olive2); }
+.cd-5 { background:rgba(160,112,32,.2); border-color:rgba(160,112,32,.5); }
+.cd-5::before { border-color:var(--gold2); }
+
+.ctl-line { flex:1; height:1px; background:linear-gradient(90deg, rgba(200,144,48,.2), rgba(200,144,48,.4), rgba(200,144,48,.2)); }
+.ctl-label {
+  font-family:'Noto Sans KR',sans-serif;
+  font-size:clamp(.52rem,1.3vw,.62rem); font-weight:500;
+  color:rgba(245,237,216,.4); letter-spacing:.05em; text-align:center;
+  white-space:nowrap;
+}
+
+.cover-desc {
+  font-family:'Noto Sans KR',sans-serif;
+  font-size:clamp(.78rem,2vw,.88rem); font-weight:300;
+  color:rgba(245,237,216,.35); letter-spacing:.15em;
+  position:relative; z-index:1;
+}
+
+/* ══ 웨이브 SVG ══ */
+.wv { display:block; width:100%; position:relative; z-index:2; }
+
+/* ══════════ 공통 양피지 페이지 ══════════ */
+.page {
+  position:relative; z-index:1;
+  background:var(--papyrus);
+}
+/* 파피루스 섬유 결 */
+.page::before {
+  content:''; position:absolute; inset:0; pointer-events:none; z-index:0;
+  background:
+    repeating-linear-gradient(88deg,
+      transparent 0, transparent 8px,
+      rgba(30,20,8,.025) 8px, rgba(30,20,8,.025) 9px
+    ),
+    repeating-linear-gradient(2deg,
+      transparent 0, transparent 20px,
+      rgba(30,20,8,.018) 20px, rgba(30,20,8,.018) 21px
+    );
+}
+.page-alt { background:var(--sand2); }
+.page-alt::before { background:
+    repeating-linear-gradient(88deg, transparent 0, transparent 8px, rgba(30,20,8,.02) 8px, rgba(30,20,8,.02) 9px),
+    repeating-linear-gradient(2deg, transparent 0, transparent 20px, rgba(30,20,8,.015) 20px, rgba(30,20,8,.015) 21px);
+}
+.page-dark { background:var(--sand3); }
+.page-dark::before { background:
+    repeating-linear-gradient(88deg, transparent 0, transparent 8px, rgba(30,20,8,.03) 8px, rgba(30,20,8,.03) 9px),
+    repeating-linear-gradient(2deg, transparent 0, transparent 20px, rgba(30,20,8,.02) 20px, rgba(30,20,8,.02) 21px);
+}
+
+.cw { max-width:780px; margin:0 auto; padding:0 22px; position:relative; z-index:1; }
+
+/* ══ 챕터 헤더 — 마블링 인장 ══ */
+.ch-wrap { padding:52px 0 38px; text-align:center; position:relative; }
+
+/* 상단 장식 줄 */
+.ch-ornament {
+  display:flex; align-items:center; justify-content:center; gap:12px;
+  margin-bottom:20px;
+}
+.ch-ornament-line { width:60px; height:1px; }
+.ch-ornament-sym {
+  font-family:'Cinzel', serif;
+  font-size:.9rem; letter-spacing:.1em;
+}
+
+/* 챕터별 색상 */
+.ch-yellow .ch-ornament-line { background:linear-gradient(90deg, transparent, var(--rust2)); }
+.ch-yellow .ch-ornament-line:last-child { background:linear-gradient(90deg, var(--rust2), transparent); }
+.ch-yellow .ch-ornament-sym { color:var(--rust2); }
+.ch-yellow .ch-num { color:var(--rust); }
+.ch-yellow h2.ch-title { color:var(--rust); }
+
+.ch-teal .ch-ornament-line { background:linear-gradient(90deg, transparent, var(--teal2)); }
+.ch-teal .ch-ornament-line:last-child { background:linear-gradient(90deg, var(--teal2), transparent); }
+.ch-teal .ch-ornament-sym { color:var(--teal2); }
+.ch-teal .ch-num { color:var(--teal); }
+.ch-teal h2.ch-title { color:var(--teal); }
+
+.ch-purple .ch-ornament-line { background:linear-gradient(90deg, transparent, var(--purple2)); }
+.ch-purple .ch-ornament-line:last-child { background:linear-gradient(90deg, var(--purple2), transparent); }
+.ch-purple .ch-ornament-sym { color:var(--purple2); }
+.ch-purple .ch-num { color:var(--purple); }
+.ch-purple h2.ch-title { color:var(--purple); }
+
+.ch-olive .ch-ornament-line { background:linear-gradient(90deg, transparent, var(--olive2)); }
+.ch-olive .ch-ornament-line:last-child { background:linear-gradient(90deg, var(--olive2), transparent); }
+.ch-olive .ch-ornament-sym { color:var(--olive2); }
+.ch-olive .ch-num { color:var(--olive); }
+.ch-olive h2.ch-title { color:var(--olive); }
+
+.ch-gold .ch-ornament-line { background:linear-gradient(90deg, transparent, var(--gold2)); }
+.ch-gold .ch-ornament-line:last-child { background:linear-gradient(90deg, var(--gold2), transparent); }
+.ch-gold .ch-ornament-sym { color:var(--gold2); }
+.ch-gold .ch-num { color:var(--gold); }
+.ch-gold h2.ch-title { color:var(--gold); }
+
+.ch-num {
+  font-family:'Cinzel', serif;
+  font-size:.62rem; letter-spacing:.5em; text-transform:uppercase;
+  display:block; margin-bottom:10px;
+}
+h2.ch-title {
+  font-family:'Noto Serif KR', serif;
+  font-size:clamp(1.1rem,3.2vw,1.65rem); font-weight:700;
+  line-height:1.35; text-align:center;
+}
+.ch-rule {
+  width:80px; height:2px; margin:16px auto 0;
+  background:linear-gradient(90deg, transparent, currentColor, transparent);
+  opacity:.3;
+}
+
+/* ══ 본문 ══ */
+p {
+  font-size:clamp(.92rem,2.4vw,1rem); font-weight:400;
+  color:var(--ink2); line-height:2.25; word-break:keep-all;
+  margin-bottom:16px;
+}
+p:last-child { margin-bottom:0; }
+b, strong { font-weight:700; color:var(--ink); }
+
+.sec-body { padding-bottom:52px; }
+
+/* ══ 소제목 (section-header) ══ */
+.sh {
+  font-family:'Noto Serif KR',serif;
+  font-size:clamp(.95rem,2.5vw,1.1rem); font-weight:700;
+  color:var(--ink); margin:28px 0 12px;
+  display:flex; align-items:center; gap:10px;
+}
+.sh::before {
+  content:''; flex-shrink:0; width:4px; height:1.1em; border-radius:2px;
+}
+.sh-rust::before   { background:var(--rust2); }
+.sh-teal::before   { background:var(--teal2); }
+.sh-purple::before { background:var(--purple2); }
+.sh-olive::before  { background:var(--olive2); }
+.sh-gold::before   { background:var(--gold2); }
+
+/* ══ 성경 박스 ══ */
+.bible-box {
+  margin:18px 0; padding:16px 20px 14px 22px;
+  font-weight:700; word-break:keep-all; overflow-wrap:break-word;
+  font-size:clamp(.88rem,2.3vw,.97rem); line-height:2;
+  border-radius:0 4px 4px 0; position:relative;
+}
+.bb-rust   { background:rgba(122,44,16,.06); border-left:4px solid var(--rust2);  color:var(--rust);   }
+.bb-teal   { background:rgba(26,80,96,.06);  border-left:4px solid var(--teal2);  color:var(--teal);   }
+.bb-purple { background:rgba(74,24,112,.06); border-left:4px solid var(--purple2);color:var(--purple); }
+.bb-olive  { background:rgba(74,96,32,.06);  border-left:4px solid var(--olive2); color:var(--olive);  }
+.bb-gold   { background:rgba(160,112,32,.07);border-left:4px solid var(--gold2);  color:var(--gold);   }
+
+/* ══ 목록 (ul/li) ══ */
+ul { list-style:none; margin:14px 0 18px; display:flex; flex-direction:column; gap:10px; }
+li {
+  padding:12px 16px 10px 16px; border-radius:3px;
+  background:rgba(30,20,8,.04); border:1px solid rgba(30,20,8,.1);
+  font-size:clamp(.88rem,2.2vw,.96rem); font-weight:300;
+  font-family:'Noto Sans KR',sans-serif;
+  color:var(--ink2); line-height:1.95; word-break:keep-all;
+}
+li b { color:var(--ink); font-weight:700; }
+
+/* ══ 테이블 — 파피루스 ══ */
+.tbl-wrap { overflow-x:auto; margin:20px 0; }
+table {
+  width:100%; border-collapse:collapse;
+  font-size:clamp(.78rem,2vw,.88rem);
+}
+th, td { border:1px solid rgba(30,20,8,.14); padding:10px 12px; text-align:left; }
+th {
+  background:rgba(30,20,8,.1); font-weight:700;
+  font-family:'Noto Sans KR',sans-serif; color:var(--ink);
+}
+td {
+  font-family:'Noto Sans KR',sans-serif; font-weight:300;
+  color:var(--ink2); line-height:1.85; background:rgba(255,255,255,.3);
+}
+td b { color:var(--ink); font-weight:700; }
+tr:nth-child(even) td { background:rgba(30,20,8,.04); }
+
+/* ══ 소제목 sub-title ══ */
+.section-sub {
+  font-family:'Noto Serif KR',serif;
+  font-size:clamp(1rem,2.8vw,1.25rem); font-weight:700;
+  text-align:center; padding:14px 12px;
+  margin:32px 0 20px; border-radius:3px;
+  position:relative;
+}
+.ss-rust   { color:var(--rust);   background:rgba(122,44,16,.07); border-bottom:2px solid rgba(122,44,16,.2); }
+.ss-teal   { color:var(--teal);   background:rgba(26,80,96,.07);  border-bottom:2px solid rgba(26,80,96,.2); }
+.ss-purple { color:var(--purple); background:rgba(74,24,112,.07); border-bottom:2px solid rgba(74,24,112,.2); }
+.ss-olive  { color:var(--olive);  background:rgba(74,96,32,.07);  border-bottom:2px solid rgba(74,96,32,.2); }
+.ss-gold   { color:var(--gold);   background:rgba(160,112,32,.08);border-bottom:2px solid rgba(160,112,32,.25); }
+
+hr { border:0; height:1px; background:linear-gradient(90deg,transparent,rgba(30,20,8,.15),transparent); margin:28px 0; }
+
+/* ══ 결론 인장 ══ */
+.conclusion-stamp {
+  margin:28px 0 8px; padding:28px 28px 24px;
+  background:linear-gradient(135deg, var(--papyrus), var(--papyrus2));
+  border:2px solid var(--gold2); border-radius:4px;
+  position:relative; text-align:center;
+}
+.conclusion-stamp::before, .conclusion-stamp::after {
+  content:''; position:absolute;
+  width:18px; height:18px; border-color:var(--gold2); border-style:solid;
+}
+.conclusion-stamp::before { top:7px; left:7px; border-width:2px 0 0 2px; }
+.conclusion-stamp::after  { bottom:7px; right:7px; border-width:0 2px 2px 0; }
+.cs-icon { font-size:2.2rem; margin-bottom:14px; display:block; }
+.cs-title {
+  font-family:'Cinzel',serif;
+  font-size:clamp(.9rem,2.4vw,1.1rem); font-weight:700;
+  color:var(--gold); margin-bottom:20px; letter-spacing:.1em;
+}
+
+/* ══ 푸터 ══ */
+.site-footer {
+  background:#1e1008; padding:26px 24px 36px; text-align:center;
+  position:relative; z-index:1;
+  border-top:1px solid rgba(200,144,48,.1);
+}
+.sf-rule { width:40px; height:1px; background:var(--gold); margin:0 auto 12px; opacity:.2; }
+.sf-name {
+  font-family:'Cinzel',serif;
+  font-size:.82rem; color:rgba(245,237,216,.35); letter-spacing:.28em; text-transform:uppercase;
+}
+
+/* 스크롤 */
+.fu { opacity:0; transform:translateY(18px); transition:opacity .72s ease, transform .72s ease; }
+.fu.vis { opacity:1; transform:translateY(0); }
+
+@media(max-width:480px){
+  .cover-timeline { display:none; }
+  .cover{ padding:50px 18px 70px; }
+  .tbl-wrap{ font-size:.78rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="papyrus-ground"></div>
+
+<!-- ══ COVER ══ -->
+<section class="cover">
+  <div class="cover-orb orb1"></div>
+  <div class="cover-orb orb2"></div>
+  <div class="cover-orb orb3"></div>
+  <div class="cover-rays"></div>
+  <div class="cover-vein cv1"></div>
+  <div class="cover-vein cv2"></div>
+  <div class="cover-vein cv3"></div>
+
+  <span class="cover-badge">The Journey of Scripture · 부산교회 2구역</span>
+  <div class="cover-icon">📖</div>
+  <h1 class="cover-title">성경은 어떻게<br>우리 손에 오게 되었을까?</h1>
+  <p class="cover-subtitle">한 권의 책에 담긴 수천 년의 여정</p>
+
+  <div class="cover-timeline">
+    <div class="ctl-item">
+      <div class="ctl-dot cd-1">📜</div>
+      <span class="ctl-label">구약의<br>탄생</span>
+    </div>
+    <div class="ctl-line"></div>
+    <div class="ctl-item">
+      <div class="ctl-dot cd-2">🏛️</div>
+      <span class="ctl-label">헬레니즘<br>70인역</span>
+    </div>
+    <div class="ctl-line"></div>
+    <div class="ctl-item">
+      <div class="ctl-dot cd-3">🔥</div>
+      <span class="ctl-label">번역의<br>투쟁</span>
+    </div>
+    <div class="ctl-line"></div>
+    <div class="ctl-item">
+      <div class="ctl-dot cd-4">🌿</div>
+      <span class="ctl-label">한글<br>성경</span>
+    </div>
+    <div class="ctl-line"></div>
+    <div class="ctl-item">
+      <div class="ctl-dot cd-5">✨</div>
+      <span class="ctl-label">오늘<br>우리</span>
+    </div>
+  </div>
+
+  <p class="cover-desc">부산교회 2구역</p>
+</section>
+
+<!-- wave 1 -->
+<svg class="wv" viewBox="0 0 1440 44" preserveAspectRatio="none" height="44" style="background:#1e1008;">
+  <path d="M0,44 Q360,4 720,24 T1440,12 L1440,44 Z" fill="#f0e6c8"/>
+</svg>
+
+<!-- ══ 들어가며 ══ -->
+<div class="page">
+<div class="cw sec-body">
+  <div class="ch-wrap ch-gold fu">
+    <div class="ch-ornament">
+      <div class="ch-ornament-line"></div>
+      <span class="ch-ornament-sym">✦</span>
+      <div class="ch-ornament-line"></div>
+    </div>
+    <span class="ch-num">Prologue · 들어가며</span>
+    <h2 class="ch-title">역사의 소용돌이 속에서 피어난 책</h2>
+    <div class="ch-rule" style="color:var(--gold);"></div>
+  </div>
+
+  <p class="fu">우리가 손에 든 한 권의 성경. 이 책은 단순히 오래된 종교 서적이 아닙니다. 여러 제국의 흥망성쇠와 수많은 사람들의 피와 땀, 그리고 간절한 믿음이 얽히고설켜 수천 년의 시간을 건너온 살아있는 역사의 산물입니다. 이 기나긴 여정의 중심에는 두 가지 거대한 흐름이 있었습니다. 하나는 하나님의 말씀을 삶의 최우선 순위로 두려는 치열한 노력이었고, 다른 하나는 그 말씀을 평범한 사람들의 언어로 소통하려는 끊임없는 노력이었습니다. 이 두 가지 열망이 어떻게 역사의 물줄기를 바꾸며 성경을 우리 손에 쥐여주었는지, 지금부터 그 놀라운 이야기를 시작하겠습니다.</p>
+</div>
+</div>
+
+<!-- wave 2 -->
+<svg class="wv" viewBox="0 0 1440 44" preserveAspectRatio="none" height="44" style="background:#f0e6c8;">
+  <path d="M0,0 Q360,44 720,18 T1440,32 L1440,44 L0,44 Z" fill="#e8d8b0"/>
+</svg>
+
+<!-- ══ 1장 구약 성경의 탄생 ══ -->
+<div class="page page-alt">
+<div class="cw sec-body">
+  <div class="ch-wrap ch-yellow fu">
+    <div class="ch-ornament">
+      <div class="ch-ornament-line"></div>
+      <span class="ch-ornament-sym">✦</span>
+      <div class="ch-ornament-line"></div>
+    </div>
+    <span class="ch-num">Chapter I · 기원전 621년~</span>
+    <h2 class="ch-title">1. 말씀의 씨앗이 뿌려지다: 구약 성경의 탄생</h2>
+    <div class="ch-rule" style="color:var(--rust);"></div>
+  </div>
+
+  <div class="section-sub ss-rust fu">1.1. 성전에서 발견된 두루마리</div>
+  <p class="fu">이야기는 기원전 621년, 남유다 왕국의 예루살렘에서 시작됩니다. 당시 왕이었던 요시야는 낡은 성전을 수리하던 중 먼지 속에 방치된 율법 두루마리를 발견합니다. 오랫동안 잊혔던 이 두루마리는 당시 이스라엘이 자신들의 영혼을 얼마나 외면하고 있었는지를 보여주는 뼈아픈 증거였습니다. 이 발견은 꺼져가던 신앙의 불씨를 되살리는 종교 개혁의 도화선이 되었습니다.</p>
+  <p class="fu">물론 이때의 '성경'은 오늘날의 완성된 책과는 거리가 멀었습니다. 유대인들은 흩어진 문서들을 토라(율법), 네비임(선지서), 케투빔(성문서)이라 불렀습니다. 중요한 것은, 이 두루마리의 발견이 단순히 말씀을 읽는 데 그치지 않았다는 점입니다. '신명기 그룹'이라 불리는 학자들과 서기관들이 움직이기 시작했습니다. 그들은 이 종교개혁을 기점으로, 잊혔던 민족의 역사와 율법을 특정 신학적 관점 아래 체계적으로 기록하고 집필하는 거대한 프로젝트를 시작했습니다. 말씀이 다시 공동체의 중심에 서자, 그것을 기록하려는 인간의 노력이 뒤따랐던 것입니다.</p>
+
+  <div class="section-sub ss-rust fu">1.2. 위기 속에서 정체성을 기록하다</div>
+  <p class="fu">안타깝게도 요시야의 개혁은 성공하지 못했습니다. 그는 전투에서 전사했고, 유다는 결국 강대국 바벨론에 의해 멸망하여 수많은 사람이 포로로 끌려가는 비극을 맞이합니다. 국가를 잃고 이역만리 타향에서 절망적인 포로 생활을 하게 된 유대인들은 역설적으로 바로 그 위기 속에서 자신들의 정체성을 지키기 위해 필사적인 노력을 시작합니다.</p>
+  <p class="fu">마치 우리나라가 나라를 빼앗긴 후 민족의 역사와 신화를 제대로 정리했듯이, 유대 민족도 그와 같은 작업을 했습니다. 그들은 흩어져 있던 토라, 네비임, 케투빔 문서들을 체계적으로 기록하고 편집하기 시작했습니다. 나라를 잃은 민족이 자신들이 누구인지를 잊지 않기 위해 말씀을 붙잡은 것입니다. 이 고통스러운 바벨론 포로 시기는 구약 성경의 기본 사상이 정립되고 체계화되는 매우 중요한 전환점이 되었습니다.</p>
+
+  <div class="section-sub ss-rust fu">1.3. 돌아온 사람들, 세워지는 말씀</div>
+  <p class="fu">시간이 흘러 바벨론이 페르시아에 멸망하고, 유대인들은 고향으로 돌아올 기회를 얻게 됩니다. 이때 에스라와 느헤미야 같은 지도자들이 무너진 공동체를 재건하기 위해 나섰습니다. 그들이 가장 먼저 한 일은 백성들을 광장에 모아 율법을 낭독하고 가르치는 것이었습니다.</p>
+  <p class="fu">하지만 중요한 문제가 있었습니다. 오랜 포로 생활 동안 백성들은 조상들의 언어인 히브리어를 대부분 잊어버렸던 것입니다. 그래서 레위인들이 중간에 서서 낭독되는 율법을 당시 사람들이 알아들을 수 있는 말로 <b>'통역'</b>해주어야 했습니다. 이 장면은 성경의 역사가 처음부터 일방적인 선포가 아닌, 사람들의 눈높이에 맞춘 '소통'을 중요하게 여겼음을 보여줍니다.</p>
+  <p class="fu">이렇게 오랜 시간과 위기를 거쳐 구약 성경의 틀이 잡혔지만, 새로운 제국의 등장은 성경의 운명을 또 다른 방향으로 이끌게 됩니다.</p>
+</div>
+</div>
+
+<!-- wave 3 -->
+<svg class="wv" viewBox="0 0 1440 44" preserveAspectRatio="none" height="44" style="background:#e8d8b0;">
+  <path d="M0,44 Q360,4 720,26 T1440,14 L1440,44 Z" fill="#f0e6c8"/>
+</svg>
+
+<!-- ══ 2장 헬레니즘 ══ -->
+<div class="page">
+<div class="cw sec-body">
+  <div class="ch-wrap ch-teal fu">
+    <div class="ch-ornament">
+      <div class="ch-ornament-line"></div>
+      <span class="ch-ornament-sym">✦</span>
+      <div class="ch-ornament-line"></div>
+    </div>
+    <span class="ch-num">Chapter II · 기원전 333년~</span>
+    <h2 class="ch-title">2. 세계를 잇는 다리: 헬레니즘 시대와 새로운 번역</h2>
+    <div class="ch-rule" style="color:var(--teal);"></div>
+  </div>
+
+  <div class="section-sub ss-teal fu">2.1. 세상의 언어가 된 그리스어</div>
+  <p class="fu">기원전 333년, 알렉산더 대왕이 등장하며 세상은 거대한 변화를 맞이합니다. 그의 정복 전쟁으로 그리스 문화(헬레니즘)와 그리스어가 지중해 세계의 국제 공용어가 되었습니다. 이로 인해 전 세계에 흩어져 살던 유대인(디아스포라)들은 새로운 문제에 부딪혔습니다. 그들은 더 이상 히브리어로 된 자신들의 경전을 읽고 이해할 수 없게 된 것입니다.</p>
+
+  <div class="section-sub ss-teal fu">2.2. 최초의 번역 성경, '70인역'의 등장</div>
+  <p class="fu">이러한 시대적 필요에 따라 역사상 최초의 번역 성경이 탄생합니다. 바로 히브리어 구약 성경을 당시 국제 공용어였던 그리스어로 번역한 <b>70인역(Septuagint)</b>입니다. 70인역의 등장은 기독교 역사에 지대한 영향을 미쳤으며, 그 중요성은 다음과 같이 요약할 수 있습니다.</p>
+
+  <ul class="fu">
+    <li><b>신앙 유지의 비결:</b> 전 세계에 흩어져 살던 유대인들은 회당에 모여 그리스어로 번역된 70인역을 통해 하나님의 말씀을 듣고 예배하며 자신들의 신앙 정체성을 지킬 수 있었습니다. 이는 고상한 학자들의 언어가 아닌, 시장과 거리에서 쓰이던 코이네 그리스어(Koine Greek)로 번역되었기에 가능했습니다. 이 결정은 하나님의 말씀이 삶의 언어로 소통되어야 한다는 원칙을 다시 한번 확인시켜 주었습니다.</li>
+    <li><b>새로운 구성의 탄생:</b> 오늘날 우리가 익숙한 성경의 형태가 이때 만들어졌습니다. 히브리어 성경에서 '토라'로 불리던 것이 70인역을 통해 '모세오경'이라는 명칭으로 불리게 되었고, 하나로 합쳐져 있던 사무엘서나 열왕기서가 상/하권으로 나뉘는 등 현대적인 편집 방식이 도입되었습니다.</li>
+    <li><b>기독교의 초석:</b> 훗날 신약 성경의 저자들은 구약 성경을 인용할 때 바로 이 70인역을 사용했습니다. 또한, 초기 기독교가 유대인의 경계를 넘어 전 세계로 퍼져나가는 데 이 그리스어 성경은 결정적인 다리 역할을 했습니다.</li>
+  </ul>
+
+  <div class="section-sub ss-teal fu">2.3. '정경'의 확립: 무엇이 성경인가?</div>
+  <p class="fu">시간이 흐르면서 "수많은 문서 중 과연 어떤 것을 하나님의 말씀으로 인정해야 하는가?"라는 질문이 중요해졌습니다. 이에 대한 공식적인 결정이 내려졌습니다.</p>
+
+  <div class="bible-box bb-teal fu">
+    구약 정경 - 주후 90년, 얌니아(Yavneh) 회의에서 유대교 지도자들은 원문이 히브리어로 기록된 39권을 구약의 정경(Canon)으로 확정했습니다. 그리스어로 기록된 외경(Apocrypha)이 제외된 이유가 바로 이 '히브리어 원전'이라는 기준 때문이었습니다.
+  </div>
+  <div class="bible-box bb-teal fu">
+    신약 정경 - 주후 397년, 카르타고 회의에서 초대 교회 지도자들은 27권의 신약 문서를 신약의 정경으로 공식 인정했습니다.
+  </div>
+  <p class="fu">이 과정을 통해 오늘날 우리가 가진 구약 39권, 신약 27권, 총 66권의 성경이 공식적으로 확립되었습니다. 그리스어로 번역되어 더 넓은 세상으로 나아간 성경은, 로마 시대에 이르러 또 한 번 민중의 언어로 옷을 갈아입게 됩니다.</p>
+</div>
+</div>
+
+<!-- wave 4 -->
+<svg class="wv" viewBox="0 0 1440 44" preserveAspectRatio="none" height="44" style="background:#f0e6c8;">
+  <path d="M0,0 Q360,44 720,16 T1440,30 L1440,44 L0,44 Z" fill="#dfd0a8"/>
+</svg>
+
+<!-- ══ 3장 번역의 투쟁 ══ -->
+<div class="page page-dark">
+<div class="cw sec-body">
+  <div class="ch-wrap ch-purple fu">
+    <div class="ch-ornament">
+      <div class="ch-ornament-line"></div>
+      <span class="ch-ornament-sym">✦</span>
+      <div class="ch-ornament-line"></div>
+    </div>
+    <span class="ch-num">Chapter III · 중세~16세기</span>
+    <h2 class="ch-title">3. 모두를 위한 말씀: 번역을 위한 투쟁의 역사</h2>
+    <div class="ch-rule" style="color:var(--purple);"></div>
+  </div>
+
+  <div class="section-sub ss-purple fu">3.1. 로마 시대를 위한 라틴어 성경, '불가타'</div>
+  <p class="fu">로마 제국이 세계의 중심이 되자, 이제 그리스어는 지식인들의 언어가 되고 대다수 민중은 라틴어를 사용하게 되었습니다. 이때 히에로니무스(Hieronymus), 영어 이름으로는 제롬(Jerome)이라는 학자가 등장합니다. 그는 평범한 사람들이 성경을 읽을 수 있도록 그리스어와 히브리어 성경을 당시 민중의 언어인 라틴어로 번역하는 위대한 과업을 수행했습니다.</p>
+  <p class="fu">이 번역본은 불가타(Vulgate) 성경이라 불리는데, '불가타'는 '통속적인', '대중적인'이라는 뜻을 담고 있습니다. 이는 성경이 특정 계층의 전유물이 아니라, 시장의 상인이나 밭 가는 농부도 읽을 수 있는 '상스러운 언어'로 소통되어야 한다는 정신을 다시 한번 보여주는 강력한 증거입니다.</p>
+
+  <div class="section-sub ss-purple fu">3.2. 암흑기: 성직자들의 언어가 된 성경</div>
+  <p class="fu">하지만 로마 제국이 멸망하고 중세 시대가 시작되면서 라틴어 역시 일상에서 쓰이지 않는, 오직 성직자들만이 사용하는 죽은 언어가 되어버렸습니다. 성경은 다시 한번 민중의 손을 떠나 소수 성직자들의 독점물이 되었고, 대다수 사람들은 성경의 내용을 전혀 이해할 수 없는 '암흑기'가 도래했습니다.</p>
+  <p class="fu">중세 교회들이 거대한 성당에 스테인드글라스나 성화를 가득 채웠던 이유가 바로 여기에 있습니다. 글을 읽을 수도, 라틴어를 이해할 수도 없었던 사람들에게 그림이라는 시각적 자료를 통해 성경 이야기를 전달하려 했던 것입니다.</p>
+
+  <div class="section-sub ss-purple fu">3.3. 종교개혁: 번역을 위한 싸움</div>
+  <p class="fu">16세기 종교개혁은 흔히 교회의 부패에 맞선 신학적 투쟁으로 알려져 있지만, 그 본질은 <b>"성경을 우리말로 읽게 해달라!"</b>는 거대한 번역을 위한 싸움이었습니다. 수많은 개혁가가 목숨을 걸고 성경을 민중의 언어로 되돌리기 위해 투쟁했습니다.</p>
+
+  <div class="tbl-wrap fu">
+    <table>
+      <thead>
+        <tr>
+          <th>인물</th>
+          <th>활동 시기</th>
+          <th>주요 활동 및 의의</th>
+          <th>결과</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>존 위클리프</b></td>
+          <td>14세기 후반</td>
+          <td>최초로 성경을 영어로 번역하여 '사람은 성직자가 아닌 성경을 통해 구원받는다'고 주장함.</td>
+          <td>사후 이단으로 정죄되고 부관참시 당함.</td>
+        </tr>
+        <tr>
+          <td><b>에라스무스</b></td>
+          <td>1516년</td>
+          <td>그리스어 성경을 출판하여 1000년간 사용된 라틴어 불가타 성경의 오류를 지적하고 번역의 중요성을 일깨움.</td>
+          <td>루터, 틴데일 등 개혁가들에게 결정적인 영향을 미침.</td>
+        </tr>
+        <tr>
+          <td><b>마르틴 루터</b></td>
+          <td>1521년</td>
+          <td>성에 숨어 지내며 신약 성경을 독일어로 번역함. 독일어 성경은 종교개혁 확산의 기초가 됨.</td>
+          <td>독일 종교개혁을 성공으로 이끎.</td>
+        </tr>
+        <tr>
+          <td><b>윌리엄 틴데일</b></td>
+          <td>1526년</td>
+          <td>히브리어와 그리스어 원문에서 직접 영어로 성경을 번역함. 현대 영어 성경의 기초를 마련함.</td>
+          <td>반역죄로 체포되어 화형당함.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="fu">이 투쟁이 얼마나 치열했는지는 존 위클리프의 추종자들에게 붙여진 이름에서도 드러납니다. 교회 당국은 그들을 '롤라드파(Lollards)'라고 불렀습니다. 이는 '웅얼거리는 소리를 낸다'는 뜻의 경멸적인 의성어였습니다. 처음으로 자기들 말로 된 성경을 읽고 자발적으로 기도하는 평민들의 모습을, 기존 질서를 독점하던 권력자들이 얼마나 경멸적으로 바라보았는지 보여주는 생생한 증거입니다. 이 싸움은 단순히 언어의 문제가 아니라, 말씀에 대한 권리를 되찾으려는 처절한 몸부림이었습니다.</p>
+
+  <div class="section-sub ss-purple fu">3.4. 통일된 목소리, 킹 제임스 성경</div>
+  <p class="fu">윌리엄 틴데일이 "주여, 영국 왕의 눈을 열어주소서!"라는 마지막 기도를 남기고 순교한 이후, 그의 피와 땀은 헛되지 않았습니다. 여러 종류의 영어 성경이 등장하며 혼란이 생기자, 영국의 제임스 1세는 통일된 표준 번역본을 만들라고 명령합니다.</p>
+  <p class="fu">그 결과 1611년에 탄생한 것이 바로 <b>킹 제임스 성경(King James Version)</b>입니다. 이 성경은 영국 교회를 하나로 묶는 구심점이 되었고, 훗날 신앙의 자유를 찾아 신대륙으로 건너간 청교도들의 손에 들려 미국 건국의 정신적 토대가 되었습니다. 에이브러햄 링컨부터 마틴 루터 킹 주니어 목사에 이르기까지, 킹 제임스 성경은 수많은 사람에게 영감을 주며 역사를 바꾼 책이 되었습니다.</p>
+</div>
+</div>
+
+<!-- wave 5 -->
+<svg class="wv" viewBox="0 0 1440 44" preserveAspectRatio="none" height="44" style="background:#dfd0a8;">
+  <path d="M0,44 Q360,4 720,24 T1440,12 L1440,44 Z" fill="#f0e6c8"/>
+</svg>
+
+<!-- ══ 4장 한글 성경 ══ -->
+<div class="page">
+<div class="cw sec-body">
+  <div class="ch-wrap ch-olive fu">
+    <div class="ch-ornament">
+      <div class="ch-ornament-line"></div>
+      <span class="ch-ornament-sym">✦</span>
+      <div class="ch-ornament-line"></div>
+    </div>
+    <span class="ch-num">Chapter IV · 19세기 조선</span>
+    <h2 class="ch-title">4. 어둠을 밝힌 빛: 한글 성경 이야기</h2>
+    <div class="ch-rule" style="color:var(--olive);"></div>
+  </div>
+
+  <div class="section-sub ss-olive fu">4.1. 선교사보다 먼저 들어온 말씀</div>
+  <p class="fu">우리나라의 기독교 역사는 세계적으로도 매우 독특한 특징을 가집니다. 바로 공식적인 선교사가 입국하기도 전에 말씀, 즉 성경이 먼저 들어왔다는 점입니다. 1832년 칼 귀츨라프, 1866년 로버트 저메인 토머스 같은 이들을 통해 한문 성경이 먼저 조선 땅에 전해졌습니다.</p>
+  <p class="fu">특히 대동강변에서 순교한 토머스 선교사의 이야기는 극적입니다. 그를 죽였던 관군 박춘권이 토머스가 마지막 순간까지 품에 안고 있던 성경을 집에 가져와 벽지로 사용했는데, 그 말씀을 읽다가 훗날 평양 지역 최초의 신자 중 한 명이 되었다는 일화는 말씀이 가진 생명력을 보여줍니다.</p>
+
+  <div class="section-sub ss-olive fu">4.2. 만주에서 온 첫 한글 성경</div>
+  <p class="fu">본격적인 복음의 씨앗은 우리말 성경을 통해 뿌려졌습니다. 스코틀랜드 출신의 존 로스 선교사는 만주에서 이응찬, 백홍준 등 조선인들의 도움을 받아 최초의 한글 신약 성경 번역에 성공합니다.</p>
+  <p class="fu">이렇게 번역된 한글 성경은 책 보따리상들을 통해 압록강을 건너 비밀리에 조선으로 보급되었습니다. 낯선 서양 선교사의 말이 아닌, 자신들의 언어로 된 '우리말 성경'이 있었기에 한국 교회는 폭발적으로 성장할 수 있었습니다. 1907년 평양을 뜨겁게 달구었던 대부흥운동의 밑바탕에는 바로 이 한글 성경의 힘이 있었습니다.</p>
+  <p class="fu">기원전 621년 예루살렘의 작은 두루마리에서 시작된 이야기는 마침내 우리 손에 들린 한 권의 책으로 이어졌습니다. 이 기나긴 여정은 우리에게 무엇을 말해주고 있을까요?</p>
+</div>
+</div>
+
+<!-- wave 6 -->
+<svg class="wv" viewBox="0 0 1440 44" preserveAspectRatio="none" height="44" style="background:#f0e6c8;">
+  <path d="M0,0 Q360,44 720,18 T1440,32 L1440,44 L0,44 Z" fill="#e8d8b0"/>
+</svg>
+
+<!-- ══ 결론 ══ -->
+<div class="page page-alt">
+<div class="cw sec-body">
+  <div class="ch-wrap ch-gold fu">
+    <div class="ch-ornament">
+      <div class="ch-ornament-line"></div>
+      <span class="ch-ornament-sym">✦</span>
+      <div class="ch-ornament-line"></div>
+    </div>
+    <span class="ch-num">Epilogue · 결론</span>
+    <h2 class="ch-title">✨ 결론: 성경이 우리에게 말을 거는 방식</h2>
+    <div class="ch-rule" style="color:var(--gold);"></div>
+  </div>
+
+  <p class="fu">성경이 수천 년의 역사를 거쳐 우리 손에 오기까지의 여정은 두 가지 중요한 교훈을 가르쳐 줍니다.</p>
+  <p class="fu">첫째, 하나님의 임재는 웅장한 건물이나 화려한 의식이 아니라, 공동체가 말씀을 삶의 최우선 순위로 둘 때 나타난다. 요시야 시대부터 바벨론 포로기, 그리고 종교개혁 시대까지, 역사는 성경이 삶의 중심에 놓일 때 사회가 생명력을 얻었음을 증언합니다.</p>
+  <p class="fu">둘째, 성경의 거룩함은 그것이 기꺼이 '상스러움'을 감수할 때, 즉 고상한 학자들의 언어가 아닌 시장 사람들의 평범한 언어로 소통될 때 비로소 드러난다. 에스라 시대의 통역, 70인역, 불가타 성경, 그리고 목숨을 건 수많은 자국어 번역의 역사는 성경이 소수에게 독점될 때가 아닌, 모두의 언어로 소통될 때 그 시대에 복음의 능력이 나타났음을 보여줍니다.</p>
+  <p class="fu">이 두 가지 역사적 기준은 오늘날 우리에게 중요한 질문을 던집니다. 과연 우리 삶의 중심에 말씀이 있는가? 우리의 언어는 세상과 단절된 그들만의 리그에 갇혀 있지는 않은가? 수천 년의 투쟁과 희생을 통해 우리 손에 주어진 이 책의 가치를 되새기며, 그 말씀이 오늘 우리의 삶 속에서 어떻게 다시 살아 숨 쉴 수 있을지 고민해 보아야 할 때입니다.</p>
+
+  <div class="conclusion-stamp fu">
+    <span class="cs-icon">📖</span>
+    <div class="cs-title">The Journey of Scripture</div>
+    <p style="font-size:clamp(.9rem,2.4vw,1rem);color:var(--ink2);line-height:2.1;margin:0;">기원전 621년 예루살렘의 작은 두루마리부터<br>오늘 우리 손에 들린 한 권의 성경까지 —<br>수천 년의 여정은 하나님의 말씀이<br>결코 사라지지 않는다는 살아있는 증거입니다.</p>
+  </div>
+</div>
+</div>
+
+<!-- wave final -->
+<svg class="wv" viewBox="0 0 1440 44" preserveAspectRatio="none" height="44" style="background:#e8d8b0;">
+  <path d="M0,44 Q360,0 720,22 T1440,10 L1440,44 Z" fill="#1e1008"/>
+</svg>
+
+<footer class="site-footer">
+  <div class="sf-rule"></div>
+  <p class="sf-name">부산교회 2구역</p>
+</footer>
+
+<script>
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('vis'); });
+},{threshold:0.08});
+document.querySelectorAll('.fu').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

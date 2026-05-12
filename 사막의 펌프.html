@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>사막의 펌프 — 로마서 1:16-17</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700;900&family=Noto+Sans+KR:wght@300;400&family=Caveat:wght@400;600;700&family=Bebas+Neue&family=Unna:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+
+:root{
+  --sand:    #e8d5b0;
+  --sand2:   #d4b882;
+  --dune:    #b89660;
+  --horizon: #c87840;
+  --burn:    #a04010;
+  --sky-hot: #f0c060;
+  --sky-top: #d08020;
+  --water:   #4a90b8;
+  --water2:  #2a6890;
+  --water-l: #8ac8e8;
+  --ink:     #1a1208;
+  --parch:   #f5ead0;
+  --rust:    #8b3010;
+}
+
+body{
+  background: var(--sand);
+  color: var(--ink);
+  font-family: 'Noto Serif KR', serif;
+  overflow-x: hidden;
+  cursor: default;
+}
+
+/* ═══ HEAT SHIMMER — fixed canvas ═══ */
+#heatCanvas{
+  position: fixed;
+  inset: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+/* ═══ PROGRESS SIDEBAR — water rising ═══ */
+#waterMeter{
+  position: fixed;
+  right: 0; top: 0; bottom: 0;
+  width: 6px;
+  background: rgba(184,150,96,0.3);
+  z-index: 100;
+}
+
+#waterFill{
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 0%;
+  background: linear-gradient(180deg, var(--water-l), var(--water2));
+  transition: height 0.3s ease;
+}
+
+#waterDrop{
+  position: absolute;
+  right: 8px;
+  width: 20px; height: 20px;
+  transition: bottom 0.3s ease;
+  bottom: 0;
+}
+
+/* ═══ HERO — FULL BLEED DESERT ═══ */
+#hero{
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+/* Sky gradient */
+#hero::before{
+  content:'';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+    #c87020 0%,
+    #e09030 25%,
+    #f0b850 45%,
+    var(--sand2) 65%,
+    var(--sand) 100%);
+}
+
+/* Desert floor — wavy dune line via SVG */
+.dune-line{
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 40%;
+  pointer-events: none;
+}
+
+/* Sun */
+.sun{
+  position: absolute;
+  top: 8%; left: 50%;
+  transform: translateX(-50%);
+  width: clamp(80px,15vw,140px);
+  height: clamp(80px,15vw,140px);
+  border-radius: 50%;
+  background: radial-gradient(circle,
+    #fff8d0 0%,
+    #ffe060 40%,
+    #ffb820 70%,
+    rgba(255,160,0,0) 100%);
+  box-shadow: 0 0 60px 20px rgba(255,180,0,0.4), 0 0 120px 60px rgba(255,140,0,0.15);
+  animation: sunPulse 4s ease-in-out infinite;
+}
+
+@keyframes sunPulse{
+  0%,100%{box-shadow:0 0 60px 20px rgba(255,180,0,0.4), 0 0 120px 60px rgba(255,140,0,0.15);}
+  50%{box-shadow:0 0 80px 30px rgba(255,180,0,0.5), 0 0 160px 80px rgba(255,140,0,0.2);}
+}
+
+/* Heat lines */
+.heat-lines{
+  position: absolute;
+  bottom: 35%; left: 0; right: 0;
+  height: 80px;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0px, transparent 40px,
+    rgba(255,200,100,0.06) 40px, rgba(255,200,100,0.06) 41px
+  );
+  animation: heatShift 3s linear infinite;
+  pointer-events: none;
+}
+@keyframes heatShift{ to{ background-position-x: 41px; } }
+
+/* Hero text */
+.hero-inner{
+  position: relative;
+  z-index: 5;
+  text-align: center;
+  padding: 0 24px;
+}
+
+.hero-location{
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(10px,1.5vw,14px);
+  letter-spacing: 0.6em;
+  color: rgba(26,18,8,0.45);
+  margin-bottom: 12px;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 0.4s forwards;
+}
+
+.hero-title{
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(72px,18vw,200px);
+  line-height: 0.85;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  opacity: 0;
+  animation: fadeUp 1.2s cubic-bezier(0.16,1,0.3,1) 0.6s forwards;
+  text-shadow: 2px 4px 0 rgba(160,64,16,0.15);
+}
+
+.hero-title .water-word{
+  display: block;
+  color: var(--water2);
+  text-shadow: 2px 4px 0 rgba(42,104,144,0.2);
+}
+
+.hero-sub{
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(13px,1.8vw,16px);
+  color: rgba(26,18,8,0.5);
+  margin-top: 16px;
+  letter-spacing: 0.05em;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 1.1s forwards;
+}
+
+/* Pump silhouette */
+.pump-silhouette{
+  position: absolute;
+  bottom: 28%;
+  left: 12%;
+  opacity: 0;
+  animation: fadeIn 1s ease 1.5s forwards;
+}
+
+.scroll-cue{
+  position: absolute;
+  bottom: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  animation: fadeIn 1s ease 2s forwards;
+}
+
+.scroll-cue-stem{
+  width: 1px; height: 48px;
+  background: linear-gradient(180deg, rgba(26,18,8,0.4), transparent);
+  animation: stemPulse 2s ease-in-out infinite;
+}
+
+.scroll-cue-label{
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.4em;
+  color: rgba(26,18,8,0.3);
+}
+
+@keyframes stemPulse{0%,100%{transform:scaleY(1);opacity:1;}50%{transform:scaleY(0.5);opacity:0.3;}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeIn{to{opacity:1;}}
+
+/* ═══ STORY SECTIONS ═══ */
+
+/* Desert walk section */
+.desert-section{
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(180deg, var(--sand) 0%, var(--parch) 100%);
+  padding: 80px 0;
+}
+
+.desert-inner{
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+/* BIG chapter letter — brutalist style */
+.ch-giant{
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(100px,20vw,220px);
+  line-height: 0.8;
+  color: rgba(184,150,96,0.12);
+  letter-spacing: 0.02em;
+  margin-bottom: -60px;
+  user-select: none;
+  pointer-events: none;
+}
+
+.ch-label{
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.6em;
+  color: var(--horizon);
+  display: block;
+  margin-bottom: 16px;
+}
+
+.ch-title{
+  font-family: 'Unna', serif;
+  font-size: clamp(28px,4.5vw,48px);
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.2;
+  margin-bottom: 32px;
+}
+
+.story-p{
+  font-size: clamp(15px,1.9vw,17px);
+  line-height: 2.1;
+  color: rgba(26,18,8,0.75);
+  margin-bottom: 20px;
+}
+
+.thirst-line{
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(32px,6vw,64px);
+  letter-spacing: 0.08em;
+  color: var(--burn);
+  display: block;
+  margin: 24px 0;
+  text-align: center;
+}
+
+/* ═══ PUMP SECTION ═══ */
+.pump-section{
+  position: relative;
+  z-index: 1;
+  background: var(--sand2);
+  padding: 80px 0;
+  overflow: hidden;
+}
+
+.pump-section::before{
+  content:'';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0px, transparent 79px,
+    rgba(160,64,16,0.04) 79px, rgba(160,64,16,0.04) 80px
+  );
+}
+
+.pump-inner{
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 40px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Two-col: pump visual + text */
+.pump-layout{
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+@media(max-width:680px){
+  .pump-layout{grid-template-columns:1fr;gap:40px;}
+}
+
+/* Pump SVG container */
+.pump-visual{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s cubic-bezier(0.16,1,0.3,1);
+}
+.pump-visual.visible{opacity:1;transform:translateY(0);}
+
+/* Pump animation */
+.pump-handle{
+  transform-origin: 50% 30%;
+  animation: pumpBob 2.5s ease-in-out infinite;
+}
+@keyframes pumpBob{
+  0%,100%{transform:rotate(0deg);}
+  40%{transform:rotate(12deg);}
+  60%{transform:rotate(-5deg);}
+}
+
+/* No water indicator */
+.pump-status{
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.3em;
+  color: var(--burn);
+  text-align: center;
+}
+
+/* ═══ LETTER SECTION ═══ */
+.letter-section{
+  position: relative;
+  z-index: 1;
+  background: var(--parch);
+  padding: 80px 0;
+  overflow: hidden;
+}
+
+.letter-section::before{
+  content:'';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 50% 50%, rgba(200,120,64,0.06) 0%, transparent 70%);
+}
+
+.letter-inner{
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0 40px;
+  position: relative;
+  z-index: 1;
+}
+
+/* The actual letter — aged paper */
+.letter-card{
+  background: #f8f0d8;
+  border: 1px solid rgba(160,100,40,0.2);
+  padding: 48px 44px;
+  position: relative;
+  box-shadow:
+    4px 6px 20px rgba(90,60,20,0.12),
+    inset 0 0 40px rgba(200,160,80,0.08);
+  transform: rotate(-0.5deg);
+  opacity: 0;
+  transform: rotate(-0.5deg) translateY(24px);
+  transition: all 0.9s cubic-bezier(0.16,1,0.3,1);
+}
+
+.letter-card.visible{opacity:1;transform:rotate(-0.5deg) translateY(0);}
+
+/* Fold line */
+.letter-card::before{
+  content:'';
+  position: absolute;
+  top: 33%; left: 0; right: 0;
+  height: 1px;
+  background: rgba(160,100,40,0.1);
+}
+
+/* Coffee stain effect */
+.letter-card::after{
+  content:'';
+  position: absolute;
+  bottom: 60px; right: 40px;
+  width: 60px; height: 50px;
+  border-radius: 50%;
+  border: 1px solid rgba(139,80,30,0.08);
+  box-shadow: inset 0 0 10px rgba(139,80,30,0.05);
+  transform: rotate(20deg) scaleX(1.3);
+}
+
+.letter-from{
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 9px;
+  font-weight: 300;
+  letter-spacing: 0.45em;
+  text-transform: uppercase;
+  color: rgba(90,60,20,0.35);
+  margin-bottom: 24px;
+  display: block;
+}
+
+.letter-body{
+  font-family: 'Caveat', cursive;
+  font-size: clamp(17px,2.4vw,22px);
+  font-weight: 500;
+  line-height: 1.85;
+  color: rgba(26,18,8,0.85);
+}
+
+.letter-body .key-instruction{
+  font-weight: 700;
+  font-size: 1.1em;
+  color: var(--water2);
+}
+
+.letter-ps{
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px dashed rgba(160,100,40,0.2);
+  font-family: 'Caveat', cursive;
+  font-size: clamp(14px,1.9vw,18px);
+  color: var(--rust);
+}
+
+/* ═══ DECISION — DRAMATIC ═══ */
+.decision-section{
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Top half: sand / drink */
+.decision-top{
+  flex: 1;
+  background: linear-gradient(180deg, #c87828 0%, #e09030 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 40px;
+  position: relative;
+}
+
+/* Bottom half: water / pour */
+.decision-bottom{
+  flex: 1;
+  background: linear-gradient(180deg, var(--water) 0%, var(--water2) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 40px;
+  position: relative;
+}
+
+/* Horizontal divider */
+.decision-divider{
+  position: relative;
+  z-index: 10;
+  height: 3px;
+  background: var(--ink);
+}
+
+.decision-divider-label{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  background: var(--ink);
+  padding: 8px 24px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.4em;
+  color: var(--parch);
+  white-space: nowrap;
+}
+
+.choice-text{
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(36px,7vw,80px);
+  line-height: 1;
+  letter-spacing: 0.06em;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s ease;
+}
+
+.choice-text.visible{opacity:1;transform:translateY(0);}
+
+.choice-top{ color: var(--parch); }
+.choice-bottom{ color: #fff; }
+
+.choice-sub{
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(13px,1.7vw,16px);
+  line-height: 1.9;
+  text-align: center;
+  margin-top: 16px;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: all 0.7s ease 0.2s;
+}
+
+.choice-sub.visible{opacity:1;transform:translateY(0);}
+
+.sub-top{ color: rgba(245,234,208,0.75); }
+.sub-bottom{ color: rgba(255,255,255,0.75); }
+
+/* Water bottle visual */
+.bottle-wrap{
+  position: absolute;
+  right: 8%;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+  transition: opacity 0.8s ease 0.4s;
+}
+.bottle-wrap.visible{opacity:1;}
+
+/* ═══ FAITH SECTION ═══ */
+.faith-section{
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(180deg, var(--water2) 0%, #1a3850 100%);
+  padding: 100px 0;
+  overflow: hidden;
+}
+
+.faith-section::before{
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0px, transparent 60px,
+    rgba(255,255,255,0.02) 60px, rgba(255,255,255,0.02) 61px
+  );
+}
+
+.faith-inner{
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 40px;
+  position: relative;
+  z-index: 1;
+}
+
+.faith-label{
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.6em;
+  color: var(--water-l);
+  display: block;
+  margin-bottom: 24px;
+}
+
+.faith-p{
+  font-size: clamp(15px,1.9vw,17px);
+  line-height: 2.1;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 20px;
+}
+
+.faith-bold{
+  font-family: 'Unna', serif;
+  font-size: clamp(22px,3.5vw,34px);
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.5;
+  margin: 32px 0;
+}
+
+/* ═══ SCRIPTURE ═══ */
+.scripture-section{
+  position: relative;
+  z-index: 1;
+  background: #1a3850;
+  padding: 100px 0;
+  overflow: hidden;
+}
+
+.scripture-section::before{
+  content:'1:16';
+  position: absolute;
+  right: -20px; top: 50%;
+  transform: translateY(-55%);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 280px;
+  color: rgba(255,255,255,0.02);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.scripture-inner{
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 40px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Stamp */
+.sc-stamp{
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 44px;
+}
+
+.sc-box{
+  width: 52px; height: 52px;
+  border: 2px solid rgba(138,200,232,0.4);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  letter-spacing: 0.1em;
+  color: var(--water-l);
+}
+
+.sc-meta{ display:flex; flex-direction:column; gap:4px; }
+
+.sc-book{
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.5em;
+  color: rgba(138,200,232,0.6);
+  text-transform: uppercase;
+}
+
+.sc-ref{
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 11px;
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  color: rgba(255,255,255,0.3);
+}
+
+.verse-layout{
+  display: grid;
+  grid-template-columns: 2px 1fr;
+  gap: 0 32px;
+}
+
+.verse-bar{
+  background: linear-gradient(180deg, var(--water-l), transparent);
+}
+
+.verse-text{
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(15px,2.1vw,19px);
+  line-height: 2.1;
+  color: rgba(255,255,255,0.85);
+}
+
+.verse-text strong{ color:#fff; font-weight:700; }
+
+.verse-ref{
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.4em;
+  color: rgba(138,200,232,0.45);
+  margin-top: 24px;
+  padding-left: 34px;
+}
+
+/* ═══ CLOSING ═══ */
+.closing-section{
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(180deg, #1a3850 0%, var(--ink) 100%);
+  padding: 100px 0 140px;
+}
+
+.closing-inner{
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.closing-faith-stmt{
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(28px,6vw,72px);
+  line-height: 1;
+  letter-spacing: 0.06em;
+  color: var(--sand);
+  margin-bottom: 40px;
+}
+
+.closing-p{
+  font-size: clamp(14px,1.9vw,17px);
+  line-height: 2.1;
+  color: rgba(245,234,208,0.65);
+  margin-bottom: 20px;
+}
+
+/* Final choice block */
+.final-choice{
+  margin-top: 60px;
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr;
+  gap: 0;
+  border: 1px solid rgba(245,234,208,0.12);
+  opacity: 0;
+  transform: translateY(24px);
+  transition: all 0.8s ease;
+}
+.final-choice.visible{opacity:1;transform:translateY(0);}
+
+.fc-divider{ background: rgba(245,234,208,0.12); }
+
+.fc-col{
+  padding: 32px 28px;
+}
+
+.fc-col-label{
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.5em;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.fc-sand .fc-col-label{ color: var(--horizon); }
+.fc-water .fc-col-label{ color: var(--water-l); }
+
+.fc-text{
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(13px,1.8vw,15px);
+  line-height: 2;
+  color: rgba(245,234,208,0.7);
+}
+
+.fc-result{
+  grid-column: 1 / -1;
+  padding: 24px 28px;
+  border-top: 1px solid rgba(245,234,208,0.12);
+  text-align: center;
+}
+
+.fc-result-text{
+  font-family: 'Unna', serif;
+  font-size: clamp(16px,2.3vw,22px);
+  font-weight: 700;
+  color: var(--water-l);
+  line-height: 1.7;
+}
+
+/* Scroll reveal */
+.sr{
+  opacity:0; transform:translateY(24px);
+  transition: all 0.65s ease;
+}
+.sr.visible{opacity:1;transform:translateY(0);}
+.sr:nth-child(2){transition-delay:0.08s;}
+.sr:nth-child(3){transition-delay:0.16s;}
+.sr:nth-child(4){transition-delay:0.24s;}
+</style>
+</head>
+<body>
+
+<!-- Water meter sidebar -->
+<div id="waterMeter">
+  <div id="waterFill"></div>
+  <svg id="waterDrop" viewBox="0 0 20 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M10 2 Q16 10 16 15 A6 6 0 0 1 4 15 Q4 10 10 2Z" fill="#4a90b8" opacity="0.8"/>
+  </svg>
+</div>
+
+<canvas id="heatCanvas"></canvas>
+
+<!-- ═══ HERO ═══ -->
+<section id="hero">
+  <div class="sun"></div>
+  <div class="heat-lines"></div>
+
+  <!-- Dune SVG -->
+  <svg class="dune-line" viewBox="0 0 1440 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,200 Q120,120 300,180 Q480,240 600,160 Q720,80 900,160 Q1080,240 1200,180 Q1320,120 1440,200 L1440,300 L0,300Z"
+      fill="#d4b882"/>
+    <path d="M0,240 Q180,200 360,230 Q540,260 720,220 Q900,180 1080,220 Q1260,260 1440,240 L1440,300 L0,300Z"
+      fill="#c4a870"/>
+  </svg>
+
+  <!-- Pump silhouette -->
+  <div class="pump-silhouette">
+    <svg width="80" height="120" viewBox="0 0 80 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="34" y="40" width="12" height="70" fill="rgba(26,18,8,0.2)"/>
+      <rect x="24" y="60" width="32" height="10" rx="2" fill="rgba(26,18,8,0.2)"/>
+      <rect x="28" y="35" width="8" height="28" fill="rgba(26,18,8,0.18)"/>
+      <path d="M10 35 L36 38 L36 42 L10 39Z" fill="rgba(26,18,8,0.2)"/>
+      <circle cx="10" cy="37" r="5" fill="rgba(26,18,8,0.15)"/>
+    </svg>
+  </div>
+
+  <div class="hero-inner">
+    <div class="hero-location">Amargosa Desert · USA · 아마고사 사막</div>
+    <h1 class="hero-title">
+      사막의<br>
+      <span class="water-word">펌프</span>
+    </h1>
+    <p class="hero-sub">마실 것인가 — 부을 것인가 · 로마서 1:16-17</p>
+  </div>
+
+  <div class="scroll-cue">
+    <div class="scroll-cue-stem"></div>
+    <span class="scroll-cue-label">Scroll</span>
+  </div>
+</section>
+
+<!-- ═══ DESERT WALK ═══ -->
+<section class="desert-section">
+  <div class="desert-inner">
+    <div class="ch-giant">01</div>
+    <span class="ch-label sr">The Desert · 사막을 걷다</span>
+    <h2 class="ch-title sr">뜨거운 태양이 내려쬐는 그 길</h2>
+
+    <p class="story-p sr">미국의 아마고사(Amargosa) 사막을 지나가는 작은 오솔길이 있습니다. 뜨거운 태양이 내려쬐는 그 길은 사람을 쉽게 지치게 만드는 길입니다. 그 길을 지나가던 한 여행자가 있었습니다.</p>
+    <p class="story-p sr">태양은 머리 위에서 불을 쏟아 붓고, 입안은 바짝 말라 혀가 입천장에 붙을 것 같았습니다.</p>
+
+    <span class="thirst-line sr">"물… 물만 있으면…"</span>
+
+    <p class="story-p sr">그는 비틀거리며 사막을 걷고 있었습니다. 그때 멀리서 녹슨 물 펌프 하나가 보였습니다. 그는 마지막 힘을 다해 그곳으로 달려갔습니다.</p>
+  </div>
+</section>
+
+<!-- ═══ PUMP ═══ -->
+<section class="pump-section">
+  <div class="pump-inner">
+    <div class="pump-layout">
+
+      <!-- Pump illustration -->
+      <div class="pump-visual sr">
+        <svg width="180" height="220" viewBox="0 0 180 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Ground -->
+          <rect x="0" y="185" width="180" height="35" fill="rgba(184,150,96,0.3)" rx="2"/>
+          <!-- Pipe / body -->
+          <rect x="78" y="90" width="24" height="95" rx="3" fill="#7a6a50" stroke="rgba(90,60,20,0.3)" stroke-width="1"/>
+          <!-- Spout -->
+          <path d="M58 115 Q55 130 45 138" stroke="#7a6a50" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <!-- Housing box -->
+          <rect x="60" y="85" width="60" height="40" rx="4" fill="#8a7a60" stroke="rgba(90,60,20,0.25)" stroke-width="1"/>
+          <!-- Rust patches -->
+          <rect x="65" y="90" width="8" height="5" rx="1" fill="rgba(139,48,16,0.3)"/>
+          <rect x="100" y="100" width="6" height="4" rx="1" fill="rgba(139,48,16,0.25)"/>
+          <!-- Handle group — animated -->
+          <g class="pump-handle">
+            <rect x="68" y="55" width="44" height="10" rx="5" fill="#6a5a40" stroke="rgba(90,60,20,0.3)" stroke-width="1"/>
+            <circle cx="90" cy="60" r="6" fill="#7a6a50" stroke="rgba(90,60,20,0.3)" stroke-width="1"/>
+            <!-- Handle arm right -->
+            <rect x="108" y="50" width="36" height="8" rx="4" fill="#6a5a40"/>
+            <circle cx="142" cy="54" r="7" fill="rgba(90,60,20,0.2)" stroke="rgba(90,60,20,0.25)" stroke-width="1"/>
+          </g>
+          <!-- No water drip -->
+          <text x="30" y="155" font-family="Bebas Neue, sans-serif" font-size="10" fill="rgba(139,48,16,0.5)" letter-spacing="1">물 없음</text>
+        </svg>
+        <div class="pump-status">DRY · 메말랐습니다</div>
+      </div>
+
+      <!-- Story text -->
+      <div>
+        <h2 class="ch-title sr">하지만 물은 한 방울도 나오지 않았습니다</h2>
+        <p class="story-p sr">그때 펌프 손잡이에 끈으로 묶인 작은 깡통 하나가 보였습니다. 깡통 속에는 편지 한 장이 들어 있었습니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ LETTER ═══ -->
+<section class="letter-section">
+  <div class="letter-inner">
+    <span class="ch-label sr">The Letter · 편지</span>
+
+    <div class="letter-card sr">
+      <span class="letter-from">깡통 속에 담긴 편지 · Letter found in the tin</span>
+      <div class="letter-body">
+        <span class="key-instruction">"이 펌프에 먼저 물을 부으십시오. 그러면 틀림없이 물이 나옵니다."</span><br><br>
+        "이 땅 밑에는 언제나 마르지 않는 샘이 있습니다. 펌프 옆 흰 바위 밑을 파면 큰 병에 물이 가득 담겨 있습니다.<br><br>
+        그 물을 절대 먼저 마시지 마십시오. 그 물을 펌프에 붓고 펌프질을 하십시오.<br><br>
+        제 말을 믿으세요. 틀림없이 물이 나옵니다.<br><br>
+        그리고 물을 충분히 마신 후에는 그 병에 다시 물을 가득 채워 다음 사람을 위해 묻어 두십시오."
+        <div class="letter-ps">
+          P.S. — 병의 물을 먼저 마셔 버리면 안 됩니다. 제 말을 꼭 믿으세요.
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:40px;">
+      <p class="story-p sr">그 사람은 흰 바위 밑을 파 보았습니다. 정말로 그곳에는 병 하나가 모래 속에 묻혀 있었습니다. 병 안에는 맑은 물이 가득 들어 있었습니다.</p>
+      <p class="story-p sr">그는 병을 들고 한참을 바라보았습니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ DECISION ═══ -->
+<section class="decision-section">
+
+  <!-- Top: drink / selfish -->
+  <div class="decision-top">
+    <div style="text-align:center;z-index:2;position:relative;">
+      <p class="choice-text choice-top sr">"지금 이 물을<br>마시면…<br>나는 살 수 있다."</p>
+      <p class="choice-sub sub-top sr">내 생각대로 · 내 본능대로 · 내 손에 쥔 것을 붙들며</p>
+    </div>
+    <!-- Water bottle visual -->
+    <div class="bottle-wrap sr">
+      <svg width="60" height="100" viewBox="0 0 60 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 15 Q18 8 22 5 L38 5 Q42 8 40 15 L45 25 L45 85 Q45 92 30 92 Q15 92 15 85 L15 25Z"
+          fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+        <path d="M15 55 L45 55 L45 85 Q45 92 30 92 Q15 92 15 85Z"
+          fill="rgba(255,255,255,0.2)"/>
+        <text x="30" y="75" text-anchor="middle" font-family="Bebas Neue, sans-serif" font-size="9" fill="rgba(255,255,255,0.4)" letter-spacing="1">WATER</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Divider -->
+  <div class="decision-divider">
+    <div class="decision-divider-label">마실 것인가 · 부을 것인가</div>
+  </div>
+
+  <!-- Bottom: pour / faith -->
+  <div class="decision-bottom">
+    <div style="text-align:center;z-index:2;position:relative;">
+      <p class="choice-text choice-bottom sr">"이 물을 펌프에<br>다 부었는데…<br>만약 물이 안 나오면?"</p>
+      <p class="choice-sub sub-bottom sr">믿음으로 · 보이지 않는 것을 신뢰하며 · 붓는 선택</p>
+    </div>
+  </div>
+
+</section>
+
+<!-- ═══ FAITH ═══ -->
+<section class="faith-section">
+  <div class="faith-inner">
+    <span class="faith-label sr">Faith · 믿음</span>
+    <p class="faith-p sr">손에 든 병은 그의 생명이었습니다. 그는 고민했습니다.</p>
+
+    <p class="faith-bold sr">믿음은 바로 보이지 않는 것을 신뢰하는 선택입니다.</p>
+
+    <p class="faith-p sr">우리의 인생도 이와 같습니다. 인생을 걷다 보면 사막 같은 순간을 만나게 됩니다. 갈증, 어려움, 고통, 막막함. 그때 우리는 두 가지 선택 앞에 서게 됩니다.</p>
+
+    <p class="faith-p sr">하나는 내 생각대로 하는 길, 다른 하나는 믿음으로 선택하는 길입니다.</p>
+
+    <p class="faith-p sr">만약 우리가 그 사막에 있었다면 어떤 선택을 했을까요? 편지를 믿고 그 물을 펌프에 부을 수 있을까요?</p>
+
+    <p class="faith-bold sr">믿음은 확실히 보이기 때문에 선택하는 것이 아닙니다. 하나님의 말씀을 믿기 때문에 선택하는 것입니다.</p>
+  </div>
+</section>
+
+<!-- ═══ SCRIPTURE ═══ -->
+<section class="scripture-section">
+  <div class="scripture-inner">
+    <div class="sc-stamp sr">
+      <div class="sc-box">ROM</div>
+      <div class="sc-meta">
+        <span class="sc-book">로마서 · Romans</span>
+        <span class="sc-ref">1장 16절 — 17절</span>
+      </div>
+    </div>
+
+    <div class="verse-layout sr">
+      <div class="verse-bar"></div>
+      <div>
+        <p class="verse-text">"나는 복음을 부끄러워하지 않습니다. 왜냐하면 이 복음은 먼저 유대인에게, 그리고 헬라인에게까지 <strong>모든 믿는 사람을 구원에 이르게 하는 하나님의 능력이기 때문입니다.</strong><br><br>믿음에서 나와 믿음에 이르게 하는 하나님의 의가 이 복음에 계시되어 있는데, 이것은 성경에 <strong>“그러나 의인은 믿음으로 생명을 얻고 살 것이다.”</strong>"라고 기록된 것과 같습니다.</p>
+        <p class="verse-ref">로마서 1:16-17</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CLOSING ═══ -->
+<section class="closing-section">
+  <div class="closing-inner">
+    <h2 class="closing-faith-stmt sr">손에 쥔 물병을<br>붓는 선택</h2>
+
+    <p class="closing-p sr">어쩌면 지금 우리의 삶에도 그 사막의 펌프와 같은 순간이 있을지 모릅니다. 손에 쥔 작은 물병을 붙들 것인가 아니면 하나님의 약속을 믿고 붓는 선택을 할 것인가.</p>
+    <p class="closing-p sr">그 선택이 우리의 믿음을 드러냅니다.</p>
+
+    <div class="final-choice sr">
+      <div class="fc-col fc-sand">
+        <span class="fc-col-label">내 생각 · My Way</span>
+        <p class="fc-text">손에 쥔 물병을 먼저 마신다 — 안전하지만, 펌프는 영원히 마른 채로 남는다.</p>
+      </div>
+      <div class="fc-divider"></div>
+      <div class="fc-col fc-water">
+        <span class="fc-col-label">믿음 · Faith</span>
+        <p class="fc-text">보이지 않는 샘을 믿고 물을 붓는다 — 두렵지만, 마르지 않는 물이 솟아오른다.</p>
+      </div>
+      <div class="fc-result">
+        <p class="fc-result-text">"그러나 의인은 믿음으로 생명을 얻고 살 것이다.” — 로마서 1:17</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+// ══ HEAT SHIMMER CANVAS ══
+(function(){
+  const c = document.getElementById('heatCanvas');
+  const ctx = c.getContext('2d');
+  let W, H, t = 0;
+
+  function resize(){
+    W = c.width = c.offsetWidth;
+    H = c.height = c.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    t += 0.008;
+
+    // Horizontal shimmer bands near horizon (bottom 40% of screen)
+    const bandStart = H * 0.3;
+    for(let y = bandStart; y < H; y += 3){
+      const intensity = ((y - bandStart)/(H - bandStart));
+      const wave = Math.sin(y * 0.05 + t * 2) * intensity * 8;
+      const alpha = intensity * 0.035;
+
+      ctx.beginPath();
+      ctx.moveTo(0, y + wave);
+      for(let x = 0; x <= W; x += 20){
+        const localWave = Math.sin(x * 0.02 + y * 0.03 + t * 1.5) * intensity * 6;
+        ctx.lineTo(x, y + wave + localWave);
+      }
+      ctx.lineTo(W, y); ctx.lineTo(0, y); ctx.closePath();
+      ctx.fillStyle = `rgba(240,160,40,${alpha})`;
+      ctx.fill();
+    }
+
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ══ WATER METER ══
+(function(){
+  const fill = document.getElementById('waterFill');
+  const drop = document.getElementById('waterDrop');
+
+  function update(){
+    const scrolled = window.scrollY;
+    const total = document.body.scrollHeight - window.innerHeight;
+    const pct = Math.min(100, (scrolled / total) * 100);
+    fill.style.height = pct + '%';
+    drop.style.bottom = pct + '%';
+  }
+
+  window.addEventListener('scroll', update, {passive:true});
+  update();
+})();
+
+// ══ SCROLL REVEAL ══
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting) e.target.classList.add('visible');
+  });
+}, {threshold: 0.1, rootMargin:'0px 0px -30px 0px'});
+
+document.querySelectorAll('.sr, .pump-visual, .letter-card, .choice-text, .choice-sub, .bottle-wrap, .final-choice').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

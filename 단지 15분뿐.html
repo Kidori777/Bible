@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>단지 15분뿐 - 분자 붕괴 효과</title>
+<style>
+:root {
+    --bg-color: #030303;
+    --text-main: #ffffff;
+    --accent: #ff3333;
+    --gold: #d4af37;
+    --pink: #FF69B4;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: -apple-system, BlinkMacSystemFont, "Pretendard Variable", sans-serif;
+    overflow-x: hidden;
+    line-height: 1.8;
+}
+
+#canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+#hud {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    text-align: right;
+    z-index: 100;
+}
+#timer-label { font-size: 0.7rem; font-weight: 800; letter-spacing: 0.1em; opacity: 0.6; }
+#timer { font-size: 2.8rem; font-weight: 900; color: var(--accent); line-height: 1; }
+
+#content-wrapper {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+}
+
+.spacer { 
+    height: 100vh; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+}
+
+/* 실제 텍스트는 캔버스 입자로 대체되므로 숨김 */
+#intro-title {
+    font-size: 9vw;
+    font-weight: 900;
+    visibility: hidden;
+}
+
+.section {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 30px;
+}
+
+.text-block {
+    font-size: 1.25rem;
+    font-weight: 300;
+    margin-bottom: 25vh;
+    word-break: keep-all;
+    transition: opacity 0.8s ease;
+}
+
+.highlight-title {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: 900;
+    margin-bottom: 2rem;
+    letter-spacing: -0.02em;
+}
+
+.telegram-box {
+    border-left: 4px solid var(--gold);
+    padding: 20px 30px;
+    margin: 40px 0;
+    background: rgba(212, 175, 55, 0.05);
+    color: var(--gold);
+}
+
+.bible-verse {
+    font-size: 1.5rem;
+    color: var(--gold);
+    text-align: center;
+    line-height: 2.3;
+    padding: 80px 0;
+    border-top: 1px solid rgba(212, 175, 55, 0.3);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+    margin: 100px 0;
+}
+
+.visible { opacity: 1; transform: translateY(0); }
+.hidden { opacity: 0; transform: translateY(20px); }
+
+</style>
+</head>
+<body>
+
+<canvas id="canvas"></canvas>
+
+<div id="hud">
+    <div id="timer-label">남은 생명</div>
+    <div id="timer">15:00</div>
+</div>
+
+<div id="content-wrapper">
+    <div class="spacer">
+        <h1 id="intro-title">당신의 분홍빛 미래</h1>
+    </div>
+
+    <section class="section">
+        <div class="text-block hidden" data-time="900">
+            <span class="highlight-title">단지 15분뿐</span>
+            생명이 15분밖에 남지 않은 한 젊은이를 주인공으로 한 <strong>「단지 15분뿐」</strong>이라는 연극이 있습니다.
+            이 젊은이는 장래가 촉망되는 인물이었습니다. 어려서부터 남다른 총명함으로 주목을 받았고, 20대에 이미 박사 과정을 마쳤습니다. 
+            그의 논문은 심사위원들로부터 극찬을 받았고, 이제 학위를 받을 날만을 기다리고 있었습니다.
+        </div>
+
+        <div class="text-block hidden" data-time="850">
+            누구도 그의 성공을 의심하지 않았고, 그 자신도 미래에 대한 자신감으로 가득했습니다. 그의 앞날에는 마치 분홍빛 미래만 펼쳐질 것처럼 보였습니다.
+        </div>
+
+        <div class="text-block hidden" data-time="800" style="color: var(--accent);">
+            그러던 어느 날, 가슴에 이상한 통증이 느껴졌습니다. 정밀 검사를 받은 결과는 충격적이었습니다. 폐암 말기. 그리고 그의 생명은 단지 15분밖에 남지 않았다는 선고였습니다.
+        </div>
+
+        <div class="text-block hidden" data-time="700">
+            15분. 그는 병상에 누워 있습니다. 시계는 멈추지 않고 째깍째깍 시간을 흘려보냅니다. 5분이 지나고 남은 시간은 10분이 됩니다.
+        </div>
+
+        <div class="text-block telegram-box hidden" data-time="600">
+            그때 병실로 한 통의 전보가 도착합니다.<br><br>
+            “억만장자인 당신의 삼촌이 방금 돌아가셨습니다. 그의 재산을 상속할 사람은 당신뿐이니 속히 와 상속 절차를 밟아 주십시오.”
+        </div>
+
+        <div class="text-block hidden" data-time="550">
+            그러나 죽음을 앞둔 그에게 그 소식은 아무런 의미가 없었습니다. 시간은 계속 흐르고, 남은 시간은 8분이 됩니다.
+        </div>
+
+        <div class="text-block telegram-box hidden" data-time="480">
+            또 한 통의 전보가 도착합니다.<br><br>
+            “당신의 학위 논문이 우리 학교 개교 이래 가장 뛰어난 논문으로 평가되었습니다. 올해의 최우수 논문으로 선정되었음을 알려드립니다.”
+        </div>
+
+        <div class="text-block hidden" data-time="300">
+            그러나 이 축하 소식도 그에게 아무런 위로가 되지 못했습니다. 이제 남은 시간은 3분. 그때 또 하나의 전보가 도착합니다.
+        </div>
+
+        <div class="text-block telegram-box hidden" data-time="180">
+            그가 그렇게도 애타게 기다리던 연인의 결혼 승낙이었습니다. 이 세 통의 전보는 평소라면 그에게 이루 말할 수 없는 기쁨이 되었을 것입니다. 
+            그러나 그 어떤 전보도 그의 운명의 15분을 멈추게 할 수는 없었습니다.
+        </div>
+
+        <div class="text-block hidden" data-time="60" style="text-align: center;">
+            마침내 15분이 지나고, 그는 세 통의 전보를 손에 쥔 채 숨을 거둡니다. 그리고 연극은 끝이 납니다.
+        </div>
+
+        <div class="text-block bible-verse hidden" data-time="0">
+            누구든지 내게 들으며 날마다 내 문 곁에서 기다리며<br>
+            문설주 옆에서 기다리는 자는 복이 있나니<br>
+            대저 나를 얻는 자는 생명을 얻고 여호와께 은총을 얻을 것임이니라.<br>
+            그러나 나를 잃는 자는 자기의 영혼을 해하는 자라<br>
+            무릇 나를 미워하는 자는 사망을 사랑하느니라.<br>
+            <span style="font-size: 1rem; opacity: 0.6;">(잠언 8장 34–36절)</span>
+        </div>
+
+        <div class="text-block hidden" data-time="0">
+            이 짧은 15분짜리 연극은 하나님이 없는 인생의 한 단면을 잘 보여줍니다. 사람들은 모두 행복을 원합니다. 어느 누구도 죽음이나 사망을 사랑하지 않습니다. 사람들은 사망을 두려워하고 피하려 합니다.
+        </div>
+
+        <div class="text-block hidden" data-time="0">
+            그런데 어떤 사람들은 죽으면 아무것도 없고 지옥도 없다고 말합니다. 하지만 그런 사람들에게 “죽어서 지옥에 간다”고 말하면 마음이 상하는 경우가 많습니다. 그 이유는 마음 깊은 곳에 미지의 세계에 대한 두려움이 자리하고 있기 때문일 것입니다.
+        </div>
+
+        <div class="text-block hidden" data-time="0">
+            성경은 이렇게 말합니다. “여호와를 미워하는 자는 사망을 사랑하는 자라.” 이 말씀을 들으면 혹 이렇게 생각할 수도 있습니다. “다행이다. 나는 주님을 사랑한다고 고백하니까 괜찮다.” 
+        </div>
+
+        <div class="text-block hidden" data-time="0" style="font-weight: 700; color: #fff;">
+            그러나 우리는 스스로에게 질문해 보아야 합니다. 혹시 입술로만 주님을 사랑한다고 말하면서, 마음은 주님의 문 곁이나 문설주 옆이 아니라 바깥마당에서 놀고 있지는 않은지 말입니다.
+        </div>
+
+        <div class="text-block hidden" data-time="0">
+            하나님의 은총을 얻는 사람은 어쩌다가 한 번 문 곁에 서 있는 사람이 아니라, 날마다 주님의 문 곁에서 그의 음성을 듣기를 기다리며 문설주 옆에서 사모하는 사람입니다.
+        </div>
+
+        <div class="text-block hidden" data-time="0">
+            우리는 삶을 위해 많은 것을 준비합니다. 재산도, 성공도, 미래도 준비합니다. 그러나 주님을 잃어버린다면 그 사람은 결국 자기 영혼을 해하는 자가 됩니다. 우리의 영혼을 위해 무엇을 선택할 것인지 우리는 날마다 선택해야 합니다.
+        </div>
+
+        <div class="text-block hidden" data-time="0" style="text-align: center; border: 1px solid #333; padding: 40px; margin-bottom: 100px;">
+            부디 주님을 얻고 생명을 누리는 사람이 되기를 바랍니다. 성경을 읽고, 기도하고, 말씀을 먹음으로 여러분의 삶 속에 활기찬 하나님의 생명이 풍성히 흐르기를 바랍니다.
+        </div>
+    </section>
+</div>
+
+<script>
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const timerEl = document.getElementById('timer');
+let width, height, particles = [];
+
+function init() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+    createParticles();
+}
+
+class Particle {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.originX = x;
+        this.originY = y;
+        this.vx = (Math.random() - 0.5) * 0.5; // 초기 미세 움직임
+        this.vy = (Math.random() - 0.5) * 0.5;
+        this.friction = 0.95;
+        this.isScattered = false;
+    }
+    update() {
+        if (this.isScattered) {
+            // 분자처럼 사방으로 서서히 흩어짐 (반동 없음)
+            this.x += this.vx;
+            this.y += this.vy;
+            // 서서히 퍼져나가는 속도 추가
+            this.vx *= 1.01; 
+            this.vy *= 1.01;
+        } else {
+            // 정지 상태 유지 (미세한 떨림만)
+            this.x = this.originX + Math.sin(Date.now() * 0.002 + this.originX) * 0.5;
+            this.y = this.originY + Math.cos(Date.now() * 0.002 + this.originY) * 0.5;
+        }
+    }
+    draw() {
+        ctx.fillStyle = "#FF69B4";
+        ctx.fillRect(this.x, this.y, 2, 2);
+    }
+}
+
+function createParticles() {
+    particles = [];
+    const tempCanvas = document.createElement('canvas');
+    const tempCtx = tempCanvas.getContext('2d');
+    tempCanvas.width = width;
+    tempCanvas.height = height;
+    
+    const fontSize = Math.min(width * 0.11, 80);
+    tempCtx.fillStyle = "white";
+    tempCtx.font = `900 ${fontSize}px sans-serif`;
+    tempCtx.textAlign = "center";
+    tempCtx.textBaseline = "middle";
+    tempCtx.fillText("당신의 분홍빛 미래", width / 2, height / 2);
+
+    const data = tempCtx.getImageData(0, 0, width, height).data;
+    for (let y = 0; y < height; y += 4) {
+        for (let x = 0; x < width; x += 4) {
+            if (data[(y * width + x) * 4 + 3] > 128) {
+                particles.push(new Particle(x, y));
+            }
+        }
+    }
+}
+
+window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    const blocks = document.querySelectorAll('.text-block');
+    let currentTime = 900;
+
+    // 1. 입자 상태 결정 (스크롤 시작 시 반동 없이 흩어짐)
+    if (scrollY > 50) {
+        particles.forEach(p => {
+            if (!p.isScattered) {
+                p.isScattered = true;
+                // 흩어질 때의 랜덤 방향성 부여
+                p.vx = (Math.random() - 0.5) * 2;
+                p.vy = (Math.random() - 0.5) * 2;
+            }
+        });
+    } else {
+        particles.forEach(p => p.isScattered = false);
+    }
+
+    // 2. 타이머 및 본문 표시
+    blocks.forEach(block => {
+        const rect = block.getBoundingClientRect();
+        if (rect.top < height * 0.8) {
+            block.classList.add('visible');
+            block.classList.remove('hidden');
+            const t = block.getAttribute('data-time');
+            if (t !== null && t !== "0") currentTime = parseInt(t);
+            if (rect.top < height * 0.5 && t === "0") currentTime = 0;
+        }
+    });
+
+    const mins = Math.floor(currentTime / 60);
+    const secs = currentTime % 60;
+    timerEl.innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+});
+
+function animate() {
+    ctx.fillStyle = 'rgba(3, 3, 3, 0.2)'; // 잔상 효과
+    ctx.fillRect(0, 0, width, height);
+    particles.forEach(p => { p.update(); p.draw(); });
+    requestAnimationFrame(animate);
+}
+
+window.onload = () => { init(); animate(); };
+window.addEventListener('resize', init);
+</script>
+</body>
+</html>

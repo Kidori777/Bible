@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>생명의 키스 — The Kiss of Life · 1968</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700;900&family=Noto+Sans+KR:wght@300;400&family=Playfair+Display:wght@400;700;900&family=UnifrakturMaguntia&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+
+<!-- ★ head에서 먼저 정의 — img onerror 발생 시점에 함수가 반드시 존재해야 함 -->
+<script>
+var IMG_URLS = [
+  'https://github.com/Kidori777/Korean-lesson/raw/main/lifekiss.jpg',
+  'https://raw.githubusercontent.com/Kidori777/Korean-lesson/main/lifekiss.jpg',
+  'https://github.com/Kidori777/Korean-lesson/blob/main/lifekiss.jpg?raw=true',
+  'https://github.com/Kidori777/Korean-lesson/raw/master/lifekiss.jpg',
+  'https://raw.githubusercontent.com/Kidori777/Korean-lesson/master/lifekiss.jpg'
+];
+var _idx = {};
+
+function tryNextSrc(imgEl) {
+  var id = imgEl.id || '_';
+  if (_idx[id] === undefined) _idx[id] = 0;
+  _idx[id]++;
+  if (_idx[id] < IMG_URLS.length) {
+    imgEl.onerror = function(){ tryNextSrc(imgEl); };
+    imgEl.src = IMG_URLS[_idx[id]];
+  } else {
+    imgEl.style.display = 'none';
+    var sec = imgEl.closest('.hero-photo-section');
+    if (sec) {
+      var fb = sec.querySelector('.photo-fallback');
+      if (fb) { fb.style.zIndex = '1'; fb.style.display = 'flex'; }
+    }
+    var fr = imgEl.closest('.vintage-frame');
+    if (fr) fr.style.display = 'none';
+  }
+}
+</script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+
+:root{
+  --black:   #0e0c0a;
+  --near:    #1c1a16;
+  --ink:     #2a2520;
+  --mid:     #5a5248;
+  --warm:    #8a7a6a;
+  --aged:    #c4b49a;
+  --cream:   #f4edd8;
+  --parch:   #ede0c4;
+  --red:     #8b1a0a;
+  --red2:    #c02818;
+  --gold:    #9a7030;
+}
+
+body{
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'Libre Baskerville', serif;
+  overflow-x: hidden;
+}
+
+/* ═══ GRAIN — fixed ═══ */
+body::before{
+  content:'';
+  position:fixed; inset:0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity:0.055;
+  pointer-events:none;
+  z-index:9999;
+  mix-blend-mode: multiply;
+}
+
+/* ═══ NEWSPAPER MASTHEAD ═══ */
+.masthead{
+  background: var(--black);
+  padding: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.masthead-top{
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding: 10px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.masthead-meta{
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 9px;
+  font-weight: 300;
+  letter-spacing: 0.35em;
+  color: rgba(255,255,255,0.3);
+  text-transform: uppercase;
+}
+
+.masthead-name{
+  text-align: center;
+  padding: 24px 40px 20px;
+  position: relative;
+}
+
+/* Horizontal rules around title */
+.masthead-name::before,
+.masthead-name::after{
+  content:'';
+  position:absolute;
+  left: 40px; right: 40px;
+  height: 1px;
+  background: rgba(255,255,255,0.15);
+}
+.masthead-name::before{ top:0; }
+.masthead-name::after{ bottom:0; }
+
+.paper-title{
+  font-family: 'UnifrakturMaguntia', cursive;
+  font-size: clamp(36px, 8vw, 80px);
+  color: var(--cream);
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+.paper-subtitle{
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 9px;
+  font-weight: 300;
+  letter-spacing: 0.5em;
+  color: rgba(255,255,255,0.35);
+  text-transform: uppercase;
+  margin-top: 6px;
+}
+
+.masthead-bottom{
+  border-top: 1px solid rgba(255,255,255,0.08);
+  background: var(--red);
+  padding: 6px 40px;
+  text-align: center;
+}
+
+.masthead-bottom span{
+  font-family: 'Libre Baskerville', serif;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: rgba(255,255,255,0.85);
+  text-transform: uppercase;
+}
+
+/* ═══ FRONT PAGE ═══ */
+.front-page{
+  position: relative;
+  z-index: 1;
+  padding: 0;
+}
+
+/* Full bleed photo + overlay headline */
+.hero-photo-section{
+  position: relative;
+  width: 100%;
+  /* tall photo block */
+  min-height: 75vh;
+  overflow: hidden;
+  background: var(--black);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+/* THE PHOTO */
+.hero-photo{
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  filter: contrast(1.08) saturate(0.3) brightness(0.82);
+  mix-blend-mode: normal;
+  display: block;
+}
+
+/* Photo fallback — SVG sketch if image doesn't load */
+.photo-fallback{
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(160deg, #2a2420 0%, #1a1410 60%, #0e0c0a 100%);
+  z-index: 0;
+}
+
+/* Gradient overlay at bottom for text readability */
+.hero-photo-section::after{
+  content:'';
+  position:absolute;
+  bottom:0; left:0; right:0;
+  height: 60%;
+  background: linear-gradient(180deg,
+    transparent 0%,
+    rgba(14,12,10,0.55) 40%,
+    rgba(14,12,10,0.92) 100%);
+  z-index: 2;
+}
+
+/* Headline overlaid on photo */
+.hero-headline-wrap{
+  position: relative;
+  z-index: 3;
+  padding: 0 40px 40px;
+}
+
+/* Kicker */
+.kicker{
+  display: inline-block;
+  background: var(--red);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0.45em;
+  text-transform: uppercase;
+  color: #fff;
+  padding: 4px 14px;
+  margin-bottom: 14px;
+}
+
+/* Giant headline — newspaper style */
+.hero-hed{
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(36px, 8vw, 92px);
+  font-weight: 900;
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+  color: var(--cream);
+  margin-bottom: 16px;
+  max-width: 800px;
+}
+
+.hero-hed .sub-hed{
+  display: block;
+  font-size: 0.42em;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: rgba(244,237,216,0.7);
+  margin-top: 10px;
+  line-height: 1.5;
+}
+
+/* Photo credit */
+.photo-credit{
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 9px;
+  font-weight: 300;
+  letter-spacing: 0.25em;
+  color: rgba(244,237,216,0.35);
+  margin-top: 12px;
+  text-transform: uppercase;
+}
+
+/* ═══ STORY COLUMNS ═══ */
+.columns-section{
+  position: relative;
+  z-index: 1;
+  padding: 60px 40px;
+  border-bottom: 3px double rgba(42,37,32,0.2);
+}
+
+/* Newspaper column grid */
+.col-grid{
+  max-width: 1040px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0 32px;
+}
+
+@media(max-width:820px){
+  .col-grid{ grid-template-columns:1fr 1fr; }
+  .col-3{ display:none; }
+}
+@media(max-width:520px){
+  .col-grid{ grid-template-columns:1fr; }
+  .col-2{ display:none; }
+}
+
+.col-head{
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(13px,1.8vw,16px);
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.3;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--ink);
+}
+
+.col-p{
+  font-size: clamp(12px,1.4vw,14px);
+  line-height: 1.95;
+  color: var(--ink);
+  margin-bottom: 12px;
+  text-align: justify;
+  hyphens: auto;
+}
+
+/* Column separators */
+.col-1{ border-right: 1px solid rgba(42,37,32,0.15); padding-right: 32px; }
+.col-2{ border-right: 1px solid rgba(42,37,32,0.15); padding-right: 32px; }
+
+/* Dropcap */
+.dropcap::first-letter{
+  font-family: 'Playfair Display', serif;
+  font-size: 4.2em;
+  font-weight: 900;
+  float: left;
+  line-height: 0.75;
+  margin: 6px 8px -4px 0;
+  color: var(--red);
+}
+
+/* Pull quote inside column */
+.pull-q{
+  border-top: 2px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
+  padding: 14px 0;
+  margin: 20px 0;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(14px,1.8vw,17px);
+  font-weight: 700;
+  line-height: 1.45;
+  color: var(--ink);
+  text-align: center;
+}
+
+/* ═══ PHOTO SPREAD ═══ */
+/* Second photo section — centered, smaller, vintage frame */
+.photo-spread{
+  position: relative;
+  z-index: 1;
+  padding: 60px 40px;
+  background: var(--parch);
+  border-top: 1px solid rgba(42,37,32,0.15);
+  border-bottom: 1px solid rgba(42,37,32,0.15);
+  text-align: center;
+}
+
+.vintage-frame{
+  display: inline-block;
+  position: relative;
+  max-width: 560px;
+  width: 100%;
+}
+
+.vintage-frame img{
+  width: 100%;
+  display: block;
+  filter: contrast(1.12) saturate(0.2) brightness(0.88) sepia(0.15);
+}
+
+/* Double border frame */
+.vintage-frame::before{
+  content:'';
+  position:absolute;
+  inset: -8px;
+  border: 1px solid rgba(42,37,32,0.3);
+  pointer-events:none;
+  z-index:2;
+}
+.vintage-frame::after{
+  content:'';
+  position:absolute;
+  inset: -4px;
+  border: 1px solid rgba(42,37,32,0.15);
+  pointer-events:none;
+  z-index:2;
+}
+
+.vintage-caption{
+  margin-top: 16px;
+  font-family: 'Libre Baskerville', serif;
+  font-size: 11px;
+  line-height: 1.7;
+  color: var(--mid);
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  border-top: 1px solid rgba(42,37,32,0.12);
+  padding-top: 12px;
+}
+
+/* ═══ EDITORIAL — KISS MEANING ═══ */
+.editorial-section{
+  position: relative;
+  z-index: 1;
+  padding: 60px 40px;
+}
+
+.editorial-inner{
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Section rule header */
+.section-rule-head{
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.srh-line{ flex:1; height:1px; background:var(--ink); }
+.srh-text{
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+/* Big editorial layout */
+.editorial-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 48px;
+}
+
+@media(max-width:680px){
+  .editorial-grid{ grid-template-columns:1fr; }
+}
+
+.ed-hed{
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(24px,4vw,42px);
+  font-weight: 900;
+  line-height: 1.1;
+  color: var(--ink);
+  margin-bottom: 28px;
+  border-top: 3px solid var(--ink);
+  padding-top: 16px;
+}
+
+.ed-p{
+  font-size: clamp(13px,1.6vw,15px);
+  line-height: 2.0;
+  color: var(--ink);
+  margin-bottom: 16px;
+  text-align: justify;
+  hyphens: auto;
+}
+
+/* Highlight word */
+.hl{ color: var(--red2); font-weight:700; }
+
+/* ═══ SCRIPTURE BOX ═══ */
+.scripture-box{
+  position: relative;
+  z-index: 1;
+  background: var(--black);
+  padding: 80px 40px;
+  overflow: hidden;
+}
+
+.scripture-box::before{
+  content: '聖';
+  position: absolute;
+  right: -20px; top: 50%;
+  transform: translateY(-55%);
+  font-size: 320px;
+  color: rgba(255,255,255,0.02);
+  pointer-events: none;
+  line-height: 1;
+}
+
+.scripture-inner{
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* Red dividing bar at top */
+.sc-topbar{
+  height: 3px;
+  background: var(--red);
+  margin-bottom: 40px;
+}
+
+.sc-book-label{
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 9px;
+  font-weight: 300;
+  letter-spacing: 0.55em;
+  text-transform: uppercase;
+  color: rgba(244,237,216,0.3);
+  margin-bottom: 24px;
+  display: block;
+}
+
+.sc-verse{
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(20px,3.2vw,32px);
+  font-weight: 400;
+  line-height: 1.65;
+  color: var(--cream);
+  margin-bottom: 20px;
+}
+
+.sc-verse strong{
+  font-weight: 700;
+  color: #fff;
+}
+
+.sc-ref{
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 10px;
+  font-weight: 300;
+  letter-spacing: 0.35em;
+  color: rgba(244,237,216,0.3);
+  text-transform: uppercase;
+}
+
+/* ═══ MEDITATION COLUMNS ═══ */
+.meditation-section{
+  position: relative;
+  z-index: 1;
+  padding: 60px 40px;
+  background: var(--parch);
+  border-top: 3px double rgba(42,37,32,0.2);
+}
+
+.meditation-inner{
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.med-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 48px;
+}
+
+@media(max-width:600px){
+  .med-grid{ grid-template-columns:1fr; }
+}
+
+.med-hed{
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(20px,3vw,30px);
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.2;
+  margin-bottom: 24px;
+  border-top: 2px solid var(--ink);
+  padding-top: 14px;
+  grid-column: 1 / -1;
+}
+
+.med-p{
+  font-size: clamp(13px,1.6vw,15px);
+  line-height: 2.0;
+  color: var(--ink);
+  margin-bottom: 14px;
+  text-align: justify;
+  hyphens: auto;
+}
+
+/* ═══ CLOSING — FULL WIDTH ═══ */
+.closing-section{
+  position: relative;
+  z-index: 1;
+  padding: 80px 40px 100px;
+  background: var(--black);
+  text-align: center;
+}
+
+.closing-red-rule{
+  width: 60px; height: 3px;
+  background: var(--red);
+  margin: 0 auto 40px;
+}
+
+.closing-hed{
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(22px,4.5vw,52px);
+  font-weight: 900;
+  line-height: 1.2;
+  color: var(--cream);
+  max-width: 700px;
+  margin: 0 auto 32px;
+}
+
+.closing-body{
+  font-size: clamp(14px,1.8vw,16px);
+  line-height: 2.1;
+  color: rgba(244,237,216,0.6);
+  max-width: 620px;
+  margin: 0 auto 20px;
+  text-align: justify;
+}
+
+.closing-final{
+  margin-top: 48px;
+  display: inline-block;
+  padding: 20px 40px;
+  border: 1px solid rgba(244,237,216,0.15);
+  position: relative;
+}
+
+.closing-final::before{
+  content:'';
+  position:absolute;
+  top:0; left:0;
+  width:20px; height:20px;
+  border-top:2px solid var(--red);
+  border-left:2px solid var(--red);
+}
+.closing-final::after{
+  content:'';
+  position:absolute;
+  bottom:0; right:0;
+  width:20px; height:20px;
+  border-bottom:2px solid var(--red);
+  border-right:2px solid var(--red);
+}
+
+.closing-final-text{
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(14px,2vw,18px);
+  font-weight: 400;
+  color: rgba(244,237,216,0.75);
+  line-height: 1.8;
+}
+
+/* ═══ COLOPHON ═══ */
+.colophon{
+  background: var(--near);
+  padding: 16px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.colophon span{
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 9px;
+  font-weight: 300;
+  letter-spacing: 0.3em;
+  color: rgba(255,255,255,0.2);
+  text-transform: uppercase;
+}
+
+/* ═══ SCROLL REVEAL ═══ */
+.sr{
+  opacity:0; transform:translateY(20px);
+  transition: all 0.65s ease;
+}
+.sr.visible{ opacity:1; transform:translateY(0); }
+.sr:nth-child(2){ transition-delay:0.08s; }
+.sr:nth-child(3){ transition-delay:0.16s; }
+</style>
+</head>
+<body>
+
+<!-- ═══ MASTHEAD ═══ -->
+<header class="masthead">
+  <div class="masthead-top">
+    <span class="masthead-meta">Vol. LVIII · No. 24</span>
+    <span class="masthead-meta">1968년 7월 · July 1968</span>
+    <span class="masthead-meta">Jacksonville, Florida</span>
+  </div>
+  <div class="masthead-name">
+    <div class="paper-title">The Kiss of Life</div>
+    <div class="paper-subtitle">생명의 키스 · 베드로전서 5:14</div>
+  </div>
+  <div class="masthead-bottom">
+    <span>사진기자 료코 모라비토 (Rocco Morabito) · Jacksonville Journal · 퓰리처상 수상작</span>
+  </div>
+</header>
+
+<!-- ═══ HERO PHOTO + HEADLINE ═══ -->
+<section class="hero-photo-section">
+  <!-- Fallback background if image fails -->
+  <div class="photo-fallback">
+    <svg width="300" height="400" viewBox="0 0 300 400" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:0.15;">
+      <!-- Telephone pole -->
+      <rect x="138" y="0" width="24" height="400" fill="#c4b49a"/>
+      <!-- Cross arm -->
+      <rect x="60" y="80" width="180" height="12" rx="2" fill="#c4b49a"/>
+      <!-- Worker 1 — hanging -->
+      <circle cx="150" cy="160" r="18" stroke="#c4b49a" stroke-width="2" fill="none"/>
+      <line x1="150" y1="178" x2="150" y2="240" stroke="#c4b49a" stroke-width="2"/>
+      <line x1="150" y1="200" x2="120" y2="230" stroke="#c4b49a" stroke-width="2"/>
+      <line x1="150" y1="200" x2="180" y2="230" stroke="#c4b49a" stroke-width="2"/>
+      <!-- Worker 2 — giving CPR -->
+      <circle cx="150" cy="120" r="18" stroke="#c4b49a" stroke-width="2" fill="none"/>
+      <path d="M150 138 Q145 155 150 165" stroke="#c4b49a" stroke-width="2" fill="none"/>
+      <!-- Life line -->
+      <line x1="138" y1="100" x2="138" y2="240" stroke="#8b1a0a" stroke-width="1" stroke-dasharray="4,4" opacity="0.6"/>
+    </svg>
+  </div>
+
+  <!-- Actual photo — try multiple URL formats -->
+  <img class="hero-photo" id="heroImg"
+    src="https://github.com/Kidori777/Korean-lesson/raw/main/lifekiss.jpg"
+    alt="The Kiss of Life — 1968 © Rocco Morabito"
+    onerror="this.onerror=null; tryNextSrc(this);">
+
+  <div class="hero-headline-wrap">
+    <div class="kicker">Breaking · 1968 · 전신주 위의 기적</div>
+    <h1 class="hero-hed">
+      생명의 키스
+      <span class="sub-hed">
+        The Kiss of Life — 2100V 감전으로 쓰러진 동료에게<br>
+        전신주 위에서 인공호흡으로 생명을 불어넣다
+      </span>
+    </h1>
+    <div class="photo-credit">Photo · Rocco Morabito · Jacksonville Journal · 1968 · 퓰리처상 수상</div>
+  </div>
+</section>
+
+<!-- ═══ STORY COLUMNS ═══ -->
+<section class="columns-section">
+  <div class="col-grid">
+    <div class="col-1">
+      <div class="col-head">사력을 다해 생명을 불어넣다</div>
+      <p class="col-p dropcap">1968년 사진기자 료코 모라비토는 자동차를 타고 국도를 달리고 있던 중 우연히 두 사람의 전기 가설 인부가 전신주 위에서 작업을 하고 있는 것을 보게 되었습니다.</p>
+      <p class="col-p">그런데 작업을 하고 있던 한명이 그만 떨어져 생명줄에 의지해 거꾸로 매달리게 되었습니다. 모라비토는 당시 단지 발이 미끄러졌나 보다 하고 생각했었으나 사실은 2100V의 전선에 감전되어 쓰러진 것이라는 것을 곧 알게 되었습니다.</p>
+      <div class="pull-q">"이보다도 더 아름다운 키스는 세상에 없을 것입니다."</div>
+      <p class="col-p">그는 급히 구급차를 부르고는 사진기의 셔터를 누르기 시작했습니다.</p>
+    </div>
+
+    <div class="col-2">
+      <div class="col-head">동료가 전신주를 타고 올라가다</div>
+      <p class="col-p">그 사이 가까이에 있던 동료가 전신주를 타고 올라가 인공호흡을 시작하였습니다. 긴박한 순간, 사력을 다해 동료에게 생명을 불어 넣는 동료의 모습은 이보다도 더 아름다운 키스는 세상에 없을 것입니다.</p>
+      <p class="col-p">전기 감전으로 심장이 멈추었을 때 인공호흡을 하면 95%는 살릴 수 있다고 합니다.</p>
+      <div class="pull-q">생명줄에 의지해<br>거꾸로 매달린 동료에게<br>생명을 불어넣다</div>
+    </div>
+
+    <div class="col-3">
+      <div class="col-head">퓰리처상의 한 장면</div>
+      <p class="col-p">이 사진은 이후 퓰리처상을 수상하며 20세기 가장 감동적인 보도사진 중 하나로 기록되었습니다. 전신주 위에서 이루어진 단 한 순간의 접촉 — 그것은 생명을 살리는 키스였습니다.</p>
+      <p class="col-p">아무 말도 없이, 조건도 없이, 두려움을 뒤로 하고 위험한 전신주를 타고 올라가 동료의 입에 자신의 입을 맞댄 그 행위는 모든 언어를 초월한 사랑이었습니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SECOND PHOTO — VINTAGE FRAME ═══ -->
+<div class="photo-spread sr">
+  <div class="vintage-frame">
+    <img id="spreadImg"
+      src="https://github.com/Kidori777/Korean-lesson/raw/main/lifekiss.jpg"
+      alt="The Kiss of Life 1968"
+      onerror="this.onerror=null; tryNextSrc(this);">
+  </div>
+  <p class="vintage-caption">
+    © 1968 Rocco Morabito / Jacksonville Journal<br>
+    Jacksonville, Florida · 퓰리처상 수상 보도사진
+  </p>
+</div>
+
+<!-- ═══ KISS EDITORIAL ═══ -->
+<section class="editorial-section">
+  <div class="editorial-inner">
+    <div class="section-rule-head">
+      <div class="srh-line"></div>
+      <span class="srh-text">Editorial · 사설 · 입맞춤에 대하여</span>
+      <div class="srh-line"></div>
+    </div>
+
+    <div class="editorial-grid">
+      <div>
+        <h2 class="ed-hed sr">입맞춤이란 무엇인가</h2>
+        <p class="ed-p sr">입맞춤이란 근대 서구 문명에서는 일반적으로 애정의 표현을 말하고 있습니다. 매우 안면이 있는 사람들 사이에서, 키스는 환영의 인사 또는 작별의 인사를 말하는 것이죠.</p>
+        <p class="ed-p sr">이러한 종류의 키스는 일반적으로 입술을 볼에 살짝 접촉하거나 전혀 접촉이 없는 경우도 있으며, 단지 볼끼리의 접촉을 하는 분위기로 이루어집니다.</p>
+        <p class="ed-p sr">이러한 입맞춤은 유럽이나 라틴 아메리카에서 남녀 사이나 여자들 사이에서 행하는 일반적인 인사이며, 일부 중동지역이나 유럽, 라틴 아메리카에서 남자들 사이에서도 이루어지고 있습니다. 때때로 아이들에게 즐거움을 주고 애정을 표현하기 위해서 부모나 어른들이 아이들에게 사랑스런 입맞춤을 하기도 하죠.</p>
+      </div>
+
+      <div>
+        <h2 class="ed-hed sr">가장 단순하고 아름다운 어울림</h2>
+        <p class="ed-p sr">동양적인 정서에는 이러한 입맞춤이란 단어를 이야기하는 것도 서로 부끄러워하고 낯 설어 하는 경우가 많습니다. 그러나 이러한 입맞춤은 <span class="hl">사랑의 감정을 표현하는 가장 단순하고 아름다운 어울림</span>이라고 말할 수 있습니다.</p>
+        <p class="ed-p sr">그러한 입맞춤의 가장 단순한 표현이 바로 엄마나 아빠가 아기에게 해주는 입맞춤일 것입니다. 물론 사랑한다고 자녀들에게 말하지만 아직 엄마나 아빠의 사랑한다는 그 단어를 이해하거나 알아듣지 못하는 아이는 부모에게서 받는 그러한 입맞춤은 아이들에게는 부모의 사랑을 느끼는 즐겁고 아주 단순한 사랑스런 감정의 표현일 것입니다.</p>
+        <p class="ed-p sr">그리고 막 청소년기를 지나 사랑을 할 만한 나이의 젊은 연인에게서도 그들의 마음의 표현을 차마 말로 표현할 용기가 없을 때 언제 한번 그러한 사랑의 표현을 할까? 하며 두근거림과 설렘으로 다가서는 마음의 표현이 바로 이러한 입맞춤일 것입니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SCRIPTURE ═══ -->
+<section class="scripture-box">
+  <div class="scripture-inner">
+    <div class="sc-topbar"></div>
+    <span class="sc-book-label">베드로전서 · 1 Peter · 5장 14절</span>
+    <p class="sc-verse sr">
+      <strong>"사랑의 입맞춤으로 서로 문안하십시오.</strong> 그리스도 안에 있는 여러분 모두에게 평안이 있기를 바랍니다."
+    </p>
+    <span class="sc-ref">베드로전서 5장 14절 — 1 Peter 5:14</span>
+  </div>
+</section>
+
+<!-- ═══ MEDITATION ═══ -->
+<section class="meditation-section">
+  <div class="meditation-inner">
+    <div class="med-grid">
+      <h2 class="med-hed sr">거룩한 입맞춤으로 서로 문안하라</h2>
+
+      <div>
+        <p class="med-p sr">성경을 읽다보면 신약 서신서에 보면 여러 군데 입맞춤이란 단어가 나옵니다. 거룩한 입맞춤, 사랑의 입맞춤으로 서로 문안하라는 것입니다. 이러한 문안은 일방적인 한 방향으로의 감정표현이 아니라 서로가 서로에게 주고받는 그러한 다정하고 사랑스러운 마음의 표현이자 감정의 나타남입니다.</p>
+        <p class="med-p sr">부부간에 부모와 자녀 사이에 그리고 지체들과의 관계에 있어서 오늘 하루도 무뚝뚝하게 흘려보내지 마시고 내가 누리고 감상하였던 그리스도의 거룩하고 사랑스런 마음을 간직한 채 다가서는 인사로서 서로에게 마음을 표현한다면 우린 서로에게 생명과 활력이 되어 주님의 평안이 나의 마음을 주장할 것입니다.</p>
+      </div>
+
+      <div>
+        <p class="med-p sr">전신주 위의 그 동료는 말 한 마디 없이 위험을 무릅쓰고 올라가 생명의 키스를 했습니다. 그것이 가장 웅변적인 사랑의 고백이었습니다.</p>
+        <p class="med-p sr">우리의 일상 속에서도 그런 순간들이 있습니다. 말로 다 하지 못하는 사랑을 몸으로, 손짓으로, 눈빛으로, 그리고 가까이 다가서는 작은 접촉으로 전하는 것 — 그것이 바로 성경이 말하는 사랑의 문안입니다.</p>
+        <p class="med-p sr">그리스도의 사랑이 우리 안에 충만할 때, 그 사랑은 자연스럽게 흘러나와 주변의 사람들에게 생명과 활력이 되는 것입니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CLOSING ═══ -->
+<section class="closing-section">
+  <div class="closing-red-rule"></div>
+  <h2 class="closing-hed sr">이보다 더 아름다운 키스는<br>세상에 없을 것입니다</h2>
+  <p class="closing-body sr">부부간에 부모와 자녀 사이에 그리고 지체들과의 관계에 있어서 오늘 하루도 무뚝뚝하게 흘려보내지 마시고 내가 누리고 감상하였던 그리스도의 거룩하고 사랑스런 마음을 간직한 채 다가서는 인사로서 서로에게 마음을 표현한다면 우린 서로에게 생명과 활력이 되어 주님의 평안이 나의 마음을 주장할 것입니다.</p>
+
+  <div class="closing-final sr">
+    <p class="closing-final-text">
+      사랑의 입맞춤으로 서로 문안하십시오.<br>
+      그리스도 안에 있는 여러분 모두에게<br>
+      평안이 있기를 바랍니다.<br>
+      <span style="font-size:0.8em;opacity:0.5;margin-top:8px;display:block;">— 베드로전서 5장 14절</span>
+    </p>
+  </div>
+</section>
+
+<!-- ═══ COLOPHON ═══ -->
+<div class="colophon">
+  <span>The Kiss of Life · 생명의 키스</span>
+  <span>베드로전서 5:14</span>
+  <span>1968 · Jacksonville Journal</span>
+</div>
+
+<script>
+// tryNextSrc 는 <head> 에서 이미 정의됨 — 여기서는 동기화 + 스크롤 리빌만
+
+// 히어로 이미지 로드 성공 시 스프레드 이미지도 동일 src 사용
+var heroImg   = document.getElementById('heroImg');
+var spreadImg = document.getElementById('spreadImg');
+
+if (heroImg && spreadImg) {
+  heroImg.addEventListener('load', function() {
+    spreadImg.src = heroImg.src;
+  });
+}
+
+// ── SCROLL REVEAL ──
+var obs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) {
+    if (e.isIntersecting) e.target.classList.add('visible');
+  });
+}, {threshold: 0.1, rootMargin: '0px 0px -30px 0px'});
+
+document.querySelectorAll('.sr').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

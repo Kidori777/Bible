@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>눈보라 속에서 시작된 인생 — Michael Dowling</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;900&family=Bebas+Neue&family=Nanum+Myeongjo:wght@400;700;800&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+
+:root{
+  --blizzard: #c8dce8;
+  --ice: #e8f4fc;
+  --cold-dark: #0a141e;
+  --cold-mid: #1a2a3a;
+  --cold-blue: #2a4a6a;
+  --ember: #c84820;
+  --flame: #e87820;
+  --gold: #f0c040;
+  --warm-white: #fff5e8;
+  --warm-cream: #f5e8d0;
+}
+
+html,body{width:100%;min-height:100vh;overflow-x:hidden}
+
+body{
+  background:var(--cold-dark);
+  color:var(--ice);
+  font-family:'Noto Serif KR',serif;
+  cursor:none;
+}
+
+/* ══════════ 커스텀 커서 (횃불) ══════════ */
+#cursor{
+  position:fixed;width:32px;height:32px;
+  pointer-events:none;z-index:9999;
+  transform:translate(-50%,-100%);
+  filter:drop-shadow(0 0 8px rgba(232,120,32,0.9));
+}
+
+/* ══════════ 눈보라 + 녹음 캔버스 ══════════ */
+#snow-canvas{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  z-index:1;pointer-events:none;
+}
+
+/* 온기 맵 캔버스 (커서 따라다니는 열원) */
+#heat-canvas{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  z-index:2;pointer-events:none;
+  mix-blend-mode:screen;
+}
+
+/* ══════════ 진행 표시 — 수직 온도계 ══════════ */
+#thermometer{
+  position:fixed;right:20px;top:50%;transform:translateY(-50%);
+  z-index:50;
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+}
+.thermo-tube{
+  width:8px;height:160px;
+  border:1px solid rgba(200,220,240,0.3);
+  border-radius:4px;
+  background:rgba(10,20,30,0.6);
+  position:relative;overflow:hidden;
+}
+.thermo-fill{
+  position:absolute;bottom:0;left:0;right:0;
+  height:0%;
+  background:linear-gradient(to top,var(--ember),var(--flame),var(--gold));
+  transition:height 0.3s ease;
+  border-radius:4px;
+}
+.thermo-bulb{
+  width:14px;height:14px;border-radius:50%;
+  background:var(--ember);
+  border:1px solid rgba(200,220,240,0.3);
+  box-shadow:0 0 8px var(--ember);
+}
+.thermo-label{
+  font-family:'Special Elite',serif;
+  font-size:8px;letter-spacing:0.2em;
+  color:rgba(200,220,240,0.4);
+  writing-mode:vertical-rl;
+  margin-top:6px;
+}
+
+/* ══════════ 스크롤 본문 ══════════ */
+main{
+  position:relative;z-index:5;
+  padding-bottom:120px;
+}
+
+/* ══════════ 히어로 ══════════ */
+.hero{
+  min-height:100vh;
+  display:flex;flex-direction:column;
+  justify-content:center;align-items:center;
+  text-align:center;
+  padding:60px 32px;
+  position:relative;
+}
+
+.hero-year{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(100px,22vw,260px);
+  line-height:0.85;
+  color:rgba(200,220,240,0.06);
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+  letter-spacing:-0.02em;
+  user-select:none;
+}
+
+.hero-tag{
+  font-family:'Special Elite',serif;
+  font-size:clamp(9px,1.4vw,12px);
+  letter-spacing:0.55em;text-transform:uppercase;
+  color:rgba(200,220,240,0.45);
+  margin-bottom:24px;
+  opacity:0;animation:fadeUp 1s 0.4s forwards;
+}
+
+.hero-title{
+  font-family:'Nanum Myeongjo',serif;
+  font-size:clamp(38px,7vw,88px);
+  font-weight:800;
+  line-height:1.05;
+  color:#fff;
+  letter-spacing:-0.01em;
+  position:relative;z-index:1;
+  opacity:0;animation:fadeUp 1.2s 0.7s forwards;
+}
+.hero-title .accent{
+  color:var(--flame);
+  display:block;
+  font-size:clamp(28px,5vw,64px);
+}
+
+.hero-en{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(13px,2vw,20px);
+  letter-spacing:0.25em;
+  color:rgba(200,220,240,0.3);
+  margin-top:16px;
+  opacity:0;animation:fadeUp 1s 1s forwards;
+}
+
+.hero-temp{
+  margin-top:32px;
+  font-family:'Special Elite',serif;
+  font-size:11px;letter-spacing:0.3em;
+  color:rgba(200,220,240,0.35);
+  opacity:0;animation:fadeUp 1s 1.3s forwards;
+}
+
+/* ══════════ 섹션 공통 ══════════ */
+.section{
+  max-width:760px;margin:0 auto;
+  padding:72px clamp(24px,6vw,64px) 32px;
+  opacity:0;transform:translateY(28px);
+  transition:opacity 1s ease,transform 1s ease;
+}
+.section.visible{opacity:1;transform:translateY(0)}
+
+.sec-tag{
+  font-family:'Special Elite',serif;
+  font-size:9px;letter-spacing:0.55em;text-transform:uppercase;
+  color:rgba(200,220,240,0.3);
+  margin-bottom:12px;display:block;
+}
+
+/* ══════════ 사건 카드 ══════════ */
+.event-card{
+  border:1px solid rgba(200,220,240,0.12);
+  padding:32px 36px;margin:24px 0;
+  position:relative;background:rgba(10,20,30,0.7);
+  backdrop-filter:blur(4px);
+}
+.event-card::before{
+  content:'';position:absolute;
+  top:0;left:0;width:3px;height:100%;
+  background:linear-gradient(to bottom,var(--cold-blue),transparent);
+}
+.event-card.warm::before{
+  background:linear-gradient(to bottom,var(--ember),var(--gold));
+}
+.event-card p{
+  font-family:'Noto Serif KR',serif;
+  font-size:15px;line-height:2.15;
+  color:rgba(232,244,252,0.82);
+  word-break:keep-all;margin-bottom:0.85em;
+}
+.event-card p:last-child{margin-bottom:0}
+.event-card p strong{color:#fff;font-weight:600;}
+
+/* ══════════ 신체 절단 시각화 ══════════ */
+.body-chart{
+  display:flex;justify-content:center;align-items:center;
+  gap:32px;padding:32px 0;flex-wrap:wrap;
+}
+#body-svg-wrap{position:relative;width:120px;}
+.body-label{
+  font-family:'Special Elite',serif;
+  font-size:10px;letter-spacing:0.3em;
+  color:rgba(200,220,240,0.4);
+  text-transform:uppercase;
+  text-align:center;
+  margin-top:12px;
+}
+.loss-list{
+  display:flex;flex-direction:column;gap:10px;
+}
+.loss-item{
+  display:flex;align-items:center;gap:12px;
+  font-family:'Noto Serif KR',serif;
+  font-size:14px;color:rgba(232,244,252,0.7);
+}
+.loss-dot{
+  width:10px;height:10px;border-radius:50%;
+  background:var(--ember);
+  box-shadow:0 0 6px var(--ember);
+  flex-shrink:0;
+}
+
+/* ══════════ 결심 인용 ══════════ */
+.resolve{
+  padding:48px 0;position:relative;
+  text-align:center;
+}
+.resolve-border{
+  border:1px solid rgba(232,120,32,0.25);
+  padding:36px 32px;
+  position:relative;
+  background:rgba(200,72,32,0.05);
+}
+.resolve-border::before,.resolve-border::after{
+  content:'';position:absolute;
+  width:20px;height:20px;
+  border-color:var(--flame);border-style:solid;
+}
+.resolve-border::before{top:-1px;left:-1px;border-width:2px 0 0 2px;}
+.resolve-border::after{bottom:-1px;right:-1px;border-width:0 2px 2px 0;}
+.resolve-text{
+  font-family:'Nanum Myeongjo',serif;
+  font-size:clamp(18px,3.2vw,28px);
+  font-weight:700;
+  color:var(--warm-white);
+  line-height:1.75;
+  word-break:keep-all;
+}
+.resolve-attr{
+  font-family:'Special Elite',serif;
+  font-size:10px;letter-spacing:0.35em;
+  color:var(--flame);
+  margin-top:16px;
+  text-transform:uppercase;display:block;
+}
+
+/* ══════════ 타임라인 ══════════ */
+.timeline{
+  position:relative;padding:20px 0;margin:20px 0;
+}
+.timeline::before{
+  content:'';position:absolute;
+  left:20px;top:0;bottom:0;width:1px;
+  background:linear-gradient(to bottom,var(--cold-blue),var(--ember),var(--gold));
+}
+.tl-item{
+  display:flex;gap:28px;margin-bottom:28px;
+  align-items:flex-start;
+}
+.tl-dot{
+  width:12px;height:12px;border-radius:50%;
+  background:var(--cold-blue);
+  border:2px solid rgba(200,220,240,0.3);
+  flex-shrink:0;margin-top:6px;
+  position:relative;z-index:1;
+  transition:background 0.5s,box-shadow 0.5s;
+}
+.tl-item.warm .tl-dot{
+  background:var(--flame);
+  border-color:var(--gold);
+  box-shadow:0 0 8px var(--flame);
+}
+.tl-year{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:28px;color:rgba(200,220,240,0.3);
+  line-height:1;flex-shrink:0;width:64px;
+  text-align:right;
+}
+.tl-item.warm .tl-year{color:var(--flame);}
+.tl-content p{
+  font-family:'Noto Serif KR',serif;
+  font-size:14.5px;line-height:2;
+  color:rgba(232,244,252,0.75);word-break:keep-all;
+}
+.tl-content p strong{color:#fff;}
+
+/* ══════════ 상이용사 장면 ══════════ */
+.veterans-scene{
+  background:rgba(10,20,30,0.8);
+  border-top:1px solid rgba(200,220,240,0.1);
+  border-bottom:1px solid rgba(200,220,240,0.1);
+  padding:36px;margin:24px 0;
+  position:relative;
+}
+.speech-bubble{
+  background:rgba(200,72,32,0.1);
+  border:1px solid rgba(232,120,32,0.3);
+  padding:24px 28px;margin:16px 0;
+  position:relative;
+}
+.speech-bubble::before{
+  content:'';position:absolute;
+  left:28px;top:-9px;
+  border-left:8px solid transparent;
+  border-right:8px solid transparent;
+  border-bottom:9px solid rgba(232,120,32,0.3);
+}
+.speech-bubble p{
+  font-family:'Nanum Myeongjo',serif;
+  font-size:clamp(15px,2.5vw,20px);font-weight:700;
+  color:var(--warm-white);
+  line-height:1.75;word-break:keep-all;
+}
+
+/* ══════════ 성경 구절 ══════════ */
+.scripture{
+  padding:40px 0;
+}
+.scripture-ref{
+  font-family:'Special Elite',serif;
+  font-size:9px;letter-spacing:0.5em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:14px;display:block;
+}
+.scripture-text{
+  font-family:'Nanum Myeongjo',serif;
+  font-size:clamp(15px,2.6vw,21px);
+  font-weight:700;color:var(--warm-cream);
+  line-height:1.9;word-break:keep-all;
+  border-left:3px solid var(--gold);
+  padding-left:24px;margin-bottom:28px;
+}
+
+/* ══════════ 클로징 ══════════ */
+.closing{
+  text-align:center;padding:60px 0 40px;
+  border-top:1px solid rgba(200,220,240,0.1);
+  margin-top:60px;
+}
+.closing p{
+  font-family:'Noto Serif KR',serif;
+  font-size:15px;line-height:2.2;
+  color:rgba(232,244,252,0.7);
+  word-break:keep-all;margin-bottom:0.8em;
+}
+.closing-big{
+  font-family:'Nanum Myeongjo',serif;
+  font-size:clamp(26px,5vw,52px);
+  font-weight:800;
+  color:#fff;line-height:1.35;
+  word-break:keep-all;
+  margin-top:32px;
+  text-shadow:0 0 40px rgba(240,192,64,0.3);
+}
+
+footer{
+  text-align:center;padding:32px 0 64px;
+  font-family:'Special Elite',serif;
+  font-size:9px;letter-spacing:0.4em;
+  color:rgba(200,220,240,0.2);text-transform:uppercase;
+}
+
+/* 공통 애니메이션 */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(16px)}
+  to{opacity:1;transform:translateY(0)}
+}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--cold-dark)}
+::-webkit-scrollbar-thumb{background:rgba(200,220,240,0.15)}
+
+@media(max-width:560px){
+  .body-chart{flex-direction:column;align-items:center}
+}
+</style>
+</head>
+<body>
+
+<!-- 커스텀 커서: 횃불 -->
+<div id="cursor">
+  <svg viewBox="0 0 32 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- 불꽃 -->
+    <ellipse cx="16" cy="10" rx="5" ry="8" fill="rgba(240,192,64,0.9)"/>
+    <ellipse cx="14" cy="12" rx="3" ry="5" fill="rgba(232,120,32,0.8)"/>
+    <ellipse cx="18" cy="9" rx="2.5" ry="4" fill="rgba(200,72,32,0.7)"/>
+    <!-- 손잡이 -->
+    <rect x="13" y="16" width="6" height="24" rx="3" fill="rgba(120,80,40,0.9)"/>
+    <line x1="16" y1="36" x2="16" y2="44" stroke="rgba(80,50,20,0.7)" stroke-width="2"/>
+  </svg>
+</div>
+
+<!-- 눈 캔버스 -->
+<canvas id="snow-canvas"></canvas>
+<!-- 열기 캔버스 -->
+<canvas id="heat-canvas"></canvas>
+
+<!-- 온도계 -->
+<div id="thermometer">
+  <div class="thermo-tube"><div class="thermo-fill" id="thermo-fill"></div></div>
+  <div class="thermo-bulb"></div>
+  <div class="thermo-label">Temperature</div>
+</div>
+
+<main>
+  <!-- ── 히어로 ── -->
+  <div class="hero">
+    <div class="hero-year">1880</div>
+    <span class="hero-tag">Minnesota · 1880s · Michael Dowling</span>
+    <h1 class="hero-title">
+      눈보라 속에서<br>
+      <span class="accent">시작된 인생</span>
+    </h1>
+    <div class="hero-en">A Life Born in the Blizzard</div>
+    <div class="hero-temp">↓ −40°F · Windchill · Frostbite in 5 minutes</div>
+  </div>
+
+  <!-- ── 섹션 1: 사건 ── -->
+  <div class="section" id="s1">
+    <span class="sec-tag">Chapter 01 — The Blizzard</span>
+
+    <div class="event-card">
+      <p>1880년대 겨울, 미국 미네소타의 평원에는 눈보라가 거세게 몰아치고 있었습니다.</p>
+      <p>열네 살 소년 마이클 다우링은 어느 날 길을 가다가 그 눈보라 속에서 길을 잃고 말았습니다. 바람은 점점 거세졌고, 눈은 앞을 볼 수 없을 만큼 쏟아졌습니다.</p>
+      <p><strong>소년은 눈 속에 쓰러졌습니다.</strong></p>
+      <p>사람들이 그를 발견했을 때는 이미 열 시간이 넘게 눈 속에 방치된 상태였습니다. 목숨은 가까스로 건졌지만 그의 몸은 심한 동상에 걸려 있었습니다.</p>
+    </div>
+
+    <!-- 신체 차트 -->
+    <div class="body-chart">
+      <div id="body-svg-wrap">
+        <svg id="body-svg" viewBox="0 0 100 220" width="100" height="220" xmlns="http://www.w3.org/2000/svg">
+          <!-- 머리 -->
+          <circle cx="50" cy="22" r="18" fill="rgba(200,220,240,0.7)" stroke="rgba(200,220,240,0.3)" stroke-width="1"/>
+          <!-- 몸통 -->
+          <rect x="30" y="42" width="40" height="60" rx="6" fill="rgba(200,220,240,0.7)" stroke="rgba(200,220,240,0.3)" stroke-width="1"/>
+          <!-- 왼팔 -->
+          <rect id="arm-left" x="8" y="44" width="20" height="52" rx="6" fill="rgba(200,220,240,0.7)" stroke="rgba(200,220,240,0.3)" stroke-width="1"/>
+          <!-- 오른팔 (잔존) -->
+          <rect x="72" y="44" width="20" height="52" rx="6" fill="rgba(200,220,240,0.7)" stroke="rgba(200,220,240,0.3)" stroke-width="1"/>
+          <!-- 왼다리 -->
+          <rect id="leg-left" x="30" y="104" width="18" height="70" rx="6" fill="rgba(200,220,240,0.7)" stroke="rgba(200,220,240,0.3)" stroke-width="1"/>
+          <!-- 오른다리 -->
+          <rect id="leg-right" x="52" y="104" width="18" height="70" rx="6" fill="rgba(200,220,240,0.7)" stroke="rgba(200,220,240,0.3)" stroke-width="1"/>
+
+          <!-- 절단 표시 (처음엔 숨김) -->
+          <g id="amputation-marks" opacity="0">
+            <!-- 왼팔 절단 -->
+            <rect x="8" y="70" width="20" height="26" rx="6" fill="rgba(200,72,32,0.2)" stroke="var(--ember)" stroke-width="1.5" stroke-dasharray="3,2"/>
+            <!-- 왼다리 절단 -->
+            <rect id="leg-left-cut" x="30" y="130" width="18" height="44" rx="6" fill="rgba(200,72,32,0.2)" stroke="var(--ember)" stroke-width="1.5" stroke-dasharray="3,2"/>
+            <!-- 오른다리 절단 -->
+            <rect id="leg-right-cut" x="52" y="130" width="18" height="44" rx="6" fill="rgba(200,72,32,0.2)" stroke="var(--ember)" stroke-width="1.5" stroke-dasharray="3,2"/>
+            <!-- X 표시 -->
+            <line x1="10" y1="72" x2="26" y2="94" stroke="var(--ember)" stroke-width="1.5"/>
+            <line x1="26" y1="72" x2="10" y2="94" stroke="var(--ember)" stroke-width="1.5"/>
+            <line x1="32" y1="132" x2="46" y2="172" stroke="var(--ember)" stroke-width="1.5"/>
+            <line x1="46" y1="132" x2="32" y2="172" stroke="var(--ember)" stroke-width="1.5"/>
+            <line x1="54" y1="132" x2="68" y2="172" stroke="var(--ember)" stroke-width="1.5"/>
+            <line x1="68" y1="132" x2="54" y2="172" stroke="var(--ember)" stroke-width="1.5"/>
+          </g>
+        </svg>
+        <div class="body-label">Michael Dowling · Age 14</div>
+      </div>
+
+      <div class="loss-list">
+        <div class="loss-item"><div class="loss-dot"></div><span>왼쪽 팔 절단</span></div>
+        <div class="loss-item"><div class="loss-dot"></div><span>오른쪽 다리 절단</span></div>
+        <div class="loss-item"><div class="loss-dot"></div><span>왼쪽 다리 절단</span></div>
+        <div style="margin-top:8px;font-family:'Special Elite',serif;font-size:10px;letter-spacing:0.2em;color:rgba(200,220,240,0.35);">Age: 14 years old</div>
+        <div style="font-family:'Special Elite',serif;font-size:10px;letter-spacing:0.2em;color:rgba(200,220,240,0.35);">Year: 1880s · Minnesota</div>
+      </div>
+    </div>
+
+    <div class="event-card" style="margin-top:8px;">
+      <p>의사들은 어쩔 수 없는 결정을 내려야 했습니다.</p>
+      <p><strong>두 다리와 한쪽 팔을 절단해야 했습니다.</strong></p>
+      <p>소년의 나이, 겨우 열네 살이었습니다.</p>
+    </div>
+  </div>
+
+  <!-- ── 섹션 2: 결심 ── -->
+  <div class="section" id="s2">
+    <span class="sec-tag">Chapter 02 — The Decision</span>
+    <div class="event-card">
+      <p>대부분의 사람이라면 인생이 끝났다고 생각했을지도 모릅니다.</p>
+      <p>그러나 마이클은 그렇게 생각하지 않았습니다.</p>
+      <p>그는 마음속으로 결심했습니다.</p>
+    </div>
+
+    <div class="resolve">
+      <div class="resolve-border">
+        <p class="resolve-text">
+          "내 몸은 이전과 같지 않지만<br>
+          나는 여전히 살아 있다.<br>
+          나는 다른 사람에게 의지하는 삶이 아니라<br>
+          스스로 살아가는 삶을 살겠다."
+        </p>
+        <span class="resolve-attr">Michael Dowling · Age 14</span>
+      </div>
+    </div>
+
+    <div class="event-card warm">
+      <p>그는 의족과 의수를 사용해 다시 걷는 법을 배웠습니다. 넘어지고 또 넘어졌지만 포기하지 않았습니다.</p>
+      <p><strong>그리고 공부를 시작했습니다.</strong></p>
+    </div>
+  </div>
+
+  <!-- ── 섹션 3: 성공 ── -->
+  <div class="section" id="s3">
+    <span class="sec-tag">Chapter 03 — The Rise</span>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year">1880s</div>
+        <div class="tl-content">
+          <p>눈보라 속에서 쓰러짐.<br>열 시간 후 발견. 두 다리·한쪽 팔 절단.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-year"></div>
+        <div class="tl-content">
+          <p>의족과 의수로 다시 걷는 법 배움.<br>포기하지 않고 공부 시작.</p>
+        </div>
+      </div>
+      <div class="tl-item warm">
+        <div class="tl-dot"></div>
+        <div class="tl-year"></div>
+        <div class="tl-content">
+          <p><strong>사업 시작. 은행가로 성공.</strong><br>사람들에게 신뢰를 얻음.</p>
+        </div>
+      </div>
+      <div class="tl-item warm">
+        <div class="tl-dot"></div>
+        <div class="tl-year"></div>
+        <div class="tl-content">
+          <p><strong>은행 협회의 지도자.</strong><br>미네소타 주 공직 참여.</p>
+        </div>
+      </div>
+      <div class="tl-item warm">
+        <div class="tl-dot"></div>
+        <div class="tl-year">1918</div>
+        <div class="tl-content">
+          <p><strong>제1차 세계대전 후, 상이용사들을 찾아가다.</strong><br>같은 고통을 겪은 자로서 용기를 전하다.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="event-card warm">
+      <p>세월이 흐르면서 마이클 다우링은 점점 사회 속에서 자신의 자리를 만들어 갔습니다.</p>
+      <p>그는 사업을 시작했고, 사람들에게 신뢰를 얻었습니다. 결국 그는 은행가로 성공하게 되었고, 나중에는 은행 협회의 지도자가 되었습니다.</p>
+      <p>뿐만 아니라 그는 정치에도 참여하여 미네소타 주의 공직을 맡기도 했습니다.</p>
+      <p><strong>한때 눈보라 속에서 죽을 뻔했던 소년이 이제는 많은 사람들에게 존경받는 지도자가 되어 있었습니다.</strong></p>
+    </div>
+  </div>
+
+  <!-- ── 섹션 4: 상이용사 ── -->
+  <div class="section" id="s4">
+    <span class="sec-tag">Chapter 04 — The Veterans</span>
+
+    <div class="event-card">
+      <p>제1차 세계대전이 끝난 후, 미국에는 많은 부상당한 군인들이 있었습니다.</p>
+      <p>팔을 잃고, 다리를 잃고, 삶의 희망을 잃어버린 사람들도 있었습니다.</p>
+      <p>마이클 다우링은 그들을 찾아갔습니다.</p>
+    </div>
+
+    <div class="veterans-scene">
+      <p style="font-family:'Noto Serif KR',serif;font-size:14px;line-height:2;color:rgba(232,244,252,0.6);margin-bottom:16px;">그리고 조용히 말했습니다.</p>
+      <div class="speech-bubble">
+        <p>"여러분의 고통을 나는 조금 압니다.<br>나 역시 젊은 시절에 팔과 다리를 잃었습니다."</p>
+      </div>
+      <p style="font-family:'Noto Serif KR',serif;font-size:14px;line-height:2;color:rgba(232,244,252,0.6);margin:16px 0;">사람들은 놀랐습니다. 그는 자신의 의족과 의수를 보여주며 이렇게 말했습니다.</p>
+      <div class="speech-bubble">
+        <p>"나는 팔과 다리를 잃었습니다.<br>그러나 용기와 희망은 잃지 않았습니다.<br>그것이 나를 여기까지 오게 했습니다."</p>
+      </div>
+      <p style="font-family:'Noto Serif KR',serif;font-size:14px;line-height:2;color:rgba(232,244,252,0.6);margin-top:16px;">그의 말은 꾸짖음이 아니라 같은 고통을 겪은 사람이 전하는 격려였습니다. 그의 이야기를 들은 많은 상이용사들이 다시 살아갈 용기를 얻었다고 전해집니다.</p>
+    </div>
+  </div>
+
+  <!-- ── 섹션 5: 교훈 ── -->
+  <div class="section" id="s5">
+    <span class="sec-tag">Chapter 05 — The Truth</span>
+
+    <div class="resolve">
+      <div class="resolve-border">
+        <p class="resolve-text">사람을 무너뜨리는 것은<br>시련 자체가 아니라<br>시련 앞에서 포기하는 마음이라는 것입니다.</p>
+      </div>
+    </div>
+
+    <div class="event-card warm">
+      <p>마이클 다우링의 삶은 우리에게 한 가지 사실을 보여 줍니다.</p>
+      <p>그는 두 다리와 한 팔을 잃었지만 그 시련을 통해 더 강한 사람이 되었습니다.</p>
+      <p><strong>그리고 그 경험으로 다른 사람들을 일으켜 세웠습니다.</strong></p>
+    </div>
+  </div>
+
+  <!-- ── 섹션 6: 성경 ── -->
+  <div class="section" id="s6">
+    <span class="sec-tag">Chapter 06 — The Word</span>
+    <div class="scripture">
+      <span class="scripture-ref">야고보서 1장 12절 · James 1:12</span>
+      <div class="scripture-text">
+        "시련을 견디는 사람은 복이 있습니다.<br>
+        왜냐하면 그가 시험을 거쳐 인정받게 되었을 때<br>
+        주님께서 그분을 사랑하는 사람들에게 약속하신<br>
+        생명의 면류관을 받을 것이기 때문입니다."
+      </div>
+
+      <span class="scripture-ref" style="margin-top:20px;">야고보서 1장 2–3절 · James 1:2–3</span>
+      <div class="scripture-text">
+        "나의 형제님들, 여러분이 여러 가지 시련을 당할 때마다<br>
+        그것을 큰 기쁨으로 여기십시오.<br>
+        여러분은 믿음의 시련이 인내를 산출해 낸다는 것을 압니다."
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 클로징 ── -->
+  <div class="section" id="s7">
+    <div class="closing">
+      <p>시련은 누구에게나 찾아옵니다.</p>
+      <p>어떤 사람은 시련을 만나면 무너집니다.<br>그러나 어떤 사람은 시련을 통해 더 강해집니다.</p>
+      <p>마이클 다우링의 삶처럼 시련은 사람을 끝내기 위한 것이 아니라 사람을 단련하기 위한 도구가 될 수 있습니다.</p>
+      <div class="closing-big">
+        시련을 견디는 사람은<br>복이 있습니다.
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>Michael Dowling · Minnesota 1880s · James 1:12 · A Life Born in the Blizzard</footer>
+
+<script>
+// ══════════════════════════════════════════════
+//  마우스 추적
+// ══════════════════════════════════════════════
+const cursorEl = document.getElementById('cursor');
+let mx = window.innerWidth / 2, my = window.innerHeight / 2;
+let prevMx = mx, prevMy = my;
+
+window.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursorEl.style.left = mx + 'px';
+  cursorEl.style.top = my + 'px';
+});
+window.addEventListener('touchmove', e => {
+  const t = e.touches[0];
+  mx = t.clientX; my = t.clientY;
+}, {passive: true});
+
+// ══════════════════════════════════════════════
+//  눈 파티클 캔버스
+// ══════════════════════════════════════════════
+const snowCanvas = document.getElementById('snow-canvas');
+const sc = snowCanvas.getContext('2d');
+let W, H;
+
+function resizeSC() {
+  W = snowCanvas.width = window.innerWidth;
+  H = snowCanvas.height = window.innerHeight;
+}
+resizeSC();
+window.addEventListener('resize', resizeSC);
+
+// 눈송이 생성
+const SNOW_COUNT = 280;
+const snowflakes = Array.from({length: SNOW_COUNT}, () => ({
+  x: Math.random() * window.innerWidth,
+  y: Math.random() * window.innerHeight,
+  r: Math.random() * 2.5 + 0.5,
+  speed: Math.random() * 1.2 + 0.3,
+  drift: (Math.random() - 0.5) * 1.5,
+  opacity: Math.random() * 0.6 + 0.2,
+  phase: Math.random() * Math.PI * 2,
+}));
+
+// 커서 주변 열기 (녹은 원들)
+const heatPoints = [];
+const MAX_HEAT = 6;
+
+// ══════════════════════════════════════════════
+//  열기 캔버스
+// ══════════════════════════════════════════════
+const heatCanvas = document.getElementById('heat-canvas');
+const hc = heatCanvas.getContext('2d');
+
+function resizeHC() {
+  heatCanvas.width = window.innerWidth;
+  heatCanvas.height = window.innerHeight;
+}
+resizeHC();
+window.addEventListener('resize', resizeHC);
+
+// 온도계
+const thermoFill = document.getElementById('thermo-fill');
+
+// ══════════════════════════════════════════════
+//  메인 애니메이션
+// ══════════════════════════════════════════════
+let t = 0;
+let scrollRatio = 0;
+
+function updateScroll() {
+  const d = document.documentElement;
+  scrollRatio = d.scrollTop / Math.max(d.scrollHeight - d.clientHeight, 1);
+  thermoFill.style.height = (scrollRatio * 100) + '%';
+
+  // 절단 마크 등장
+  const ampEl = document.getElementById('amputation-marks');
+  if (scrollRatio > 0.03) {
+    ampEl.style.opacity = Math.min((scrollRatio - 0.03) / 0.05, 1);
+  }
+}
+window.addEventListener('scroll', updateScroll);
+
+// 커서 이동 시 열기 포인트 추가
+let lastHeatTime = 0;
+function addHeat() {
+  const now = performance.now();
+  if (now - lastHeatTime < 60) return;
+  lastHeatTime = now;
+
+  if (Math.hypot(mx - prevMx, my - prevMy) > 3) {
+    heatPoints.push({
+      x: mx, y: my,
+      r: 0,
+      maxR: 80 + Math.random() * 60,
+      life: 1,
+      decay: 0.008 + Math.random() * 0.006,
+    });
+    if (heatPoints.length > MAX_HEAT) heatPoints.shift();
+  }
+  prevMx = mx; prevMy = my;
+}
+
+function animate() {
+  addHeat();
+
+  // 스크롤에 따른 눈보라 강도
+  const blizzardIntensity = Math.max(0.1, 1 - scrollRatio * 1.4);
+
+  // ── 눈 그리기 ──────────────────────────────
+  sc.clearRect(0, 0, W, H);
+
+  // 배경 — 눈 위에서 따뜻한 색으로 전환
+  const bgR = Math.round(10 + scrollRatio * 30);
+  const bgG = Math.round(20 + scrollRatio * 10);
+  const bgB = Math.round(30 + scrollRatio * 5);
+  sc.fillStyle = `rgb(${bgR},${bgG},${bgB})`;
+  sc.fillRect(0, 0, W, H);
+
+  // 눈송이
+  snowflakes.forEach(s => {
+    // 커서 가까이면 녹음
+    const distToCursor = Math.hypot(s.x - mx, s.y - my);
+    const meltRadius = 120 * (1 - scrollRatio * 0.5);
+    if (distToCursor < meltRadius) {
+      // 커서 반대 방향으로 흩날림
+      const angle = Math.atan2(s.y - my, s.x - mx);
+      s.x += Math.cos(angle) * 1.5;
+      s.y += Math.sin(angle) * 0.5;
+      s.opacity = Math.max(0, s.opacity - 0.05);
+    } else {
+      s.opacity = Math.min(0.8, s.opacity + 0.01);
+    }
+
+    // 이동
+    s.y += s.speed * blizzardIntensity;
+    s.x += s.drift * blizzardIntensity + Math.sin(t + s.phase) * 0.5;
+
+    if (s.y > H) { s.y = -5; s.x = Math.random() * W; }
+    if (s.x > W) s.x = 0;
+    if (s.x < 0) s.x = W;
+
+    const a = s.opacity * blizzardIntensity;
+    if (a <= 0) return;
+
+    sc.beginPath();
+    sc.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    sc.fillStyle = `rgba(232,244,252,${a})`;
+    sc.fill();
+  });
+
+  // 눈보라 가로 줄기 효과
+  if (blizzardIntensity > 0.3) {
+    for (let i = 0; i < 8; i++) {
+      const gx = ((t * 200 + i * W / 8) % (W + 200)) - 200;
+      const gy = i * (H / 8) + Math.sin(t * 0.5 + i) * 30;
+      const len = 60 + Math.random() * 80;
+      sc.beginPath();
+      sc.moveTo(gx, gy);
+      sc.lineTo(gx + len, gy + 3);
+      sc.strokeStyle = `rgba(200,220,240,${0.05 * blizzardIntensity})`;
+      sc.lineWidth = 0.5;
+      sc.stroke();
+    }
+  }
+
+  // ── 열기 그리기 ──────────────────────────────
+  hc.clearRect(0, 0, W, H);
+
+  // 커서 주변 온기 글로우
+  const cursorGlow = hc.createRadialGradient(mx, my, 0, mx, my, 100);
+  cursorGlow.addColorStop(0, `rgba(240,192,64,${0.18 * (1 + scrollRatio * 0.5)})`);
+  cursorGlow.addColorStop(0.4, `rgba(232,120,32,${0.08 * (1 + scrollRatio * 0.5)})`);
+  cursorGlow.addColorStop(1, 'rgba(200,72,32,0)');
+  hc.fillStyle = cursorGlow;
+  hc.fillRect(0, 0, W, H);
+
+  // 이동 궤적 열기
+  heatPoints.forEach((hp, i) => {
+    hp.r = Math.min(hp.r + 3, hp.maxR);
+    hp.life -= hp.decay;
+
+    if (hp.life <= 0) return;
+
+    const hg = hc.createRadialGradient(hp.x, hp.y, 0, hp.x, hp.y, hp.r);
+    hg.addColorStop(0, `rgba(240,192,64,${hp.life * 0.25})`);
+    hg.addColorStop(0.5, `rgba(232,120,32,${hp.life * 0.1})`);
+    hg.addColorStop(1, 'rgba(200,72,32,0)');
+    hc.fillStyle = hg;
+    hc.beginPath();
+    hc.arc(hp.x, hp.y, hp.r, 0, Math.PI * 2);
+    hc.fill();
+  });
+
+  // 스크롤 진행에 따른 화면 하단 온기
+  if (scrollRatio > 0.3) {
+    const warmRatio = (scrollRatio - 0.3) / 0.7;
+    const wg = hc.createLinearGradient(0, H * 0.5, 0, H);
+    wg.addColorStop(0, 'rgba(200,72,32,0)');
+    wg.addColorStop(1, `rgba(200,72,32,${warmRatio * 0.08})`);
+    hc.fillStyle = wg;
+    hc.fillRect(0, 0, W, H);
+  }
+
+  t += 0.016;
+  requestAnimationFrame(animate);
+}
+animate();
+
+// ══════════════════════════════════════════════
+//  IntersectionObserver
+// ══════════════════════════════════════════════
+const sections = document.querySelectorAll('.section');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+sections.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>

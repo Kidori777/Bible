@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>받은 사랑을 다시 흘려보내다</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700;900&family=Noto+Sans+KR:wght@300;400;500&family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --water-deep:  #1a4a6a;
+  --water-mid:   #2a7aa0;
+  --water-light: #5ab0d8;
+  --water-pale:  #b0d8ee;
+  --teal:        #1a8a78;
+  --teal2:       #2ab8a0;
+  --rose:        #c04870;
+  --rose2:       #e87898;
+  --amber:       #c07820;
+  --amber2:      #e8a830;
+  --ink:         #1a1410;
+  --ink2:        #3a2e24;
+  --ink3:        #6a5a48;
+  --paper:       #fdf8f0;
+  --paper2:      #f5ede0;
+  --paper3:      #ece0d0;
+  --line:        rgba(26,20,16,0.09);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { background:#1a3040; color:var(--ink); font-family:'Gowun Batang', 'Noto Serif KR', serif; overflow-x:hidden; }
+
+/* ══════════ 수채화 배경 물결 ══════════ */
+.watercolor-bg {
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(ellipse 100% 50% at 0% 30%, rgba(42,122,160,.18) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 60% at 100% 70%, rgba(26,138,120,.12) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 40% at 50% 90%, rgba(26,74,106,.15) 0%, transparent 60%),
+    #1a2a38;
+  animation: wc-drift 12s ease-in-out infinite alternate;
+}
+@keyframes wc-drift { 0%{opacity:.85;} 100%{opacity:1;} }
+
+/* 물방울 파티클 */
+.drops { position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
+.drop {
+  position:absolute; border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;
+  background:rgba(90,176,216,.12);
+  animation: drop-fall var(--d,8s) ease-in infinite var(--dl,0s);
+  opacity:0;
+}
+@keyframes drop-fall {
+  0%   { opacity:0; transform:translateY(-30px) scaleX(0.8); }
+  10%  { opacity:var(--op,.3); }
+  90%  { opacity:.05; }
+  100% { opacity:0; transform:translateY(100vh) scaleX(0.8); }
+}
+
+/* ══════════ COVER ══════════ */
+.cover {
+  position:relative; z-index:1;
+  min-height:100vh;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:70px 24px 90px; overflow:hidden;
+}
+
+/* 수채화 물감 번짐 효과 */
+.cover-wash {
+  position:absolute; inset:0; pointer-events:none;
+  background:
+    radial-gradient(ellipse 70% 50% at 30% 40%, rgba(42,122,160,.25) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 70% 60%, rgba(26,138,120,.2) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 40% at 50% 10%, rgba(90,176,216,.15) 0%, transparent 50%);
+  filter:blur(40px);
+  animation:wash-pulse 8s ease-in-out infinite alternate;
+}
+@keyframes wash-pulse { 0%{opacity:.7; transform:scale(1);} 100%{opacity:1; transform:scale(1.05);} }
+
+/* 편지지 카드 — 커버 */
+.letter-cover {
+  position:relative; z-index:1;
+  max-width:660px; width:100%;
+  background:var(--paper);
+  box-shadow:
+    0 20px 60px rgba(0,0,0,.35),
+    0 2px 8px rgba(0,0,0,.2),
+    inset 0 0 80px rgba(200,160,100,.06);
+  /* 찢어진 상단 효과 */
+  clip-path:polygon(
+    0% 2%, 3% 0%, 7% 1.5%, 11% 0.2%, 15% 1.8%, 20% 0.5%, 25% 1.2%, 30% 0%,
+    35% 1.5%, 40% 0.3%, 45% 1.8%, 50% 0.5%, 55% 1.2%, 60% 0%,
+    65% 1.5%, 70% 0.3%, 75% 1.8%, 80% 0.5%, 85% 1.2%, 90% 0%, 95% 1.5%, 100% 0.3%,
+    100% 100%, 0% 100%
+  );
+}
+
+/* 편지지 줄 */
+.letter-cover::before {
+  content:'';
+  position:absolute; inset:0; pointer-events:none; z-index:0;
+  background:repeating-linear-gradient(
+    180deg,
+    transparent 0px, transparent 34px,
+    rgba(42,122,160,.08) 34px, rgba(42,122,160,.08) 35px
+  );
+}
+
+/* 왼쪽 빨간 줄 */
+.letter-cover::after {
+  content:'';
+  position:absolute; left:52px; top:0; bottom:0; width:1px;
+  background:linear-gradient(180deg, transparent 5%, rgba(192,72,112,.25) 15%, rgba(192,72,112,.25) 85%, transparent 95%);
+  pointer-events:none; z-index:0;
+}
+
+.letter-inner {
+  position:relative; z-index:1;
+  padding:56px 52px 48px 68px;
+}
+@media(max-width:480px){
+  .letter-inner{ padding:44px 24px 36px 36px; }
+  .letter-cover::after{ left:36px; }
+}
+
+/* 날짜 & 발신 */
+.letter-date {
+  font-family:'Noto Sans KR',sans-serif;
+  font-size:.72rem; font-weight:300; letter-spacing:.2em;
+  color:var(--ink3); margin-bottom:28px; text-align:right;
+}
+
+/* 제목 */
+.letter-title {
+  font-size:clamp(1.5rem,4.5vw,2.6rem); font-weight:700;
+  color:var(--water-deep); line-height:1.3; margin-bottom:8px;
+}
+.letter-subtitle {
+  font-size:clamp(.85rem,2.3vw,.98rem); font-weight:400;
+  color:var(--ink3); letter-spacing:.05em; margin-bottom:32px;
+}
+
+/* 커버 물결 장식 SVG */
+.wave-deco { margin:24px 0; opacity:.6; }
+
+/* 커버 리드 텍스트 */
+.letter-lead {
+  font-size:clamp(.92rem,2.4vw,1.05rem); font-weight:400;
+  color:var(--ink2); line-height:2.2; margin-bottom:28px;
+}
+
+/* 서명 */
+.letter-sign {
+  text-align:right; margin-top:20px;
+  font-size:.9rem; color:var(--ink3); line-height:1.9;
+}
+.letter-sign-name {
+  font-size:1.1rem; font-weight:700; color:var(--water-deep);
+  display:block; margin-top:6px;
+}
+
+/* ══════════ 본문 섹션들 ══════════ */
+.content-area {
+  position:relative; z-index:1;
+  max-width:720px; margin:0 auto; padding:0 16px 60px;
+}
+
+/* ══════════ 스토리 카드 — 접힌 편지 ══════════ */
+.story-card {
+  position:relative;
+  background:var(--paper);
+  margin:20px 0;
+  box-shadow:0 4px 24px rgba(0,0,0,.18), 0 1px 4px rgba(0,0,0,.1);
+  opacity:0; transform:translateY(28px);
+  transition:opacity .75s ease, transform .75s ease;
+}
+.story-card.vis { opacity:1; transform:translateY(0); }
+
+/* 각 카드 상단 수채화 번짐 헤더 */
+.sc-header {
+  position:relative; height:80px; overflow:hidden;
+  display:flex; align-items:center; padding:0 28px;
+}
+.sc-header-wash {
+  position:absolute; inset:0;
+  background:linear-gradient(135deg, var(--h-c1,#1a4a6a) 0%, var(--h-c2,#2a7aa0) 60%, transparent 100%);
+  opacity:.88;
+}
+.sc-header-wash::after {
+  content:'';
+  position:absolute; bottom:-20px; left:0; right:0; height:40px;
+  background:var(--paper);
+  clip-path:ellipse(55% 100% at 50% 100%);
+}
+.sc-header-title {
+  position:relative; z-index:1;
+  font-size:clamp(.85rem,2.3vw,.98rem); font-weight:700;
+  color:rgba(255,255,255,.92); letter-spacing:.05em; line-height:1.5;
+}
+.sc-header-num {
+  position:relative; z-index:1;
+  font-family:'Noto Sans KR',sans-serif;
+  font-size:.6rem; font-weight:500; letter-spacing:.25em;
+  color:rgba(255,255,255,.55); margin-right:14px; margin-top:2px; flex-shrink:0;
+}
+
+/* 편지지 줄 */
+.sc-body-wrap {
+  position:relative; padding:20px 28px 24px;
+}
+.sc-body-wrap::before {
+  content:'';
+  position:absolute; inset:0; pointer-events:none;
+  background:repeating-linear-gradient(
+    180deg,
+    transparent 0px, transparent 31px,
+    rgba(42,122,160,.06) 31px, rgba(42,122,160,.06) 32px
+  );
+}
+.sc-left-line {
+  position:absolute; left:52px; top:0; bottom:0; width:1px;
+  background:linear-gradient(180deg, transparent, rgba(192,72,112,.2) 10%, rgba(192,72,112,.2) 90%, transparent);
+}
+.sc-body {
+  position:relative; z-index:1; padding-left:16px;
+  font-size:clamp(.9rem,2.3vw,.98rem); font-weight:400;
+  color:var(--ink2); line-height:2.25; word-break:keep-all;
+}
+.sc-body p { margin-bottom:14px; }
+.sc-body p:last-child { margin-bottom:0; }
+
+/* 인용구 — 손글씨 느낌 */
+.quote {
+  margin:16px 0;
+  padding:14px 18px 12px 22px;
+  position:relative;
+  font-size:clamp(.9rem,2.3vw,.97rem);
+  color:var(--water-deep);
+  font-weight:600; line-height:1.95;
+}
+.quote::before {
+  content:'"';
+  position:absolute; left:2px; top:-4px;
+  font-size:3rem; line-height:1; color:var(--water-pale);
+  font-family:'Georgia',serif;
+}
+.quote::after {
+  content:'';
+  position:absolute; inset:0;
+  background:linear-gradient(135deg, rgba(42,122,160,.07), rgba(26,138,120,.04));
+  border-left:3px solid var(--water-light);
+  border-radius:0 4px 4px 0;
+  z-index:-1;
+}
+
+/* 강조 인용 — 핵심 */
+.quote-key {
+  margin:16px 0;
+  padding:16px 20px 14px;
+  background:linear-gradient(135deg,rgba(192,72,112,.07),rgba(192,72,112,.03));
+  border:1px solid rgba(192,72,112,.2);
+  border-left:4px solid var(--rose2);
+  border-radius:0 6px 6px 0;
+  font-size:clamp(.9rem,2.3vw,.97rem); font-weight:700;
+  color:var(--rose); line-height:1.95;
+}
+
+/* WATER 강조 */
+.water-word {
+  display:inline-block;
+  letter-spacing:.3em; font-weight:900; font-size:1.1em;
+  color:var(--water-mid);
+  text-shadow:0 0 20px rgba(42,122,160,.3);
+  animation:water-glow 3s ease-in-out infinite;
+}
+@keyframes water-glow { 0%,100%{text-shadow:0 0 10px rgba(42,122,160,.2);} 50%{text-shadow:0 0 25px rgba(42,122,160,.5);} }
+
+/* ══════════ 메시지 섹션 ══════════ */
+.message-section {
+  position:relative; z-index:1;
+  max-width:720px; margin:0 auto; padding:0 16px;
+}
+.message-card {
+  background:var(--paper);
+  border-top:4px solid var(--teal2);
+  padding:32px 32px 28px;
+  margin:20px 0;
+  box-shadow:0 4px 24px rgba(0,0,0,.15);
+  position:relative; overflow:hidden;
+  opacity:0; transform:translateY(28px);
+  transition:opacity .75s ease, transform .75s ease;
+}
+.message-card.vis { opacity:1; transform:translateY(0); }
+.message-card::before {
+  content:'';
+  position:absolute; inset:0; pointer-events:none;
+  background:repeating-linear-gradient(
+    180deg,
+    transparent 0px, transparent 31px,
+    rgba(26,138,120,.05) 31px, rgba(26,138,120,.05) 32px
+  );
+}
+.message-card-inner { position:relative; z-index:1; }
+
+/* 성경 구절 */
+.scripture {
+  margin:16px 0; padding:16px 18px 14px 22px;
+  background:rgba(42,90,138,.05);
+  border-left:4px solid var(--water-mid);
+  border-radius:0 6px 6px 0;
+  font-size:clamp(.9rem,2.3vw,.97rem); font-weight:600;
+  color:var(--water-deep); line-height:2;
+}
+
+/* 결론 카드 */
+.conclusion-card {
+  background:linear-gradient(135deg, #fff0f5 0%, var(--paper) 100%);
+  border-top:4px solid var(--rose);
+  padding:32px 32px 28px;
+  margin:20px 0;
+  box-shadow:0 4px 24px rgba(0,0,0,.15);
+  position:relative; overflow:hidden;
+  opacity:0; transform:translateY(28px);
+  transition:opacity .75s ease, transform .75s ease;
+}
+.conclusion-card.vis { opacity:1; transform:translateY(0); }
+.conclusion-card::before {
+  content:'';
+  position:absolute; inset:0; pointer-events:none;
+  background:repeating-linear-gradient(
+    180deg,
+    transparent 0px, transparent 31px,
+    rgba(192,72,112,.04) 31px, rgba(192,72,112,.04) 32px
+  );
+}
+.conclusion-card-inner { position:relative; z-index:1; }
+
+/* 섹션 레이블 */
+.sec-label {
+  font-family:'Noto Sans KR',sans-serif;
+  font-size:.62rem; font-weight:600; letter-spacing:.28em; text-transform:uppercase;
+  display:flex; align-items:center; gap:10px; margin-bottom:16px;
+}
+.sec-label::after { content:''; flex:1; height:1px; }
+.sl-teal   { color:var(--teal2);  } .sl-teal::after  { background:linear-gradient(90deg,rgba(42,184,160,.3),transparent); }
+.sl-rose   { color:var(--rose2);  } .sl-rose::after  { background:linear-gradient(90deg,rgba(232,120,152,.3),transparent); }
+.sl-water  { color:var(--water-mid);} .sl-water::after { background:linear-gradient(90deg,rgba(42,122,160,.3),transparent); }
+
+.sec-title {
+  font-size:clamp(1rem,2.8vw,1.25rem); font-weight:700;
+  margin-bottom:18px; line-height:1.4;
+}
+.st-teal  { color:var(--teal);  }
+.st-rose  { color:var(--rose);  }
+.st-water { color:var(--water-deep); }
+
+.card-body-text {
+  font-size:clamp(.9rem,2.3vw,.98rem); font-weight:400;
+  color:var(--ink2); line-height:2.25; word-break:keep-all;
+}
+.card-body-text p { margin-bottom:12px; }
+
+/* 마지막 질문 하이라이트 */
+.final-question {
+  margin:20px 0;
+  padding:20px 22px;
+  background:linear-gradient(135deg,rgba(192,72,112,.08),rgba(192,72,112,.04));
+  border:1px solid rgba(192,72,112,.25);
+  border-radius:6px;
+  text-align:center;
+  font-size:clamp(.95rem,2.5vw,1.08rem); font-weight:700;
+  color:var(--rose); line-height:1.95;
+}
+
+/* ══════════ 강 흐름 SVG 구분선 ══════════ */
+.river-div {
+  position:relative; z-index:1;
+  height:48px; overflow:hidden; margin:0;
+}
+.river-div svg { width:100%; height:100%; }
+
+/* ══════════ FOOTER ══════════ */
+.site-footer {
+  position:relative; z-index:1;
+  background:rgba(26,48,64,.8);
+  padding:28px 24px 36px; text-align:center;
+  border-top:1px solid rgba(90,176,216,.12);
+}
+.sf-rule { width:48px; height:1px; background:linear-gradient(90deg,transparent,var(--water-light),transparent); margin:0 auto 14px; opacity:.5; }
+.sf-name { font-size:.85rem; font-weight:400; color:rgba(176,216,238,.45); letter-spacing:.25em; font-family:'Noto Sans KR',sans-serif; }
+
+/* 스크롤 */
+.fu { opacity:0; transform:translateY(28px); transition:opacity .75s ease, transform .75s ease; }
+.fu.vis { opacity:1; transform:translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="watercolor-bg"></div>
+<div class="drops" id="drops"></div>
+
+<!-- ══ COVER 편지지 ══ -->
+<section class="cover">
+  <div class="cover-wash"></div>
+  <div class="letter-cover">
+    <div class="letter-inner">
+      <div class="letter-date">1887년 3월 3일 · 부산교회 2구역</div>
+
+      <h1 class="letter-title">"받은 사랑을<br>다시 흘려보내다"</h1>
+      <p class="letter-subtitle">— 앤 설리번과 헬렌 켈러 이야기</p>
+
+      <!-- 물결 SVG 장식 -->
+      <div class="wave-deco">
+        <svg viewBox="0 0 500 28" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:28px;">
+          <path d="M0,14 Q62,4 125,14 T250,14 T375,14 T500,14" stroke="rgba(42,122,160,.3)" stroke-width="1.5" fill="none"/>
+          <path d="M0,18 Q62,8 125,18 T250,18 T375,18 T500,18" stroke="rgba(26,138,120,.2)" stroke-width="1" fill="none"/>
+          <path d="M0,22 Q62,12 125,22 T250,22 T375,22 T500,22" stroke="rgba(42,122,160,.15)" stroke-width="1" fill="none"/>
+        </svg>
+      </div>
+
+      <p class="letter-lead">
+        앤 설리번은 받은 사랑을 다시 흘려보낸 사람이었습니다.<br>
+        그리고 그 사랑은 강물처럼 헬렌 켈러를 지나,<br>
+        온 세상에 닿았습니다.
+      </p>
+
+      <div class="letter-sign">
+        <span style="font-size:.82rem;color:var(--ink3);">"내게 배움은 지식이 아니라,</span><br>
+        <span style="font-size:.82rem;color:var(--ink3);">누군가 나를 포기하지 않았다는 증거였다."</span>
+        <span class="letter-sign-name">— Anne Sullivan</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 강물 구분선 -->
+<div class="river-div" style="background:#1a3040;">
+  <svg viewBox="0 0 1440 48" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,48 Q180,8 360,30 T720,20 T1080,32 T1440,16 L1440,48 Z" fill="#fdf8f0"/>
+  </svg>
+</div>
+
+<!-- ══ 스토리 섹션 ══ -->
+<div class="content-area">
+
+  <!-- 카드 1 -->
+  <div class="story-card fu">
+    <div class="sc-header" style="--h-c1:#1a4a6a; --h-c2:#2a7aa0;">
+      <span class="sc-header-num">01</span>
+      <span class="sc-header-title">어둠 속에서 자란 소녀 — 앤 설리번</span>
+    </div>
+    <div class="sc-body-wrap">
+      <div class="sc-left-line"></div>
+      <div class="sc-body">
+        <p>앤 설리번은 밝은 환경에서 자란 사람이 아니었습니다. 가난했으며, 어린 시절부터 눈병(트라코마)으로 고통받았습니다. 시력이 흐려지고, 앞이 점점 보이지 않게 되면서 그녀는 삶의 벽 앞에서 절망을 배웠습니다.</p>
+        <p>그녀의 가족은 돌볼 수 없었고, 어린 앤은 <strong>매사추세츠 주의 시각장애아 학교(Perkins School for the Blind)</strong>에 들어가야 했습니다. 그곳에서 처음으로 그녀는 누군가에게 받는 친절, 누군가가 자신을 포기하지 않는 경험을 했습니다.</p>
+        <div class="quote">내게 배움은 지식이 아니라, 누군가 나를 포기하지 않았다는 증거였다.</div>
+        <p>그녀는 학교에서 치료를 받으며 시력을 조금씩 회복했고, 글을 배우고, 점자와 언어 교육을 배웠습니다.</p>
+        <p>그리고 어느 날, 한 생각이 그녀 안에서 자라기 시작했습니다.</p>
+        <div class="quote">언젠가… 나처럼 상처받고 길을 잃은 누군가에게 내가 받은 도움을 돌려주고 싶다.</div>
+        <p>그 말에는 조그만 소망이 있었지만, 아직 대상은 없었습니다. 그러나 하나님은 이미 그 길을 준비하고 계셨습니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 카드 2 -->
+  <div class="story-card fu">
+    <div class="sc-header" style="--h-c1:#1a5a48; --h-c2:#2ab8a0;">
+      <span class="sc-header-num">02</span>
+      <span class="sc-header-title">1887년 3월 3일 — 한 소녀의 인생을 만나던 날</span>
+    </div>
+    <div class="sc-body-wrap">
+      <div class="sc-left-line"></div>
+      <div class="sc-body">
+        <p>앤이 스무 살이 되었을 때, 한 가족에게 요청이 들어왔습니다.</p>
+        <div class="quote">보고 듣고 말할 수 없는 아이, 헬렌 켈러에게 교사가 되어줄 사람.</div>
+        <p>사람들은 말했습니다.</p>
+        <div class="quote">그 아이는 불가능합니다. 누구도 가르칠 수 없습니다.</div>
+        <p>하지만 앤은 마음속에서 오래전부터 자라온 목소리를 들었습니다.</p>
+        <div class="quote-key">너도 포기되지 않았다. 그러니 너도 포기하지 말아라.</div>
+        <p>그녀는 켈러의 집 문을 두드렸습니다. 그리고 난폭하게 반항하던 헬렌을 처음 보았을 때, 앤은 이상하게 과거의 자기 자신을 보는 듯한 느낌을 받았습니다.</p>
+        <div class="quote">저 아이는 어둡지 않습니다. 그저 길을 찾지 못하고 있을 뿐입니다.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 카드 3 — WATER -->
+  <div class="story-card fu">
+    <div class="sc-header" style="--h-c1:#1a3870; --h-c2:#5ab0d8;">
+      <span class="sc-header-num">03</span>
+      <span class="sc-header-title">물(WATER)의 기적 — 언어가 열리던 순간</span>
+    </div>
+    <div class="sc-body-wrap">
+      <div class="sc-left-line"></div>
+      <div class="sc-body">
+        <p>앤은 헬렌의 손에 단어 철자를 반복해서 썼습니다. <span class="water-word">W-A-T-E-R</span> 하지만 헬렌은 이해할 수 없었습니다. 그녀는 분노했고, 울었고, 손짓으로 모든 것을 밀어냈습니다. 그러나 앤은 포기하지 않았습니다. 마치 과거에 누군가 자신에게 그랬던 것처럼.</p>
+        <p>결국 어느 날, 물이 흐르는 펌프 앞에서 헬렌의 얼굴에 물이 닿던 그 순간— 헬렌의 몸이 멈췄습니다. 그리고 작은 손이 떨리며 다시 쓰기 시작했습니다.</p>
+        <div class="quote-key" style="text-align:center; font-size:1.3rem; letter-spacing:.3em;">W… A… T… E… R…</div>
+        <p>그 순간, 헬렌은 단어가 세상과 연결되는 다리라는 것을 이해했습니다. 그리고 울었습니다. 앤도 울었습니다. 그날을 헬렌은 평생 이렇게 기록했습니다.</p>
+        <div class="quote">그날, 내 영혼은 깨어났다.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 카드 4 -->
+  <div class="story-card fu">
+    <div class="sc-header" style="--h-c1:#3a2060; --h-c2:#7a50a0;">
+      <span class="sc-header-num">04</span>
+      <span class="sc-header-title">48년의 동행 — 사랑의 수업</span>
+    </div>
+    <div class="sc-body-wrap">
+      <div class="sc-left-line"></div>
+      <div class="sc-body">
+        <p>이후 앤은 단지 선생님이 아니었습니다. 그녀는 친구였고, 가족이었고, 안내자였으며, 옆에서 함께 꿈을 써 내려간 동역자였습니다. 헬렌이 대학에서 공부할 때, 강의실마다 함께 들어가 헬렌의 손에 수업 내용을 써주며 시간을 함께했습니다.</p>
+        <p>헬렌은 이렇게 말했습니다.</p>
+        <div class="quote">내 인생에서 눈이 되어준 분, 나의 스승, 나의 사랑하는 앤이 없었다면 지금의 나는 없었을 것입니다.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 카드 5 — 마지막 장면 -->
+  <div class="story-card fu">
+    <div class="sc-header" style="--h-c1:#6a1830; --h-c2:#c04870;">
+      <span class="sc-header-num">05</span>
+      <span class="sc-header-title">마지막 장면 — 사랑의 완성</span>
+    </div>
+    <div class="sc-body-wrap">
+      <div class="sc-left-line"></div>
+      <div class="sc-body">
+        <p>세월이 지나 앤 설리번의 시력은 다시 약해졌습니다. 그리고 어느 날, 더 이상 글을 가르칠 수 없게 되었을 때 헬렌은 조용히 앤의 손을 잡고 말했습니다.</p>
+        <div class="quote-key">이제는 제가 당신의 눈이 되어 드릴게요.</div>
+        <p>앤은 미소 지었습니다. 그리고 조용히 말했습니다.</p>
+        <div class="quote-key">그게… 내가 바라던 삶이었어요.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- 강물 구분선 -->
+<div class="river-div" style="background:var(--paper);">
+  <svg viewBox="0 0 1440 48" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,0 Q360,40 720,18 T1440,30 L1440,48 L0,48 Z" fill="#e0f2f1"/>
+  </svg>
+</div>
+
+<!-- ══ 메시지 ══ -->
+<div class="message-section" style="background:#e0f2f1; padding:0 16px;">
+  <div style="max-width:688px; margin:0 auto; padding:32px 0;">
+    <div class="message-card fu" style="background:#fdf8f0;">
+      <div class="message-card-inner">
+        <div class="sec-label sl-teal">🕯️ Message · 메시지</div>
+        <h2 class="sec-title st-teal">메시지</h2>
+        <div class="card-body-text">
+          <p>앤은 뛰어난 실력을 가진 사람이 아니었습니다. 부유하지 않았습니다. 건강하지도 않았습니다. 그녀에게 있었던 단 하나는 받은 사랑을 흘려보내겠다는 결심이었습니다. 그리고 그 사랑은 한 사람을 깨웠고, 그 한 사람은 세상을 깨웠습니다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 강물 구분선 -->
+<div class="river-div" style="background:#e0f2f1;">
+  <svg viewBox="0 0 1440 48" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,48 Q360,8 720,28 T1440,18 L1440,48 Z" fill="#e3f2fd"/>
+  </svg>
+</div>
+
+<!-- ══ 성경적 적용 ══ -->
+<div class="message-section" style="background:#e3f2fd; padding:0 16px;">
+  <div style="max-width:688px; margin:0 auto; padding:32px 0;">
+    <div class="message-card fu" style="background:#fdf8f0; border-top-color:var(--water-mid);">
+      <div class="message-card-inner">
+        <div class="sec-label sl-water">📖 Scripture · 성경적 적용</div>
+        <h2 class="sec-title st-water">성경적 적용</h2>
+        <div class="card-body-text">
+          <div class="scripture">"우리가 사랑하는 것은 하나님께서 먼저 우리를 사랑하셨기 때문입니다." - 요한일서 4:19</div>
+          <div class="scripture">"여러분이 거저 받았으니 거저 주십시오." - 마태복음 10:8</div>
+          <p>사랑은 흘러갈 때 생명이 되고, 헌신은 포기되지 않을 때 기적이 됩니다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 강물 구분선 -->
+<div class="river-div" style="background:#e3f2fd;">
+  <svg viewBox="0 0 1440 48" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,0 Q360,40 720,18 T1440,30 L1440,48 L0,48 Z" fill="#fce4ec"/>
+  </svg>
+</div>
+
+<!-- ══ 결론 ══ -->
+<div class="message-section" style="background:#fce4ec; padding:0 16px 40px;">
+  <div style="max-width:688px; margin:0 auto; padding:32px 0;">
+    <div class="conclusion-card fu">
+      <div class="conclusion-card-inner">
+        <div class="sec-label sl-rose">🎯 Conclusion · 결론</div>
+        <h2 class="sec-title st-rose">결론</h2>
+        <div class="card-body-text">
+          <p>헬렌 켈러의 성공은 기적이지만, 그 기적 뒤에는 조용히 흘러간 한 사람의 사랑이 있었습니다. 우리에게도 하나님은 같은 질문을 하십니다.</p>
+          <div class="final-question">
+            "너는 네가 받은 사랑을<br>누구에게 흘려보내겠느냐?"
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 최하단 강물 -->
+<div class="river-div" style="background:#fce4ec;">
+  <svg viewBox="0 0 1440 48" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,48 Q360,10 720,28 T1440,15 L1440,48 Z" fill="rgba(26,48,64,.8)"/>
+  </svg>
+</div>
+
+<footer class="site-footer">
+  <div class="sf-rule"></div>
+  <p class="sf-name">부산교회 2구역</p>
+</footer>
+
+<script>
+  // 물방울 파티클
+  const dc = document.getElementById('drops');
+  for (let i = 0; i < 22; i++) {
+    const d = document.createElement('div');
+    d.className = 'drop';
+    const w = 4 + Math.random() * 8;
+    d.style.cssText = `
+      left:${Math.random()*100}%;
+      top:${Math.random()*10}%;
+      width:${w}px; height:${w*1.3}px;
+      --d:${8+Math.random()*10}s;
+      --dl:${Math.random()*8}s;
+      --op:${0.15+Math.random()*0.2};
+    `;
+    dc.appendChild(d);
+  }
+
+  // 스크롤 IO
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fu').forEach(el => io.observe(el));
+</script>
+</body>
+</html>

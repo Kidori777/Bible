@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>살아있는 청어 — 메기의 역설</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600&family=Cormorant+Garamond:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --sea-deep:   #0a1a2e;
+  --sea-mid:    #0f2840;
+  --sea-surf:   #1a3a54;
+  --sea-light:  #2a5070;
+  --water-glow: rgba(40,120,180,0.15);
+  --foam:       rgba(180,220,255,0.08);
+  --surface:    #f4efe4;
+  --surface2:   #ede6d4;
+  --ink:        #1a1610;
+  --ink2:       #3a3228;
+  --ink3:       #7a7060;
+  --gold:       #c8902a;
+  --gold2:      #e8b84a;
+  --rust:       #8a3820;
+  --herring:    #c8d8e8;
+  --herring2:   #a0c0d8;
+  --catfish:    #5a4030;
+  --catfish2:   #3a2818;
+  --fire:       #e87020;
+  --fire2:      #f0a030;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--sea-deep);
+  font-family: 'Noto Serif KR', serif;
+  color: var(--ink);
+  overflow-x: hidden;
+}
+
+/* ═══════════════════════════════
+   HERO: 살아있는 수조
+═══════════════════════════════ */
+.tank-hero {
+  width: 100%;
+  height: 100vh;
+  min-height: 600px;
+  position: relative;
+  overflow: hidden;
+  background: var(--sea-deep);
+  cursor: none;
+}
+
+/* 물 층위 그라디언트 */
+.water-layers {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+    #061420 0%,
+    #0a1e34 20%,
+    #0f2840 50%,
+    #0a1e34 80%,
+    #061420 100%
+  );
+}
+
+/* 빛 산란 */
+.light-scatter {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 30% at 30% 20%, rgba(40,100,180,0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 20% at 70% 60%, rgba(20,80,140,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* 수면 라인 */
+.water-surface {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(120,200,255,0.4) 20%,
+    rgba(180,230,255,0.6) 50%,
+    rgba(120,200,255,0.4) 80%,
+    transparent 100%
+  );
+  animation: surfaceShimmer 4s ease-in-out infinite;
+}
+@keyframes surfaceShimmer {
+  0%,100% { opacity:0.5; transform:scaleX(1); }
+  50%      { opacity:1;   transform:scaleX(1.01); }
+}
+
+/* 기포 */
+.bubble {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(140,200,255,0.25);
+  background: rgba(140,200,255,0.04);
+  animation: riseUp linear infinite;
+}
+@keyframes riseUp {
+  0%   { transform: translateY(0) translateX(0) scale(1); opacity:0; }
+  10%  { opacity:0.6; }
+  90%  { opacity:0.3; }
+  100% { transform: translateY(-100vh) translateX(20px) scale(0.5); opacity:0; }
+}
+
+/* Canvas for fish */
+#fishCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* 수조 타이틀 오버레이 */
+.tank-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 80px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.tank-eyebrow {
+  font-size: 9px;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: rgba(140,200,255,0.5);
+  margin-bottom: 14px;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+}
+
+.tank-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 42px;
+  font-weight: 300;
+  color: rgba(220,240,255,0.9);
+  line-height: 1.2;
+  text-align: center;
+  margin-bottom: 10px;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.8);
+}
+
+.tank-subtitle {
+  font-size: 12px;
+  letter-spacing: 4px;
+  color: rgba(120,180,240,0.5);
+  font-weight: 300;
+  text-align: center;
+}
+
+/* 마우스 커서 힌트 */
+.cursor-hint {
+  position: absolute;
+  top: 32px; right: 32px;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: rgba(120,180,240,0.35);
+  font-weight: 300;
+  pointer-events: none;
+  z-index: 10;
+  text-align: right;
+}
+
+/* 커스텀 커서 */
+.custom-cursor {
+  position: fixed;
+  width: 20px; height: 20px;
+  border: 1px solid rgba(120,200,255,0.6);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: width 0.2s, height 0.2s, opacity 0.2s;
+}
+
+/* 스크롤 유도 */
+.scroll-indicator {
+  position: absolute;
+  bottom: 28px; left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  z-index: 10;
+  pointer-events: none;
+  animation: sinkDown 2.5s ease-in-out infinite;
+}
+.scroll-indicator-line {
+  width: 1px; height: 36px;
+  background: linear-gradient(180deg, rgba(120,200,255,0.6), transparent);
+}
+@keyframes sinkDown {
+  0%,100% { opacity:0.4; transform:translateX(-50%) translateY(0); }
+  50%      { opacity:0.9; transform:translateX(-50%) translateY(8px); }
+}
+
+/* ═══════════════════════════════
+   수면 위 — 이야기 섹션
+═══════════════════════════════ */
+.story-world {
+  background: var(--surface);
+  position: relative;
+}
+
+/* 물결 전환 효과 */
+.wave-transition {
+  width: 100%;
+  height: 80px;
+  background: var(--sea-deep);
+  position: relative;
+  overflow: hidden;
+}
+.wave-transition svg {
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 100%;
+}
+
+/* ── 공통 섹션 ── */
+.story-section {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 80px 56px;
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+.story-section.in { opacity:1; transform:translateY(0); }
+
+.section-rule {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.section-rule-label {
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 400;
+  white-space: nowrap;
+}
+.section-rule-line {
+  flex:1; height:1px;
+  background: rgba(180,150,80,0.2);
+}
+
+.body-text {
+  font-size: 16px;
+  line-height: 2.3;
+  color: var(--ink);
+  font-weight: 300;
+  word-break: keep-all;
+  margin-bottom: 24px;
+}
+
+.emph {
+  color: var(--rust);
+  font-weight: 400;
+}
+
+/* ── 항해 루트 다이어그램 ── */
+.route-diagram {
+  margin: 48px 0;
+  padding: 40px 0;
+  border-top: 1px solid rgba(180,150,80,0.15);
+  border-bottom: 1px solid rgba(180,150,80,0.15);
+  position: relative;
+}
+
+/* ── 대화 블록 ── */
+.dialogue {
+  margin: 28px 0;
+  padding: 0 0 0 24px;
+  border-left: 2px solid rgba(180,150,80,0.3);
+}
+.dialogue-who {
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--ink3);
+  margin-bottom: 8px;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 400;
+}
+.dialogue-line {
+  font-size: 16.5px;
+  line-height: 2;
+  color: var(--ink2);
+  font-weight: 400;
+  word-break: keep-all;
+}
+
+/* ── 비결 공개 섹션 (어두운) ── */
+.secret-section {
+  background: var(--sea-mid);
+  padding: 80px 0;
+}
+.secret-inner {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 0 56px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+.secret-inner.in { opacity:1; transform:translateY(0); }
+
+.secret-reveal {
+  text-align: center;
+  margin: 48px 0;
+}
+.secret-reveal-label {
+  font-size: 9px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: rgba(120,180,240,0.5);
+  margin-bottom: 20px;
+  font-family: 'Cormorant Garamond', serif;
+}
+.secret-reveal-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 300;
+  color: rgba(200,230,255,0.9);
+  line-height: 1.6;
+  text-shadow: 0 0 30px rgba(40,100,180,0.4);
+}
+.secret-reveal-text .catfish-word {
+  color: var(--catfish);
+  font-size: 28px;
+  color: rgba(180,140,100,0.9);
+}
+
+.secret-body {
+  font-size: 15.5px;
+  line-height: 2.3;
+  color: rgba(160,200,240,0.75);
+  font-weight: 300;
+  word-break: keep-all;
+}
+.secret-body .light {
+  color: rgba(200,230,255,0.9);
+  font-weight: 400;
+}
+
+/* 메기-청어 수치 시각화 */
+.tank-stat {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  margin: 40px 0;
+}
+.stat-box {
+  padding: 32px 28px;
+  text-align: center;
+}
+.stat-box.dead-side {
+  background: rgba(15,8,4,0.85);
+  border: 1px solid rgba(100,80,60,0.3);
+}
+.stat-box.live-side {
+  background: rgba(10,30,60,0.95);
+  border: 1px solid rgba(60,140,220,0.4);
+}
+.stat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 56px;
+  font-weight: 400;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+.dead-side .stat-num { color: rgba(180,150,120,0.75); }
+.live-side .stat-num { color: rgba(160,215,255,1); }
+.stat-desc {
+  font-size: 13px;
+  letter-spacing: 1px;
+  font-weight: 300;
+}
+.dead-side .stat-desc { color: rgba(180,155,125,0.7); }
+.live-side .stat-desc { color: rgba(130,185,240,0.9); }
+
+/* ── 교훈 섹션 ── */
+.lesson-section {
+  background: var(--surface2);
+  padding: 80px 0;
+}
+.lesson-inner {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 0 56px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+.lesson-inner.in { opacity:1; transform:translateY(0); }
+
+/* 대비 카드 */
+.contrast-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  margin: 40px 0;
+}
+.c-ease {
+  background: #e8e0cc;
+  padding: 40px 32px;
+  border-radius: 3px 0 0 3px;
+}
+.c-tension {
+  background: linear-gradient(135deg, #1a2e1a, #0f2010);
+  padding: 40px 32px;
+  border-radius: 0 3px 3px 0;
+}
+.contrast-label {
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  font-weight: 400;
+  font-family: 'Cormorant Garamond', serif;
+}
+.c-ease .contrast-label { color: var(--ink2); }
+.c-tension .contrast-label { color: rgba(100,190,100,0.9); }
+.contrast-body {
+  font-size: 15px;
+  line-height: 2.2;
+  font-weight: 300;
+  word-break: keep-all;
+}
+.c-ease .contrast-body { color: var(--ink2); }
+.c-tension .contrast-body { color: rgba(160,220,160,0.9); }
+
+/* ── 불 / 금 섹션 (베드로전서) ── */
+.fire-section {
+  background: var(--ink);
+  padding: 100px 0;
+  position: relative;
+  overflow: hidden;
+}
+.fire-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 70% at 50% 100%, rgba(200,80,20,0.25) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 50% at 30% 80%, rgba(240,160,30,0.12) 0%, transparent 60%);
+  pointer-events: none;
+}
+.fire-inner {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 0 56px;
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+.fire-inner.in { opacity:1; transform:translateY(0); }
+
+.scripture-block {
+  margin: 40px 0;
+  text-align: center;
+  padding: 56px 48px;
+  border: 1px solid rgba(200,144,42,0.35);
+  position: relative;
+  background: rgba(255,255,255,0.03);
+}
+.scripture-block::before,
+.scripture-block::after {
+  content: '';
+  position: absolute;
+  left: 50%; transform: translateX(-50%);
+  width: 60px; height: 1px;
+  background: rgba(200,144,42,0.6);
+}
+.scripture-block::before { top: 0; }
+.scripture-block::after  { bottom: 0; }
+
+.scripture-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 400;
+  color: rgba(235,215,175,0.95);
+  line-height: 2.1;
+  word-break: keep-all;
+}
+.scripture-text .gold-word {
+  color: var(--gold2);
+  font-weight: 600;
+}
+.scripture-ref {
+  margin-top: 28px;
+  font-size: 12px;
+  letter-spacing: 5px;
+  color: rgba(200,165,80,0.8);
+  font-family: 'Cormorant Garamond', serif;
+  text-transform: uppercase;
+}
+
+.fire-body {
+  font-size: 16px;
+  line-height: 2.3;
+  color: rgba(210,195,170,0.9);
+  font-weight: 300;
+  word-break: keep-all;
+  margin-bottom: 24px;
+}
+.fire-body .flame {
+  color: var(--fire2);
+  font-weight: 400;
+}
+
+/* ── 클로징 ── */
+.closing {
+  background: var(--sea-deep);
+  padding: 100px 40px 120px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.closing-glow {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px; height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(40,100,200,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.closing-inner {
+  position: relative;
+  z-index: 1;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+.closing-inner.in { opacity:1; transform:translateY(0); }
+
+.closing-big {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 72px;
+  font-weight: 300;
+  color: rgba(140,200,255,0.65);
+  line-height: 1;
+  margin-bottom: 16px;
+  letter-spacing: -2px;
+}
+.closing-ko {
+  font-size: 15px;
+  letter-spacing: 5px;
+  color: rgba(120,175,235,0.7);
+  font-weight: 300;
+  margin-bottom: 48px;
+}
+.closing-vline {
+  width: 1px; height: 60px;
+  background: linear-gradient(180deg, rgba(100,160,220,0.4), transparent);
+  margin: 0 auto;
+}
+
+/* 반응형 */
+@media (max-width: 640px) {
+  .story-section, .secret-inner, .lesson-inner, .fire-inner { padding: 0 24px; }
+  .tank-title { font-size: 30px; }
+  .contrast-pair, .tank-stat { grid-template-columns: 1fr; }
+  .c-ease { border-radius: 3px 3px 0 0; }
+  .c-tension { border-radius: 0 0 3px 3px; }
+  .closing-big { font-size: 40px; }
+  .scripture-text { font-size: 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="custom-cursor" id="cursor"></div>
+
+<!-- ══════════════════════════════
+     HERO: 살아있는 수조
+══════════════════════════════ -->
+<div class="tank-hero" id="tankHero">
+  <div class="water-layers"></div>
+  <div class="light-scatter"></div>
+  <div class="water-surface"></div>
+
+  <!-- 기포들 -->
+  <div class="bubble" style="width:6px;height:6px;left:12%;bottom:0;animation-duration:8s;animation-delay:0s;"></div>
+  <div class="bubble" style="width:4px;height:4px;left:28%;bottom:0;animation-duration:11s;animation-delay:2s;"></div>
+  <div class="bubble" style="width:8px;height:8px;left:45%;bottom:0;animation-duration:9s;animation-delay:4s;"></div>
+  <div class="bubble" style="width:3px;height:3px;left:65%;bottom:0;animation-duration:13s;animation-delay:1s;"></div>
+  <div class="bubble" style="width:5px;height:5px;left:82%;bottom:0;animation-duration:10s;animation-delay:3s;"></div>
+  <div class="bubble" style="width:4px;height:4px;left:55%;bottom:0;animation-duration:12s;animation-delay:5.5s;"></div>
+
+  <canvas id="fishCanvas"></canvas>
+
+  <div class="cursor-hint">마우스를 움직이면<br>메기가 나타납니다</div>
+
+  <div class="tank-overlay">
+    <div class="tank-eyebrow">North Sea · London · 18th Century</div>
+    <div class="tank-title">살아있는 청어</div>
+    <div class="tank-subtitle">북해 어부의 비결</div>
+  </div>
+
+  <div class="scroll-indicator">
+    <div class="scroll-indicator-line"></div>
+  </div>
+</div>
+
+<!-- 물결 전환 -->
+<div class="wave-transition">
+  <svg viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" height="80">
+    <path d="M0,40 C240,80 480,0 720,40 C960,80 1200,0 1440,40 L1440,80 L0,80 Z" fill="#f4efe4"/>
+  </svg>
+</div>
+
+<!-- ══════════════════════════════
+     이야기 — 수면 위 세계
+══════════════════════════════ -->
+<div class="story-world">
+
+  <!-- 1: 문제 -->
+  <div class="story-section">
+    <div class="section-rule">
+      <div class="section-rule-label">북해에서 런던까지</div>
+      <div class="section-rule-line"></div>
+    </div>
+
+    <p class="body-text">
+      오래전 유럽의 북해에서는 청어가 많이 잡혔습니다.
+      스코틀랜드와 북해 연안의 어부들은 이 청어를 잡아 배에 싣고
+      런던까지 운반하여 시장에 내다 팔았습니다.
+      그러나 이들에게는 큰 고민이 하나 있었습니다.
+    </p>
+
+    <!-- 항해 루트 SVG -->
+    <div class="route-diagram">
+      <svg viewBox="0 0 660 110" xmlns="http://www.w3.org/2000/svg" width="100%">
+        <defs>
+          <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5"
+            markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="rgba(180,150,80,0.5)" stroke-width="1.5" stroke-linecap="round"/>
+          </marker>
+        </defs>
+        <!-- 점선 항로 -->
+        <path d="M80,55 C200,20 400,90 580,55"
+          fill="none" stroke="rgba(160,130,60,0.7)" stroke-width="1.5"
+          stroke-dasharray="5,6" marker-end="url(#arr)"/>
+        <!-- 북해 -->
+        <circle cx="80" cy="55" r="26" fill="rgba(20,50,100,0.25)" stroke="rgba(80,140,220,0.7)" stroke-width="1.5"/>
+        <text x="80" y="50" text-anchor="middle" font-size="11" fill="rgba(140,190,255,1)" font-family="Cormorant Garamond, serif" font-weight="400" letter-spacing="1">NORTH</text>
+        <text x="80" y="64" text-anchor="middle" font-size="11" fill="rgba(140,190,255,1)" font-family="Cormorant Garamond, serif" font-weight="400" letter-spacing="1">SEA</text>
+        <!-- 런던 -->
+        <circle cx="580" cy="55" r="26" fill="rgba(100,70,10,0.2)" stroke="rgba(210,160,60,0.8)" stroke-width="1.5"/>
+        <text x="580" y="50" text-anchor="middle" font-size="11" fill="rgba(230,185,80,1)" font-family="Cormorant Garamond, serif" font-weight="400" letter-spacing="1">LONDON</text>
+        <text x="580" y="64" text-anchor="middle" font-size="11" fill="rgba(210,165,70,0.9)" font-family="Cormorant Garamond, serif" font-weight="400">MARKET</text>
+        <!-- 며칠 소요 -->
+        <text x="330" y="36" text-anchor="middle" font-size="13" fill="rgba(180,155,90,0.9)" font-family="Noto Serif KR, serif" font-weight="400" letter-spacing="3">며칠의 항해</text>
+        <!-- 죽은 물고기 표시 -->
+        <text x="330" y="82" text-anchor="middle" font-size="13" fill="rgba(160,110,80,0.85)" font-family="Noto Serif KR, serif" font-weight="400">대부분 죽어서 도착</text>
+      </svg>
+    </div>
+
+    <p class="body-text">
+      북해에서 런던까지는 며칠이 걸리는 긴 항해였기 때문에,
+      배가 항구에 도착할 즈음이면
+      <span class="emph">대부분의 청어가 이미 죽어 버린다</span>는 것이었습니다.
+      런던 사람들은 살아있거나 매우 신선한 생선을 원했기 때문에,
+      죽은 청어는 값이 크게 떨어졌습니다.
+    </p>
+
+    <p class="body-text">
+      어부들은 여러 가지 방법을 시도했습니다.
+      물통을 크게 만들기도 하고, 바닷물을 자주 갈아 주기도 했습니다.
+      하지만 긴 항해 동안 청어들은 점점 힘을 잃고
+      결국 대부분 죽고 말았습니다.
+    </p>
+  </div>
+
+  <!-- 2: 그런데 -->
+  <div class="story-section" style="padding-top:20px;">
+    <div class="section-rule">
+      <div class="section-rule-label">한 어부의 비밀</div>
+      <div class="section-rule-line"></div>
+    </div>
+
+    <p class="body-text">
+      그런데 어느 날부터 <span class="emph">한 어부의 청어만은 달랐습니다.</span>
+      그의 배가 런던에 도착하면, 물통 속의 청어들이
+      여전히 힘차게 헤엄치고 있었습니다.
+      시장 사람들은 그 신선함에 감탄했고,
+      그의 청어는 다른 어부들의 것보다 훨씬 좋은 값에 팔렸습니다.
+    </p>
+
+    <div class="dialogue">
+      <div class="dialogue-who">동료 어부들</div>
+      <div class="dialogue-line">"우리는 모두 같은 바다에서 청어를 잡아 오는데, 어째서 당신의 청어만 이렇게 살아 있는 것입니까?"</div>
+    </div>
+
+    <p class="body-text">
+      처음에는 그가 웃으며 대답을 피했지만,
+      계속되는 질문에 결국 그 비결을 말해 주었습니다.
+    </p>
+  </div>
+
+</div><!-- /story-world -->
+
+<!-- ══════════════════════════════
+     비결 공개 — 어두운 물속
+══════════════════════════════ -->
+<div class="secret-section">
+  <div class="secret-inner">
+
+    <div class="secret-reveal">
+      <div class="secret-reveal-label">The Secret</div>
+      <div class="secret-reveal-text">
+        청어를 넣은 물통에<br>
+        <span class="catfish-word">메기 한 마리</span>를<br>
+        함께 넣어 둡니다.
+      </div>
+    </div>
+
+    <div class="dialogue" style="border-left-color:rgba(100,140,80,0.3);">
+      <div class="dialogue-who" style="color:rgba(100,160,100,0.5);">동료 어부들</div>
+      <div class="dialogue-line" style="color:rgba(160,200,240,0.65);">
+        "그러면 메기가 청어를 잡아먹지 않습니까?"
+      </div>
+    </div>
+
+    <div class="dialogue" style="border-left-color:rgba(180,150,80,0.3); margin-top:8px;">
+      <div class="dialogue-who" style="color:rgba(180,150,80,0.4);">비결의 어부</div>
+      <div class="dialogue-line" style="color:rgba(200,230,255,0.75);">
+        "물론 몇 마리는 잡아먹습니다.
+        하지만 그 덕분에 나머지 청어들은
+        잡아먹히지 않기 위해 계속 도망치며 헤엄칩니다.
+        그래서 긴 항해 동안에도 움직임이 멈추지 않고
+        끝까지 살아 있을 수 있는 것입니다."
+      </div>
+    </div>
+
+    <!-- 수치 대비 -->
+    <div class="tank-stat">
+      <div class="stat-box dead-side">
+        <div class="stat-num">0</div>
+        <div class="stat-desc">메기 없음 · 대부분 죽어 도착</div>
+      </div>
+      <div class="stat-box live-side">
+        <div class="stat-num">+1</div>
+        <div class="stat-desc">메기 한 마리 · 대부분 살아 도착</div>
+      </div>
+    </div>
+
+    <p class="secret-body">
+      물통 속의 청어들은 메기를 피해
+      <span class="light">끊임없이 움직였습니다.</span>
+      그 움직임 덕분에 활력을 잃지 않았고,
+      런던에 도착했을 때도 대부분이 살아 있는 상태로 남아 있었습니다.
+    </p>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     교훈 섹션
+══════════════════════════════ -->
+<div class="lesson-section">
+  <div class="lesson-inner">
+
+    <div class="section-rule">
+      <div class="section-rule-label">삶의 메기</div>
+      <div class="section-rule-line"></div>
+    </div>
+
+    <p class="body-text">
+      이 이야기는 우리에게 한 가지 중요한 사실을 생각하게 합니다.
+    </p>
+
+    <div class="contrast-pair">
+      <div class="c-ease">
+        <div class="contrast-label">편안함만 있을 때</div>
+        <p class="contrast-body">
+          움직임이 없다.<br>
+          긴장이 사라진다.<br>
+          활력을 잃어간다.<br>
+          결국 죽어버린다.
+        </p>
+      </div>
+      <div class="c-tension">
+        <div class="contrast-label">적당한 긴장이 있을 때</div>
+        <p class="contrast-body">
+          끊임없이 움직인다.<br>
+          활력을 유지한다.<br>
+          살아남는다.<br>
+          그리고 성숙해진다.
+        </p>
+      </div>
+    </div>
+
+    <p class="body-text">
+      우리 삶에 찾아오는 어려움과 시련도 마찬가지입니다.
+      그 순간에는 힘들고 고통스럽게 느껴지지만,
+      그 과정 속에서 우리의 믿음과 삶은
+      <span class="emph">더욱 단단해집니다.</span>
+    </p>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     불 / 금 — 베드로전서
+══════════════════════════════ -->
+<div class="fire-section">
+  <div class="fire-bg"></div>
+  <div class="fire-inner">
+
+    <div class="section-rule">
+      <div class="section-rule-label" style="color:rgba(200,144,42,0.6);">베드로전서 1장 6–7절</div>
+      <div class="section-rule-line" style="background:rgba(200,144,42,0.1);"></div>
+    </div>
+
+    <div class="scripture-block">
+      <p class="scripture-text">
+        여러 가지 시험으로 말미암아<br>
+        잠깐 근심하게 되지 않을 수 없었으나<br><br>
+        너희 <span class="gold-word">믿음의 시련</span>이<br>
+        불로 연단하여도 없어질 금보다<br>
+        <span class="gold-word">더 귀하여</span><br><br>
+        예수 그리스도께서 나타나실 때에<br>
+        칭찬과 영광과 존귀를 얻게 하려 함이라.
+      </p>
+      <div class="scripture-ref">1 Peter 1 : 6 – 7</div>
+    </div>
+
+    <p class="fire-body">
+      우리에게 주어지는 시련은 때로
+      <span class="flame">메기와 같은 역할</span>을 합니다.
+      그것이 우리를 지치게 하는 것처럼 보일지라도,
+      사실은 우리를 살아 움직이게 하고
+      더욱 성숙하게 만드는 도구가 될 수 있습니다.
+    </p>
+
+    <!-- 금 연단 시각화 -->
+    <svg viewBox="0 0 660 80" xmlns="http://www.w3.org/2000/svg" width="100%" style="margin:32px 0 0;">
+      <defs>
+        <linearGradient id="fireGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%"   stop-color="rgba(200,80,20,0)"  />
+          <stop offset="30%"  stop-color="rgba(200,80,20,0.4)"/>
+          <stop offset="50%"  stop-color="rgba(240,160,30,0.6)"/>
+          <stop offset="70%"  stop-color="rgba(200,144,42,0.4)"/>
+          <stop offset="100%" stop-color="rgba(200,144,42,0)"  />
+        </linearGradient>
+      </defs>
+      <rect x="0" y="35" width="660" height="1" fill="url(#fireGrad)"/>
+      <!-- 불꽃 암시 -->
+      <path d="M300,34 Q310,20 320,34 Q330,20 340,34" fill="none" stroke="rgba(240,160,30,0.3)" stroke-width="1"/>
+      <path d="M315,34 Q322,15 330,34" fill="none" stroke="rgba(240,160,30,0.4)" stroke-width="1"/>
+      <!-- 금 -->
+      <text x="330" y="58" text-anchor="middle" font-size="10" fill="rgba(200,160,60,0.4)"
+        font-family="Cormorant Garamond, serif" letter-spacing="6">REFINED · GOLD</text>
+    </svg>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     클로징
+══════════════════════════════ -->
+<div class="closing">
+  <div class="closing-glow"></div>
+  <div class="closing-inner">
+    <div class="closing-big">緊張</div>
+    <div class="closing-ko">긴장이 생명을 살린다</div>
+    <div class="closing-vline"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     JAVASCRIPT: 물고기 시뮬레이션
+══════════════════════════════ -->
+<script>
+const canvas = document.getElementById('fishCanvas');
+const ctx = canvas.getContext('2d');
+const hero = document.getElementById('tankHero');
+const cursorEl = document.getElementById('cursor');
+
+let W, H;
+function resize() {
+  W = canvas.width  = hero.offsetWidth;
+  H = canvas.height = hero.offsetHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+// 마우스 (메기 위치)
+let mouse = { x: -300, y: -300, active: false };
+document.addEventListener('mousemove', e => {
+  const rect = hero.getBoundingClientRect();
+  if (e.clientY >= rect.top && e.clientY <= rect.bottom) {
+    mouse.x = e.clientX - rect.left;
+    mouse.y = e.clientY - rect.top;
+    mouse.active = true;
+  } else {
+    mouse.active = false;
+    mouse.x = -300; mouse.y = -300;
+  }
+  cursorEl.style.left = e.clientX + 'px';
+  cursorEl.style.top  = e.clientY + 'px';
+});
+
+// ── 청어 클래스 ──
+class Herring {
+  constructor() { this.reset(true); }
+  reset(init) {
+    this.x = init ? Math.random() * W : (Math.random() < 0.5 ? -20 : W + 20);
+    this.y = 80 + Math.random() * (H - 160);
+    const angle = Math.random() * Math.PI * 2;
+    const spd = 0.8 + Math.random() * 0.8;
+    this.vx = Math.cos(angle) * spd;
+    this.vy = Math.sin(angle) * spd;
+    this.len = 14 + Math.random() * 10;
+    this.silver = 0.5 + Math.random() * 0.5;
+    this.wobble = 0;
+    this.wobbleSpd = 0.06 + Math.random() * 0.04;
+    this.fear = 0; // 0~1 공포 레벨
+  }
+
+  update() {
+    this.wobble += this.wobbleSpd;
+
+    // 메기 거리 반응
+    const dx = this.x - mouse.x;
+    const dy = this.y - mouse.y;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    const fearRadius = 160;
+
+    if (mouse.active && dist < fearRadius) {
+      this.fear = Math.min(1, this.fear + 0.08);
+      const fleeFactor = (1 - dist/fearRadius) * 3.5;
+      this.vx += (dx/dist) * fleeFactor;
+      this.vy += (dy/dist) * fleeFactor;
+    } else {
+      this.fear = Math.max(0, this.fear - 0.02);
+    }
+
+    // 속도 제한 (공포 상태면 더 빠름)
+    const maxSpd = this.fear > 0.3 ? 4.5 : 2.0;
+    const spd = Math.sqrt(this.vx*this.vx + this.vy*this.vy);
+    if (spd > maxSpd) { this.vx = (this.vx/spd)*maxSpd; this.vy = (this.vy/spd)*maxSpd; }
+
+    // 무리 결집 (Boids 간략화)
+    if (this.fear < 0.2) {
+      this.vx += (Math.random()-0.5) * 0.05;
+      this.vy += (Math.random()-0.5) * 0.05;
+    }
+
+    // 경계 반응
+    const margin = 60;
+    if (this.x < margin)   this.vx += 0.15;
+    if (this.x > W-margin) this.vx -= 0.15;
+    if (this.y < margin+40) this.vy += 0.15;
+    if (this.y > H-margin) this.vy -= 0.15;
+
+    this.x += this.vx;
+    this.y += this.vy;
+
+    if (this.x < -40 || this.x > W+40 || this.y < -40 || this.y > H+40) this.reset(false);
+  }
+
+  draw() {
+    const angle = Math.atan2(this.vy, this.vx);
+    const spd = Math.sqrt(this.vx*this.vx + this.vy*this.vy);
+    const tailWag = Math.sin(this.wobble) * (0.3 + spd * 0.1);
+
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.rotate(angle);
+
+    // 몸통
+    const alpha = 0.35 + this.silver * 0.4 + this.fear * 0.2;
+    const blueShift = this.fear > 0.3 ? 0.8 : 1;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, this.len, this.len * 0.28, 0, 0, Math.PI*2);
+    ctx.fillStyle = `rgba(${Math.floor(180*blueShift)},${Math.floor(210*blueShift)},${Math.floor(235)},${alpha})`;
+    ctx.fill();
+
+    // 비늘 광택
+    ctx.beginPath();
+    ctx.ellipse(-this.len*0.1, -this.len*0.05, this.len*0.5, this.len*0.12, 0, 0, Math.PI*2);
+    ctx.fillStyle = `rgba(220,240,255,${alpha*0.5})`;
+    ctx.fill();
+
+    // 꼬리
+    ctx.beginPath();
+    ctx.moveTo(-this.len, 0);
+    ctx.lineTo(-this.len*1.5, this.len*0.35 * Math.sin(tailWag + 1));
+    ctx.lineTo(-this.len*1.5, -this.len*0.35 * Math.sin(tailWag + 1));
+    ctx.closePath();
+    ctx.fillStyle = `rgba(160,200,230,${alpha*0.7})`;
+    ctx.fill();
+
+    // 눈
+    ctx.beginPath();
+    ctx.arc(this.len * 0.65, -this.len * 0.06, this.len * 0.06, 0, Math.PI*2);
+    ctx.fillStyle = `rgba(20,30,60,${alpha*1.4})`;
+    ctx.fill();
+
+    ctx.restore();
+  }
+}
+
+// ── 메기 클래스 ──
+class Catfish {
+  constructor() {
+    this.x = -100; this.y = H/2;
+    this.tx = -100; this.ty = H/2;
+    this.wobble = 0;
+    this.visible = false;
+    this.alpha = 0;
+  }
+  update() {
+    if (mouse.active) {
+      this.tx = mouse.x; this.ty = mouse.y;
+      this.alpha = Math.min(1, this.alpha + 0.05);
+    } else {
+      this.alpha = Math.max(0, this.alpha - 0.03);
+    }
+    this.x += (this.tx - this.x) * 0.12;
+    this.y += (this.ty - this.y) * 0.12;
+    this.wobble += 0.08;
+  }
+  draw() {
+    if (this.alpha <= 0.01) return;
+    const a = this.alpha;
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    const tailWag = Math.sin(this.wobble) * 0.35;
+
+    // 그림자
+    ctx.beginPath();
+    ctx.ellipse(3, 4, 30, 10, 0, 0, Math.PI*2);
+    ctx.fillStyle = `rgba(0,0,0,${a*0.2})`;
+    ctx.fill();
+
+    // 몸통
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 28, 11, 0, 0, Math.PI*2);
+    ctx.fillStyle = `rgba(80,56,34,${a*0.85})`;
+    ctx.fill();
+
+    // 배
+    ctx.beginPath();
+    ctx.ellipse(2, 3, 18, 7, 0, 0, Math.PI*2);
+    ctx.fillStyle = `rgba(110,80,50,${a*0.5})`;
+    ctx.fill();
+
+    // 꼬리
+    ctx.beginPath();
+    ctx.moveTo(-26, 0);
+    ctx.lineTo(-40, 14 * Math.sin(tailWag + 1));
+    ctx.lineTo(-40, -14 * Math.sin(tailWag + 1));
+    ctx.closePath();
+    ctx.fillStyle = `rgba(60,40,20,${a*0.7})`;
+    ctx.fill();
+
+    // 수염 (바베이라)
+    for (let i = -1; i <= 1; i += 2) {
+      ctx.beginPath();
+      ctx.moveTo(24, i * 3);
+      ctx.quadraticCurveTo(36, i * 10, 40, i * 14);
+      ctx.strokeStyle = `rgba(60,40,20,${a*0.6})`;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+    for (let i = -1; i <= 1; i += 2) {
+      ctx.beginPath();
+      ctx.moveTo(20, i * 5);
+      ctx.quadraticCurveTo(28, i * 16, 30, i * 22);
+      ctx.strokeStyle = `rgba(60,40,20,${a*0.4})`;
+      ctx.lineWidth = 0.8;
+      ctx.stroke();
+    }
+
+    // 눈
+    ctx.beginPath();
+    ctx.arc(20, -3, 4, 0, Math.PI*2);
+    ctx.fillStyle = `rgba(15,10,5,${a})`;
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(21, -3.5, 1.5, 0, Math.PI*2);
+    ctx.fillStyle = `rgba(255,200,100,${a*0.5})`;
+    ctx.fill();
+
+    // 등지느러미
+    ctx.beginPath();
+    ctx.moveTo(-5, -10);
+    ctx.lineTo(5, -18);
+    ctx.lineTo(15, -11);
+    ctx.fillStyle = `rgba(50,32,16,${a*0.6})`;
+    ctx.fill();
+
+    ctx.restore();
+  }
+}
+
+// 초기화
+const herrings = Array.from({length: 28}, () => new Herring());
+const catfish = new Catfish();
+
+// 수중 배경 그라디언트 (캐시)
+let bgGrad = null;
+function makeBgGrad() {
+  bgGrad = ctx.createLinearGradient(0, 0, 0, H);
+  bgGrad.addColorStop(0,   '#061420');
+  bgGrad.addColorStop(0.3, '#0a1e34');
+  bgGrad.addColorStop(0.7, '#0f2840');
+  bgGrad.addColorStop(1,   '#061420');
+}
+
+// 빛 광선 (캐시 없이)
+function drawLightRays() {
+  ctx.save();
+  ctx.globalAlpha = 0.04;
+  for (let i = 0; i < 5; i++) {
+    const x = W * (0.1 + i * 0.2);
+    const g = ctx.createLinearGradient(x, 0, x + 30, H);
+    g.addColorStop(0, 'rgba(100,180,255,0.8)');
+    g.addColorStop(1, 'rgba(100,180,255,0)');
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.moveTo(x - 8, 0);
+    ctx.lineTo(x + 8, 0);
+    ctx.lineTo(x + 60, H);
+    ctx.lineTo(x + 44, H);
+    ctx.closePath();
+    ctx.fill();
+  }
+  ctx.restore();
+}
+
+// 애니메이션 루프
+function loop() {
+  if (!bgGrad) makeBgGrad();
+  ctx.fillStyle = bgGrad;
+  ctx.fillRect(0, 0, W, H);
+
+  drawLightRays();
+
+  // 수면 반짝임
+  ctx.save();
+  ctx.globalAlpha = 0.06;
+  const surfGrad = ctx.createLinearGradient(0, 0, W, 0);
+  surfGrad.addColorStop(0,   'transparent');
+  surfGrad.addColorStop(0.3, 'rgba(140,210,255,0.8)');
+  surfGrad.addColorStop(0.7, 'rgba(180,230,255,0.8)');
+  surfGrad.addColorStop(1,   'transparent');
+  ctx.fillStyle = surfGrad;
+  ctx.fillRect(0, 0, W, 2);
+  ctx.restore();
+
+  // 청어
+  herrings.forEach(h => { h.update(); h.draw(); });
+  // 메기
+  catfish.update(); catfish.draw();
+
+  requestAnimationFrame(loop);
+}
+loop();
+
+// ── 스크롤 페이드인 ──
+const fadeEls = document.querySelectorAll('.story-section, .secret-inner, .lesson-inner, .fire-inner, .closing-inner');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+  });
+}, { threshold: 0.08 });
+fadeEls.forEach((el, i) => {
+  el.style.transitionDelay = (i % 3) * 0.1 + 's';
+  io.observe(el);
+});
+</script>
+</body>
+</html>

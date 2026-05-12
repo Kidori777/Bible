@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>믿는 이를 위한 심판, 보상, 징계에 관한 교훈</title>
+    <style>
+        :root {
+            --bg-color: #0d1a10; /* Deep Forest Green */
+            --accent-gold: #c5a059;
+            --accent-rust: #8b4513;
+            --text-cream: #f5f5dc;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --line-color: rgba(197, 160, 89, 0.2);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nanum Myeongjo', serif;
+            background-color: var(--bg-color);
+            color: var(--text-cream);
+            line-height: 1.8;
+            overflow-x: hidden;
+            word-break: keep-all;
+        }
+
+        /* 미세한 종이 질감 오버레이 */
+        body::before {
+            content: "";
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0.04; pointer-events: none; z-index: 9999;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3%3Ffilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+        }
+
+        /* 등대 불빛 Radial Gradient 효과 */
+        .header {
+            height: 60vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at 50% 35%, rgba(197, 160, 89, 0.2) 0%, transparent 75%);
+            text-align: center;
+            padding: 20px;
+            border-bottom: 1px solid var(--line-color);
+        }
+
+        .main-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            text-shadow: 0 0 25px rgba(197, 160, 89, 0.4);
+            letter-spacing: -1px;
+            margin-bottom: 10px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 60px 25px 120px;
+            position: relative;
+        }
+
+        /* 세로 Spine 및 Dot 디자인 */
+        .container::after {
+            content: "";
+            position: absolute; left: 50%; top: 0; bottom: 0;
+            width: 1px; background: linear-gradient(to bottom, transparent, var(--line-color), transparent);
+            z-index: -1;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+            margin-bottom: 100px;
+            background: var(--bg-color);
+            padding: 20px 0;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--accent-gold);
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: "";
+            display: block; width: 60px; height: 2px;
+            background: var(--accent-rust);
+            margin: 15px auto 0;
+        }
+
+        .sub-heading {
+            font-size: 1.4rem;
+            color: var(--accent-gold);
+            margin: 35px 0 15px;
+            border-left: 3px solid var(--accent-rust);
+            padding-left: 15px;
+        }
+
+        /* Verse Box */
+        .verse-box {
+            background: rgba(139, 69, 19, 0.08);
+            border: 1px double var(--accent-gold);
+            padding: 30px;
+            margin: 40px 0;
+            text-align: center;
+            font-style: italic;
+        }
+
+        /* Table Style */
+        .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            background: rgba(255, 255, 255, 0.03);
+            font-size: 0.95rem;
+        }
+
+        .styled-table th, .styled-table td {
+            border: 1px solid var(--line-color);
+            padding: 15px;
+            text-align: center;
+        }
+
+        .styled-table th {
+            background: rgba(197, 160, 89, 0.1);
+            color: var(--accent-gold);
+        }
+
+        .spine-dot {
+            width: 12px; height: 12px;
+            background: var(--accent-gold);
+            border-radius: 50%;
+            margin: 0 auto 30px;
+            box-shadow: 0 0 15px var(--accent-gold);
+        }
+
+        /* Footer */
+        .footer {
+            background: #050a06;
+            padding: 80px 20px;
+            text-align: center;
+            border-top: 1px solid var(--accent-rust);
+        }
+
+        .footer-text {
+            color: var(--accent-gold);
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+        }
+
+        hr { border: 0; height: 1px; background: var(--line-color); margin: 40px 0; }
+
+        @media (max-width: 600px) {
+            .main-title { font-size: 1.7rem; }
+            .section-title { font-size: 1.4rem; }
+            .styled-table { font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="reveal">
+            <h1 class="main-title">믿는 이를 위한 심판, 보상, 징계에 관한 교훈</h1>
+            <p style="color: var(--accent-rust); letter-spacing: 2px;">Judgment, Reward, and Discipline for Believers</p>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <div class="reveal">
+            <h2 class="section-title">서론: 믿는 이를 향한 경고와 훈계</h2>
+            <p>성경은 구원받은 믿는 이들의 삶과 행위가 장차 그리스도의 심판대 앞에서 평가받을 것임을 분명히 경고합니다. 이 평가는 구원의 여부를 결정하는 것이 아니라, 믿는 이가 이 땅에서 어떻게 살았는지에 따라 보상 혹은 징계를 결정하는 의의 심판입니다. 마태복음 25장의 달란트 비유, 누가복음 19장의 므나 비유 등은 주인이 종들의 충성됨을 회계하는 모습을 통해 이러한 원리를 설명합니다. 이 문서의 목적은 주어진 성경 말씀을 토대로 믿는 이들이 받을 보상과 징계, 특히 '바깥 어두운 곳'의 의미를 깊이 있게 분석하고, 이를 통해 오늘날의 믿는 이들에게 엄중한 훈계와 경고를 전달하는 데 있습니다.</p>
+        </div>
+
+        <hr>
+
+        <section class="reveal">
+            <div class="spine-dot"></div>
+            <h2 class="section-title">1. 두 종류의 심판: 믿지 않는 자와 믿는 자</h2>
+            <p>성경은 두 가지 종류의 심판을 명확히 구분합니다. 하나는 믿지 않는 자들을 위한 것이고, 다른 하나는 이미 구원받은 믿는 이들을 위한 것입니다.</p>
+            
+            <h3 class="sub-heading">가. 믿지 않는 자의 심판: 백보좌 심판</h3>
+            <p>믿지 않는 자들은 천년왕국 후에 있을 '백보좌 심판' 앞에서 그들의 행위에 따라 심판을 받게 됩니다(요한계시록 20:11-15). 생명책에 그 이름이 기록되지 않은 모든 이들은 불못에 던져지는 영원한 형벌을 받게 됩니다.</p>
+
+            <h3 class="sub-heading">나. 믿는 자의 심판: 의의 심판</h3>
+            <p>구원받은 믿는 이들은 구원을 잃지 않지만, 그들의 행위와 충성도에 따라 평가받는 '의의 심판'을 거치게 됩니다. 이는 구원받은 이후의 삶이 어떠했는지를 평가하여 보상을 받거나 징계를 받는 자리입니다. 바울 사도는 자신이 복음을 전한 후에 도리어 버림을 당할까 두려워한다고 말했는데(고린도전서 9:27), 여기서 '버림을 당한다'는 것은 구원을 잃는 것이 아니라 왕국 시대의 보상을 잃는 것을 의미합니다. 이 심판은 믿는 이들에게 경고가 되며, 그들의 삶을 돌아보게 하는 역할을 합니다.</p>
+        </section>
+
+        <section class="reveal">
+            <div class="spine-dot"></div>
+            <h2 class="section-title">2. 믿는 이의 보상과 징계</h2>
+            <p>그리스도의 심판대 앞에서 믿는 이들은 자신의 행위에 따라 보상을 받거나 징계를 받게 될 것입니다.</p>
+
+            <h3 class="sub-heading">가. 충성된 자를 위한 보상</h3>
+            <p>충성되고 지혜로운 종들에게는 영광스러운 보상이 약속되어 있습니다.</p>
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th>비유</th>
+                        <th>보상 내용</th>
+                        <th>성경적 근거</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>달란트 비유</td>
+                        <td>"네 주인의 즐거움에 참여할지어다"</td>
+                        <td>마태복음 25:21</td>
+                    </tr>
+                    <tr>
+                        <td>므나 비유</td>
+                        <td>열 고을 또는 다섯 고을을 다스리는 권세</td>
+                        <td>누가복음 19:17, 19</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>이러한 보상은 천년왕국 동안 그리스도와 함께 왕 노릇하며 다스리는 특권을 포함합니다. 이는 믿는 이들이 이 땅에서 주님을 위해 얼마나 충성스럽게 살았는지에 대한 직접적인 결과입니다.</p>
+
+            <h3 class="sub-heading">나. 불충한 자를 위한 징계</h3>
+            <p>반면, 게으르고 악한 종, 즉 불충한 믿는 이에게는 엄중한 징계가 예비되어 있습니다.</p>
+            <ul>
+                <li><strong>공적이 불타는 징계:</strong> 어떤 이들은 공적이 불타 없어지는 부끄러움을 당할 것이지만, 구원 자체는 잃지 않습니다(고린도전서 3:15). 이는 자신의 행위가 아무런 가치가 없었음을 깨닫는 고통스러운 과정입니다.</li>
+                <li><strong>왕국에서 제외되는 징계:</strong> 일부 믿는 이들은 왕국의 영광스러운 잔치에 참여하지 못하고 바깥으로 쫓겨나는 징계를 받게 됩니다.</li>
+            </ul>
+            <p>가장 심각한 징계는 '바깥 어두운 곳'으로 쫓겨나는 것입니다.</p>
+        </section>
+
+        <section class="reveal">
+            <div class="spine-dot"></div>
+            <h2 class="section-title">3. 바깥 어두운 곳: 믿는 이를 위한 징계의 장소</h2>
+            <p>'바깥 어두운 곳(Outer Darkness)'은 성경에서 불충한 믿는 이들이 받을 징계의 장소로 언급됩니다. 이는 지옥이나 불못과 같은 영원한 형벌의 장소가 아니라, 천년왕국 기간 동안 왕국의 영광스러운 통치와 잔치에서 제외되어 슬피 울며 이를 가는 징벌의 장소입니다.</p>
+            <div class="verse-box">
+                "이 무익한 종을 바깥 어두운 데로 내쫓으라 거기서 슬피 울며 이를 갈리라 하니라" <br>- 마태복음 25장 30절 -
+            </div>
+            <p>이 구절은 명백히 '종', 즉 구원받은 믿는 이를 대상으로 한 징계임을 보여줍니다. 주인이 맡긴 달란트(은사, 능력)를 사용하지 않고 땅에 묻어둔 게으른 종은 주인의 즐거움에 참여하지 못하고 바깥 어두운 곳으로 쫓겨나 천년 동안 징계를 받게 됩니다. 이는 구원을 잃는 것이 아니라, 왕국의 보상을 상실하고 고통 속에서 연단을 받는 기간을 의미합니다.</p>
+        </section>
+
+        <section class="reveal">
+            <div class="spine-dot"></div>
+            <h2 class="section-title">4. 주요 비유를 통한 경고</h2>
+            <p>주님은 여러 비유를 통해 자신의 다시 오심과 그때 있을 회계에 대해 경고하셨습니다.</p>
+
+            <h3 class="sub-heading">가. 달란트 비유 (마태복음 25:14-30)</h3>
+            <p><strong>핵심 내용:</strong> 주인이 종들에게 각자의 재능에 따라 다섯, 둘, 한 달란트를 맡기고 떠났다가 돌아와 회계합니다.</p>
+            <p><strong>충성된 종:</strong> 다섯 달란트와 두 달란트를 받은 종들은 즉시 장사하여 갑절을 남겼습니다. 주인은 그들을 "착하고 충성된 종"이라 칭찬하며 "네 주인의 즐거움에 참여하라"고 말하며 더 큰 일을 맡깁니다.</p>
+            <p><strong>악하고 게으른 종:</strong> 한 달란트를 받은 종은 주인을 두려워하여 그것을 땅에 묻어두었습니다. 주인은 그를 "악하고 게으른 종"이라 책망하고, 그의 달란트를 빼앗아 열 달란트 가진 자에게 주며, 그를 바깥 어두운 곳으로 내쫓으라고 명령합니다.</p>
+            <p><strong>교훈:</strong> 이 비유는 모든 믿는 이가 주님으로부터 받은 은사(달란트)를 충성스럽게 사용하여 이윤을 남겨야 함을 강력히 경고합니다. 은사를 사용하지 않고 낭비하는 것은 주님 보시기에 악하고 게으른 행위이며, 이는 왕국의 보상을 잃고 엄중한 징계를 받는 결과로 이어집니다.</p>
+
+            <h3 class="sub-heading">나. 므나 비유 (누가복음 19:11-27)</h3>
+            <p><strong>핵심 내용:</strong> 귀인이 왕위를 받아오기 위해 떠나면서 종 열 명에게 각각 한 므나씩을 주며 장사하라고 명령합니다.</p>
+            <p><strong>보상의 차등:</strong> 한 므나로 열 므나를 남긴 종에게는 "열 고을 권세를 차지하라"고 하셨고, 다섯 므나를 남긴 종에게는 "다섯 고을을 차지하라"고 하셨습니다. 이는 충성의 정도에 따라 보상에 차등이 있음을 보여줍니다.</p>
+            <p><strong>교훈:</strong> 이 비유 역시 달란트 비유와 마찬가지로 주님이 맡기신 것을 가지고 충성스럽게 일한 자에게 왕국에서 다스리는 권세가 보상으로 주어진다는 점을 강조합니다.</p>
+        </section>
+
+        <hr>
+
+        <div class="reveal">
+            <h2 class="section-title">결론: 깨어 준비하라는 경고</h2>
+            <p>달란트와 므나 비유, 그리고 바깥 어두운 곳에 대한 경고는 모든 믿는 이들에게 주어진 엄중한 메시지입니다. 구원은 은혜로 받았지만, 보상은 행위에 따라 결정됩니다. 주님은 우리 각자에게 그분의 왕국을 위해 사용할 달란트와 므나를 맡기셨습니다.</p>
+            <p>우리는 스스로에게 질문해야 합니다. 나는 주님이 맡기신 것을 가지고 충성스럽게 이윤을 남기고 있는가, 아니면 땅에 묻어두고 있는가? 주님이 오셔서 회계하실 때, "착하고 충성된 종아"라는 칭찬을 들을 것인가, 아니면 "악하고 게으른 종아"라는 책망과 함께 바깥 어두운 곳으로 쫓겨나는 징계를 받을 것인가? 이 경고를 마음에 새기고, 남은 생애 동안 주님의 즐거움에 참여하며 그분과 함께 다스릴 보상을 위해 충성을 다해야 할 것입니다.</p>
+        </div>
+
+    </div>
+
+    <footer class="footer">
+        <p class="footer-text">부산교회 2구역</p>
+        <p style="color: rgba(197, 160, 89, 0.5); font-size: 0.8rem; margin-top: 10px;">Well done, good and faithful servant. You have been faithful over a few things.</p>
+    </footer>
+
+    <script>
+        // 스크롤 시 요소가 부드럽게 나타나는 Intersection Observer
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

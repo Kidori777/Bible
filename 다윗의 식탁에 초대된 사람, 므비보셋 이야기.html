@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>다윗의 식탁에 초대된 사람</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700;900&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --sand:    #f5ede0;
+      --sand2:   #ede0cc;
+      --parch:   #faf6f0;
+      --amber:   #b8742a;
+      --amber2:  #d4924a;
+      --deep:    #1a1208;
+      --ink:     #2a1e0e;
+      --ink2:    #3e2e1a;
+      --crimson: #7a1a1a;
+      --crimson2:#a02828;
+      --royal:   #1a2e5a;
+      --royal2:  #2a4278;
+      --sage:    #2e4228;
+      --sage2:   #3e5838;
+      --gold:    #c0881e;
+      --muted:   #6a5238;
+      --line:    #d8c8b0;
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--deep);
+      color: var(--sand);
+      font-family: 'Noto Serif KR', serif;
+      overflow-x: hidden;
+    }
+
+    /* ══════════════════════════════════
+       CINEMATIC OPENING
+    ══════════════════════════════════ */
+    .opening {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 24px;
+      position: relative;
+      overflow: hidden;
+      background: var(--deep);
+    }
+
+    /* 별빛 배경 */
+    .opening::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(1px 1px at 15% 20%, rgba(255,220,150,0.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 35% 60%, rgba(255,220,150,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 60% 15%, rgba(255,220,150,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 80% 45%, rgba(255,220,150,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 25% 85%, rgba(255,220,150,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 70% 75%, rgba(255,220,150,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 90% 30%, rgba(255,220,150,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 45% 40%, rgba(255,220,150,0.6) 0%, transparent 100%),
+        radial-gradient(ellipse 70% 50% at 50% 100%, rgba(184,116,42,0.25) 0%, transparent 60%);
+    }
+
+    /* 황금 빛 원 */
+    .opening::after {
+      content: '';
+      position: absolute;
+      bottom: -200px; left: 50%;
+      transform: translateX(-50%);
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(ellipse, rgba(192,136,30,0.2) 0%, transparent 70%);
+      animation: glow 4s ease-in-out infinite;
+    }
+    @keyframes glow {
+      0%,100% { opacity: 0.6; transform: translateX(-50%) scale(1); }
+      50%      { opacity: 1;   transform: translateX(-50%) scale(1.1); }
+    }
+
+    .opening-pre {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: rgba(192,136,30,0.8);
+      margin-bottom: 32px;
+      position: relative;
+      z-index:1;
+    }
+
+    .opening-title {
+      font-size: clamp(2rem, 7vw, 4.2rem);
+      font-weight: 900;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      color: var(--sand);
+      position: relative;
+      z-index:1;
+      margin-bottom: 18px;
+    }
+
+    .opening-title .highlight {
+      color: var(--amber2);
+      display: block;
+    }
+
+    .opening-sub {
+      font-size: clamp(0.9rem, 2.5vw, 1.05rem);
+      font-weight: 300;
+      color: rgba(245,237,224,0.65);
+      position: relative;
+      z-index:1;
+      line-height: 1.9;
+      margin-bottom: 52px;
+    }
+
+    /* 수직선 장식 */
+    .v-ornament {
+      width: 1px;
+      height: 80px;
+      background: linear-gradient(180deg, transparent, rgba(192,136,30,0.6), transparent);
+      position: relative;
+      z-index:1;
+      margin: 0 auto;
+      animation: pulse-line 2s ease-in-out infinite;
+    }
+    @keyframes pulse-line {
+      0%,100%{ opacity: 0.5; }
+      50%    { opacity: 1; }
+    }
+
+    /* ══════════════════════════════════
+       CHAPTER SYSTEM
+    ══════════════════════════════════ */
+    .chapter {
+      position: relative;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    /* 풀스크린 씬 헤더 */
+    .scene-header {
+      min-height: 55vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 52px 28px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .scene-header.night {
+      background: linear-gradient(180deg, #0a0d1a 0%, #12183a 60%, #1a1208 100%);
+    }
+    .scene-header.dawn {
+      background: linear-gradient(180deg, #1a0e08 0%, #3a1e08 40%, #6a3010 70%, #c87830 100%);
+    }
+    .scene-header.exile {
+      background: linear-gradient(180deg, #0e1a0e 0%, #182818 50%, #1a1208 100%);
+    }
+    .scene-header.throne {
+      background: linear-gradient(180deg, #0a0e1a 0%, #141e3a 40%, #1e2e50 80%, #1a1208 100%);
+    }
+    .scene-header.table {
+      background: linear-gradient(180deg, #1a0a0a 0%, #3a1010 40%, #6a2020 70%, #c04030 100%);
+    }
+    .scene-header.covenant {
+      background: linear-gradient(180deg, #0e1208 0%, #1a2010 40%, #2e3818 70%, #4a5a28 100%);
+    }
+
+    /* 씬 배경 텍스트 장식 */
+    .scene-bg-text {
+      position: absolute;
+      font-family: 'Noto Serif KR', serif;
+      font-size: clamp(8rem, 25vw, 18rem);
+      font-weight: 900;
+      color: rgba(255,255,255,0.025);
+      pointer-events: none;
+      line-height: 0.85;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      white-space: nowrap;
+      letter-spacing: -0.05em;
+    }
+
+    .chapter-num {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(192,136,30,0.7);
+      margin-bottom: 16px;
+      position: relative;
+      z-index:1;
+    }
+
+    .chapter-title {
+      font-size: clamp(1.5rem, 5.5vw, 3rem);
+      font-weight: 900;
+      line-height: 1.2;
+      letter-spacing: -0.025em;
+      position: relative;
+      z-index:1;
+      margin-bottom: 16px;
+    }
+
+    .chapter-verse-ref {
+      font-size: 0.75rem;
+      color: rgba(245,237,224,0.5);
+      letter-spacing: 0.12em;
+      position: relative;
+      z-index:1;
+    }
+
+    /* ══════════════════════════════════
+       STORY CONTENT
+    ══════════════════════════════════ */
+    .story-body {
+      background: var(--parch);
+      color: var(--ink);
+      padding: 52px 24px 60px;
+    }
+
+    .story-inner {
+      max-width: 660px;
+      margin: 0 auto;
+    }
+
+    .story-text {
+      font-size: clamp(1rem, 2.7vw, 1.12rem);
+      font-weight: 400;
+      line-height: 2.15;
+      color: var(--ink2);
+      margin-bottom: 20px;
+    }
+
+    /* 성경 구절 인용 */
+    .bible-quote {
+      margin: 30px 0;
+      padding: 24px 26px 24px 30px;
+      position: relative;
+      background: rgba(26,18,8,0.04);
+      border-radius: 0 10px 10px 0;
+      border-left: 3px solid var(--amber);
+    }
+
+    .bible-quote::before {
+      content: '"';
+      font-family: Georgia, serif;
+      font-size: 5rem;
+      color: var(--amber2);
+      opacity: 0.15;
+      position: absolute;
+      top: -12px; left: 6px;
+      line-height: 1;
+    }
+
+    .bible-quote-text {
+      font-family: 'Noto Serif KR', serif;
+      font-size: clamp(0.92rem, 2.4vw, 1.02rem);
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 2.05;
+      position: relative;
+      z-index: 1;
+    }
+
+    .bible-quote-ref {
+      display: block;
+      margin-top: 10px;
+      font-size: 0.75rem;
+      font-family: 'Noto Sans KR', sans-serif;
+      font-weight: 400;
+      color: var(--amber);
+      letter-spacing: 0.08em;
+    }
+
+    /* 핵심 문장 강조 */
+    .key-line {
+      display: block;
+      text-align: center;
+      font-family: 'Noto Serif KR', serif;
+      font-size: clamp(1.05rem, 3vw, 1.25rem);
+      font-weight: 700;
+      color: var(--crimson);
+      line-height: 1.8;
+      margin: 32px 0;
+      padding: 20px;
+      border-top: 1px solid rgba(122,26,26,0.2);
+      border-bottom: 1px solid rgba(122,26,26,0.2);
+    }
+
+    /* 장면 구분 점선 */
+    .scene-break {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 40px 0;
+    }
+    .scene-break::before, .scene-break::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--line));
+    }
+    .scene-break::after { background: linear-gradient(90deg, var(--line), transparent); }
+    .scene-break i { color: var(--amber); font-style:normal; font-size: 0.85rem; opacity:0.6; }
+
+    /* ══════════════════════════════════
+       SCRIPTURE SIDEBAR (성경 본문)
+    ══════════════════════════════════ */
+    .scripture-panel {
+      background: var(--deep);
+      border-top: 1px solid rgba(192,136,30,0.25);
+      padding: 40px 24px 48px;
+    }
+
+    .scripture-inner {
+      max-width: 660px;
+      margin: 0 auto;
+    }
+
+    .scripture-label {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(192,136,30,0.65);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .scripture-label::after {
+      content: ''; flex:1; height:1px;
+      background: rgba(192,136,30,0.2);
+    }
+
+    .scripture-ref-title {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--amber2);
+      letter-spacing: 0.06em;
+      margin-bottom: 10px;
+    }
+
+    .scripture-content {
+      font-size: clamp(0.82rem, 2.1vw, 0.9rem);
+      font-weight: 300;
+      color: rgba(245,237,224,0.72);
+      line-height: 2;
+      margin-bottom: 24px;
+      padding-left: 14px;
+      border-left: 1px solid rgba(192,136,30,0.25);
+    }
+
+    /* ══════════════════════════════════
+       INSIGHT CARDS
+    ══════════════════════════════════ */
+    .insight-strip {
+      background: var(--royal);
+      padding: 48px 24px;
+    }
+
+    .insight-inner {
+      max-width: 660px;
+      margin: 0 auto;
+    }
+
+    .insight-eyebrow {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(180,200,255,0.55);
+      margin-bottom: 28px;
+      text-align: center;
+    }
+
+    .insight-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 520px) {
+      .insight-cards { grid-template-columns: 1fr; }
+    }
+
+    .insight-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(180,200,255,0.12);
+      border-radius: 10px;
+      padding: 20px 18px;
+    }
+
+    .insight-icon {
+      font-size: 1.4rem;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .insight-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: rgba(245,237,224,0.95);
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    .insight-body {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 300;
+      color: rgba(245,237,224,0.6);
+      line-height: 1.85;
+    }
+
+    /* ══════════════════════════════════
+       FINALE — 은혜의 식탁
+    ══════════════════════════════════ */
+    .finale {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 28px;
+      background: var(--deep);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .finale::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 50%, rgba(192,136,30,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 30% at 50% 50%, rgba(192,136,30,0.08) 0%, transparent 50%);
+    }
+
+    .finale-label {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(192,136,30,0.6);
+      margin-bottom: 36px;
+      position: relative; z-index:1;
+    }
+
+    .finale-title {
+      font-size: clamp(1.8rem, 6vw, 3.5rem);
+      font-weight: 900;
+      line-height: 1.25;
+      letter-spacing: -0.03em;
+      color: var(--sand);
+      margin-bottom: 32px;
+      position: relative; z-index:1;
+    }
+
+    .finale-title em {
+      font-style: normal;
+      color: var(--amber2);
+      display: block;
+    }
+
+    .finale-verse {
+      background: rgba(192,136,30,0.1);
+      border: 1px solid rgba(192,136,30,0.3);
+      border-radius: 14px;
+      padding: 30px 28px;
+      max-width: 540px;
+      margin: 0 auto 36px;
+      position: relative; z-index:1;
+    }
+
+    .finale-verse-text {
+      font-size: clamp(0.95rem, 2.5vw, 1.08rem);
+      font-weight: 600;
+      color: rgba(245,237,224,0.95);
+      line-height: 2.05;
+      margin-bottom: 12px;
+    }
+
+    .finale-verse-ref {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 0.75rem;
+      color: var(--amber2);
+      letter-spacing: 0.1em;
+    }
+
+    .finale-message {
+      font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+      font-weight: 400;
+      color: rgba(245,237,224,0.7);
+      line-height: 2.1;
+      max-width: 540px;
+      margin: 0 auto;
+      position: relative; z-index:1;
+    }
+
+    .finale-message strong {
+      color: var(--amber2);
+      font-weight: 600;
+    }
+
+    /* ══════════════════════════════════
+       FOOTER
+    ══════════════════════════════════ */
+    .site-footer {
+      background: #0a0805;
+      padding: 36px 24px 44px;
+      text-align: center;
+      border-top: 1px solid rgba(192,136,30,0.15);
+    }
+
+    .footer-ornament {
+      width: 40px; height: 1px;
+      background: var(--gold);
+      margin: 0 auto 20px;
+      opacity: 0.4;
+    }
+
+    .footer-name {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: rgba(245,237,224,0.7);
+      letter-spacing: 0.18em;
+    }
+
+    .footer-prayer {
+      margin-top: 8px;
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 0.75rem;
+      color: rgba(245,237,224,0.3);
+      letter-spacing: 0.06em;
+    }
+
+    /* ══════════════════════════════════
+       SCROLL ANIMATIONS
+    ══════════════════════════════════ */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.75s ease, transform 0.75s ease;
+    }
+    .fade-up.vis {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 480px) {
+      .scene-header { min-height: 42vh; padding: 36px 20px; }
+      .story-body   { padding: 36px 18px 44px; }
+      .finale       { padding: 60px 20px; }
+      .finale-verse { padding: 22px 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ OPENING ══ -->
+<section class="opening">
+  <p class="opening-pre">사무엘하 9장 · 부산교회 2구역</p>
+  <h1 class="opening-title">
+    다윗의 식탁에<br>
+    <em class="highlight">초대된 사람</em>
+  </h1>
+  <p class="opening-sub">므비보셋 이야기<br>— 언약과 은혜, 그리고 식탁의 신학 —</p>
+  <div class="v-ornament"></div>
+</section>
+
+
+<!-- ══ CHAPTER 1 — 언약의 씨앗 ══ -->
+<section class="chapter">
+  <div class="scene-header night">
+    <div class="scene-bg-text">언약</div>
+    <p class="chapter-num">Chapter One</p>
+    <h2 class="chapter-title">언약의 씨앗이<br>심겨지다</h2>
+    <p class="chapter-verse-ref">사무엘상 18:1-4</p>
+  </div>
+
+  <div class="story-body">
+    <div class="story-inner">
+      <p class="story-text fade-up">이 이야기는 한 약속에서 시작됩니다. 아직 왕이 되기 전, 젊은 다윗과 사울의 아들 요나단 사이에서 일어난 일이었습니다.</p>
+
+      <div class="bible-quote fade-up">
+        <p class="bible-quote-text">요나단의 혼이 다윗의 혼과 결합되어, 요나단은 다윗을 자신의 혼처럼 사랑하였다. 요나단은 다윗과 언약을 맺었다.</p>
+        <span class="bible-quote-ref">— 사무엘상 18:1, 3</span>
+      </div>
+
+      <p class="story-text fade-up">두 사람은 언약을 맺었습니다. 요나단은 자신의 겉옷과 갑옷, 칼과 활까지 다윗에게 건네주었습니다. "내가 죽어도 내 자손을 네 자손처럼 지켜달라." 그 약속은 보이지 않는 씨앗처럼 땅속에 심겨졌습니다.</p>
+
+      <span class="key-line fade-up">하나님의 은혜는 언제나<br>누군가의 언약 위에 세워집니다.</span>
+    </div>
+  </div>
+
+  <div class="scripture-panel">
+    <div class="scripture-inner">
+      <p class="scripture-label">성경 본문</p>
+      <p class="scripture-ref-title">사무엘상 18:1–4</p>
+      <p class="scripture-content">다윗이 사울에게 말하기를 마치자, 요나단의 혼이 다윗의 혼과 결합되어 요나단은 다윗을 자신의 혼처럼 사랑하였다. … 요나단은 입고 있던 겉옷을 벗어 다윗에게 건네주었으며, 자신의 갑옷뿐 아니라 심지어 자신의 칼과 활과 허리띠까지도 주었다.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ CHAPTER 2 — 다리를 저는 아이 ══ -->
+<section class="chapter">
+  <div class="scene-header exile">
+    <div class="scene-bg-text">로드발</div>
+    <p class="chapter-num">Chapter Two</p>
+    <h2 class="chapter-title">잊혀진 자,<br>로드발에 숨다</h2>
+    <p class="chapter-verse-ref">사무엘하 4:4</p>
+  </div>
+
+  <div class="story-body">
+    <div class="story-inner">
+      <p class="story-text fade-up">그 언약이 맺어진 지 얼마 후, 비극이 찾아왔습니다. 사울과 요나단이 전쟁터에서 쓰러졌습니다. 다섯 살짜리 아이가 있었습니다. 요나단의 아들, 므비보셋.</p>
+
+      <p class="story-text fade-up">놀란 유모가 아이를 안고 도망치다 그만 아이를 떨어뜨렸습니다. 그날 이후, 므비보셋은 두 발을 절게 되었습니다.</p>
+
+      <div class="bible-quote fade-up">
+        <p class="bible-quote-text">유모가 그를 데리고 도망하였는데, 서둘러 도망하는 바람에 그가 떨어져 불구가 되었던 것이다. 그의 이름은 므비보셋이었다.</p>
+        <span class="bible-quote-ref">— 사무엘하 4:4</span>
+      </div>
+
+      <p class="story-text fade-up">그는 왕의 손자였지만, 이제 '로드발(무목초지, 아무것도 없는 땅)'이라는 곳에 숨어 살았습니다. 원수의 후손이라 언제 죽임을 당할지 모른다는 공포 속에서, 잊혀진 자로 살아갔습니다.</p>
+
+      <span class="key-line fade-up">인생의 가장 어두운 자리에서도<br>하나님은 그 이름을 기억하십니다.</span>
+    </div>
+  </div>
+
+  <div class="scripture-panel">
+    <div class="scripture-inner">
+      <p class="scripture-label">성경 본문</p>
+      <p class="scripture-ref-title">사무엘하 4:4</p>
+      <p class="scripture-content">한편 사울의 아들 요나단에게는 다리 저는 아들이 있었다. 사울과 요나단에 관한 소식이 이스르엘에서 전해졌을 때, 그는 다섯 살이었다. 유모가 그를 데리고 도망하였는데, 서둘러 도망하는 바람에 그가 떨어져 불구가 되었던 것이다. 그의 이름은 므비보셋이었다.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ CHAPTER 3 — 왕의 부름 ══ -->
+<section class="chapter">
+  <div class="scene-header throne">
+    <div class="scene-bg-text">부름</div>
+    <p class="chapter-num">Chapter Three</p>
+    <h2 class="chapter-title">왕이 그를<br>찾아 나서다</h2>
+    <p class="chapter-verse-ref">사무엘하 9:1–7</p>
+  </div>
+
+  <div class="story-body">
+    <div class="story-inner">
+      <p class="story-text fade-up">세월이 흘러 다윗은 이스라엘의 왕이 되었습니다. 권력이 절정에 달했을 때, 다윗은 갑자기 이 질문을 던집니다.</p>
+
+      <div class="bible-quote fade-up">
+        <p class="bible-quote-text">사울의 집안에 아직 살아남은 이가 있소? 내가 요나단을 생각해 그에게 친절을 베풀고자 하오.</p>
+        <span class="bible-quote-ref">— 사무엘하 9:1</span>
+      </div>
+
+      <p class="story-text fade-up">왕이 먼저 찾아 나섰습니다. 므비보셋이 부탁하거나 요청한 것이 없었습니다. 다윗이 먼저 찾아낸 것입니다. 이것이 은혜입니다. 자격 없는 자를 왕이 먼저 찾아내시는 것.</p>
+
+      <p class="story-text fade-up">마침내 므비보셋이 왕 앞에 엎드렸습니다. 그는 두려워 떨었습니다. 원수의 후손인 자신이 불려왔으니까요. 그런데 다윗의 입에서 뜻밖의 말이 터져 나옵니다.</p>
+
+      <div class="bible-quote fade-up">
+        <p class="bible-quote-text">두려워하지 마시오. 내가 분명히 그대의 아버지 요나단을 생각해 그대에게 친절을 베풀겠소. 내가 그대의 할아버지 사울의 온 땅을 그대에게 돌려줄 것이오. 그리고 그대는 항상 내 상에서 음식을 먹도록 하시오.</p>
+        <span class="bible-quote-ref">— 사무엘하 9:7</span>
+      </div>
+
+      <span class="key-line fade-up">"두려워하지 마라" —<br>이 말은 하나님이 우리에게<br>가장 먼저 하시는 말씀입니다.</span>
+    </div>
+  </div>
+
+  <div class="insight-strip">
+    <div class="insight-inner">
+      <p class="insight-eyebrow">이 장면이 품은 신학</p>
+      <div class="insight-cards">
+        <div class="insight-card fade-up">
+          <span class="insight-icon">🤴</span>
+          <div class="insight-title">왕이 먼저 찾으셨다</div>
+          <p class="insight-body">므비보셋은 아무것도 구하지 않았습니다. 은혜는 받을 자격이 있어서 오는 것이 아니라, 왕이 먼저 찾아오시는 것입니다.</p>
+        </div>
+        <div class="insight-card fade-up">
+          <span class="insight-icon">📜</span>
+          <div class="insight-title">언약이 기초였다</div>
+          <p class="insight-body">다윗이 므비보셋을 찾은 이유는 오직 하나 — 요나단과의 언약. 하나님이 우리를 구원하신 기초도 예수 그리스도의 언약입니다.</p>
+        </div>
+        <div class="insight-card fade-up">
+          <span class="insight-icon">🍞</span>
+          <div class="insight-title">식탁으로의 초대</div>
+          <p class="insight-body">"항상 내 상에서 먹으라." 종이 아닌 왕자처럼, 죄인이 아닌 자녀처럼 — 그것이 하나님의 식탁입니다.</p>
+        </div>
+        <div class="insight-card fade-up">
+          <span class="insight-icon">🦶</span>
+          <div class="insight-title">상처는 덮이다</div>
+          <p class="insight-body">두 다리를 절었지만, 식탁보가 덮었습니다. 우리의 부족함을 그리스도의 의가 덮으시는 것 — 이것이 이신칭의입니다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scripture-panel">
+    <div class="scripture-inner">
+      <p class="scripture-label">성경 본문</p>
+      <p class="scripture-ref-title">사무엘하 9:6–13 (발췌)</p>
+      <p class="scripture-content">므비보셋이 다윗에게 와서 얼굴을 땅에 대고 엎드리며 경의를 표하였다. … 다윗이 그에게 말하였다. "두려워하지 마시오. … 그대는 항상 내 상에서 음식을 먹도록 하시오." … 므비보셋은 항상 왕의 상에서 음식을 먹었기 때문에 예루살렘에 거주하였다. 그는 두 다리를 모두 절었다.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ CHAPTER 4 — 오해와 충성 ══ -->
+<section class="chapter">
+  <div class="scene-header dawn">
+    <div class="scene-bg-text">충성</div>
+    <p class="chapter-num">Chapter Four</p>
+    <h2 class="chapter-title">오해 속에서도<br>변하지 않는 마음</h2>
+    <p class="chapter-verse-ref">사무엘하 19:24–30</p>
+  </div>
+
+  <div class="story-body">
+    <div class="story-inner">
+      <p class="story-text fade-up">세월이 흘러 다윗에게 위기가 찾아왔습니다. 아들 압살롬의 반란으로 다윗은 예루살렘을 버리고 도망쳐야 했습니다. 이때 므비보셋의 종 시바가 왕에게 접근합니다. "므비보셋이 왕권을 노리고 예루살렘에 남았습니다."</p>
+
+      <p class="story-text fade-up">그 말을 들은 다윗은 므비보셋의 땅 전부를 시바에게 줘버렸습니다. 억울한 모함이었지만, 므비보셋은 아무것도 할 수 없었습니다.</p>
+
+      <div class="scene-break"><i>· · ·</i></div>
+
+      <p class="story-text fade-up">마침내 다윗이 돌아왔습니다. 그때 므비보셋이 나타났습니다. 그의 모습은 충격적이었습니다.</p>
+
+      <div class="bible-quote fade-up">
+        <p class="bible-quote-text">왕이 떠난 날부터 다시 평안하게 돌아오는 날까지, 발도 씻지 않고 턱수염도 깎지 않았으며 옷도 빨지 않았다.</p>
+        <span class="bible-quote-ref">— 사무엘하 19:24</span>
+      </div>
+
+      <p class="story-text fade-up">왕이 "왜 나와 함께 가지 않았느냐?"고 묻자, 므비보셋은 대답합니다. "저는 다리를 절기에 따라가지 못했고, 시바가 저를 속였습니다. 그러나 왕이여, 이제 평안히 돌아오셨으니 — 땅은 시바가 다 가져도 좋습니다."</p>
+
+      <span class="key-line fade-up">진짜 충성은 받은 것에 있지 않습니다.<br>왕에게 속한 마음에 있습니다.</span>
+    </div>
+  </div>
+
+  <div class="scripture-panel">
+    <div class="scripture-inner">
+      <p class="scripture-label">성경 본문</p>
+      <p class="scripture-ref-title">사무엘하 19:24–30 (발췌)</p>
+      <p class="scripture-content">므비보셋이 왕에게 말하였다. "… 저의 주군이신 왕께서 평안하게 궁전에 도착하셨으니, 땅은 시바가 모두 차지하게 하셔도 좋습니다." — 사무엘하 19:30</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ CHAPTER 5 — 언약의 완성 ══ -->
+<section class="chapter">
+  <div class="scene-header covenant">
+    <div class="scene-bg-text">생명</div>
+    <p class="chapter-num">Chapter Five</p>
+    <h2 class="chapter-title">언약이 그의<br>생명을 지키다</h2>
+    <p class="chapter-verse-ref">사무엘하 21:7</p>
+  </div>
+
+  <div class="story-body">
+    <div class="story-inner">
+      <p class="story-text fade-up">마지막 장면이 남아 있습니다. 다윗 시대에 3년간 기근이 들었고, 하나님은 그 이유를 알려주셨습니다. 사울이 기브온 사람들을 학살한 죄 때문이었습니다. 기브온 사람들은 사울의 자손 일곱 명의 목숨을 요구했습니다.</p>
+
+      <p class="story-text fade-up">다윗은 사울의 자손 일곱 명을 내어줍니다. 그런데 단 한 사람만은 내어주지 않았습니다.</p>
+
+      <div class="bible-quote fade-up">
+        <p class="bible-quote-text">왕이 사울의 아들인 요나단의 아들 므비보셋은 남겨 두었는데, 그것은 그들 곧 다윗과 사울의 아들 요나단 사이에 여호와 앞에서 한 맹세가 있었기 때문이다.</p>
+        <span class="bible-quote-ref">— 사무엘하 21:7</span>
+      </div>
+
+      <p class="story-text fade-up">므비보셋은 그날 무엇을 기준으로 살아남았습니까? 자신의 능력? 자신의 공로? 아닙니다. 오직 하나 — 아버지 요나단과 다윗 사이에 맺어진 언약. 그 언약이 그의 생명을 지킨 것입니다.</p>
+
+      <span class="key-line fade-up">우리가 심판을 면하는 것도<br>우리의 자격 때문이 아닙니다.<br>예수 그리스도의 언약 때문입니다.</span>
+    </div>
+  </div>
+
+  <div class="scripture-panel">
+    <div class="scripture-inner">
+      <p class="scripture-label">성경 본문</p>
+      <p class="scripture-ref-title">사무엘하 21:1–7 (발췌)</p>
+      <p class="scripture-content">다윗 시대에 연이어 삼 년 동안 기근이 들었다. … 그러나 왕이 사울의 아들인 요나단의 아들 므비보셋은 남겨 두었는데, 그것은 그들 곧 다윗과 사울의 아들 요나단 사이에 여호와 앞에서 한 맹세가 있었기 때문이다.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ FINALE — 은혜의 식탁 ══ -->
+<section class="finale">
+  <p class="finale-label">Epilogue · 은혜의 신학</p>
+
+  <h2 class="finale-title">
+    우리 모두는<br>
+    <em>므비보셋입니다</em>
+  </h2>
+
+  <div class="finale-verse fade-up">
+    <p class="finale-verse-text">내가 너를 구속하였으니 두려워하지 마라. 내가 너를 지명하여 불렀으니 너는 나의 것이라.</p>
+    <p class="finale-verse-ref">— 이사야 43:1</p>
+  </div>
+
+  <p class="finale-message fade-up">
+    우리는 상처 입은 다리를 가졌습니다.<br>
+    죄로 절름거리며 숨어 살아온 존재들입니다.<br><br>
+    그러나 왕이 먼저 찾아오셔서 말씀하십니다.<br>
+    <strong>"두려워하지 마라. 내 상에서 함께 먹자."</strong><br><br>
+    식탁에 앉으면, 식탁보가 우리의 상처를 덮습니다.<br>
+    그것이 <strong>은혜</strong>입니다.
+  </p>
+</section>
+
+
+<!-- ══ FOOTER ══ -->
+<footer class="site-footer">
+  <div class="footer-ornament"></div>
+  <p class="footer-name">부산교회 2구역</p>
+  <p class="footer-prayer">이 말씀이 당신의 마음에 평안을 가져다주기를 🙏</p>
+</footer>
+
+
+<script>
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('vis');
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>

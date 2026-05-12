@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>7년 대환란과 두 기수</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700;900&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --void:    #04060a;
+      --dark:    #080c14;
+      --deep:    #0c1020;
+      --ember:   #c84010;
+      --ember2:  #e05828;
+      --fire:    #f07820;
+      --gold:    #d4a017;
+      --gold2:   #f0c040;
+      --smoke:   rgba(200,64,16,0.12);
+      --ash:     #e8e0d0;
+      --ash2:    #c8bfaf;
+      --muted:   rgba(232,224,208,0.55);
+      --seal:    #2a1808;
+      --horse1:  #f0f0e8; /* 흰말 */
+      --horse2:  #c83020; /* 붉은말 */
+      --horse3:  #181818; /* 검은말 */
+      --horse4:  #7a9060; /* 창백한말 */
+      --royal:   #4a1a8a;
+      --royal2:  #7a3acc;
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--void);
+      color: var(--ash);
+      font-family: 'Noto Serif KR', serif;
+      overflow-x: hidden;
+    }
+
+    /* ══════════════════════════════
+       하늘 균열 배경
+    ══════════════════════════════ */
+    .sky-crack {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background:
+        radial-gradient(ellipse 80% 40% at 50% 0%, rgba(200,64,16,0.18) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 30% at 20% 100%, rgba(120,30,80,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 25% at 80% 80%, rgba(80,20,120,0.1) 0%, transparent 60%);
+    }
+
+    /* 파티클 불꽃 */
+    .embers { position: fixed; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
+    .ember-p {
+      position: absolute;
+      width: 2px; height: 2px;
+      border-radius: 50%;
+      background: var(--fire);
+      animation: float-up var(--dur,8s) ease-in infinite var(--delay,0s);
+      opacity: 0;
+    }
+    @keyframes float-up {
+      0%   { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
+      10%  { opacity: var(--op, 0.7); }
+      80%  { opacity: 0.2; }
+      100% { transform: translateY(-100vh) translateX(var(--drift,20px)) scale(0.3); opacity: 0; }
+    }
+
+    /* ══════════════════════════════
+       COVER — 봉인된 두루마리
+    ══════════════════════════════ */
+    .cover {
+      position: relative; min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 60px 24px;
+      z-index: 2; overflow: hidden;
+    }
+
+    /* 봉인 원 장식 */
+    .seal-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(212,160,23,0.15);
+      animation: ring-pulse 4s ease-in-out infinite;
+    }
+    .seal-ring:nth-child(1) { width:300px; height:300px; animation-delay:0s; }
+    .seal-ring:nth-child(2) { width:500px; height:500px; animation-delay:0.8s; border-color: rgba(212,160,23,0.08); }
+    .seal-ring:nth-child(3) { width:700px; height:700px; animation-delay:1.6s; border-color: rgba(212,160,23,0.04); }
+    @keyframes ring-pulse {
+      0%,100% { transform: scale(1); opacity: 0.6; }
+      50%      { transform: scale(1.04); opacity: 1; }
+    }
+
+    .cover-eyebrow {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 0.65rem; font-weight: 500;
+      letter-spacing: 0.35em; text-transform: uppercase;
+      color: var(--gold); opacity: 0.75;
+      margin-bottom: 24px; position: relative; z-index:1;
+    }
+
+    .cover-num {
+      font-family: 'Noto Serif KR', serif;
+      font-size: clamp(5rem, 20vw, 12rem);
+      font-weight: 900;
+      line-height: 0.85;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(212,160,23,0.4);
+      position: absolute;
+      z-index: 0;
+      letter-spacing: -0.05em;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .cover-title {
+      font-size: clamp(2.2rem, 8vw, 5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -0.04em;
+      position: relative; z-index:1;
+      margin-bottom: 16px;
+    }
+
+    .cover-title .fire-text {
+      color: var(--fire);
+      text-shadow: 0 0 60px rgba(240,120,32,0.6), 0 0 120px rgba(240,120,32,0.2);
+    }
+
+    .cover-sub {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: clamp(0.85rem, 2.3vw, 1rem);
+      font-weight: 300; color: var(--muted);
+      line-height: 1.9; max-width: 420px; margin: 0 auto 40px;
+      position: relative; z-index:1;
+    }
+
+    .cover-verse-badge {
+      display: inline-block; padding: 8px 20px;
+      border: 1px solid rgba(212,160,23,0.35); border-radius: 20px;
+      font-size: 0.78rem; color: var(--gold); letter-spacing: 0.1em;
+      position: relative; z-index:1;
+    }
+
+    /* ══════════════════════════════
+       섹션 공통
+    ══════════════════════════════ */
+    .page { position: relative; z-index: 2; }
+    .wrap { max-width: 720px; margin: 0 auto; padding: 0 22px; }
+
+    /* 챕터 헤더 */
+    .ch-header {
+      padding: 60px 22px 0;
+      max-width: 720px; margin: 0 auto;
+    }
+
+    .ch-tag {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 0.62rem; font-weight: 500;
+      letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--ember2); margin-bottom: 14px; display: block;
+    }
+
+    .ch-title {
+      font-size: clamp(1.5rem, 5vw, 2.4rem);
+      font-weight: 900; line-height: 1.2;
+      letter-spacing: -0.03em; color: var(--ash);
+      margin-bottom: 8px;
+    }
+
+    .ch-title .accent { color: var(--gold); }
+
+    .ch-rule {
+      width: 50px; height: 2px;
+      background: linear-gradient(90deg, var(--ember), transparent);
+      margin: 18px 0 36px;
+    }
+
+    /* 본문 텍스트 */
+    .body-text {
+      font-size: clamp(0.95rem, 2.5vw, 1.05rem);
+      font-weight: 400; line-height: 2.2;
+      color: rgba(232,224,208,0.82); margin-bottom: 18px;
+    }
+
+    /* 성경 카드 */
+    .verse-block {
+      margin: 28px 0; padding: 24px 24px 20px 28px;
+      background: rgba(212,160,23,0.05);
+      border-left: 3px solid var(--gold);
+      border-radius: 0 10px 10px 0;
+      position: relative;
+    }
+    .verse-block::before {
+      content: '"';
+      font-family: Georgia, serif; font-size: 5rem;
+      color: rgba(212,160,23,0.1);
+      position: absolute; top:-14px; right:12px; line-height:1;
+    }
+    .verse-ref {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 0.65rem; font-weight: 600;
+      letter-spacing: 0.18em; color: var(--gold);
+      margin-bottom: 10px; display: block;
+    }
+    .verse-text {
+      font-size: clamp(0.9rem, 2.4vw, 1rem);
+      font-weight: 500; line-height: 2.05;
+      color: rgba(232,224,208,0.92);
+    }
+
+    /* 인포 카드 */
+    .info-card {
+      margin: 20px 0; padding: 22px 20px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px;
+    }
+    .info-card:hover { border-color: rgba(212,160,23,0.3); }
+
+    /* 리스트 */
+    .dot-list { list-style: none; margin: 14px 0; }
+    .dot-list li {
+      position: relative; padding-left: 22px;
+      margin-bottom: 10px;
+      font-size: clamp(0.88rem, 2.3vw, 0.97rem);
+      color: rgba(232,224,208,0.78); line-height: 1.9;
+    }
+    .dot-list li::before {
+      content: '◈'; position: absolute; left: 0;
+      color: var(--gold); font-size: 0.75rem; top: 3px;
+    }
+
+    /* 핵심 선언 */
+    .declaration {
+      margin: 32px 0; padding: 22px;
+      text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .declaration-text {
+      font-size: clamp(1rem, 3vw, 1.2rem);
+      font-weight: 700; color: var(--fire); line-height: 1.8;
+    }
+
+    /* 테이블 */
+    .seal-table {
+      width: 100%; border-collapse: collapse;
+      margin: 24px 0; font-size: clamp(0.78rem, 2vw, 0.88rem);
+      border-radius: 10px; overflow: hidden;
+    }
+    .seal-table th {
+      background: rgba(200,64,16,0.5);
+      color: var(--ash); padding: 11px 8px;
+      font-weight: 600; letter-spacing: 0.05em;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .seal-table td {
+      padding: 10px 8px; text-align: center;
+      border: 1px solid rgba(255,255,255,0.06);
+      color: rgba(232,224,208,0.78);
+      background: rgba(255,255,255,0.02);
+    }
+    .seal-table tr:hover td { background: rgba(212,160,23,0.05); }
+
+    /* 기간 배지 */
+    .time-badges {
+      display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0;
+    }
+    .time-badge {
+      padding: 8px 16px;
+      background: rgba(200,64,16,0.15);
+      border: 1px solid rgba(200,64,16,0.35);
+      border-radius: 20px;
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 0.8rem; font-weight: 500;
+      color: var(--ember2);
+    }
+
+    /* 구분선 */
+    .flame-divider {
+      display: flex; align-items: center; gap: 16px;
+      margin: 56px 0;
+    }
+    .flame-divider::before, .flame-divider::after {
+      content:''; flex:1; height:1px;
+    }
+    .flame-divider::before { background: linear-gradient(90deg, transparent, var(--ember)); }
+    .flame-divider::after  { background: linear-gradient(90deg, var(--ember), transparent); }
+    .flame-divider i { color: var(--ember); font-style:normal; font-size: 0.9rem; opacity:0.7; }
+
+    /* ══════════════════════════════
+       네 말 섹션 — 색상별
+    ══════════════════════════════ */
+    .horse-section {
+      position: relative;
+      padding: 56px 22px 60px;
+      overflow: hidden;
+    }
+
+    /* 각 말의 배경 오라 */
+    .horse-section::before {
+      content: '';
+      position: absolute; inset: 0; pointer-events: none;
+      opacity: 0.06;
+    }
+    .horse-section.h1::before { background: radial-gradient(ellipse 80% 60% at 50% 50%, #e8e8d0, transparent); }
+    .horse-section.h2::before { background: radial-gradient(ellipse 80% 60% at 50% 50%, #c83020, transparent); }
+    .horse-section.h3::before { background: radial-gradient(ellipse 80% 60% at 50% 50%, #808080, transparent); }
+    .horse-section.h4::before { background: radial-gradient(ellipse 80% 60% at 50% 50%, #6a9060, transparent); }
+
+    .horse-inner { max-width: 720px; margin: 0 auto; }
+
+    /* 말 번호 대형 */
+    .horse-num-bg {
+      position: absolute;
+      font-family: 'Noto Serif KR', serif;
+      font-size: clamp(10rem, 35vw, 22rem);
+      font-weight: 900; line-height: 0.85;
+      pointer-events: none; top: 50%; right: -2%;
+      transform: translateY(-50%);
+      opacity: 0.03; letter-spacing: -0.05em;
+    }
+    .h1 .horse-num-bg { color: #e8e8d0; }
+    .h2 .horse-num-bg { color: #c83020; }
+    .h3 .horse-num-bg { color: #aaaaaa; }
+    .h4 .horse-num-bg { color: #6a9060; }
+
+    /* 말 타이틀 바 */
+    .horse-title-bar {
+      display: flex; align-items: center; gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .horse-color-dot {
+      width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0;
+    }
+    .h1 .horse-color-dot { background: #d8d8c8; box-shadow: 0 0 14px rgba(220,220,200,0.5); }
+    .h2 .horse-color-dot { background: #c83020; box-shadow: 0 0 14px rgba(200,48,32,0.6); }
+    .h3 .horse-color-dot { background: #707070; box-shadow: 0 0 14px rgba(80,80,80,0.5); }
+    .h4 .horse-color-dot { background: #5a8050; box-shadow: 0 0 14px rgba(90,128,80,0.5); }
+
+    .horse-badge {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 0.62rem; font-weight: 500;
+      letter-spacing: 0.22em; text-transform: uppercase; padding: 4px 12px;
+      border-radius: 10px;
+    }
+    .h1 .horse-badge { background: rgba(220,220,200,0.1); color: #d8d8c8; border: 1px solid rgba(220,220,200,0.25); }
+    .h2 .horse-badge { background: rgba(200,48,32,0.15); color: #e87060; border: 1px solid rgba(200,48,32,0.3); }
+    .h3 .horse-badge { background: rgba(100,100,100,0.15); color: #a0a0a0; border: 1px solid rgba(100,100,100,0.3); }
+    .h4 .horse-badge { background: rgba(90,128,80,0.15); color: #90b880; border: 1px solid rgba(90,128,80,0.3); }
+
+    .horse-name {
+      font-size: clamp(1.4rem, 4.5vw, 2.2rem);
+      font-weight: 900; letter-spacing: -0.025em;
+      line-height: 1.2; margin-bottom: 6px;
+    }
+    .h1 .horse-name { color: #e8e8d8; }
+    .h2 .horse-name { color: #e06050; }
+    .h3 .horse-name { color: #b0b0a8; }
+    .h4 .horse-name { color: #90b880; }
+
+    .horse-subtitle {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 0.82rem; font-weight: 300;
+      color: var(--muted); margin-bottom: 24px;
+    }
+
+    /* ══════════════════════════════
+       두 기수 비교 — 핵심 섹션
+    ══════════════════════════════ */
+    .rider-compare {
+      background: var(--dark);
+      padding: 60px 22px;
+      position: relative; overflow: hidden;
+    }
+
+    .rider-compare::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 70% 50% at 50% 50%, rgba(74,26,138,0.15), transparent);
+      pointer-events: none;
+    }
+
+    .compare-inner { max-width: 720px; margin: 0 auto; }
+
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 60px 1fr;
+      gap: 0 0;
+      margin: 36px 0;
+      align-items: stretch;
+    }
+    @media(max-width:560px){
+      .compare-grid { grid-template-columns: 1fr; gap: 20px 0; }
+      .compare-vs { display: none; }
+    }
+
+    .compare-card {
+      padding: 28px 22px; border-radius: 12px;
+      position: relative; overflow: hidden;
+    }
+
+    .compare-card.false {
+      background: rgba(200,64,16,0.08);
+      border: 1px solid rgba(200,64,16,0.25);
+    }
+    .compare-card.true {
+      background: rgba(74,26,138,0.12);
+      border: 1px solid rgba(122,58,204,0.3);
+    }
+
+    .compare-vs {
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Noto Serif KR', serif;
+      font-size: 1.4rem; font-weight: 900;
+      color: rgba(255,255,255,0.15);
+    }
+
+    .compare-ref {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 0.62rem; letter-spacing: 0.2em;
+      margin-bottom: 14px; display: block;
+    }
+    .false .compare-ref { color: var(--ember2); opacity: 0.7; }
+    .true  .compare-ref { color: var(--royal2); opacity: 0.8; }
+
+    .compare-title {
+      font-size: clamp(1rem, 3vw, 1.3rem); font-weight: 900;
+      margin-bottom: 18px; line-height: 1.3;
+    }
+    .false .compare-title { color: #e87060; }
+    .true  .compare-title { color: #c090f0; }
+
+    .compare-rows { display: flex; flex-direction: column; gap: 12px; }
+
+    .compare-row {
+      padding: 12px 14px; border-radius: 8px;
+      font-size: clamp(0.82rem, 2.2vw, 0.9rem);
+      line-height: 1.75;
+    }
+    .false .compare-row { background: rgba(200,64,16,0.08); color: rgba(232,224,208,0.75); }
+    .true  .compare-row { background: rgba(74,26,138,0.1); color: rgba(232,224,208,0.75); }
+
+    .compare-row-label {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 0.6rem; letter-spacing: 0.18em;
+      text-transform: uppercase; margin-bottom: 4px; display: block;
+    }
+    .false .compare-row-label { color: var(--ember2); opacity: 0.7; }
+    .true  .compare-row-label { color: var(--royal2); opacity: 0.8; }
+
+    .compare-value { font-weight: 600; }
+
+    /* 왕관 비교 강조 */
+    .crown-compare {
+      margin: 36px 0; padding: 28px 24px;
+      background: linear-gradient(135deg, rgba(200,64,16,0.08), rgba(74,26,138,0.1));
+      border: 1px solid rgba(212,160,23,0.2);
+      border-radius: 14px;
+    }
+
+    .crown-title {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 0.62rem; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 18px; display: block;
+    }
+
+    .crown-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    }
+    @media(max-width:480px){ .crown-grid{grid-template-columns:1fr; gap:12px;} }
+
+    .crown-item { padding: 16px; border-radius: 10px; }
+    .crown-item.stephanos { background: rgba(200,64,16,0.1); border: 1px solid rgba(200,64,16,0.2); }
+    .crown-item.diadema   { background: rgba(74,26,138,0.12); border: 1px solid rgba(122,58,204,0.25); }
+
+    .crown-word {
+      font-family: Georgia, serif; font-size: 1.4rem; font-weight: 700;
+      margin-bottom: 8px; display: block; letter-spacing: 0.05em;
+    }
+    .stephanos .crown-word { color: #e87060; }
+    .diadema   .crown-word { color: #c090f0; }
+
+    .crown-meaning {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 0.78rem; font-weight: 300;
+      color: rgba(232,224,208,0.65); line-height: 1.85;
+    }
+
+    /* ══════════════════════════════
+       결론 피날레
+    ══════════════════════════════ */
+    .finale {
+      min-height: 80vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 80px 28px;
+      background: var(--void); position: relative; overflow: hidden;
+    }
+
+    .finale::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 40% at 50% 50%, rgba(74,26,138,0.2), transparent 70%),
+        radial-gradient(ellipse 40% 25% at 50% 50%, rgba(74,26,138,0.1), transparent 50%);
+      animation: finale-glow 4s ease-in-out infinite;
+    }
+    @keyframes finale-glow {
+      0%,100%{ opacity: 0.7; } 50%{ opacity: 1; }
+    }
+
+    .finale-icon {
+      font-size: clamp(3.5rem, 10vw, 6rem); margin-bottom: 28px;
+      position: relative; z-index:1;
+      filter: drop-shadow(0 0 30px rgba(160,100,255,0.6));
+      animation: crown-glow 3s ease-in-out infinite;
+    }
+    @keyframes crown-glow {
+      0%,100%{ filter: drop-shadow(0 0 20px rgba(160,100,255,0.4)); }
+      50%    { filter: drop-shadow(0 0 50px rgba(160,100,255,0.8)); }
+    }
+
+    .finale-label {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: rgba(160,100,255,0.6); margin-bottom: 24px;
+      position: relative; z-index:1;
+    }
+
+    .finale-title {
+      font-size: clamp(1.8rem, 6vw, 3.5rem); font-weight: 900;
+      line-height: 1.2; letter-spacing: -0.03em;
+      margin-bottom: 28px; position: relative; z-index:1;
+    }
+    .finale-title em { font-style:normal; color: var(--royal2); display: block; }
+
+    .finale-verse {
+      background: rgba(74,26,138,0.12);
+      border: 1px solid rgba(122,58,204,0.3);
+      border-radius: 14px; padding: 28px 26px;
+      max-width: 540px; margin: 0 auto 32px;
+      position: relative; z-index:1;
+    }
+    .finale-verse-text {
+      font-size: clamp(0.92rem, 2.5vw, 1.05rem); font-weight: 600;
+      color: rgba(232,224,208,0.95); line-height: 2.05; margin-bottom: 10px;
+    }
+    .finale-verse-ref {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 0.72rem; color: var(--royal2); letter-spacing: 0.1em;
+    }
+
+    .finale-message {
+      font-size: clamp(0.9rem, 2.4vw, 1rem); font-weight: 400;
+      color: rgba(232,224,208,0.6); line-height: 2.2;
+      max-width: 500px; margin: 0 auto;
+      position: relative; z-index:1;
+    }
+    .finale-message strong { color: var(--gold2); font-weight: 600; }
+
+    /* 푸터 */
+    .site-footer {
+      background: #020304; padding: 32px 24px 40px;
+      text-align: center;
+      border-top: 1px solid rgba(212,160,23,0.1);
+    }
+    .footer-rule { width:36px; height:1px; background:var(--gold); margin:0 auto 16px; opacity:0.3; }
+    .footer-name { font-size:0.88rem; font-weight:600; color:rgba(232,224,208,0.55); letter-spacing:0.18em; }
+
+    /* 스크롤 */
+    .fade-up {
+      opacity:0; transform:translateY(24px);
+      transition:opacity 0.75s ease, transform 0.75s ease;
+    }
+    .fade-up.vis { opacity:1; transform:translateY(0); }
+
+    @media(max-width:480px){
+      .cover{ padding:40px 20px; }
+      .horse-section{ padding:40px 18px 44px; }
+      .rider-compare{ padding:44px 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- 배경 -->
+<div class="sky-crack"></div>
+<div class="embers" id="embers"></div>
+
+<!-- ══ COVER ══ -->
+<section class="cover">
+  <div class="seal-ring"></div>
+  <div class="seal-ring"></div>
+  <div class="seal-ring"></div>
+  <div class="cover-num">7</div>
+
+  <p class="cover-eyebrow">부산교회 2구역 · 요한계시록 · 다니엘</p>
+  <h1 class="cover-title">
+    <span class="fire-text">7년 대환란</span><br>과 두 기수
+  </h1>
+  <p class="cover-sub">요한계시록의 구체적 전개와 영적 통찰<br>— 봉인이 열릴 때, 역사는 어디로 가는가 —</p>
+  <span class="cover-verse-badge">다니엘 9:24–27 · 요한계시록 6장 · 19장</span>
+</section>
+
+<div class="page">
+
+<!-- ══ Ⅰ. 7년 대환란의 성경적 근거 ══ -->
+<section style="background:var(--dark); padding-bottom:52px;">
+  <div class="wrap">
+    <div class="ch-header" style="padding:60px 0 0;">
+      <span class="ch-tag">Chapter Ⅰ</span>
+      <h2 class="ch-title">7년 대환란의 <span class="accent">성경적 근거</span></h2>
+      <div class="ch-rule"></div>
+    </div>
+
+    <div class="verse-block fade-up">
+      <span class="verse-ref">다니엘 9:24–27</span>
+      <p class="verse-text">칠십 이레가 그대의 백성과 그대의 거룩한 성을 위하여 정해졌습니다. … 그가 많은 사람들과 한 이레 동안의 견고한 언약을 맺을 것인데, 그 이레의 한중간에 희생 제물과 예물을 바치지 못하게 하고 황폐하게 하는 자의 가증한 것들로 희생 제물과 예물을 대치할 것이니, 이미 정해진 완전한 멸망이 그 황폐하게 하는 자 위에 쏟아부어질 때까지 그러할 것입니다.</p>
+    </div>
+
+    <div class="info-card fade-up">
+      <ul class="dot-list">
+        <li><strong style="color:var(--gold)">다니엘 9:27</strong> — "그가 많은 사람들과 한 이레(7년) 동안의 견고한 언약을 맺을 것인데, 그 이레의 한중간에 희생 제물과 예물을 바치지 못하게 하고 …"</li>
+        <li>'한 이레' = <strong style="color:var(--fire)">7년</strong></li>
+        <li>이 마지막 한 이레가 흔히 말하는 대환란 기간</li>
+        <li>절반(3년 반)을 기준으로 전반 / 후반이 갈라짐</li>
+      </ul>
+      <p style="margin-top:14px; color:var(--ember2); font-size:0.9rem;">👉 요한계시록은 이 "마지막 한 이레"의 구체적 전개 상황을 보여주는 책입니다.</p>
+    </div>
+  </div>
+</section>
+
+<div class="flame-divider" style="margin:0 22px;"><i>✦</i></div>
+
+<!-- ══ Ⅱ. 대환란의 시작 ══ -->
+<section style="background:var(--dark); padding-bottom:52px;">
+  <div class="wrap">
+    <div class="ch-header" style="padding:20px 0 0;">
+      <span class="ch-tag">Chapter Ⅱ</span>
+      <h2 class="ch-title">대환란의 시작 —<br><span class="accent">'언약'과 첫째 인</span></h2>
+      <div class="ch-rule"></div>
+    </div>
+
+    <p class="body-text fade-up" style="color:var(--gold); font-weight:600;">1️⃣ 대환란의 공식적 시작</p>
+
+    <div class="verse-block fade-up">
+      <span class="verse-ref">다니엘 9:27</span>
+      <p class="verse-text">"그가 많은 사람들과 한 이레 동안의 견고한 언약을 맺을 것인데,"</p>
+    </div>
+
+    <div class="info-card fade-up" style="border-color:rgba(200,64,16,0.3);">
+      <p class="body-text">여기서 <strong style="color:var(--fire)">"그"</strong>는 장차 올 세상의 한 왕 <strong style="color:var(--fire)">적그리스도</strong>이다.</p>
+      <ul class="dot-list">
+        <li>이스라엘과 평화·보호·질서의 언약체결</li>
+        <li>외형상 평화의 시작</li>
+        <li>아직 전쟁도, 재앙도 본격화되지 않음</li>
+        <li>그러나 하늘에서는 이미 심판이 시작됨</li>
+      </ul>
+    </div>
+
+    <p class="body-text fade-up" style="color:var(--gold); font-weight:600; margin-top:32px;">2️⃣ 첫째 인 — 가짜 평화의 등장</p>
+
+    <div class="verse-block fade-up">
+      <span class="verse-ref">요한계시록 6:1–2</span>
+      <p class="verse-text">나는 어린양께서 일곱 봉인 중에 하나를 떼시는 것을 보았습니다. … 내가 보니, 흰색 말이 있고, 그 위에 탄 이는 활을 가지고 있었으며, 그에게 면류관이 주어졌습니다. 그래서 그는 정복하며 나아갔고 또 정복하려고 나아갔습니다.</p>
+    </div>
+
+    <div class="info-card fade-up" style="background:rgba(88,166,255,0.04); border-color:rgba(88,166,255,0.15);">
+      <p class="body-text">🔑 봉인은 '복음 사역'이 아니라, 이미 봉인되어 있던 <strong style="color:var(--gold)">'심판의 두루마리'</strong>를 여는 행위입니다.</p>
+      <div class="verse-block" style="margin:14px 0 0;">
+        <span class="verse-ref">고린도후서 11:14</span>
+        <p class="verse-text">이것은 놀랄 일이 아닙니다. 왜냐하면 사탄도 자기를 빛의 천사로 가장하기 때문입니다.</p>
+      </div>
+    </div>
+
+    <div class="info-card fade-up">
+      <p class="body-text">흰색 = 성경에서 의, 승리, 거룩의 색. 그래서 많은 사람들이 '복음'으로 오해하지만, 성경은 흰색으로 가장한 속임을 반복해서 경고합니다.</p>
+      <div class="verse-block" style="margin:14px 0;">
+        <span class="verse-ref">다니엘 8:25</span>
+        <p class="verse-text">그는 교활하여 / 제 손으로 속임수가 통하게도 하며 / 마음속에서 스스로를 높이며 / 평온하게 지내는 많은 이들을 멸망시킬 것입니다.</p>
+      </div>
+      <ul class="dot-list">
+        <li>적그리스도의 등장</li>
+        <li>칼 없이 정복 → 외교·경제·사상적 지배 (활은 있으나 화살에 대한 언급 없음)</li>
+        <li>세상은 "평화의 지도자"로 인식할 것</li>
+      </ul>
+    </div>
+
+    <div class="verse-block fade-up">
+      <span class="verse-ref">데살로니가전서 5:3</span>
+      <p class="verse-text">"사람들이 '평화롭다, 안전하다.'라고 말할 그때에 임신한 여자에게 진통이 오듯이, 멸망이 갑자기 그들에게 닥칠 것입니다. 그래서 그들이 결코 피하지 못할 것입니다."</p>
+    </div>
+
+    <div class="declaration fade-up">
+      <p class="declaration-text">환란은 '혼란'이 아니라 '속임수'로 시작합니다.<br>평화롭다, 안전하다 — 마음이 무뎌질 때 멸망이 갑자기 옵니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ Ⅲ. 환란 전반부 ══ -->
+<section style="background:var(--deep); padding:52px 0;">
+  <div class="wrap">
+    <span class="ch-tag">Chapter Ⅲ</span>
+    <h2 class="ch-title">환란 전반부 <span class="accent">(3년 반)</span></h2>
+    <div class="ch-rule"></div>
+
+    <div class="time-badges fade-up">
+      <span class="time-badge">42개월 (계 11:2)</span>
+      <span class="time-badge">1,260일 (계 11:3)</span>
+      <span class="time-badge">한 때 두 때 반 때 (단 7:25)</span>
+    </div>
+
+    <p class="body-text fade-up" style="color:var(--gold); font-weight:600; margin-top:28px;">1️⃣ 인(印) 심판 — 인간 사회 붕괴</p>
+
+    <table class="seal-table fade-up">
+      <thead>
+        <tr>
+          <th>인</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="color:var(--gold); font-weight:600;">내용</td>
+          <td>적그리스도</td><td>전쟁</td><td>기근</td><td>죽음</td><td>순교자 호소</td><td>우주적 재앙</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="body-text fade-up" style="color:var(--ember2);">👉 인간의 정치·경제·군사 시스템은 붕괴되고 맙니다.</p>
+
+    <p class="body-text fade-up" style="color:var(--gold); font-weight:600; margin-top:28px;">2️⃣ 하나님의 보호 — 144,000 인침</p>
+
+    <div class="verse-block fade-up">
+      <span class="verse-ref">요한계시록 7:3</span>
+      <p class="verse-text">우리가 우리 하나님의 노예들의 이마에 도장을 찍기까지는</p>
+    </div>
+
+    <ul class="dot-list fade-up">
+      <li>이스라엘 12지파에서 144,000명</li>
+      <li>하나님의 종들에게 이마에 도장을 찍음</li>
+      <li>심판 중에도 구속 계획은 중단되지 않음</li>
+    </ul>
+
+    <div class="verse-block fade-up">
+      <span class="verse-ref">요한계시록 7:9, 14</span>
+      <p class="verse-text">아무도 그 수를 셀 수 없을 정도로 큰 무리가 각 민족과 모든 지파와 백성과 언어에서 나와, 흰 겉옷을 입고 손에 야자나무 가지를 들고 보좌 앞과 어린양 앞에 서서, … "이 사람들은 큰 환난에서 나오는 사람들인데, 그들의 겉옷을 어린양의 피로 빨아서 희게 하였습니다."</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ Ⅳ. 결정적 전환 ══ -->
+<section style="background:var(--dark); padding:52px 0;">
+  <div class="wrap">
+    <span class="ch-tag">Chapter Ⅳ</span>
+    <h2 class="ch-title">환란의 중심점 —<br><span class="accent">결정적 전환</span></h2>
+    <div class="ch-rule"></div>
+
+    <div class="declaration fade-up" style="border-color:rgba(200,64,16,0.3);">
+      <p class="declaration-text">⚠️ 결정적 사건: 성전 모독</p>
+    </div>
+
+    <div class="verse-block fade-up">
+      <span class="verse-ref">다니엘 9:27 / 마태복음 24:15 / 데살로니가후서 2:3–4</span>
+      <p class="verse-text">그 이레의 한중간에 희생 제물과 예물을 바치지 못하게 하고 황폐하게 하는 자의 가증한 것들로 희생 제물과 예물을 대치할 것이니, … '황폐하게 하는 가증한 것'이 거룩한 곳에 서 있는 것을 보거든 … 그는 대적하는 자이며, 신이라고 불리는 모든 것이나 사람의 경배를 받는 모든 대상보다 자기를 높이고, 심지어 하나님의 성전에 앉아서 자기를 내세우며 자신을 하나님이라고 할 것입니다.</p>
+    </div>
+
+    <ul class="dot-list fade-up">
+      <li>적그리스도가 하나님 자리에 앉음</li>
+      <li>스스로를 신이라고 선포함</li>
+      <li>이 순간부터 후반부 = <strong style="color:var(--fire)">'대(大)환란'</strong>이 시작됩니다.</li>
+    </ul>
+
+    <div class="verse-block fade-up" style="border-color:var(--fire);">
+      <span class="verse-ref" style="color:var(--fire);">마태복음 24:21</span>
+      <p class="verse-text">"그때에 대환난이 있을 것인데, 그런 환난은 세상의 시작부터 지금까지 일어난 적이 없었고, 그 후로도 결코 다시 일어나지 않을 것입니다."</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ Ⅴ. 환란 후반부 ══ -->
+<section style="background:var(--deep); padding:52px 0;">
+  <div class="wrap">
+    <span class="ch-tag">Chapter Ⅴ</span>
+    <h2 class="ch-title">환란 후반부 <span class="accent">(3년 반)</span><br>— 진짜 고통의 시작</h2>
+    <div class="ch-rule"></div>
+
+    <p class="body-text fade-up" style="color:var(--gold); font-weight:600;">1️⃣ 나팔 심판 (계 8–9장)</p>
+    <ul class="dot-list fade-up">
+      <li>자연·생태·인구의 대규모 파괴</li>
+      <li>악한 영들의 활동 증가</li>
+      <li>인간의 완고함 드러나고 회개하지 않음</li>
+    </ul>
+
+    <p class="body-text fade-up" style="color:var(--gold); font-weight:600; margin-top:28px;">2️⃣ 짐승의 표 강요</p>
+    <div class="verse-block fade-up">
+      <span class="verse-ref">요한계시록 13장</span>
+      <p class="verse-text">매매 통제, 짐승의 이름·수의 표, 경배 강요 … "창세 때부터 죽음을 당한 어린양의 생명책에 이름이 기록되지 못하고 땅에 거하는 사람들은 모두 그 짐승에게 경배할 것입니다."</p>
+    </div>
+    <div class="declaration fade-up">
+      <p class="declaration-text">중립은 불가능합니다.<br>짐승에게 경배하거나, 순교하거나.</p>
+    </div>
+
+    <p class="body-text fade-up" style="color:var(--gold); font-weight:600;">3️⃣ 성도들의 극심한 박해</p>
+    <div class="verse-block fade-up">
+      <span class="verse-ref">요한계시록 12:17 / 13:7</span>
+      <p class="verse-text">여자에게 화가 난 용은 여자의 씨 가운데 남아 있는 사람들, 곧 하나님의 계명들을 지키고 예수님의 증거를 가진 사람들에 대해 전쟁을 일으키려고 나가서, … 또 그 짐승은 성도들과 싸워 이기는 것을 허락받았으며, 모든 지파와 백성과 언어와 민족을 다스리는 권세도 받았습니다.</p>
+    </div>
+    <ul class="dot-list fade-up">
+      <li>짐승은 그 기간 잠깐 성도들과 싸우고 이기므로 모든 백성과 민족을 다스림</li>
+      <li>성도들은 육체적 생존보다 충성의 문제로 박해를 당함</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ══ Ⅵ. 대환란의 끝 ══ -->
+<section style="background:var(--dark); padding:52px 0;">
+  <div class="wrap">
+    <span class="ch-tag">Chapter Ⅵ</span>
+    <h2 class="ch-title">대환란의 끝 —<br><span class="accent">하나님의 진노 완성</span></h2>
+    <div class="ch-rule"></div>
+
+    <p class="body-text fade-up" style="color:var(--gold); font-weight:600;">1️⃣ 대접 심판 (계 16장)</p>
+    <p class="body-text fade-up">하나님의 진노가 완전히 쏟아짐 / 더 이상 회개의 기회가 없음</p>
+
+    <p class="body-text fade-up" style="color:var(--gold); font-weight:600; margin-top:24px;">2️⃣ 아마겟돈 전쟁</p>
+    <div class="verse-block fade-up">
+      <span class="verse-ref">요한계시록 16:16 / 19:19</span>
+      <p class="verse-text">더러운 영 셋은 히브리 말로 아마겟돈이라 하는 곳으로 왕들을 모았습니다. … 그 짐승과 땅의 왕들과 그들의 군대들이 함께 모여, 말을 타신 분과 그분의 군대와 전쟁을 하였습니다.</p>
+    </div>
+    <p class="body-text fade-up">세상의 군대 vs 어린 양 / 실제 전투라기보다 주님의 일방적인 심판이 이루어짐.</p>
+
+    <p class="body-text fade-up" style="color:var(--gold); font-weight:600; margin-top:24px;">3️⃣ 예수 그리스도의 재림</p>
+    <div class="verse-block fade-up" style="border-color:var(--royal2);">
+      <span class="verse-ref" style="color:var(--royal2);">요한계시록 19:11–16</span>
+      <p class="verse-text">"또 나는 하늘이 열린 것을 보았습니다. 보십시오, 흰색 말이 있고, 신실하시고 참되시다고 불리시는 분께서 그 위에 타셨는데, 그분은 의로 심판하시고 전쟁하시는 분이십니다.…"</p>
+    </div>
+    <p class="body-text fade-up">적그리스도와 거짓 선지자 → 불못 / 사탄은 결박됨 (계 20:1–3)</p>
+
+    <p class="body-text fade-up" style="color:var(--gold); font-weight:600; margin-top:28px;">Ⅶ. 환란 이후 — 새로운 국면</p>
+    <div class="info-card fade-up">
+      <ul class="dot-list">
+        <li>1️⃣ 천년왕국 시작 (계 20장)</li>
+        <li>2️⃣ 사탄 최후 심판</li>
+        <li>3️⃣ 백보좌 심판</li>
+        <li>4️⃣ 새 하늘과 새 땅 (계 21–22장)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="flame-divider" style="margin:0 22px;"><i>🐎</i></div>
+
+<!-- ══ 네 말 — 색상별 풀스크린 ══ -->
+
+<!-- 흰 말 -->
+<div class="horse-section h1">
+  <div class="horse-num-bg">1</div>
+  <div class="horse-inner">
+    <div class="horse-title-bar">
+      <span class="horse-color-dot"></span>
+      <span class="horse-badge">첫째 말 · First Horse</span>
+    </div>
+    <h3 class="horse-name">🐎 흰 말</h3>
+    <p class="horse-subtitle">거짓 평화 — '받은 관'을 쓴 자 (계 6:1–2)</p>
+
+    <p class="body-text fade-up">요한이 처음 본 흰 말은 세상이 열광할 만한 모습이었습니다. 흰 말을 타고 정복하였고 승리자처럼 보였습니다. 그리고 그의 머리 위에 면류관이 하나 주어졌습니다. 그런데 요한은 이렇게 씁니다.</p>
+
+    <div class="verse-block fade-up" style="border-color:#c8c8b0;">
+      <span class="verse-ref" style="color:#c8b880;">"그에게 면류관이 주어졌고" — edothe auto stephanos</span>
+      <p class="verse-text">여기서 요한이 고른 단어는 <strong style="color:#d8d090;">스테파노스</strong>입니다. 스테파노스는 왕의 왕관이 아닙니다. 본래 소유한 관도 아닙니다. 누군가에게서 '받은' 관입니다. 고대 경기장에서 우승자가 받던 화관 — 공로가 있을 때 잠시 씌워주는 면류관인 것입니다. 즉, 이 기수는 왕이 아닙니다. 다만 왕처럼 보이도록 허락받은 자입니다.</p>
+    </div>
+
+    <p class="body-text fade-up">그는 칼도 없이 화살도 없이 활만 가지고 싸우지 않고 정복합니다. 세상은 말합니다. "평화롭다, 안전하다." 하지만 요한은 이미 알고 있었습니다. 이 평화는 가면이라는 것을. 이 흰말은 말합니다 — "내가 답이다." "내가 질서를 만들겠다." "내가 평화를 가져오겠다."</p>
+
+    <div class="info-card fade-up" style="background:rgba(220,220,200,0.04); border-color:rgba(220,220,200,0.12);">
+      <p class="body-text" style="color:rgba(220,220,200,0.8);">이 흰 말은 그리스도를 흉내 내는 평화, 진리를 흉내 낸 거짓 질서의 왕입니다. 그 관을 쓴 자는 왕이 아니라 왕에게서 허락받은 자인 것입니다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 붉은 말 -->
+<div class="horse-section h2">
+  <div class="horse-num-bg">2</div>
+  <div class="horse-inner">
+    <div class="horse-title-bar">
+      <span class="horse-color-dot"></span>
+      <span class="horse-badge">둘째 말 · Second Horse</span>
+    </div>
+    <h3 class="horse-name">🐎 붉은 말</h3>
+    <p class="horse-subtitle">평화를 빼앗는 자 (계 6:3–4)</p>
+
+    <div class="verse-block fade-up" style="border-color:#c83020;">
+      <span class="verse-ref" style="color:#e87060;">요한계시록 6:4</span>
+      <p class="verse-text">"내가 보니, 다른 말 곧 붉은색 말이 나왔는데, 그 위에 탄 이에게는 평화를 땅에서 떠나가게 함으로써 사람들이 서로를 죽이게 하는 권위가 주어졌습니다"</p>
+    </div>
+
+    <p class="body-text fade-up">첫 번째 말이 가져온 "가짜 평화"는 오래가지 않습니다. 질서는 있었지만 진리는 없었고, 통제는 있었지만 하나님은 없었기 때문입니다.</p>
+
+    <p class="body-text fade-up">두 번째 말은 평화를 '만들지' 않습니다. 이미 있는 평화를 <strong style="color:#e87060;">'빼앗습니다'</strong>. 사람과 사람 사이, 민족과 민족 사이, 이념과 이념 사이에 서로를 향한 칼이 들려집니다.</p>
+
+    <div class="declaration fade-up" style="border-color:rgba(200,48,32,0.3);">
+      <p class="declaration-text" style="color:#e87060;">하나님 없는 평화는<br>결국 폭력으로 유지될 수밖에 없습니다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 검은 말 -->
+<div class="horse-section h3">
+  <div class="horse-num-bg">3</div>
+  <div class="horse-inner">
+    <div class="horse-title-bar">
+      <span class="horse-color-dot"></span>
+      <span class="horse-badge">셋째 말 · Third Horse</span>
+    </div>
+    <h3 class="horse-name">🐎 검은 말</h3>
+    <p class="horse-subtitle">공의가 무너진 경제 (계 6:5–6)</p>
+
+    <div class="verse-block fade-up" style="border-color:#707070;">
+      <span class="verse-ref" style="color:#a0a0a0;">요한계시록 6:6</span>
+      <p class="verse-text">"한 데나리온에 밀 한 되요, 한 데나리온에 보리 세 되입니다."</p>
+    </div>
+
+    <p class="body-text fade-up">전쟁은 반드시 경제를 무너뜨립니다. 세 번째 말은 저울을 들고 옵니다. 저울은 원래 공정함의 상징이지만, 여기서는 왜곡된 공정함입니다. 하루 종일 일해도 하루 먹을 양식밖에 얻지 못합니다.</p>
+
+    <div class="info-card fade-up" style="border-color:rgba(100,100,100,0.25);">
+      <p class="body-text" style="color:rgba(200,200,192,0.85);">흥미로운 말이 들립니다. <strong style="color:#c8c8b0;">"기름과 포도주는 해치지 말라"</strong> — 생존 필수품은 부족하지만 사치품은 남아 있습니다. 가난한 자는 더 가난해지고 가진 자는 여전히 누립니다.</p>
+      <p class="body-text" style="color:rgba(200,200,192,0.7); margin-top:10px;">불의한 구조와 양심이 없는 시장은 단순한 경제 위기가 아니라 하나님 없는 세계가 만들어내는 구조적 모순입니다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 창백한 말 -->
+<div class="horse-section h4">
+  <div class="horse-num-bg">4</div>
+  <div class="horse-inner">
+    <div class="horse-title-bar">
+      <span class="horse-color-dot"></span>
+      <span class="horse-badge">넷째 말 · Fourth Horse</span>
+    </div>
+    <h3 class="horse-name">🐎 창백한 말</h3>
+    <p class="horse-subtitle">죽음과 음부 (계 6:7–8)</p>
+
+    <div class="verse-block fade-up" style="border-color:#5a8050;">
+      <span class="verse-ref" style="color:#90b880;">요한계시록 6:8</span>
+      <p class="verse-text">"그의 이름은 죽음이고, 음부가 그 뒤를 따랐습니다"</p>
+    </div>
+
+    <p class="body-text fade-up">마지막 말은 생기가 없습니다. 헬라어로는 <strong style="color:#90b880;">'클로로스'</strong> — 시체의 색, 병든 말의 살의 색입니다. 이 말의 이름은 죽음이고, 그 뒤에는 음부가 따라옵니다.</p>
+
+    <p class="body-text fade-up">이제 더 이상 꾸밈도, 명분도 없습니다. 거짓 평화와 전쟁, 기근과 질병 — 그리고 죽음 뒤에 따라오는 음부는 인간이 하나님 없이 세운 세계의 최종 도착지인 것입니다.</p>
+
+    <div class="info-card fade-up" style="background:rgba(90,128,80,0.06); border-color:rgba(90,128,80,0.2);">
+      <p style="color:var(--gold); font-weight:700; margin-bottom:12px;">🔁 네 말의 숨겨진 구조</p>
+      <p class="body-text" style="color:rgba(232,224,208,0.75);">이 네 말은 무작위가 아닙니다. 거짓 평화(흰 말) → 폭력(붉은 말) → 공의롭지 못한 구조(검은 말) → 죽음(창백한 말)의 순서는 하나님이 없는 인간 세상의 역사의 반복 패턴입니다.</p>
+      <p class="body-text" style="color:rgba(232,224,208,0.65); margin-top:10px;">흰색 말의 활로 마음을 정복하고, 붉은 말로 평화를 제거하며, 검은 말로 생존을 통제하여, 창백한 말로 죽음을 관리하는 — 바벨탑 이후 계속되어 온 인간의 길이기도 합니다.</p>
+      <div class="verse-block" style="margin:18px 0 0; border-color:var(--gold);">
+        <p class="verse-text" style="font-size:0.88rem;"><strong>가장 중요한 반전</strong> — 이 모든 말은 사탄이 보낸 말이 아닙니다. <strong style="color:var(--gold);">"어린양께서 일곱 봉인 중에 하나를 떼시는 것을 보았습니다…"</strong> 어린양이 허락하신 역사입니다. 심판을 위한 것이 아니라 회개를 위한 경고이기 때문입니다.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="flame-divider" style="margin:0 22px;"><i>👑</i></div>
+
+<!-- ══ 두 기수 비교 ══ -->
+<div class="rider-compare">
+  <div class="compare-inner">
+    <span class="ch-tag">한 두루마리, 두 기수</span>
+    <h2 class="ch-title" style="color:var(--ash);">요한계시록 6장과 19장의<br><span style="color:var(--royal2);">흰 말에 대하여</span></h2>
+    <div class="ch-rule" style="background:linear-gradient(90deg,var(--royal2),transparent);"></div>
+
+    <p class="body-text fade-up">요한계시록을 보면 흰말을 타는 기수에 대한 이야기가 두 군데 있습니다. 하나는 요한계시록 6장이고 또 한 곳은 19장입니다. 많은 사람들이 계시록 6장의 흰말을 탄 자가 그리스도라고 하지만, 6장에서는 어린양이신 주님이 심판의 첫 봉인을 떼시는 것을 볼 수 있습니다.</p>
+
+    <div class="info-card fade-up" style="border-color:rgba(122,58,204,0.2);">
+      <p style="color:var(--royal2); font-weight:700; margin-bottom:10px;">이 네 마리의 말은</p>
+      <p class="body-text">1. 거짓 평화 (흰 말) &nbsp; 2. 폭력 (붉은 말) &nbsp; 3. 불의한 구조 (검은 말) &nbsp; 4. 죽음 (창백한 말)을 나타내고 있습니다.</p>
+    </div>
+
+    <!-- 비교 그리드 -->
+    <div class="compare-grid fade-up">
+      <div class="compare-card false">
+        <span class="compare-ref">계시록 6장 · 첫 번째 기수</span>
+        <div class="compare-title">🐎 받은 관을 쓴 자</div>
+        <div class="compare-rows">
+          <div class="compare-row">
+            <span class="compare-row-label">관의 종류</span>
+            <span class="compare-value">스테파노스 — 수여받은 면류관<br><small style="opacity:0.7;">경기 우승자가 잠시 받는 관</small></span>
+          </div>
+          <div class="compare-row">
+            <span class="compare-row-label">행동 방향</span>
+            <span class="compare-value">"정복하려고 나아감"<br><small style="opacity:0.7;">칼 없이, 화살 없이, 속임으로</small></span>
+          </div>
+          <div class="compare-row">
+            <span class="compare-row-label">시간 위치</span>
+            <span class="compare-value">심판의 시작</span>
+          </div>
+          <div class="compare-row">
+            <span class="compare-row-label">본질</span>
+            <span class="compare-value">왕처럼 보이도록 허락받은 자</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="compare-vs">VS</div>
+
+      <div class="compare-card true">
+        <span class="compare-ref">계시록 19장 · 두 번째 기수</span>
+        <div class="compare-title">👑 왕관을 가지신 분</div>
+        <div class="compare-rows">
+          <div class="compare-row">
+            <span class="compare-row-label">관의 종류</span>
+            <span class="compare-value">디아데마 — 왕의 본래 왕관<br><small style="opacity:0.7;">혈통·주권·정체성에 속한 관</small></span>
+          </div>
+          <div class="compare-row">
+            <span class="compare-row-label">행동 방향</span>
+            <span class="compare-value">"의로 심판하시고 전쟁하시는 분"<br><small style="opacity:0.7;">눈은 불꽃, 많은 왕관을 쓰심</small></span>
+          </div>
+          <div class="compare-row">
+            <span class="compare-row-label">시간 위치</span>
+            <span class="compare-value">심판의 완성</span>
+          </div>
+          <div class="compare-row">
+            <span class="compare-row-label">본질</span>
+            <span class="compare-value">만왕의 왕 — 왕관을 가지신 분</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 왕관 비교 -->
+    <div class="crown-compare fade-up">
+      <span class="crown-title">요한이 일부러 갈라놓은 언어 · 스테파노스 vs 디아데마</span>
+      <div class="crown-grid">
+        <div class="crown-item stephanos">
+          <span class="crown-word">Stephanos</span>
+          <p class="crown-meaning">경기 우승자의 화관. 수여받는 관. 잠시 씌워주는 면류관. 공로가 있을 때 받는 관. 이 기수는 왕이 아닙니다 — 왕처럼 보이도록 허락받은 자입니다.</p>
+        </div>
+        <div class="crown-item diadema">
+          <span class="crown-word">Diadema</span>
+          <p class="crown-meaning">왕이기 때문에 쓰는 관. 혈통에 속하고 주권에 속하고 정체성에 속하는 관. 이분은 왕관을 받은 분이 아닙니다 — 이분은 왕관을 가지신 분입니다.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="verse-block fade-up" style="border-color:var(--royal2); margin-top:28px;">
+      <span class="verse-ref" style="color:var(--royal2);">요한계시록 19:11–12</span>
+      <p class="verse-text">"또 나는 하늘이 열린 것을 보았습니다. 보십시오, 흰색 말이 있고, 신실하시고 참되시다고 불리시는 분께서 그 위에 타셨는데 … 그분의 눈은 불꽃이고, 머리에는 많은 왕관이 있고 (diademata polla)"</p>
+    </div>
+
+    <div class="info-card fade-up" style="background:rgba(74,26,138,0.1); border-color:rgba(122,58,204,0.25);">
+      <p style="color:var(--royal2); font-weight:700; margin-bottom:12px;">🕊️ 이야기의 결말</p>
+      <p class="body-text">요한은 이렇게 말하고 싶은 것입니다. <strong style="color:var(--ash);">처음 흰 말은 왕처럼 보이지만 왕이 아니고, 마지막 흰 말은 왕이기 때문에 왕관을 쓰고 계신다.</strong> 6장의 관은 주어진 면류관이라면, 19장의 관은 빼앗을 수 없는 왕관인 것입니다. 처음 정복은 속임의 승리이고, 마지막 승리는 진리의 의로운 심판인 것입니다.</p>
+    </div>
+
+    <div class="declaration fade-up" style="border-color:rgba(122,58,204,0.3);">
+      <p class="declaration-text" style="color:var(--royal2);">스테파노스는 잠시 씌워진 가면이고,<br>디아데마는 영원히 벗겨지지 않는 왕권입니다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FINALE ══ -->
+<section class="finale">
+  <p class="finale-label">Conclusion · 결론</p>
+  <div class="finale-icon">👑</div>
+
+  <h2 class="finale-title">
+    아직 은혜의 시간<br>
+    <em>진짜 흰 말은 아직 오지 않았다</em>
+  </h2>
+
+  <div class="finale-verse fade-up">
+    <p class="finale-verse-text">계시록 6장은 아직 일곱 번째 봉인을 열지 않았습니다. 지금 이 시대는 아직 복음이 전파되고, 아직 어린양이 기다리시며, 아직 돌아올 길이 열려 있습니다.</p>
+    <p class="finale-verse-ref">— 요한계시록 6장의 메시지</p>
+  </div>
+
+  <p class="finale-message fade-up">
+    네 마리의 말은 이렇게 말합니다.<br>
+    <strong>"이 길은 생명의 길이 아니다."</strong><br>
+    <strong>"다른 왕, 만왕의 왕이 있다."</strong><br>
+    <strong>"진짜 흰 말은 아직 오지 않았다."</strong><br><br>
+    그리고 그 진짜 흰 말은<br>계시록 19장에서 디아데마를 쓰고<br>심판과 구원을 함께 들고 오십니다.
+  </p>
+</section>
+
+</div>
+
+<!-- ══ FOOTER ══ -->
+<footer class="site-footer">
+  <div class="footer-rule"></div>
+  <p class="footer-name">부산교회 2구역</p>
+</footer>
+
+<script>
+  // 불꽃 파티클
+  const embersEl = document.getElementById('embers');
+  for (let i = 0; i < 40; i++) {
+    const p = document.createElement('div');
+    p.className = 'ember-p';
+    const hue = 10 + Math.random() * 30;
+    p.style.cssText = `
+      left: ${Math.random()*100}%;
+      top: ${80 + Math.random()*20}%;
+      --dur: ${6 + Math.random()*8}s;
+      --delay: ${Math.random()*8}s;
+      --drift: ${(Math.random()-0.5)*80}px;
+      --op: ${0.4 + Math.random()*0.5};
+      background: hsl(${hue},90%,60%);
+      width: ${1+Math.random()*2}px;
+      height: ${1+Math.random()*2}px;
+    `;
+    embersEl.appendChild(p);
+  }
+
+  // 스크롤 애니메이션
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('vis');
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>

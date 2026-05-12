@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>사탄의 기원, 배반, 그리고 심판</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700;900&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --void:    #05040a;
+      --deep:    #080610;
+      --mid:     #0c0a18;
+      --slate:   #10122a;
+
+      --ash:     #e8e4dc;
+      --ash2:    #c4c0b8;
+      --muted:   rgba(232,228,220,0.48);
+
+      --gold:    #d4a820;
+      --gold2:   #f0c840;
+      --neon:    #00e050;
+      --neon2:   #40ff80;
+      --crimson: #c02820;
+      --crimson2:#e84830;
+      --purple:  #8030c0;
+      --purple2: #b060f0;
+
+      --line:    rgba(255,255,255,0.07);
+      --line2:   rgba(255,255,255,0.04);
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { background:var(--void); color:var(--ash); font-family:'Noto Serif KR',serif; overflow-x:hidden; }
+
+    /* ── 배경 성운 ── */
+    .cosmos {
+      position:fixed; inset:0; z-index:0; pointer-events:none;
+      background:
+        radial-gradient(ellipse 60% 40% at 20% 20%, rgba(192,40,32,.06) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 35% at 80% 70%, rgba(128,48,192,.06) 0%, transparent 60%),
+        radial-gradient(ellipse 80% 60% at 50% 50%, rgba(0,180,80,.03) 0%, transparent 70%);
+      animation: cosmos-drift 20s ease-in-out infinite alternate;
+    }
+    @keyframes cosmos-drift {
+      0%   { opacity:.7; transform:scale(1); }
+      100% { opacity:1;  transform:scale(1.05); }
+    }
+
+    /* ── 별 ── */
+    .stars { position:fixed; inset:0; z-index:0; pointer-events:none; }
+    .s { position:absolute; border-radius:50%; background:#fff;
+         animation:twinkle var(--d,3s) ease-in-out infinite var(--dl,0s); }
+    @keyframes twinkle { 0%,100%{opacity:var(--lo,.08);} 50%{opacity:var(--hi,.5);} }
+
+    /* ══════════════════════════════
+       COVER
+    ══════════════════════════════ */
+    .cover {
+      position:relative; min-height:100vh;
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      text-align:center; padding:70px 28px 90px;
+      overflow:hidden; z-index:1;
+    }
+
+    /* 하강하는 불꽃 천사 실루엣 효과 */
+    .cover-corona {
+      position:absolute; top:-60px; left:50%; transform:translateX(-50%);
+      width:500px; height:500px; pointer-events:none;
+      background:radial-gradient(ellipse 50% 50%, rgba(212,168,32,.18) 0%, rgba(192,40,32,.08) 40%, transparent 70%);
+      animation:corona-pulse 5s ease-in-out infinite;
+    }
+    @keyframes corona-pulse { 0%,100%{opacity:.7; transform:translateX(-50%) scale(1);} 50%{opacity:1; transform:translateX(-50%) scale(1.1);} }
+
+    /* 번개 균열 */
+    .crack {
+      position:absolute; pointer-events:none;
+      background:linear-gradient(180deg, rgba(212,168,32,.0), rgba(212,168,32,.2), rgba(212,168,32,.0));
+    }
+    .crack-1 { left:48%; top:0; width:1px; height:60%; animation:crack-flicker 4s ease-in-out infinite; }
+    .crack-2 { left:44%; top:20%; width:1px; height:40%; transform:rotate(-12deg); transform-origin:top; animation:crack-flicker 4s ease-in-out infinite .8s; }
+    .crack-3 { left:52%; top:20%; width:1px; height:40%; transform:rotate(12deg); transform-origin:top; animation:crack-flicker 4s ease-in-out infinite 1.6s; }
+    @keyframes crack-flicker { 0%,90%,100%{opacity:0;} 40%,60%{opacity:1;} }
+
+    .cover-kicker {
+      font-family:'Noto Sans KR',sans-serif;
+      font-size:.62rem; font-weight:500; letter-spacing:.38em; text-transform:uppercase;
+      color:rgba(212,168,32,.45); margin-bottom:32px; position:relative; z-index:1;
+    }
+
+    .cover-title {
+      font-size:clamp(2rem,8vw,5rem); font-weight:900;
+      line-height:1.15; letter-spacing:-.04em;
+      position:relative; z-index:1; margin-bottom:18px;
+    }
+    .ct-gold    { color:var(--gold2); text-shadow:0 0 50px rgba(212,168,32,.5); display:block; }
+    .ct-red     { color:var(--crimson2); text-shadow:0 0 40px rgba(192,40,32,.4); display:block; font-size:.55em; font-weight:400; letter-spacing:.05em; margin-top:8px; }
+
+    .cover-sub {
+      font-family:'Noto Sans KR',sans-serif;
+      font-size:clamp(.82rem,2.2vw,.95rem); font-weight:300;
+      color:var(--muted); line-height:1.95; max-width:440px;
+      margin:0 auto 44px; position:relative; z-index:1;
+    }
+
+    .cover-pills { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; position:relative; z-index:1; }
+    .pill { padding:7px 18px; border-radius:18px; font-family:'Noto Sans KR',sans-serif; font-size:.72rem; letter-spacing:.08em; }
+    .p-gold   { border:1px solid rgba(212,168,32,.35); color:var(--gold);    background:rgba(212,168,32,.08); }
+    .p-neon   { border:1px solid rgba(0,200,80,.3);    color:var(--neon2);   background:rgba(0,200,80,.06); }
+    .p-red    { border:1px solid rgba(192,40,32,.35);  color:var(--crimson2);background:rgba(192,40,32,.08); }
+    .p-purple { border:1px solid rgba(128,48,192,.35); color:var(--purple2); background:rgba(128,48,192,.08); }
+
+    /* ── 웨이브 ── */
+    .wv { display:block; width:100%; height:40px; position:relative; z-index:2; }
+
+    /* ══════════════════════════════
+       공통 섹션
+    ══════════════════════════════ */
+    .sec { position:relative; z-index:2; padding:64px 22px 72px; overflow:hidden; }
+    .sec-wrap { max-width:700px; margin:0 auto; }
+
+    .s-summary { background:linear-gradient(180deg,#080610 0%,#0c0a18 100%); }
+    .s-origin  { background:linear-gradient(180deg,#0c0a18 0%,#100c1c 100%); }
+    .s-rebel   { background:linear-gradient(180deg,#0e0814 0%,#120a10 100%); }
+    .s-result  { background:linear-gradient(180deg,#100810 0%,#0e0a08 100%); }
+    .s-exec    { background:linear-gradient(180deg,#0a0c10 0%,#080a0e 100%); }
+
+    .s-summary::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 60% 40% at 50% 0%,rgba(0,180,80,.06),transparent); pointer-events:none; }
+    .s-origin::before  { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 60% 40% at 50% 0%,rgba(212,168,32,.06),transparent); pointer-events:none; }
+    .s-rebel::before   { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 60% 40% at 50% 0%,rgba(192,40,32,.06),transparent); pointer-events:none; }
+    .s-result::before  { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 60% 40% at 50% 0%,rgba(192,40,32,.08),transparent); pointer-events:none; }
+    .s-exec::before    { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 60% 40% at 50% 0%,rgba(128,48,192,.07),transparent); pointer-events:none; }
+
+    /* 배경 대형 로마 숫자 */
+    .bg-roman {
+      position:absolute; font-family:'Noto Serif KR',serif;
+      font-size:clamp(14rem,38vw,26rem); font-weight:900;
+      top:50%; right:-4%; transform:translateY(-50%);
+      line-height:.85; pointer-events:none; letter-spacing:-.05em; opacity:.028; color:#fff;
+    }
+
+    /* ── 섹션 태그 ── */
+    .sec-tag {
+      font-family:'Noto Sans KR',sans-serif;
+      font-size:.6rem; font-weight:500; letter-spacing:.28em; text-transform:uppercase;
+      display:flex; align-items:center; gap:12px; margin-bottom:16px;
+    }
+    .sec-tag::after { content:''; flex:1; height:1px; }
+    .st-neon   { color:var(--neon2);   } .st-neon::after   { background:linear-gradient(90deg,rgba(0,200,80,.3),transparent); }
+    .st-gold   { color:var(--gold);    } .st-gold::after   { background:linear-gradient(90deg,rgba(212,168,32,.3),transparent); }
+    .st-red    { color:var(--crimson2);} .st-red::after    { background:linear-gradient(90deg,rgba(192,40,32,.3),transparent); }
+    .st-purple { color:var(--purple2); } .st-purple::after { background:linear-gradient(90deg,rgba(128,48,192,.3),transparent); }
+
+    .sec-title { font-size:clamp(1.4rem,4.5vw,2.2rem); font-weight:900; line-height:1.2; letter-spacing:-.03em; margin-bottom:8px; }
+    .sec-rule  { width:50px; height:2px; margin:16px 0 36px; border-radius:1px; }
+    .r-neon   { background:linear-gradient(90deg,var(--neon2),transparent); }
+    .r-gold   { background:linear-gradient(90deg,var(--gold),transparent); }
+    .r-red    { background:linear-gradient(90deg,var(--crimson2),transparent); }
+    .r-purple { background:linear-gradient(90deg,var(--purple2),transparent); }
+
+    /* ── 본문 ── */
+    .body-text { font-size:clamp(.95rem,2.5vw,1.05rem); font-weight:400; line-height:2.2; color:rgba(232,228,220,.78); margin-bottom:18px; word-break:keep-all; }
+    .key-concept { color:var(--gold2); font-weight:700; }
+
+    /* ── 핵심 요약 박스 ── */
+    .summary-box {
+      background:rgba(0,180,80,.04); border:1px solid rgba(0,200,80,.18);
+      padding:28px 26px; border-radius:14px; margin-bottom:28px;
+      box-shadow:0 0 30px rgba(0,200,80,.06);
+    }
+    .summary-box .sb-title {
+      font-family:'Noto Sans KR',sans-serif; font-size:.62rem; letter-spacing:.25em; text-transform:uppercase;
+      color:var(--neon2); opacity:.7; margin-bottom:18px; display:block;
+    }
+
+    /* ── 요약 리스트 ── */
+    .sum-list { list-style:none; display:flex; flex-direction:column; gap:12px; }
+    .sum-item {
+      display:flex; gap:14px; align-items:flex-start;
+      padding:14px 16px; border-radius:10px;
+      background:rgba(255,255,255,.025); border:1px solid var(--line);
+      opacity:0; transform:translateX(-14px);
+      transition:opacity .6s ease, transform .6s ease;
+    }
+    .sum-item.vis { opacity:1; transform:translateX(0); }
+    .sum-badge {
+      flex-shrink:0; padding:3px 10px; border-radius:8px;
+      font-family:'Noto Sans KR',sans-serif; font-size:.65rem; font-weight:600;
+      letter-spacing:.1em; margin-top:2px;
+    }
+    .sb-neon   { background:rgba(0,200,80,.12);  color:var(--neon2);   border:1px solid rgba(0,200,80,.2); }
+    .sb-gold   { background:rgba(212,168,32,.12); color:var(--gold2);   border:1px solid rgba(212,168,32,.2); }
+    .sb-red    { background:rgba(192,40,32,.12);  color:var(--crimson2);border:1px solid rgba(192,40,32,.2); }
+    .sb-purple { background:rgba(128,48,192,.12); color:var(--purple2); border:1px solid rgba(128,48,192,.2); }
+    .sum-text  { font-family:'Noto Sans KR',sans-serif; font-size:.85rem; font-weight:300; color:rgba(232,228,220,.75); line-height:1.95; }
+    .sum-text strong { color:var(--gold2); font-weight:600; }
+
+    /* ── 소제목 ── */
+    .sub-lbl {
+      font-family:'Noto Sans KR',sans-serif; font-size:.62rem; font-weight:600;
+      letter-spacing:.2em; text-transform:uppercase;
+      display:flex; align-items:center; gap:10px; margin:28px 0 14px;
+    }
+    .sub-lbl::after { content:''; flex:1; height:1px; background:var(--line); }
+
+    /* ── 리스트 카드 ── */
+    .point-cards { display:flex; flex-direction:column; gap:12px; margin:16px 0 22px; }
+    .point-card {
+      padding:16px 18px 14px 22px; border-radius:10px;
+      background:rgba(255,255,255,.025); border:1px solid var(--line);
+      position:relative; overflow:hidden;
+      opacity:0; transform:translateY(14px);
+      transition:opacity .6s ease, transform .6s ease;
+    }
+    .point-card.vis { opacity:1; transform:translateY(0); }
+    .point-card::before { content:'⚡'; position:absolute; left:8px; top:16px; font-size:.75rem; }
+    .pc-gold::before   { color:var(--gold); }
+    .pc-neon::before   { color:var(--neon2); }
+    .pc-red::before    { color:var(--crimson2); }
+    .pc-purple::before { color:var(--purple2); }
+    .pc-title { font-size:clamp(.9rem,2.5vw,1rem); font-weight:700; margin-bottom:6px; }
+    .pc-gold   .pc-title { color:var(--gold2); }
+    .pc-neon   .pc-title { color:var(--neon2); }
+    .pc-red    .pc-title { color:var(--crimson2); }
+    .pc-purple .pc-title { color:var(--purple2); }
+    .pc-body { font-family:'Noto Sans KR',sans-serif; font-size:.82rem; font-weight:300; color:rgba(232,228,220,.68); line-height:1.9; }
+    .pc-body .key-concept { color:var(--gold2); font-weight:600; }
+
+    /* ── 성경 구절 인용 ── */
+    .quote-block {
+      margin:22px 0; padding:20px 22px 18px 24px;
+      border-radius:0 10px 10px 0;
+      font-size:clamp(.88rem,2.3vw,.97rem); font-weight:500;
+      color:rgba(232,228,220,.88); line-height:2.05;
+    }
+    .qb-gold   { background:rgba(212,168,32,.06); border-left:3px solid var(--gold); }
+    .qb-neon   { background:rgba(0,180,80,.05);   border-left:3px solid var(--neon2); }
+    .qb-red    { background:rgba(192,40,32,.06);  border-left:3px solid var(--crimson2); }
+    .qb-purple { background:rgba(128,48,192,.06); border-left:3px solid var(--purple2); }
+    .qb-ref {
+      font-family:'Noto Sans KR',sans-serif; font-size:.62rem; font-weight:600;
+      letter-spacing:.18em; margin-bottom:10px; display:block; opacity:.65;
+    }
+    .qb-gold   .qb-ref { color:var(--gold); }
+    .qb-neon   .qb-ref { color:var(--neon2); }
+    .qb-red    .qb-ref { color:var(--crimson2); }
+    .qb-purple .qb-ref { color:var(--purple2); }
+
+    /* ── 5가지 선언 ── */
+    .five-decl {
+      margin:24px 0; padding:24px 22px;
+      background:rgba(192,40,32,.06); border:1px solid rgba(192,40,32,.2);
+      border-radius:14px;
+    }
+    .fd-title {
+      font-family:'Noto Sans KR',sans-serif; font-size:.62rem; letter-spacing:.22em; text-transform:uppercase;
+      color:var(--crimson2); opacity:.7; margin-bottom:16px; display:block;
+    }
+    .fd-items { display:flex; flex-direction:column; gap:10px; }
+    .fd-item {
+      display:flex; gap:12px; align-items:flex-start;
+      padding:10px 12px; border-radius:8px; background:rgba(255,255,255,.03);
+      opacity:0; transform:translateX(-12px);
+      transition:opacity .55s ease, transform .55s ease;
+    }
+    .fd-item.vis { opacity:1; transform:translateX(0); }
+    .fd-num {
+      flex-shrink:0; width:24px; height:24px; border-radius:50%;
+      background:rgba(192,40,32,.2); border:1px solid rgba(192,40,32,.3);
+      display:flex; align-items:center; justify-content:center;
+      font-family:'Noto Sans KR',sans-serif; font-size:.65rem; font-weight:700;
+      color:var(--crimson2); margin-top:2px;
+    }
+    .fd-text {
+      font-size:clamp(.88rem,2.3vw,.97rem); font-weight:500;
+      color:rgba(232,228,220,.82); line-height:1.8;
+    }
+    .fd-item:last-child .fd-text { color:var(--crimson2); font-weight:700; }
+
+    /* ── 테이블 ── */
+    .tbl-wrap { margin:24px 0; overflow-x:auto; }
+    .ctbl { width:100%; border-collapse:collapse; font-size:clamp(.75rem,2vw,.85rem); border-radius:10px; overflow:hidden; }
+    .ctbl th { padding:13px 12px; font-weight:600; letter-spacing:.05em; border:1px solid rgba(255,255,255,.08); text-align:center; }
+    .ctbl td { padding:12px; border:1px solid rgba(255,255,255,.06); color:rgba(232,228,220,.75); background:rgba(255,255,255,.02); vertical-align:top; }
+    .ctbl tr:hover td { background:rgba(255,255,255,.04); }
+    .th-neon   { background:rgba(0,180,80,.25);   color:var(--ash); }
+    .th-gold   { background:rgba(212,168,32,.25);  color:var(--ash); }
+    .th-red    { background:rgba(192,40,32,.25);   color:var(--ash); }
+    .th-purple { background:rgba(128,48,192,.25);  color:var(--ash); }
+    .th-gray   { background:rgba(255,255,255,.08); color:var(--ash2); }
+    .ctbl td strong { color:var(--ash); font-weight:600; }
+    .tbl-note { font-family:'Noto Sans KR',sans-serif; font-size:.72rem; font-weight:300; color:rgba(232,228,220,.4); margin-top:8px; }
+
+    /* ── 선언 ── */
+    .decl { margin:28px 0; padding:22px; text-align:center; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+    .decl p { font-size:clamp(.98rem,2.8vw,1.15rem); font-weight:700; line-height:1.85; }
+    .d-gold   p { color:var(--gold2); }
+    .d-neon   p { color:var(--neon2); }
+    .d-red    p { color:var(--crimson2); }
+    .d-purple p { color:var(--purple2); }
+
+    /* ── 심판 단계 플로우 ── */
+    .judg-flow { display:flex; flex-direction:column; gap:4px; margin:24px 0; }
+    .jf-step {
+      display:flex; align-items:center; gap:14px;
+      opacity:0; transform:translateY(14px);
+      transition:opacity .65s ease, transform .65s ease;
+    }
+    .jf-step.vis { opacity:1; transform:translateY(0); }
+    .jf-node {
+      flex-shrink:0; width:44px; height:44px; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      font-family:'Noto Sans KR',sans-serif; font-size:.78rem; font-weight:700;
+    }
+    .jn-1 { background:rgba(0,180,80,.15);   border:1px solid rgba(0,180,80,.3);   color:var(--neon2); }
+    .jn-2 { background:rgba(212,168,32,.15);  border:1px solid rgba(212,168,32,.3); color:var(--gold2); }
+    .jn-3 { background:rgba(192,40,32,.15);   border:1px solid rgba(192,40,32,.3);  color:var(--crimson2); }
+    .jn-4 { background:rgba(128,48,192,.15);  border:1px solid rgba(128,48,192,.3); color:var(--purple2); }
+    .jf-text { font-size:clamp(.88rem,2.3vw,.97rem); color:rgba(232,228,220,.82); line-height:1.75; }
+    .jf-text strong { color:var(--ash); font-weight:600; }
+    .jf-arrow { width:1px; height:24px; margin-left:21px; background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(255,255,255,.03)); }
+
+    /* ── FINALE ── */
+    .finale {
+      min-height:80vh; display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      text-align:center; padding:80px 28px;
+      background:radial-gradient(ellipse 80% 60% at 50% 50%, #0e0818 0%, var(--void) 70%);
+      position:relative; z-index:2; overflow:hidden;
+    }
+    .finale::before {
+      content:''; position:absolute; inset:0;
+      background:radial-gradient(ellipse 50% 40% at 50% 70%, rgba(128,48,192,.08), transparent 60%);
+      animation:fg 5s ease-in-out infinite;
+    }
+    @keyframes fg { 0%,100%{opacity:.6;} 50%{opacity:1;} }
+    .finale-icon { font-size:clamp(2.5rem,8vw,5rem); margin-bottom:28px; position:relative; z-index:1; animation:fi 4s ease-in-out infinite; }
+    @keyframes fi { 0%,100%{filter:drop-shadow(0 0 20px rgba(128,48,192,.4));} 50%{filter:drop-shadow(0 0 50px rgba(128,48,192,.7));} }
+    .finale-title { font-size:clamp(1.5rem,5vw,2.8rem); font-weight:900; line-height:1.25; letter-spacing:-.03em; color:var(--ash); margin-bottom:28px; position:relative; z-index:1; }
+    .finale-title em { font-style:normal; color:var(--purple2); display:block; font-size:.75em; margin-top:8px; font-weight:400; }
+    .finale-verse {
+      background:rgba(128,48,192,.08); border:1px solid rgba(128,48,192,.22);
+      border-radius:14px; padding:26px 24px; max-width:520px; margin:0 auto 28px;
+      position:relative; z-index:1;
+    }
+    .fv-text { font-size:clamp(.92rem,2.5vw,1.05rem); font-weight:600; color:rgba(232,228,220,.95); line-height:2.1; margin-bottom:10px; }
+    .fv-ref  { font-family:'Noto Sans KR',sans-serif; font-size:.72rem; color:var(--purple2); letter-spacing:.1em; }
+
+    /* ── 푸터 ── */
+    .site-footer { background:#030204; padding:30px 24px 38px; text-align:center; border-top:1px solid rgba(128,48,192,.08); position:relative; z-index:2; }
+    .footer-rule { width:32px; height:1px; background:var(--purple2); margin:0 auto 14px; opacity:.2; }
+    .footer-name { font-size:.85rem; font-weight:600; color:rgba(232,228,220,.45); letter-spacing:.2em; }
+
+    /* 스크롤 */
+    .fu { opacity:0; transform:translateY(22px); transition:opacity .75s ease, transform .75s ease; }
+    .fu.vis { opacity:1; transform:translateY(0); }
+
+    @media(max-width:480px){ .sec{ padding:44px 18px 52px; } .finale{ padding:60px 20px; } }
+  </style>
+</head>
+<body>
+
+<div class="cosmos"></div>
+<div class="stars" id="stars"></div>
+
+<!-- ══ COVER ══ -->
+<section class="cover">
+  <div class="cover-corona"></div>
+  <div class="crack crack-1"></div>
+  <div class="crack crack-2"></div>
+  <div class="crack crack-3"></div>
+
+  <p class="cover-kicker">부산교회 2구역 · 에스겔 28 · 이사야 14 · 요한계시록 20</p>
+  <h1 class="cover-title">
+    <span class="ct-gold">사탄의 기원, 배반,<br>그리고 심판</span>
+    <span class="ct-red">기원 · 교만 · 파괴 · 집행의 우주적 서사</span>
+  </h1>
+  <p class="cover-sub">
+    최고의 천사장에서 타락한 원수로 —<br>
+    하나님의 심판은 어떻게 집행되는가<br>
+    그리고 교회에 맡겨진 사명은 무엇인가
+  </p>
+  <div class="cover-pills">
+    <span class="pill p-gold">기원 · Origin</span>
+    <span class="pill p-red">배반 · Rebellion</span>
+    <span class="pill p-red">심판 · Judgment</span>
+    <span class="pill p-purple">집행 · Execution</span>
+  </div>
+</section>
+
+<!-- wave 1 -->
+<svg class="wv" viewBox="0 0 1440 40" preserveAspectRatio="none" style="background:var(--void);">
+  <path d="M0,0 Q720,40 1440,0 L1440,40 L0,40 Z" fill="#080610"/>
+</svg>
+
+<!-- ══ 핵심 요약 ══ -->
+<section class="sec s-summary">
+  <div class="bg-roman">∑</div>
+  <div class="sec-wrap">
+    <div class="sec-tag st-neon fu">Summary · 핵심 요약</div>
+    <h2 class="sec-title fu" style="color:var(--neon2);">타락한 그룹과<br><span style="font-size:.65em;font-weight:300;color:rgba(232,228,220,.5);">심판의 집행</span></h2>
+    <div class="sec-rule r-neon"></div>
+
+    <p class="body-text fu">본 문서는 제공된 자료를 바탕으로 사탄의 기원, 그의 배반, 그리고 그에 따른 하나님의 심판을 종합적으로 분석한다.</p>
+
+    <div class="summary-box fu">
+      <span class="sb-title">핵심 요약 · Core Summary</span>
+      <ul class="sum-list">
+        <li class="sum-item">
+          <span class="sum-badge sb-gold">기원</span>
+          <span class="sum-text">사탄은 본래 지혜와 아름다움이 충족한 최고의 천사장, <strong>'기름 부음을 받은 덮는 그룹'</strong>이었다.</span>
+        </li>
+        <li class="sum-item">
+          <span class="sum-badge sb-red">배반</span>
+          <span class="sum-text">자신의 영화로움에서 비롯된 <strong>'교만'</strong>이 원인이며, 하나님과 동등하게 되려는 5가지 "내가 ... 하리라"는 야망을 품었다.</span>
+        </li>
+        <li class="sum-item">
+          <span class="sum-badge sb-neon">동조</span>
+          <span class="sum-text"><strong>타락한 천사(공중의 악한 영들)</strong>와 육체를 잃고 물에 거하는 <strong>귀신</strong>들로 구성된다.</span>
+        </li>
+        <li class="sum-item">
+          <span class="sum-badge sb-red">결과</span>
+          <span class="sum-text">배반의 결과로 창조 세계는 <strong>'황폐하고 공허한'</strong> 상태(창세기 1:2)로 파괴되었다.</span>
+        </li>
+        <li class="sum-item">
+          <span class="sum-badge sb-purple">집행</span>
+          <span class="sum-text">선포된 심판의 집행은 <strong>교회와 이기는 자들</strong>에게 맡겨졌으며, 이는 마귀가 불못에 던져질 때 완성된다.</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- wave 2 -->
+<svg class="wv" viewBox="0 0 1440 40" preserveAspectRatio="none" style="background:#080610;">
+  <path d="M0,0 Q720,40 1440,0 L1440,40 L0,40 Z" fill="#0c0a18"/>
+</svg>
+
+<!-- ══ I. 기원 ══ -->
+<section class="sec s-origin">
+  <div class="bg-roman">Ⅰ</div>
+  <div class="sec-wrap">
+    <div class="sec-tag st-gold fu">Chapter Ⅰ · Origin · 기원</div>
+    <h2 class="sec-title fu" style="color:var(--gold2);">사탄의 기원과 본래의 지위:<br><span style="font-size:.65em;font-weight:300;color:rgba(232,228,220,.5);">우주의 통치자</span></h2>
+    <div class="sec-rule r-gold"></div>
+
+    <!-- A. 창조된 존재 -->
+    <div class="sub-lbl fu" style="color:var(--gold);">A. 창조된 존재: 천사장 그룹</div>
+
+    <div class="point-cards">
+      <div class="point-card pc-gold fu">
+        <div class="pc-title">창조 시점</div>
+        <p class="pc-body">땅의 기초를 놓으시기 전에 창조되었으며, "하나님의 모든 아들들(천사들)" 중 으뜸이었다.</p>
+      </div>
+      <div class="point-card pc-gold fu">
+        <div class="pc-title">지위</div>
+        <p class="pc-body">가장 높은 계급의 <span class="key-concept">'기름 부음을 받은 덮는 그룹'</span> (에스겔 28:14). 하나님의 보좌 가장 가까이에서 영광을 나타냄.</p>
+      </div>
+      <div class="point-card pc-gold fu">
+        <div class="pc-title">특성</div>
+        <p class="pc-body"><span class="key-concept">"지혜가 가득하며 온전히 아름다운"</span> 존재로, "새벽의 아들, 계명성(샛별)"의 칭호를 가졌다 (이사야 14:12).</p>
+      </div>
+    </div>
+
+    <!-- B. 우주적 통치자 -->
+    <div class="sub-lbl fu" style="color:var(--gold);">B. 우주적 통치자: 왕과 제사장 직분</div>
+
+    <div class="point-cards">
+      <div class="point-card pc-gold fu">
+        <div class="pc-title">왕의 직분</div>
+        <p class="pc-body">이 세상 통치자 (요한복음 12:31), 공중 권세의 통치자 (에베소서 2:2)라는 칭호를 가짐.<br>
+        하나님께로부터 아담 이전 우주의 통치권을 위임받았음을 암시 (누가복음 4:5-6).</p>
+      </div>
+      <div class="point-card pc-gold fu">
+        <div class="pc-title">제사장의 직분</div>
+        <p class="pc-body">'기름 부음을 받은 그룹'으로서, 하나님의 법궤를 덮는 역할은 최고 대제사장의 직분을 가졌음을 시사한다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- wave 3 -->
+<svg class="wv" viewBox="0 0 1440 40" preserveAspectRatio="none" style="background:#0c0a18;">
+  <path d="M0,0 Q720,40 1440,0 L1440,40 L0,40 Z" fill="#0e0814"/>
+</svg>
+
+<!-- ══ II. 배반 ══ -->
+<section class="sec s-rebel">
+  <div class="bg-roman">Ⅱ</div>
+  <div class="sec-wrap">
+    <div class="sec-tag st-red fu">Chapter Ⅱ · Rebellion · 배반</div>
+    <h2 class="sec-title fu" style="color:var(--crimson2);">사탄의 배반:<br><span style="font-size:.65em;font-weight:300;color:rgba(232,228,220,.5);">교만의 야망</span></h2>
+    <div class="sec-rule r-red"></div>
+
+    <!-- A. 배반의 원인 -->
+    <div class="sub-lbl fu" style="color:var(--crimson2);">A. 배반의 원인: 교만</div>
+
+    <div class="point-cards">
+      <div class="point-card pc-red fu">
+        <div class="pc-title">교만의 근원</div>
+        <p class="pc-body"><span class="key-concept">자신의 아름다움과 광채</span>를 보며 스스로 높아진 내적 요인. "네 아름다움 때문에 네 마음이 높아지고..." (에스겔 28:17).</p>
+      </div>
+      <div class="point-card pc-red fu">
+        <div class="pc-title">경고</div>
+        <p class="pc-body">교만은 마귀의 정죄에 빠지게 하는 도구이며, 유일한 대항책은 <span class="key-concept">겸손</span>이다.</p>
+      </div>
+    </div>
+
+    <!-- B. 배반의 목적 -->
+    <div class="sub-lbl fu" style="color:var(--crimson2);">B. 배반의 목적: 하나님과 동등됨</div>
+
+    <p class="body-text fu">사탄의 반역 의지는 이사야 14장 13-14절에 기록된 다섯 가지 <span class="key-concept">"내가 ~하리라"</span>는 선언으로 구체화되었다.</p>
+
+    <div class="five-decl fu">
+      <span class="fd-title">이사야 14:13–14 · 다섯 가지 야망의 선언</span>
+      <div class="fd-items">
+        <div class="fd-item"><span class="fd-num">1</span><span class="fd-text">내가 하늘로 올라가리라.</span></div>
+        <div class="fd-item"><span class="fd-num">2</span><span class="fd-text">내가 하나님의 별들 위로 내 보좌를 높이리라.</span></div>
+        <div class="fd-item"><span class="fd-num">3</span><span class="fd-text">내가 북쪽 끝에 있는 회중의 산 위에 앉으리라.</span></div>
+        <div class="fd-item"><span class="fd-num">4</span><span class="fd-text">내가 구름 꼭대기로 올라가리라.</span></div>
+        <div class="fd-item"><span class="fd-num">5</span><span class="fd-text">내가 나 자신을 가장 높으신 분과 같아지게 만들리라.</span></div>
+      </div>
+    </div>
+
+    <!-- C. 동참 세력 -->
+    <div class="sub-lbl fu" style="color:var(--crimson2);">C. 배반의 동참 세력: 천사와 귀신</div>
+
+    <div class="tbl-wrap fu">
+      <table class="ctbl">
+        <thead>
+          <tr>
+            <th class="th-red">동참 세력</th>
+            <th class="th-red">정체</th>
+            <th class="th-red">현재 상태/활동</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>타락한 천사들</strong></td>
+            <td>하늘의 별(천사) 삼분의 일 (요한계시록 12:4)</td>
+            <td>공중에 거하며 '악의 영들'로 활동 (에베소서 6:12)</td>
+          </tr>
+          <tr>
+            <td><strong>귀신들</strong></td>
+            <td>아담 이전 땅 위의 생물들 (육체 상실)</td>
+            <td>물(깊음/심연) 속에 거하며, 사람의 몸에 들어가기를 원함</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="tbl-note">*자료는 '타락한 천사'와 '귀신'을 거처(공중/물 속)와 본질로 명확히 구분한다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- wave 4 -->
+<svg class="wv" viewBox="0 0 1440 40" preserveAspectRatio="none" style="background:#0e0814;">
+  <path d="M0,0 Q720,40 1440,0 L1440,40 L0,40 Z" fill="#100810"/>
+</svg>
+
+<!-- ══ III. 결과 ══ -->
+<section class="sec s-result">
+  <div class="bg-roman">Ⅲ</div>
+  <div class="sec-wrap">
+    <div class="sec-tag st-red fu">Chapter Ⅲ · Consequence · 결과</div>
+    <h2 class="sec-title fu" style="color:var(--crimson2);">배반의 결과:<br><span style="font-size:.65em;font-weight:300;color:rgba(232,228,220,.5);">우주적 심판</span></h2>
+    <div class="sec-rule r-red"></div>
+
+    <!-- A. 심판 선포 -->
+    <div class="sub-lbl fu" style="color:var(--crimson2);">A. 사탄에 대한 심판 선포</div>
+    <div class="point-cards">
+      <div class="point-card pc-red fu">
+        <div class="pc-title">심판 선언</div>
+        <p class="pc-body">하나님은 사탄을 <span class="key-concept">하나님의 산에서 쫓아내고 땅으로 던져</span> 결국 음부(스올) 맨 밑에 빠뜨릴 것을 선언하셨다 (에스겔 28:15-18).</p>
+      </div>
+    </div>
+
+    <!-- B. 아담 이전 세계 파괴 -->
+    <div class="sub-lbl fu" style="color:var(--crimson2);">B. 아담 이전 세계의 파괴</div>
+    <div class="point-cards">
+      <div class="point-card pc-red fu">
+        <div class="pc-title">'틈새 이론' 시사</div>
+        <p class="pc-body">창세기 1:1과 1:2 사이에는 사탄의 반역과 그에 따른 하나님의 심판으로 인한 시간적 공백이 존재한다.</p>
+      </div>
+      <div class="point-card pc-red fu">
+        <div class="pc-title">심판의 증거</div>
+        <p class="pc-body">창세기 1:2의 <span class="key-concept">'황폐하고 공허한'</span> 상태, 흑암과 깊은 물에 잠김은 하나님의 심판의 결과이다 (예레미야 4:23).</p>
+      </div>
+    </div>
+
+    <!-- C. 동조 세력 심판 -->
+    <div class="sub-lbl fu" style="color:var(--crimson2);">C. 동조 세력에 대한 심판</div>
+    <div class="point-cards">
+      <div class="point-card pc-red fu">
+        <div class="pc-title">타락한 천사</div>
+        <p class="pc-body">공중의 악한 영들이 되었으며, 일부는 <span class="key-concept">흑암에 갇혀</span> 심판 때까지 구금되었다 (베드로후서 2:4).</p>
+      </div>
+      <div class="point-card pc-red fu">
+        <div class="pc-title">귀신</div>
+        <p class="pc-body">육체를 빼앗긴 형체 없는 영이 되어 물 속에 거하게 되었다.</p>
+      </div>
+    </div>
+
+    <div class="decl d-red fu"><p>배반의 결과 —<br>창조 세계는 '황폐하고 공허한' 상태로 파괴되었다.</p></div>
+  </div>
+</section>
+
+<!-- wave 5 -->
+<svg class="wv" viewBox="0 0 1440 40" preserveAspectRatio="none" style="background:#100810;">
+  <path d="M0,0 Q720,40 1440,0 L1440,40 L0,40 Z" fill="#0a0c10"/>
+</svg>
+
+<!-- ══ IV. 집행 ══ -->
+<section class="sec s-exec">
+  <div class="bg-roman">Ⅳ</div>
+  <div class="sec-wrap">
+    <div class="sec-tag st-purple fu">Chapter Ⅳ · Execution · 집행</div>
+    <h2 class="sec-title fu" style="color:var(--purple2);">심판의 집행:<br><span style="font-size:.65em;font-weight:300;color:rgba(232,228,220,.5);">그리스도와 교회의 사명</span></h2>
+    <div class="sec-rule r-purple"></div>
+
+    <!-- A. 집행 주체 -->
+    <div class="sub-lbl fu" style="color:var(--purple2);">A. 집행의 주체: 그리스도와 교회</div>
+    <p class="body-text fu">선포된 심판의 완전한 집행은 단계적으로 이루어지며, 하나님은 대리인을 통해 집행하신다.</p>
+
+    <div class="point-cards">
+      <div class="point-card pc-purple fu">
+        <div class="pc-title">그리스도의 시작</div>
+        <p class="pc-body">예수님은 "마귀의 일을 멸하기 위해" 오셨고 (요한일서 3:8), 십자가로 사탄을 무력화시키셨다 (히브리서 2:14).</p>
+      </div>
+      <div class="point-card pc-purple fu">
+        <div class="pc-title">교회의 사명</div>
+        <p class="pc-body">그리스도의 몸으로서 심판 집행을 이어받아 <span class="key-concept">'강한 자(사탄)를 결박하고 약탈하는 것'</span>을 목표로 한다 (마태복음 12:29).</p>
+      </div>
+    </div>
+
+    <!-- B. 최종 단계 -->
+    <div class="sub-lbl fu" style="color:var(--purple2);">B. 심판의 최종 단계</div>
+    <p class="body-text fu">교회의 영적 전쟁과 승리를 통해 심판의 집행이 완성된다.</p>
+
+    <div class="judg-flow fu">
+      <div class="jf-step">
+        <div class="jf-node jn-1">교회</div>
+        <div class="jf-text"><strong>교회의 승리</strong> → 마귀와 사자들이 하늘에서 <span class="key-concept">땅으로 내쫓김</span> (요한계시록 12:9)</div>
+      </div>
+      <div class="jf-arrow"></div>
+      <div class="jf-step">
+        <div class="jf-node jn-2">결박</div>
+        <div class="jf-text">마귀가 결박되어 <span class="key-concept">무저갱</span>에 던져짐 (요한계시록 20:2-3)</div>
+      </div>
+      <div class="jf-arrow"></div>
+      <div class="jf-step">
+        <div class="jf-node jn-4">완성</div>
+        <div class="jf-text">최종적으로 마귀가 <span class="key-concept">영원한 불못</span>에 던져져 심판 집행이 완료됨 (요한계시록 20:10)</div>
+      </div>
+    </div>
+
+    <div class="decl d-purple fu">
+      <p>심판의 집행은 교회와 이기는 자들에게 맡겨졌으며,<br>마귀가 불못에 던져질 때 완성된다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- wave to finale -->
+<svg class="wv" viewBox="0 0 1440 40" preserveAspectRatio="none" style="background:#0a0c10;">
+  <path d="M0,0 Q720,40 1440,0 L1440,40 L0,40 Z" fill="var(--void)"/>
+</svg>
+
+<!-- ══ FINALE ══ -->
+<section class="finale">
+  <div class="finale-icon">⚔️</div>
+  <h2 class="finale-title">
+    심판은 이미 선포되었습니다.<br>
+    <em>집행은 교회와 이기는 자들에게 맡겨졌습니다.</em>
+  </h2>
+  <div class="finale-verse fu">
+    <p class="fv-text">
+      사탄은 최고의 천사장으로 창조되었으나<br>
+      교만으로 인해 배반하였고,<br>
+      그 심판은 이미 선포되었습니다.<br><br>
+      그리스도께서 시작하신 그 집행을<br>
+      교회가 완성해 나가는 것입니다.
+    </p>
+    <p class="fv-ref">— 요한계시록 20:10 · 요한일서 3:8 · 히브리서 2:14</p>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="footer-rule"></div>
+  <p class="footer-name">부산교회 2구역</p>
+</footer>
+
+<script>
+  // 별
+  const sf = document.getElementById('stars');
+  for (let i = 0; i < 120; i++) {
+    const s = document.createElement('div'); s.className = 's';
+    const sz = Math.random() * 1.8 + .4;
+    s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;width:${sz}px;height:${sz}px;--d:${2+Math.random()*5}s;--dl:${Math.random()*5}s;--lo:${.04+Math.random()*.15};--hi:${.3+Math.random()*.5};`;
+    sf.appendChild(s);
+  }
+
+  // 스크롤 IO
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fu,.sum-item,.point-card,.fd-item,.jf-step').forEach(el => io.observe(el));
+
+  // 지연
+  document.querySelectorAll('.sum-item').forEach((el,i) => { el.style.transitionDelay = (i*.1)+'s'; });
+  document.querySelectorAll('.fd-item').forEach((el,i)  => { el.style.transitionDelay = (i*.12)+'s'; });
+  document.querySelectorAll('.jf-step').forEach((el,i)  => { el.style.transitionDelay = (i*.18)+'s'; });
+  document.querySelectorAll('.point-card').forEach((el,i) => { el.style.transitionDelay = (i*.1)+'s'; });
+</script>
+</body>
+</html>

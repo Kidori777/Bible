@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>보십시오, 새것이 되었습니다</title>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --void:        #1A1A2E;
+  --void-mid:    #2A2A44;
+  --dusk:        #4A3060;
+  --dawn:        #C97830;
+  --gold:        #E8B840;
+  --gold-light:  #F5D878;
+  --new:         #4CAF88;
+  --new-light:   #7ACFAA;
+  --new-pale:    #E8FAF4;
+  --rose:        #C85878;
+  --rose-light:  #F090A8;
+  --rose-pale:   #FFF0F4;
+  --cream:       #FDFAF4;
+  --ink:         #1A1A2E;
+  --muted:       #6A6A8A;
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+body{
+  font-family:'Noto Sans KR',sans-serif;
+  background:var(--cream);
+  color:var(--ink);
+  overflow-x:hidden;
+}
+
+/* ──── HERO ──── */
+.hero{
+  min-height:100vh;
+  background: linear-gradient(170deg, #0D0D1E 0%, #1A1030 35%, #3A2050 65%, #7A4030 100%);
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  text-align:center; padding:60px 24px 80px;
+  position:relative; overflow:hidden;
+}
+
+/* stars */
+.stars{ position:absolute; inset:0; pointer-events:none; }
+.star{
+  position:absolute; border-radius:50%;
+  background:white;
+  animation:twinkle ease-in-out infinite;
+}
+@keyframes twinkle{
+  0%,100%{ opacity:.2; transform:scale(1); }
+  50%    { opacity:.9; transform:scale(1.4); }
+}
+
+/* rising sun glow at bottom */
+.hero-glow{
+  position:absolute; bottom:-100px; left:50%; transform:translateX(-50%);
+  width:600px; height:300px;
+  background: radial-gradient(ellipse at 50% 100%, rgba(201,120,48,.35) 0%, transparent 70%);
+  pointer-events:none;
+}
+
+.hero-eyebrow{
+  font-size:11px; font-weight:700; letter-spacing:5px;
+  color:rgba(255,255,255,0.6);
+  background:rgba(255,255,255,0.07);
+  border:1px solid rgba(255,255,255,0.15);
+  padding:7px 22px; border-radius:40px;
+  margin-bottom:36px;
+  opacity:0; animation:fadeUp .8s .2s forwards;
+}
+
+.hero-old{
+  font-size:clamp(14px,3.5vw,18px);
+  color:rgba(255,255,255,0.4);
+  letter-spacing:4px; font-weight:300;
+  text-decoration:line-through;
+  text-decoration-color:rgba(255,255,255,0.3);
+  margin-bottom:16px;
+  opacity:0; animation:fadeUp .8s .35s forwards;
+}
+
+.hero-title{
+  font-size:clamp(36px,10vw,76px);
+  font-weight:900; color:white;
+  line-height:1.15; letter-spacing:-1px;
+  text-shadow:0 4px 40px rgba(0,0,0,0.5);
+  opacity:0; animation:fadeUp .9s .5s forwards;
+}
+.hero-title em{
+  font-style:normal; color:var(--gold);
+  text-shadow:0 0 40px rgba(232,184,64,.5);
+}
+
+.hero-verse{
+  margin-top:36px; max-width:480px;
+  background:rgba(255,255,255,0.07);
+  border:1px solid rgba(255,255,255,0.15);
+  border-radius:20px; padding:24px 28px;
+  font-family:'Nanum Myeongjo',serif;
+  font-size:clamp(15px,3.5vw,18px); line-height:2;
+  color:rgba(255,255,255,0.85); font-style:italic;
+  opacity:0; animation:fadeUp .9s .7s forwards;
+}
+.hero-verse cite{
+  display:block; font-style:normal; font-size:12px;
+  color:var(--gold); letter-spacing:2px; margin-top:10px; font-weight:700;
+}
+
+.scroll-hint{
+  position:absolute; bottom:32px;
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+  color:rgba(255,255,255,0.4); font-size:11px; letter-spacing:3px;
+  opacity:0; animation:fadeUp .8s 1.2s forwards;
+}
+.scroll-arr{
+  width:18px; height:18px;
+  border-right:2px solid rgba(255,255,255,0.4);
+  border-bottom:2px solid rgba(255,255,255,0.4);
+  transform:rotate(45deg); animation:bounce 1.5s infinite;
+}
+
+/* ──── LAYOUT ──── */
+.wrap{ max-width:720px; margin:0 auto; padding:0 24px; }
+
+.reveal{
+  opacity:0; transform:translateY(36px);
+  transition:opacity .8s cubic-bezier(.22,.68,0,.99), transform .8s cubic-bezier(.22,.68,0,.99);
+}
+.reveal.visible{ opacity:1; transform:translateY(0); }
+
+/* ──── CHAPTER CARDS ──── */
+.card{
+  border-radius:28px; padding:52px 44px;
+  margin:56px 0; position:relative; overflow:hidden;
+  box-shadow:0 12px 60px rgba(0,0,0,0.09);
+}
+
+.ch-num{
+  font-size:11px; font-weight:700; letter-spacing:4px;
+  display:inline-flex; align-items:center; gap:10px;
+  margin-bottom:14px;
+}
+.ch-num::before{
+  content:''; display:inline-block;
+  width:24px; height:2px; border-radius:2px;
+}
+
+.ch-title{
+  font-size:clamp(22px,5.5vw,32px);
+  font-weight:800; line-height:1.3;
+  margin-bottom:28px; letter-spacing:-.5px;
+}
+.ch-body{ font-size:16px; line-height:2.1; }
+
+/* ──── CH 1: 허무 ──── */
+.ch-1{
+  background:linear-gradient(135deg,#1A1A2E 0%,#2A2040 100%);
+  color:white;
+}
+.ch-1 .ch-num{ color:rgba(200,160,255,.7); }
+.ch-1 .ch-num::before{ background:rgba(200,160,255,.5); }
+.ch-1 .ch-title{ color:rgba(255,255,255,.9); }
+.ch-1 .ch-body{ color:rgba(255,255,255,.78); }
+
+.solomon-portrait{
+  display:flex; justify-content:center; margin:28px 0;
+}
+
+.vanity-box{
+  margin-top:28px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:18px; padding:28px 32px;
+  position:relative;
+}
+.vanity-box::before{
+  content:'"';
+  position:absolute; top:-16px; left:18px;
+  font-size:80px; color:rgba(255,255,255,.1);
+  font-family:'Nanum Myeongjo',serif; line-height:1;
+}
+.vanity-ref{
+  font-size:11px; letter-spacing:3px;
+  color:rgba(200,160,255,.7); font-weight:700; margin-bottom:8px;
+}
+.vanity-text{
+  font-family:'Nanum Myeongjo',serif;
+  font-size:17px; line-height:2; color:rgba(255,255,255,.88);
+  font-style:italic;
+}
+
+/* ──── CH 2: 해 아래 ──── */
+.ch-2{
+  background:linear-gradient(135deg,#2A1A10 0%,#3A2820 100%);
+  color:white;
+}
+.ch-2 .ch-num{ color:rgba(232,184,64,.8); }
+.ch-2 .ch-num::before{ background:var(--gold); }
+.ch-2 .ch-title{ color:rgba(255,255,255,.9); }
+.ch-2 .ch-body{ color:rgba(255,255,255,.78); }
+
+.under-sun{
+  display:flex; justify-content:center; margin:28px 0;
+}
+
+.cycles-grid{
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:14px; margin:24px 0;
+}
+.cycle-item{
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:14px; padding:18px;
+  text-align:center;
+}
+.cycle-icon{ font-size:28px; margin-bottom:8px; }
+.cycle-label{
+  font-size:13px; color:rgba(255,255,255,.7);
+  line-height:1.7;
+}
+
+.sun-verse{
+  margin-top:24px;
+  background:rgba(232,184,64,.1);
+  border-left:4px solid var(--gold);
+  border-radius:0 14px 14px 0;
+  padding:18px 22px;
+  font-family:'Nanum Myeongjo',serif;
+  font-size:16px; line-height:2;
+  color:rgba(255,255,255,.88); font-style:italic;
+}
+.sun-verse cite{
+  display:block; font-style:normal; font-size:12px;
+  color:var(--gold); margin-top:8px; font-weight:700; letter-spacing:1px;
+}
+
+/* ──── CH 3: 창조주를 기억 ──── */
+.ch-3{
+  background:linear-gradient(135deg,#F0FAF6 0%,#E0F5EC 100%);
+  border-top:5px solid var(--new);
+}
+.ch-3 .ch-num{ color:var(--new); }
+.ch-3 .ch-num::before{ background:var(--new); }
+.ch-3 .ch-title{ color:#1A4A34; }
+.ch-3 .ch-body{ color:#2A4A3C; }
+
+.remember-verse{
+  margin:24px 0;
+  background:linear-gradient(135deg, #2A6048, #1A4034);
+  border-radius:18px; padding:28px 32px; color:white;
+}
+.remember-verse .v-ref{
+  font-size:11px; letter-spacing:3px; color:var(--new-light);
+  font-weight:700; margin-bottom:10px;
+}
+.remember-verse .v-text{
+  font-family:'Nanum Myeongjo',serif;
+  font-size:16px; line-height:2;
+  color:rgba(255,255,255,.9); font-style:italic;
+}
+
+.purpose-cards{
+  display:grid; grid-template-columns:1fr 1fr 1fr;
+  gap:14px; margin-top:24px;
+}
+.purpose-card{
+  background:white; border-radius:16px; padding:22px 16px;
+  text-align:center;
+  box-shadow:0 4px 20px rgba(76,175,136,.1);
+  transition:transform .3s;
+}
+.purpose-card:hover{ transform:translateY(-5px); }
+.purpose-card .p-icon{ margin-bottom:10px; }
+.purpose-card .p-title{
+  font-size:13px; font-weight:700; color:#1A4A34; margin-bottom:6px;
+}
+.purpose-card .p-desc{ font-size:12px; color:#5A7A6C; line-height:1.7; }
+
+/* ──── CH 4: 노래 중의 노래 ──── */
+.ch-4{
+  background:linear-gradient(135deg,#2A1020 0%,#3A1830 100%);
+  color:white;
+}
+.ch-4 .ch-num{ color:var(--rose-light); }
+.ch-4 .ch-num::before{ background:var(--rose); }
+.ch-4 .ch-title{ color:rgba(255,255,255,.95); }
+.ch-4 .ch-body{ color:rgba(255,255,255,.8); }
+
+.song-visual{
+  display:flex; justify-content:center; margin:28px 0;
+}
+
+.song-verse{
+  margin-top:24px;
+  background:rgba(200,88,120,.15);
+  border-left:4px solid var(--rose);
+  border-radius:0 16px 16px 0;
+  padding:22px 24px;
+  font-family:'Nanum Myeongjo',serif;
+  font-size:16px; line-height:2.1;
+  color:rgba(255,255,255,.9); font-style:italic;
+}
+.song-verse cite{
+  display:block; font-style:normal; font-size:12px;
+  color:var(--rose-light); margin-top:8px; font-weight:700; letter-spacing:1px;
+}
+
+.song-promise{
+  margin-top:24px;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,144,168,.25);
+  border-radius:18px; padding:24px 28px;
+  font-size:16px; line-height:2; color:rgba(255,255,255,.88);
+}
+.song-promise strong{ color:var(--rose-light); font-weight:900; }
+
+/* ──── CH 5: 새 창조물 ──── */
+.ch-5{
+  background:linear-gradient(135deg,#F4FDF8 0%,#E8FAF2 100%);
+  border-top:5px solid var(--new);
+}
+.ch-5 .ch-num{ color:var(--new); }
+.ch-5 .ch-num::before{ background:var(--new); }
+.ch-5 .ch-title{ color:#1A4A34; }
+
+.new-creation-visual{
+  display:flex; justify-content:center; margin:32px 0;
+}
+
+.christ-points{
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:16px; margin:28px 0;
+}
+.christ-point{
+  background:white; border-radius:16px; padding:22px;
+  box-shadow:0 4px 20px rgba(76,175,136,.1);
+  border-left:4px solid var(--new);
+  transition:transform .3s;
+}
+.christ-point:hover{ transform:translateY(-4px); }
+.cp-title{ font-size:14px; font-weight:700; color:#1A5A3A; margin-bottom:8px; }
+.cp-desc{ font-size:13px; color:#4A6A5A; line-height:1.8; }
+
+/* ──── PRAYER ──── */
+.prayer-section{
+  background:linear-gradient(145deg,#1A4A34 0%,#0D2A1E 100%);
+  border-radius:32px; padding:64px 44px;
+  text-align:center; color:white;
+  position:relative; overflow:hidden;
+  margin:56px 0;
+}
+.prayer-section::before{
+  content:'';
+  position:absolute; inset:0;
+  background:radial-gradient(circle at 50% 20%, rgba(232,184,64,.08), transparent 60%);
+}
+.prayer-eyebrow{
+  font-size:11px; font-weight:700; letter-spacing:4px;
+  color:var(--gold); margin-bottom:20px;
+}
+.prayer-intro{
+  font-size:clamp(17px,4vw,22px); font-weight:700;
+  color:white; line-height:1.7; margin-bottom:36px;
+}
+.prayer-intro em{ font-style:normal; color:var(--gold-light); }
+.prayer-box{
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:24px; padding:40px 36px;
+  position:relative;
+}
+.prayer-box::before{
+  content:'기 도';
+  position:absolute; top:-14px; left:50%; transform:translateX(-50%);
+  background:var(--gold); color:#3A2A00;
+  font-size:11px; font-weight:900; letter-spacing:3px;
+  padding:5px 20px; border-radius:20px;
+}
+.prayer-text{
+  font-family:'Nanum Myeongjo',serif;
+  font-size:clamp(15px,3.5vw,18px); line-height:2.4;
+  color:rgba(255,255,255,.92); text-align:center;
+}
+.prayer-text em{ color:var(--gold-light); font-style:normal; font-weight:700; }
+
+/* ──── FINAL ──── */
+.final{
+  background:linear-gradient(135deg,#1A4A34 0%,#0D2A20 100%);
+  border-radius:32px; padding:64px 44px;
+  text-align:center; color:white;
+  margin:0 0 80px; position:relative; overflow:hidden;
+}
+.final::before{
+  content:'';
+  position:absolute; inset:0;
+  background:radial-gradient(circle at 30% 50%, rgba(76,175,136,.08), transparent 50%),
+             radial-gradient(circle at 70% 50%, rgba(232,184,64,.06), transparent 50%);
+}
+.final-old{
+  font-size:14px; color:rgba(255,255,255,.35);
+  letter-spacing:3px; text-decoration:line-through;
+  text-decoration-color:rgba(255,255,255,.25);
+  margin-bottom:10px;
+}
+.final-arrow{
+  font-size:24px; color:var(--gold); margin-bottom:10px;
+}
+.final-phrase{
+  font-size:clamp(24px,6vw,40px);
+  font-weight:900; color:white; line-height:1.3;
+  margin-bottom:8px;
+}
+.final-phrase span{ color:var(--gold); }
+.final-sub{
+  font-size:15px; color:rgba(255,255,255,.65);
+  margin-bottom:32px; line-height:1.8;
+}
+.final-info{
+  border-top:1px solid rgba(255,255,255,.12);
+  padding-top:24px;
+}
+.final-church{ font-size:17px; font-weight:700; color:var(--gold); margin-bottom:8px; }
+.final-addr{ font-size:13px; color:rgba(255,255,255,.55); line-height:1.8; }
+
+/* ──── DIVIDER ──── */
+.divider{
+  display:flex; align-items:center; gap:14px;
+  padding:4px 24px; max-width:720px; margin:0 auto;
+}
+.div-line{ flex:1; height:1px; background:linear-gradient(90deg,transparent,#C8C0B0,transparent); }
+
+/* ──── ANIMATIONS ──── */
+@keyframes fadeUp{
+  from{ opacity:0; transform:translateY(24px); }
+  to  { opacity:1; transform:translateY(0); }
+}
+@keyframes bounce{
+  0%,100%{ transform:rotate(45deg) translateY(0); }
+  50%    { transform:rotate(45deg) translateY(6px); }
+}
+
+/* ──── RESPONSIVE ──── */
+@media(max-width:540px){
+  .card{ padding:36px 22px; margin:40px 0; }
+  .purpose-cards,.cycles-grid,.christ-points{ grid-template-columns:1fr; }
+  .prayer-section,.final{ padding:44px 22px; }
+  .prayer-box{ padding:28px 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════ HERO ════ -->
+<div class="hero">
+  <!-- Stars -->
+  <div class="stars" id="stars"></div>
+  <div class="hero-glow"></div>
+
+  <div class="hero-eyebrow">ECCLESIASTES · SONG OF SONGS · 2 CORINTHIANS</div>
+  <p class="hero-old">허무 중의 허무</p>
+  <h1 class="hero-title">
+    보십시오,<br><em>새것이</em> 되었습니다.
+  </h1>
+
+  <div class="hero-verse">
+    "누구든지 그리스도 안에 있으면 새 창조물입니다.<br>
+    옛것은 지나갔으니, 보십시오, 새것이 되었습니다."
+    <cite>— 고린도후서 5장 17절</cite>
+  </div>
+
+  <div class="scroll-hint">
+    <span>SCROLL</span>
+    <div class="scroll-arr"></div>
+  </div>
+</div>
+
+<!-- ════ CH 1: 허무 ════ -->
+<div class="wrap">
+<div class="card ch-1 reveal">
+  <div class="ch-num">CHAPTER 01</div>
+  <h2 class="ch-title">허무 중의 허무</h2>
+
+  <!-- Solomon with crown SVG -->
+  <div class="solomon-portrait">
+    <svg width="240" height="130" viewBox="0 0 240 130" fill="none">
+      <!-- throne silhouette -->
+      <rect x="80" y="60" width="80" height="70" rx="4" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.15)" stroke-width="1"/>
+      <!-- person -->
+      <circle cx="120" cy="38" r="20" fill="rgba(200,160,255,.2)" stroke="rgba(200,160,255,.4)" stroke-width="1.5"/>
+      <path d="M96 130 Q96 80 120 80 Q144 80 144 130" fill="rgba(200,160,255,.15)" stroke="rgba(200,160,255,.3)" stroke-width="1.5"/>
+      <!-- crown -->
+      <path d="M102 22 L108 10 L114 20 L120 8 L126 20 L132 10 L138 22 Z" fill="rgba(232,184,64,.6)" stroke="rgba(232,184,64,.8)" stroke-width="1"/>
+      <!-- wealth items -->
+      <circle cx="40" cy="90" r="12" fill="rgba(232,184,64,.2)" stroke="rgba(232,184,64,.4)" stroke-width="1"/>
+      <text x="40" y="95" text-anchor="middle" font-size="12" fill="rgba(232,184,64,.7)">₩</text>
+      <circle cx="200" cy="90" r="12" fill="rgba(200,160,255,.2)" stroke="rgba(200,160,255,.4)" stroke-width="1"/>
+      <text x="200" y="95" text-anchor="middle" font-size="12" fill="rgba(200,160,255,.7)">♛</text>
+      <!-- question marks -->
+      <text x="30" y="40" font-size="22" fill="rgba(255,255,255,.12)" font-weight="900">?</text>
+      <text x="195" y="55" font-size="18" fill="rgba(255,255,255,.1)" font-weight="900">?</text>
+      <!-- void spiral -->
+      <path d="M120 38 Q125 45 120 50 Q115 55 120 60" stroke="rgba(255,255,255,.15)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <p class="ch-body">
+    젊은 시절부터 모든 것을 누린 왕이 있었습니다. 부, 권세, 위엄, 수많은 사랑스러운 자녀들… 탁월한 지혜로도 유명했습니다. 고대 이스라엘의 <strong style="color:rgba(232,184,64,.9)">솔로몬 왕</strong>입니다.<br><br>
+    나이가 들어가면서, 솔로몬은 인생의 허무와 슬픔과 괴로움을 맛보게 됩니다.
+  </p>
+
+  <div class="vanity-box">
+    <div class="vanity-ref">전도서 1장 2절</div>
+    <p class="vanity-text">
+      "허무 중의 허무, 허무 중의 허무라.<br>모든 것이 허무하도다."
+    </p>
+  </div>
+
+  <p class="ch-body" style="margin-top:20px;">
+    인간 역사는 그 시작부터 지금까지 허무할 뿐입니다. 솔로몬은 인생 생활이 허무하다는 것을 깊이 통감했습니다.
+  </p>
+</div>
+</div>
+
+<!-- ════ CH 2: 해 아래 ════ -->
+<div class="divider"><div class="div-line"></div>
+<svg width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="5" fill="rgba(232,184,64,.6)"/><path d="M10 1V4 M10 16V19 M1 10H4 M16 10H19 M3 3L5.1 5.1 M14.9 14.9L17 17 M17 3L14.9 5.1 M5.1 14.9L3 17" stroke="rgba(232,184,64,.5)" stroke-width="1.5" stroke-linecap="round"/></svg>
+<div class="div-line"></div></div>
+
+<div class="wrap">
+<div class="card ch-2 reveal">
+  <div class="ch-num">CHAPTER 02</div>
+  <h2 class="ch-title">해 아래 새로운 것이란<br>아무것도 없다</h2>
+
+  <!-- Sun diagram -->
+  <div class="under-sun">
+    <svg width="240" height="120" viewBox="0 0 240 120" fill="none">
+      <!-- sun -->
+      <circle cx="120" cy="50" r="28" fill="rgba(232,184,64,.25)" stroke="rgba(232,184,64,.5)" stroke-width="1.5"/>
+      <circle cx="120" cy="50" r="16" fill="rgba(232,184,64,.4)"/>
+      <!-- rays -->
+      <path d="M120 14V22 M120 78V86 M84 50H76 M164 50H156 M95.1 25.1L100.4 30.4 M139.6 69.6L144.9 74.9 M144.9 25.1L139.6 30.4 M100.4 69.6L95.1 74.9" stroke="rgba(232,184,64,.4)" stroke-width="2" stroke-linecap="round"/>
+      <!-- cycle arrow under sun -->
+      <path d="M50 90 Q120 110 190 90" stroke="rgba(255,255,255,.2)" stroke-width="1.5" stroke-dasharray="5 4" fill="none" marker-end="url(#arrsun)"/>
+      <defs><marker id="arrsun" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="rgba(255,255,255,.2)"/></marker></defs>
+      <text x="120" y="108" text-anchor="middle" font-size="9" fill="rgba(255,255,255,.35)" font-family="Noto Sans KR,sans-serif">반복되는 순환</text>
+    </svg>
+  </div>
+
+  <p class="ch-body">솔로몬은 하늘 아래서 일어나는 모든 일을 탐구해 보았습니다. 모든 것이 피곤하게 합니다. 아무것도 만족을 주지 못합니다.</p>
+
+  <div class="cycles-grid">
+    <div class="cycle-item">
+      <div class="cycle-icon">
+        <svg width="32" height="32" viewBox="0 0 32 32"><path d="M16 4 Q22 4 26 10 Q30 16 26 22 Q22 28 16 28 Q10 28 6 22 Q2 16 6 10 Q10 4 16 4Z" stroke="rgba(232,184,64,.5)" stroke-width="1.5" fill="none"/><path d="M16 8 L16 16 L21 21" stroke="rgba(232,184,64,.6)" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <div class="cycle-label">세대가 가고<br>세대가 와도 반복</div>
+    </div>
+    <div class="cycle-item">
+      <div class="cycle-icon">
+        <svg width="32" height="32" viewBox="0 0 32 32"><path d="M6 16 Q10 6 16 8 Q22 10 26 16 Q22 22 16 24 Q10 26 6 16Z" stroke="rgba(232,184,64,.4)" stroke-width="1.5" fill="none"/><path d="M10 16 Q14 12 18 16 Q22 20 18 20" stroke="rgba(232,184,64,.5)" stroke-width="1.5" fill="none"/></svg>
+      </div>
+      <div class="cycle-label">바람은 맴돌다<br>제자리로 돌아옴</div>
+    </div>
+    <div class="cycle-item">
+      <div class="cycle-icon">
+        <svg width="32" height="32" viewBox="0 0 32 32"><path d="M8 6 Q16 2 24 6 L24 26 Q16 30 8 26 Z" stroke="rgba(232,184,64,.4)" stroke-width="1.5" fill="none"/><line x1="16" y1="2" x2="16" y2="30" stroke="rgba(232,184,64,.3)" stroke-width="1" stroke-dasharray="3 3"/></svg>
+      </div>
+      <div class="cycle-label">눈도 귀도<br>만족할 줄 모름</div>
+    </div>
+    <div class="cycle-item">
+      <div class="cycle-icon">
+        <svg width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="12" stroke="rgba(232,184,64,.4)" stroke-width="1.5" fill="none" stroke-dasharray="4 4"/><text x="16" y="21" text-anchor="middle" font-size="14" fill="rgba(232,184,64,.7)">∅</text></svg>
+      </div>
+      <div class="cycle-label">아무것도<br>새것이 없음</div>
+    </div>
+  </div>
+
+  <div class="sun-verse">
+    "나는 해 아래에서 일어나는 모든 일을 보았는데,<br>참으로 모든 것이 허무요 바람 잡는 것이다."
+    <cite>— 전도서 1장 14절</cite>
+  </div>
+</div>
+</div>
+
+<!-- ════ CH 3: 창조주를 기억 ════ -->
+<div class="divider"><div class="div-line"></div>
+<svg width="20" height="20" viewBox="0 0 20 20"><path d="M10 2 C5 2 2 6 2 10 C2 14 5 18 10 18 C15 18 18 14 18 10" stroke="#4CAF88" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M13 7 L18 10 L13 13" stroke="#4CAF88" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<div class="div-line"></div></div>
+
+<div class="wrap">
+<div class="card ch-3 reveal">
+  <div class="ch-num">CHAPTER 03</div>
+  <h2 class="ch-title">너의 창조주를<br>기억하여라</h2>
+
+  <p class="ch-body">
+    이후 솔로몬은 허무에서 벗어나는 길을 발견했습니다. 그 길은 바로 <strong style="color:#1A5A3A">창조주이신 하나님께 되돌아오는 것</strong>이었습니다.
+  </p>
+
+  <div class="remember-verse">
+    <div class="v-ref">전도서 12장 7절</div>
+    <p class="v-text">
+      "흙이 원래 있던 땅으로 돌아가고<br>
+      호흡이 그것을 주신 하나님께로 돌아가기 전에<br>
+      너의 창조주를 기억하여라."
+    </p>
+  </div>
+
+  <div class="purpose-cards">
+    <div class="purpose-card">
+      <div class="p-icon">
+        <svg width="44" height="44" viewBox="0 0 44 44" fill="none"><circle cx="22" cy="22" r="19" fill="rgba(76,175,136,.1)" stroke="#4CAF88" stroke-width="1.5"/><path d="M22 10 L24.5 17.5 L32 17.5 L26 22.5 L28.5 30 L22 25 L15.5 30 L18 22.5 L12 17.5 L19.5 17.5 Z" fill="#4CAF88" opacity=".8"/></svg>
+      </div>
+      <div class="p-title">하나님의 형상</div>
+      <div class="p-desc">신성한 품성을 반영하도록 창조됨</div>
+    </div>
+    <div class="purpose-card">
+      <div class="p-icon">
+        <svg width="44" height="44" viewBox="0 0 44 44" fill="none"><circle cx="22" cy="22" r="19" fill="rgba(76,175,136,.1)" stroke="#4CAF88" stroke-width="1.5"/><circle cx="22" cy="22" r="8" stroke="#4CAF88" stroke-width="1.5" fill="rgba(76,175,136,.2)"/><path d="M22 6 L22 14 M22 30 L22 38 M6 22 L14 22 M30 22 L38 22" stroke="#4CAF88" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <div class="p-title">하나님을 담는 영</div>
+      <div class="p-desc">하나님만이 채울 수 있는 빈 공간</div>
+    </div>
+    <div class="purpose-card">
+      <div class="p-icon">
+        <svg width="44" height="44" viewBox="0 0 44 44" fill="none"><circle cx="22" cy="22" r="19" fill="rgba(76,175,136,.1)" stroke="#4CAF88" stroke-width="1.5"/><path d="M14 22 Q14 12 22 12 Q30 12 30 22 Q30 32 22 32 Q18 32 16 28" stroke="#4CAF88" stroke-width="1.5" fill="none"/><circle cx="22" cy="22" r="4" fill="#4CAF88" opacity=".8"/></svg>
+      </div>
+      <div class="p-title">하나님을 표현</div>
+      <div class="p-desc">하나님의 형상 안에서 하나님을 나타냄</div>
+    </div>
+  </div>
+
+  <div style="margin-top:24px;background:rgba(76,175,136,.12);border-radius:16px;padding:22px 24px;border-left:4px solid var(--new);">
+    <p style="font-size:15px;line-height:2;color:#1A4A34;font-weight:600;">
+      이 목적을 이루는 길은 사람이 <strong>하나님을 자신 안에 받아들이는 것</strong>입니다.<br>
+      성경은 허무와 죽음을 이기는 길, 행복한 삶의 비결을 제시합니다.
+    </p>
+  </div>
+</div>
+</div>
+
+<!-- ════ CH 4: 노래 중의 노래 ════ -->
+<div class="divider"><div class="div-line"></div>
+<svg width="20" height="20" viewBox="0 0 20 20"><path d="M10 3 C7 3 4 5.5 4 8.5 C4 13 10 17 10 17 C10 17 16 13 16 8.5 C16 5.5 13 3 10 3Z" stroke="#C85878" stroke-width="1.5" fill="rgba(200,88,120,.15)"/></svg>
+<div class="div-line"></div></div>
+
+<div class="wrap">
+<div class="card ch-4 reveal">
+  <div class="ch-num">CHAPTER 04</div>
+  <h2 class="ch-title">노래 중의 노래</h2>
+
+  <div class="song-visual">
+    <svg width="260" height="120" viewBox="0 0 260 120" fill="none">
+      <!-- musical notes floating -->
+      <text x="30" y="50" font-size="28" fill="rgba(200,88,120,.5)">♩</text>
+      <text x="70" y="30" font-size="22" fill="rgba(200,88,120,.4)">♪</text>
+      <text x="110" y="55" font-size="32" fill="rgba(200,88,120,.6)">♫</text>
+      <text x="155" y="28" font-size="24" fill="rgba(200,88,120,.45)">♬</text>
+      <text x="198" y="52" font-size="26" fill="rgba(200,88,120,.5)">♩</text>
+      <text x="230" y="35" font-size="20" fill="rgba(200,88,120,.35)">♪</text>
+      <!-- heart -->
+      <path d="M120 85 C120 85 100 72 100 60 C100 53 105.5 48 112 50 C115 51 118 54 120 57 C122 54 125 51 128 50 C134.5 48 140 53 140 60 C140 72 120 85 120 85Z" fill="rgba(200,88,120,.5)" stroke="rgba(200,88,120,.7)" stroke-width="1.5"/>
+      <!-- wavy melody line -->
+      <path d="M20 95 Q45 85 70 95 Q95 105 120 95 Q145 85 170 95 Q195 105 220 95 Q235 90 250 95" stroke="rgba(200,88,120,.3)" stroke-width="1.5" fill="none"/>
+    </svg>
+  </div>
+
+  <p class="ch-body">
+    하나님께 들어온 후 솔로몬의 삶은 <strong style="color:var(--rose-light)">감사와 찬양과 사랑의 노래가 가득한</strong> 나날이었습니다.<br><br>
+    그가 지은 <strong style="color:var(--rose-light)">아가(雅哥) — 노래 중의 노래</strong>는 하나님과의 만족이 충만한 삶을 노래한 시가입니다.
+  </p>
+
+  <div class="song-verse">
+    "나를 도장처럼 당신 마음에,<br>
+    도장처럼 당신 팔에 지녀 주세요.<br>
+    사랑은 죽음만큼이나 강하고<br>
+    질투는 스올만큼이나 잔인하니까요."
+    <cite>— 아가 8장 3절</cite>
+  </div>
+
+  <div class="song-promise">
+    당신의 삶은 더 이상 허무가 아니라<br>
+    <strong>노래 중의 노래가 가득한 나날</strong>이 될 수 있습니다.<br>
+    예수 그리스도 안에서 그 길을 찾을 수 있습니다.
+  </div>
+</div>
+</div>
+
+<!-- ════ CH 5: 새 창조물 ════ -->
+<div class="divider"><div class="div-line"></div>
+<svg width="16" height="22" viewBox="0 0 16 24"><rect x="6" y="0" width="4" height="24" rx="2" fill="#4CAF88" opacity=".7"/><rect x="0" y="6" width="16" height="4" rx="2" fill="#4CAF88" opacity=".7"/></svg>
+<div class="div-line"></div></div>
+
+<div class="wrap">
+<div class="card ch-5 reveal">
+  <div class="ch-num">CHAPTER 05</div>
+  <h2 class="ch-title">누구든지 그리스도 안에 있으면<br>새 창조물입니다</h2>
+
+  <!-- new creation visual: old→new -->
+  <div class="new-creation-visual">
+    <svg width="280" height="120" viewBox="0 0 280 120" fill="none">
+      <!-- OLD side -->
+      <rect x="10" y="20" width="90" height="80" rx="10" fill="rgba(60,30,60,.15)" stroke="rgba(100,60,100,.3)" stroke-width="1.5" stroke-dasharray="6 4"/>
+      <text x="55" y="52" text-anchor="middle" font-family="Noto Sans KR,sans-serif" font-size="10" fill="rgba(150,100,150,.7)">옛것</text>
+      <text x="55" y="68" text-anchor="middle" font-family="Noto Sans KR,sans-serif" font-size="9" fill="rgba(150,100,150,.55)">허무 · 썩음 · 죽음</text>
+      <!-- arrow -->
+      <path d="M108 60 L172 60" stroke="#4CAF88" stroke-width="2.5" stroke-linecap="round" marker-end="url(#arrnew)"/>
+      <defs><marker id="arrnew" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#4CAF88"/></marker></defs>
+      <text x="140" y="54" text-anchor="middle" font-family="Noto Sans KR,sans-serif" font-size="9" fill="#4CAF88" font-weight="700">그리스도 안에서</text>
+      <!-- NEW side -->
+      <rect x="178" y="20" width="90" height="80" rx="10" fill="rgba(76,175,136,.15)" stroke="#4CAF88" stroke-width="2"/>
+      <!-- glow inside new -->
+      <circle cx="223" cy="60" r="28" fill="rgba(76,175,136,.12)"/>
+      <text x="223" y="54" text-anchor="middle" font-family="Noto Sans KR,sans-serif" font-size="10" fill="#1A5A3A" font-weight="700">새것!</text>
+      <text x="223" y="70" text-anchor="middle" font-family="Noto Sans KR,sans-serif" font-size="9" fill="#2A6A4A">생명 · 만족 · 노래</text>
+    </svg>
+  </div>
+
+  <div class="christ-points">
+    <div class="christ-point">
+      <div class="cp-title">성육신 — 하나님이 사람이 되심</div>
+      <div class="cp-desc">그리스도는 하나님께서 육체가 되어 우리 가운데 오신 분이십니다</div>
+    </div>
+    <div class="christ-point">
+      <div class="cp-title">십자가 — 죄에서의 구속</div>
+      <div class="cp-desc">십자가에서 피를 흘리시고 인류를 죄에서 구속하셨습니다</div>
+    </div>
+    <div class="christ-point">
+      <div class="cp-title">부활 — 죽음을 이기심</div>
+      <div class="cp-desc">죽음을 이기고 부활하셔서 새 생명의 근원이 되셨습니다</div>
+    </div>
+    <div class="christ-point">
+      <div class="cp-title">생명 주시는 영 — 오늘 우리 안으로</div>
+      <div class="cp-desc">원하는 사람은 누구나 그분을 받아들일 수 있습니다</div>
+    </div>
+  </div>
+
+  <div style="margin-top:24px;background:rgba(76,175,136,.1);border-left:4px solid var(--new);border-radius:0 14px 14px 0;padding:18px 22px;">
+    <p style="font-family:'Nanum Myeongjo',serif;font-size:16px;line-height:2;color:#1A4A34;font-style:italic;font-weight:700;">
+      "그리스도를 받아들일 때 우리는 하나님의 생명을 얻어 새 창조물이 됩니다. 우리 인생은 허무와 썩음과 죽음에 더 이상 노예 노릇 하지 않습니다."
+    </p>
+  </div>
+</div>
+</div>
+
+<!-- ════ PRAYER ════ -->
+<div class="wrap">
+<div class="prayer-section reveal">
+  <div class="prayer-eyebrow">PRAYER · 기도</div>
+  <p class="prayer-intro">
+    원하는 사람은 누구나<br>
+    <em>지금 이렇게 기도하십시오.</em>
+  </p>
+  <div class="prayer-box">
+    <p class="prayer-text">
+      주 예수님,<br>
+      당신을 <em>제 안에 받아들입니다.</em><br><br>
+      저의 허무와 죄를 용서해 주시고<br>
+      저를 <em>새 창조물</em>로 만들어 주십시오.<br><br>
+      제 삶이 <em>기쁨의 눈물로 가득한 삶</em>이 되게 해 주십시오.<br>
+      노래 중의 노래가 가득한<br>
+      <em>새로운 나날</em>이 되게 해 주십시오.<br><br>
+      <em>아멘.</em>
+    </p>
+  </div>
+</div>
+</div>
+
+<!-- ════ FINAL ════ -->
+<div class="wrap">
+<div class="final reveal">
+  <div class="final-old">허무 중의 허무 — 모든 것이 허무하도다</div>
+  <div class="final-arrow">↓</div>
+  <h2 class="final-phrase">
+    보십시오,<br><span>새것이 되었습니다!</span>
+  </h2>
+  <p class="final-sub">
+    새 생명, 새 시작!<br>
+    그리스도 안에서 영원한 만족을 찾으십시오.
+  </p>
+  <div class="final-info">
+    <div class="final-church">부산교회 2구역</div>
+    <div class="final-addr">부산광역시 사하구 하신번영로 강변프라자 201호<br>상담 전화 : 010-9362-7642</div>
+  </div>
+</div>
+</div>
+
+<script>
+// Generate stars
+const starsEl = document.getElementById('stars');
+for(let i=0;i<80;i++){
+  const s=document.createElement('div');
+  s.className='star';
+  const size=Math.random()*2.5+0.5;
+  s.style.cssText=`
+    width:${size}px; height:${size}px;
+    top:${Math.random()*100}%;
+    left:${Math.random()*100}%;
+    animation-duration:${2+Math.random()*4}s;
+    animation-delay:${Math.random()*5}s;
+  `;
+  starsEl.appendChild(s);
+}
+
+// Scroll reveal
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>

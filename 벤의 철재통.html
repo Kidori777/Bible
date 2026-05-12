@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>비밀 재료 — 베드로전서 4:11</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700;900&family=Noto+Sans+KR:wght@300;400&family=Playfair+Display:ital,wght@0,400;0,700;0,900&family=Caveat:wght@400;600;700&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+:root {
+  --cream:   #f5ede0;
+  --parch:   #ede0cc;
+  --parch2:  #e5d4b8;
+  --aged:    #d4c4a0;
+  --ink:     #2a1f14;
+  --sepia:   #5c3d1e;
+  --warm:    #8b5e3c;
+  --rust:    #a0451e;
+  --gold:    #c09040;
+  --sage:    #6b7c5a;
+  --red:     #8b2010;
+}
+
+body {
+  background: var(--cream);
+  font-family: 'Noto Serif KR', serif;
+  color: var(--ink);
+  overflow-x: hidden;
+}
+
+/* ═══ PAPER TEXTURE overlay ═══ */
+body::before {
+  content:'';
+  position:fixed; inset:0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 600'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.045;
+  pointer-events: none;
+  z-index: 9998;
+}
+
+/* ═══ HERO — RECIPE BOOK COVER ═══ */
+#hero {
+  position: relative;
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--parch);
+  overflow: hidden;
+  padding: 60px 24px;
+}
+
+/* Aged border frame */
+#hero::before {
+  content:'';
+  position:absolute;
+  inset: 24px;
+  border: 1px solid rgba(90,60,20,0.2);
+  pointer-events:none;
+}
+#hero::after {
+  content:'';
+  position:absolute;
+  inset: 32px;
+  border: 1px solid rgba(90,60,20,0.08);
+  pointer-events:none;
+}
+
+/* Corner ornaments */
+.corner { position:absolute; width:40px; height:40px; }
+.corner svg { width:100%; height:100%; }
+.c-tl { top:18px; left:18px; }
+.c-tr { top:18px; right:18px; transform:scaleX(-1); }
+.c-bl { bottom:18px; left:18px; transform:scaleY(-1); }
+.c-br { bottom:18px; right:18px; transform:scale(-1); }
+
+.hero-inner {
+  position:relative;
+  z-index:2;
+  text-align:center;
+  max-width:700px;
+}
+
+.hero-recipe-label {
+  font-family:'Caveat', cursive;
+  font-size: clamp(14px,2vw,18px);
+  color: rgba(90,60,20,0.5);
+  letter-spacing: 0.15em;
+  margin-bottom: 16px;
+  opacity:0;
+  animation: fadeUp 0.8s ease 0.4s forwards;
+}
+
+/* Horizontal rule with ornament */
+.orn-rule {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin: 16px auto;
+  max-width:340px;
+  opacity:0;
+  animation: fadeIn 1s ease 0.8s forwards;
+}
+.orn-line { flex:1; height:1px; background:rgba(90,60,20,0.25); }
+.orn-star { color:var(--gold); font-size:14px; }
+
+.hero-title {
+  font-family:'Playfair Display', serif;
+  font-size: clamp(52px, 13vw, 140px);
+  font-weight:900;
+  line-height:0.85;
+  letter-spacing:-0.03em;
+  color: var(--ink);
+  opacity:0;
+  animation: fadeUp 1.2s cubic-bezier(0.16,1,0.3,1) 0.6s forwards;
+}
+
+.hero-title .sub {
+  display:block;
+  font-size:0.32em;
+  font-weight:400;
+  font-family:'Noto Serif KR', serif;
+  letter-spacing:0.12em;
+  color: var(--warm);
+  margin-top:14px;
+  line-height:1.7;
+}
+
+.hero-title .big-ko {
+  display:block;
+  color: var(--rust);
+}
+
+.hero-byline {
+  font-family:'Caveat', cursive;
+  font-size: clamp(16px,2.2vw,20px);
+  color: var(--sepia);
+  margin-top:20px;
+  opacity:0;
+  animation: fadeUp 0.8s ease 1.2s forwards;
+}
+
+.scroll-invite {
+  position:absolute;
+  bottom:32px;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+  opacity:0;
+  animation: fadeIn 1s ease 2s forwards;
+}
+
+.scroll-invite span {
+  font-family:'Caveat', cursive;
+  font-size:13px;
+  color: rgba(90,60,20,0.4);
+  letter-spacing:0.2em;
+}
+
+.scroll-stem {
+  width:1px; height:40px;
+  background:linear-gradient(180deg, var(--warm), transparent);
+  animation: stemPulse 2s ease-in-out infinite;
+}
+
+@keyframes stemPulse {
+  0%,100%{ opacity:1; }
+  50%{ opacity:0.2; }
+}
+
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(18px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes fadeIn { to { opacity:1; } }
+
+/* ═══ MAIN CONTENT ═══ */
+.page {
+  background: var(--cream);
+  position: relative;
+  z-index:1;
+}
+
+/* ═══ STORY BLOCK — TWO-PAGE SPREAD FEEL ═══ */
+.spread {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 80px 40px;
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 60px;
+  align-items: start;
+}
+
+@media(max-width:720px){
+  .spread { grid-template-columns:1fr; gap:0; }
+  .spread-margin { display:none; }
+}
+
+/* Left margin — like a book's inner margin */
+.spread-margin {
+  position: sticky;
+  top: 80px;
+}
+
+.margin-chapter {
+  font-family:'Caveat', cursive;
+  font-size:clamp(70px,10vw,100px);
+  font-weight:700;
+  line-height:0.9;
+  color: rgba(160,69,30,0.08);
+  letter-spacing:-0.04em;
+  margin-bottom:20px;
+}
+
+.margin-label {
+  font-family:'Noto Sans KR', sans-serif;
+  font-size:9px;
+  font-weight:300;
+  letter-spacing:0.5em;
+  text-transform:uppercase;
+  color: rgba(90,60,20,0.35);
+  display:block;
+  margin-bottom:8px;
+}
+
+.margin-rule {
+  width:100%;
+  height:1px;
+  background:linear-gradient(90deg, var(--aged), transparent);
+  margin: 16px 0;
+}
+
+.margin-note {
+  font-family:'Caveat', cursive;
+  font-size:14px;
+  color: rgba(90,60,20,0.4);
+  line-height:1.7;
+}
+
+/* Right: story text */
+.story-body {
+  padding-top:4px;
+}
+
+.chapter-head {
+  font-family:'Playfair Display', serif;
+  font-size:clamp(28px,4vw,42px);
+  font-weight:700;
+  color: var(--ink);
+  line-height:1.2;
+  margin-bottom:12px;
+}
+
+.chapter-rule {
+  width:48px; height:2px;
+  background: var(--rust);
+  margin-bottom:32px;
+}
+
+.story-p {
+  font-size:clamp(15px,1.9vw,17px);
+  line-height:2.1;
+  color: var(--sepia);
+  margin-bottom:20px;
+}
+
+/* Promise text — highlighted */
+.promise-box {
+  margin: 32px 0;
+  padding: 20px 24px;
+  border: 1px solid rgba(160,69,30,0.2);
+  background: var(--parch);
+  position:relative;
+  opacity:0;
+  transform:translateX(-12px);
+  transition: all 0.7s ease;
+}
+.promise-box.visible { opacity:1; transform:translateX(0); }
+.promise-box::before {
+  content:'"';
+  position:absolute;
+  top:-20px; left:12px;
+  font-family:'Playfair Display', serif;
+  font-size:60px;
+  color:rgba(160,69,30,0.15);
+  line-height:1;
+}
+.promise-text {
+  font-family:'Noto Serif KR', serif;
+  font-size:clamp(14px,1.8vw,16px);
+  line-height:2;
+  color: var(--ink);
+}
+
+/* ═══ TIN CAN SECTION ═══ */
+.tin-section {
+  background: var(--parch);
+  padding:80px 40px;
+  position:relative;
+  overflow:hidden;
+  border-top: 1px solid rgba(90,60,20,0.1);
+  border-bottom: 1px solid rgba(90,60,20,0.1);
+}
+
+.tin-section::before {
+  content:'30';
+  position:absolute;
+  right:-10px; top:50%;
+  transform:translateY(-55%);
+  font-family:'Libre Baskerville', serif;
+  font-size:300px;
+  font-weight:700;
+  color:rgba(90,60,20,0.03);
+  line-height:1;
+  pointer-events:none;
+}
+
+.tin-inner {
+  max-width:760px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:1fr 280px;
+  gap:60px;
+  align-items:center;
+}
+
+@media(max-width:700px){
+  .tin-inner { grid-template-columns:1fr; }
+}
+
+.tin-text {}
+
+.tin-story-p {
+  font-size:clamp(15px,1.9vw,17px);
+  line-height:2.1;
+  color: var(--sepia);
+  margin-bottom:20px;
+}
+
+/* TIN CAN ILLUSTRATION + interactive */
+.tin-can-wrap {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:20px;
+  cursor:pointer;
+  user-select:none;
+}
+
+.tin-can-wrap:hover .tin-lid { transform:translateY(-18px) rotate(-8deg); }
+.tin-can-wrap:active .tin-lid { transform:translateY(-28px) rotate(-15deg); }
+
+.tin-svg-wrap {
+  position:relative;
+  width:160px;
+  height:200px;
+  flex-shrink:0;
+}
+
+.tin-lid {
+  position:absolute;
+  top:0; left:50%;
+  transform:translateX(-50%);
+  transition: transform 0.5s cubic-bezier(0.34,1.56,0.64,1);
+  z-index:2;
+}
+
+.tin-body {
+  position:absolute;
+  bottom:0; left:50%;
+  transform:translateX(-50%);
+}
+
+.tin-hint {
+  font-family:'Caveat', cursive;
+  font-size:14px;
+  color:rgba(90,60,20,0.45);
+  text-align:center;
+  letter-spacing:0.05em;
+}
+
+/* Paper note reveal */
+.paper-note {
+  max-width:640px;
+  margin:0 auto;
+  padding:48px 40px;
+  background: var(--cream);
+  border:1px solid var(--aged);
+  position:relative;
+  transform:rotate(-1deg);
+  box-shadow: 4px 6px 24px rgba(90,60,20,0.12), 0 2px 4px rgba(90,60,20,0.08);
+  opacity:0;
+  transform:rotate(-1deg) translateY(20px) scale(0.97);
+  transition: all 0.9s cubic-bezier(0.16,1,0.3,1);
+  text-align:center;
+}
+
+.paper-note.visible {
+  opacity:1;
+  transform:rotate(-1deg) translateY(0) scale(1);
+}
+
+/* Ruled lines on note */
+.paper-note::before {
+  content:'';
+  position:absolute;
+  inset:40px 32px;
+  background: repeating-linear-gradient(
+    transparent,
+    transparent 31px,
+    rgba(90,60,20,0.08) 31px,
+    rgba(90,60,20,0.08) 32px
+  );
+  pointer-events:none;
+}
+
+.note-from {
+  font-family:'Noto Sans KR', sans-serif;
+  font-size:9px;
+  font-weight:300;
+  letter-spacing:0.45em;
+  color:rgba(90,60,20,0.35);
+  text-transform:uppercase;
+  margin-bottom:20px;
+  position:relative;
+  z-index:1;
+}
+
+.note-text {
+  font-family:'Caveat', cursive;
+  font-size:clamp(22px,3.5vw,34px);
+  font-weight:600;
+  line-height:1.6;
+  color: var(--ink);
+  position:relative;
+  z-index:1;
+}
+
+.note-text .highlight {
+  color: var(--rust);
+  font-size:1.15em;
+}
+
+.note-footer {
+  margin-top:20px;
+  font-family:'Caveat', cursive;
+  font-size:15px;
+  color:rgba(90,60,20,0.4);
+  position:relative;
+  z-index:1;
+}
+
+/* ═══ REVELATION — BEN'S AHA ═══ */
+.reveal-section {
+  background: var(--ink);
+  padding:100px 40px;
+  position:relative;
+  overflow:hidden;
+}
+
+.reveal-section::before {
+  content:'사랑';
+  position:absolute;
+  left:-30px; top:50%;
+  transform:translateY(-55%);
+  font-family:'Noto Serif KR', serif;
+  font-size:280px;
+  font-weight:900;
+  color:rgba(255,255,255,0.02);
+  line-height:1;
+  pointer-events:none;
+}
+
+.reveal-inner {
+  max-width:700px;
+  margin:0 auto;
+  position:relative;
+  z-index:1;
+}
+
+.reveal-eyebrow {
+  font-family:'Noto Sans KR', sans-serif;
+  font-size:9px;
+  font-weight:300;
+  letter-spacing:0.55em;
+  text-transform:uppercase;
+  color:rgba(192,140,64,0.6);
+  margin-bottom:28px;
+  display:block;
+}
+
+.reveal-quote {
+  font-family:'Playfair Display', serif;
+  font-size:clamp(22px,4vw,42px);
+  font-weight:400;
+  line-height:1.45;
+  color:#f5ede0;
+  margin-bottom:20px;
+}
+
+.reveal-quote .gold { color:var(--gold); }
+
+.reveal-body {
+  font-size:clamp(14px,1.9vw,17px);
+  line-height:2.1;
+  color:rgba(245,237,224,0.65);
+  margin-bottom:16px;
+}
+
+/* ═══ INGREDIENTS LIST ═══ */
+.ingredients-section {
+  background: var(--cream);
+  padding:80px 40px;
+}
+
+.ingredients-inner {
+  max-width:800px;
+  margin:0 auto;
+}
+
+.recipe-card {
+  border:1px solid var(--aged);
+  padding:48px;
+  position:relative;
+  background:var(--parch);
+  opacity:0;
+  transform:translateY(24px);
+  transition:all 0.8s ease;
+}
+
+.recipe-card.visible { opacity:1; transform:translateY(0); }
+
+/* Top label tab */
+.recipe-tab {
+  position:absolute;
+  top:-14px; left:40px;
+  background:var(--rust);
+  padding:4px 20px;
+  font-family:'Noto Sans KR', sans-serif;
+  font-size:9px;
+  font-weight:400;
+  letter-spacing:0.45em;
+  text-transform:uppercase;
+  color:#f5ede0;
+}
+
+.recipe-title {
+  font-family:'Playfair Display', serif;
+  font-size:clamp(22px,3.5vw,32px);
+  font-weight:700;
+  color:var(--ink);
+  margin-bottom:32px;
+  text-align:center;
+}
+
+/* Two columns: wrong ingredients / right ingredient */
+.ingr-grid {
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  gap:0 32px;
+  align-items:start;
+  margin-bottom:40px;
+}
+
+@media(max-width:600px){
+  .ingr-grid { grid-template-columns:1fr; }
+  .ingr-vs { padding:20px 0; text-align:center; }
+}
+
+.ingr-col-label {
+  font-family:'Noto Sans KR', sans-serif;
+  font-size:9px;
+  font-weight:400;
+  letter-spacing:0.4em;
+  text-transform:uppercase;
+  margin-bottom:16px;
+}
+
+.ingr-col-label.wrong { color:rgba(139,32,16,0.5); }
+.ingr-col-label.right { color:var(--sage); }
+
+.ingr-item {
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  padding:12px 0;
+  border-bottom:1px solid rgba(90,60,20,0.1);
+  font-size:clamp(13px,1.7vw,15px);
+  line-height:1.7;
+  color:var(--sepia);
+}
+
+.ingr-item:last-child { border-bottom:none; }
+
+.ingr-bullet {
+  width:6px; height:6px;
+  border-radius:50%;
+  flex-shrink:0;
+  margin-top:8px;
+}
+
+.bullet-wrong { background:rgba(139,32,16,0.4); }
+.bullet-right { background:var(--sage); }
+
+.ingr-vs {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding-top:32px;
+  font-family:'Libre Baskerville', serif;
+  font-size:20px;
+  color:rgba(90,60,20,0.2);
+}
+
+/* Result row */
+.recipe-result {
+  border-top:2px solid var(--rust);
+  padding-top:24px;
+  text-align:center;
+}
+
+.result-label {
+  font-family:'Noto Sans KR', sans-serif;
+  font-size:9px;
+  letter-spacing:0.45em;
+  text-transform:uppercase;
+  color:var(--rust);
+  margin-bottom:12px;
+}
+
+.result-text {
+  font-family:'Caveat', cursive;
+  font-size:clamp(22px,3.5vw,32px);
+  font-weight:700;
+  color:var(--ink);
+}
+
+/* ═══ SCRIPTURE ═══ */
+.scripture-section {
+  background:var(--parch2);
+  padding:100px 40px;
+  position:relative;
+  overflow:hidden;
+  border-top:1px solid rgba(90,60,20,0.15);
+}
+
+.scripture-section::before {
+  content:'4:11';
+  position:absolute;
+  right:-10px; bottom:20px;
+  font-family:'Libre Baskerville', serif;
+  font-size:220px;
+  font-weight:700;
+  color:rgba(90,60,20,0.04);
+  line-height:1;
+  pointer-events:none;
+}
+
+.scripture-inner {
+  max-width:760px;
+  margin:0 auto;
+  position:relative;
+  z-index:1;
+}
+
+/* Book-tag stamp */
+.scripture-stamp {
+  display:inline-flex;
+  align-items:center;
+  gap:16px;
+  margin-bottom:40px;
+}
+
+.stamp-sq {
+  width:48px; height:48px;
+  background:var(--rust);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Playfair Display', serif;
+  font-size:16px;
+  font-weight:700;
+  color:#f5ede0;
+}
+
+.stamp-meta { display:flex; flex-direction:column; gap:4px; }
+
+.stamp-name {
+  font-family:'Noto Sans KR', sans-serif;
+  font-size:10px;
+  font-weight:400;
+  letter-spacing:0.3em;
+  color:var(--rust);
+  text-transform:uppercase;
+}
+
+.stamp-ref {
+  font-family:'Noto Sans KR', sans-serif;
+  font-size:11px;
+  font-weight:300;
+  letter-spacing:0.15em;
+  color:var(--warm);
+}
+
+.verse-text {
+  font-family:'Noto Serif KR', serif;
+  font-size:clamp(15px,2.2vw,20px);
+  line-height:2.1;
+  color:var(--ink);
+  margin-bottom:20px;
+}
+
+.verse-text strong { font-weight:700; color:var(--rust); }
+
+.verse-ref {
+  font-family:'Noto Sans KR', sans-serif;
+  font-size:11px;
+  letter-spacing:0.3em;
+  color:var(--warm);
+  margin-top:24px;
+}
+
+/* ═══ MEDITATION ═══ */
+.meditation-section {
+  background:var(--cream);
+  padding:80px 40px;
+}
+
+.meditation-inner {
+  max-width:760px;
+  margin:0 auto;
+}
+
+.med-title {
+  font-family:'Playfair Display', serif;
+  font-size:clamp(24px,4vw,38px);
+  font-weight:700;
+  color:var(--ink);
+  margin-bottom:12px;
+}
+
+.med-rule { width:40px; height:2px; background:var(--gold); margin-bottom:36px; }
+
+.med-p {
+  font-size:clamp(14px,1.9vw,17px);
+  line-height:2.1;
+  color:var(--sepia);
+  margin-bottom:20px;
+}
+
+/* Closing call-out */
+.callout {
+  margin-top:48px;
+  padding:36px 40px;
+  background:var(--parch);
+  border-left:4px solid var(--gold);
+  position:relative;
+  opacity:0;
+  transform:translateY(20px);
+  transition:all 0.8s ease;
+}
+
+.callout.visible { opacity:1; transform:translateY(0); }
+
+.callout::before {
+  content:'';
+  position:absolute;
+  top:0; right:0;
+  width:60px; height:60px;
+  background:
+    linear-gradient(135deg, transparent 50%, var(--aged) 50%);
+  opacity:0.4;
+}
+
+.callout-text {
+  font-family:'Noto Serif KR', serif;
+  font-size:clamp(16px,2.2vw,20px);
+  line-height:1.9;
+  color:var(--ink);
+  font-weight:600;
+}
+
+.callout-sub {
+  margin-top:12px;
+  font-size:clamp(14px,1.7vw,16px);
+  line-height:2;
+  color:var(--sepia);
+  font-weight:300;
+}
+
+/* Scroll reveal */
+.sr {
+  opacity:0;
+  transform:translateY(24px);
+  transition: all 0.7s ease;
+}
+.sr.visible { opacity:1; transform:translateY(0); }
+.sr:nth-child(2){ transition-delay:0.08s; }
+.sr:nth-child(3){ transition-delay:0.16s; }
+.sr:nth-child(4){ transition-delay:0.24s; }
+</style>
+</head>
+<body>
+
+<!-- ═══ HERO ═══ -->
+<section id="hero">
+  <!-- Corner ornaments -->
+  <div class="corner c-tl">
+    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 38 L2 2 L38 2" stroke="rgba(90,60,20,0.3)" stroke-width="1.5" fill="none"/>
+      <path d="M8 38 L8 8 L38 8" stroke="rgba(90,60,20,0.12)" stroke-width="1" fill="none"/>
+      <circle cx="2" cy="2" r="2" fill="rgba(160,69,30,0.3)"/>
+    </svg>
+  </div>
+  <div class="corner c-tr">
+    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 38 L2 2 L38 2" stroke="rgba(90,60,20,0.3)" stroke-width="1.5" fill="none"/>
+      <path d="M8 38 L8 8 L38 8" stroke="rgba(90,60,20,0.12)" stroke-width="1" fill="none"/>
+      <circle cx="2" cy="2" r="2" fill="rgba(160,69,30,0.3)"/>
+    </svg>
+  </div>
+  <div class="corner c-bl">
+    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 38 L2 2 L38 2" stroke="rgba(90,60,20,0.3)" stroke-width="1.5" fill="none"/>
+      <path d="M8 38 L8 8 L38 8" stroke="rgba(90,60,20,0.12)" stroke-width="1" fill="none"/>
+      <circle cx="2" cy="2" r="2" fill="rgba(160,69,30,0.3)"/>
+    </svg>
+  </div>
+  <div class="corner c-br">
+    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 38 L2 2 L38 2" stroke="rgba(90,60,20,0.3)" stroke-width="1.5" fill="none"/>
+      <path d="M8 38 L8 8 L38 8" stroke="rgba(90,60,20,0.12)" stroke-width="1" fill="none"/>
+      <circle cx="2" cy="2" r="2" fill="rgba(160,69,30,0.3)"/>
+    </svg>
+  </div>
+
+  <div class="hero-inner">
+    <div class="hero-recipe-label">Secret Recipe · 비밀 재료</div>
+
+    <div class="orn-rule">
+      <div class="orn-line"></div>
+      <span class="orn-star">✦</span>
+      <div class="orn-line"></div>
+    </div>
+
+    <h1 class="hero-title">
+      비밀
+      <span class="big-ko">재료</span>
+      <span class="sub">벤의 철재통 이야기<br>베드로전서 4장 11절</span>
+    </h1>
+
+    <div class="orn-rule" style="animation-delay:1s;">
+      <div class="orn-line"></div>
+      <span class="orn-star">✦</span>
+      <div class="orn-line"></div>
+    </div>
+
+    <div class="hero-byline">30년의 궁금증</div>
+  </div>
+
+  <div class="scroll-invite">
+    <span>scroll</span>
+    <div class="scroll-stem"></div>
+  </div>
+</section>
+
+<!-- ═══ STORY ═══ -->
+<section class="page">
+  <div class="spread">
+    <!-- Margin -->
+    <div class="spread-margin">
+      <div class="margin-chapter">이야기</div>
+      <span class="margin-label">The Story</span>
+      <div class="margin-rule"></div>
+      <p class="margin-note">30년을 넘게 참아 온 궁금증...</p>
+    </div>
+
+    <!-- Story text -->
+    <div class="story-body">
+      <div class="chapter-head sr">아내의 비밀</div>
+      <div class="chapter-rule"></div>
+
+      <div class="promise-box sr">
+        <p class="promise-text">"벤 철재통 속을 절대 들여다봐서는 안돼요. 만일 당신이 약속을 어긴다면 다시는 맛있는 요리를 먹을 수 없게 될 거예요. "</p>
+      </div>
+
+      <p class="story-p sr">아내는 늘 선반에 놓인 조그만 철재통에 대해 주의를 주곤 했다. 그 철재 통에는 장모님에게서 물려받은 비밀재료가 들어있다는 것이다. 아내는 그 비밀 재료를 매우 아껴서 썼다. 아마도 너무 많이 사용하면 곧 없어져 버릴 것을 염려한 때문인 것 같았다.</p>
+
+      <p class="story-p sr">하지만 그것은 아주 조금씩만 사용해도 최고의 효과를 냈다. 아내의 요리는 언제나 훌륭했기 때문이다. 언제가 벤도 아내가 그것을 뿌리는 것을 본적이 있는데 가루가 너무 고와서인지 아니면 너무 조금 사용해서 그런지 눈에 잘 보이지 않았다.</p>
+
+      <p class="story-p sr">그런데 삼십 년을 넘게 참아 온 궁금증이 아내가 집을 비운 오늘은 걷잡을 수 없이 부풀어 올랐다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TIN CAN ═══ -->
+<section class="tin-section">
+  <div class="tin-inner">
+    <div class="tin-text">
+      <span style="font-family:'Noto Sans KR',sans-serif;font-size:9px;letter-spacing:0.45em;text-transform:uppercase;color:rgba(90,60,20,0.4);display:block;margin-bottom:16px;">The Moment · 그 순간</span>
+      <h2 style="font-family:'Playfair Display',serif;font-size:clamp(24px,3.5vw,36px);font-weight:700;color:var(--ink);margin-bottom:24px;line-height:1.3;">도대체 그 통속에<br>뭐가 들어있기에</h2>
+
+      <p class="tin-story-p">벤은 몇 번씩이나 아내와의 다짐을 떠올려 봤지만 머릿속에는 온통 그 철재통을 한 번 열어 보고 싶다는 생각뿐이었다.</p>
+
+      <p class="tin-story-p">그는 조심스럽게 철재 통을 집어 식탁위에 내려놓았다. 벤은 침을 꿀꺽 삼켰다. 그리고 너무 긴장해서 땀이 밴 손으로 조심스럽게 뚜껑을 열었다.</p>
+
+      <p class="tin-story-p">순간 벤은 깜짝 놀랐다. 통속에는 조그맣게 접힌 종이 한 장외에는 아무것도 없었기 때문이었다. 벤은 커다란 손가락을 간신히 밀어 넣어 그 종이를 꺼냈다.</p>
+    </div>
+
+    <!-- Tin can illustration -->
+    <div style="display:flex;flex-direction:column;align-items:center;gap:24px;">
+      <div class="tin-can-wrap" id="tinWrap" title="눌러보세요">
+        <div class="tin-svg-wrap">
+          <!-- Lid -->
+          <div class="tin-lid" id="tinLid">
+            <svg width="130" height="30" viewBox="0 0 130 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <ellipse cx="65" cy="15" rx="63" ry="14" fill="#8a7a6a" stroke="rgba(90,60,20,0.3)" stroke-width="1"/>
+              <ellipse cx="65" cy="13" rx="60" ry="11" fill="#9a8a7a" stroke="rgba(90,60,20,0.2)" stroke-width="0.5"/>
+              <ellipse cx="65" cy="12" rx="55" ry="8" fill="#a89a8a"/>
+              <!-- Handle -->
+              <rect x="50" y="3" width="30" height="6" rx="3" fill="#7a6a5a" stroke="rgba(90,60,20,0.3)" stroke-width="0.5"/>
+              <!-- Ridges -->
+              <line x1="15" y1="15" x2="115" y2="15" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>
+            </svg>
+          </div>
+          <!-- Body -->
+          <div class="tin-body">
+            <svg width="130" height="170" viewBox="0 0 130 170" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Main cylinder -->
+              <rect x="4" y="15" width="122" height="140" rx="4" fill="#8a7a6a"/>
+              <!-- Highlight -->
+              <rect x="10" y="15" width="20" height="140" rx="3" fill="rgba(255,255,255,0.08)"/>
+              <!-- Ridges / bands -->
+              <rect x="4" y="38" width="122" height="4" fill="rgba(0,0,0,0.12)"/>
+              <rect x="4" y="110" width="122" height="4" fill="rgba(0,0,0,0.12)"/>
+              <!-- Label area -->
+              <rect x="16" y="50" width="98" height="58" rx="2" fill="var(--parch)" opacity="0.9"/>
+              <!-- Label text -->
+              <text x="65" y="72" text-anchor="middle" font-family="Caveat, cursive" font-size="12" fill="var(--sepia)" font-weight="600">비밀 재료</text>
+              <text x="65" y="90" text-anchor="middle" font-family="serif" font-size="9" fill="rgba(90,60,20,0.5)" letter-spacing="1">SECRET</text>
+              <text x="65" y="103" text-anchor="middle" font-family="serif" font-size="9" fill="rgba(90,60,20,0.5)" letter-spacing="1">INGREDIENT</text>
+              <!-- Bottom ellipse -->
+              <ellipse cx="65" cy="155" rx="61" ry="8" fill="#7a6a5a"/>
+              <!-- Top opening ellipse -->
+              <ellipse cx="65" cy="15" rx="61" ry="10" fill="#9a8a7a"/>
+              <!-- Shadow bottom -->
+              <rect x="4" y="148" width="122" height="7" rx="0" fill="rgba(0,0,0,0.1)"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <p class="tin-hint" id="tinHint">👆 눌러서 열어보세요</p>
+    </div>
+  </div>
+
+  <!-- Paper note — revealed on scroll -->
+  <div style="max-width:600px;margin:60px auto 0;">
+    <div class="paper-note" id="paperNote">
+      <div class="note-from">장모님의 손글씨 · From Mother-in-law</div>
+      <p class="note-text">
+        '말타야<br>
+        무슨 요리를 하던<br>
+        <span class="highlight">사랑을 뿌려 넣는 것을</span><br>
+        <span class="highlight">잊지 말아라.'</span>
+      </p>
+      <p class="note-footer">— 그 것이 비밀의 전부였다</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ REVELATION ═══ -->
+<section class="reveal-section">
+  <div class="reveal-inner">
+    <span class="reveal-eyebrow">The Secret · 비밀의 정체</span>
+    <p class="reveal-quote sr">종이를 다시 통속으로 밀어 넣으면서 벤은 아내의 요리가 그렇게 맛있었던 <span class="gold">비결이 무엇인지 알 것 같았다.</span></p>
+    <p class="reveal-body sr">30년이 넘도록 그 철재통 안에 있던 것은 가루도 향신료도 아니었습니다. 단 한 장의 종이와 단 한 마디의 말 — 사랑을 뿌려 넣어라.</p>
+    <p class="reveal-body sr">아내는 그 말을 30년 동안 실천했습니다. 그래서 요리가 맛있었습니다. 그래서 삶이 아름다웠습니다.</p>
+  </div>
+</section>
+
+<!-- ═══ INGREDIENTS COMPARE ═══ -->
+<section class="ingredients-section">
+  <div class="ingredients-inner">
+    <div class="recipe-card sr" id="recipeCard">
+      <div class="recipe-tab">Recipe Analysis · 레시피 분석</div>
+      <h3 class="recipe-title">충만함의 재료표</h3>
+
+      <div class="ingr-grid">
+        <div>
+          <div class="ingr-col-label wrong">충만하면 흘러나오는 것 ✗</div>
+          <div class="ingr-item"><div class="ingr-bullet bullet-wrong"></div><span>시기와 질투 → 비방이 전달됩니다</span></div>
+          <div class="ingr-item"><div class="ingr-bullet bullet-wrong"></div><span>미움 → 성냄이 전달됩니다</span></div>
+          <div class="ingr-item"><div class="ingr-bullet bullet-wrong"></div><span>교만 → 다툼이 전달됩니다</span></div>
+        </div>
+
+        <div class="ingr-vs">vs</div>
+
+        <div>
+          <div class="ingr-col-label right">충만하면 흘러나오는 것 ✓</div>
+          <div class="ingr-item"><div class="ingr-bullet bullet-right"></div><span>사랑 → 그리스도의 사랑이 전달됩니다</span></div>
+          <div class="ingr-item"><div class="ingr-bullet bullet-right"></div><span>은혜 → 그리스도의 은혜가 전달됩니다</span></div>
+          <div class="ingr-item"><div class="ingr-bullet bullet-right"></div><span>그리스도 → 하나님의 영광이 전달됩니다</span></div>
+        </div>
+      </div>
+
+      <div class="recipe-result">
+        <div class="result-label">비밀 재료 · The Secret Ingredient</div>
+        <div class="result-text">당신이 충만한 것이 다른 사람에게 전달됩니다</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SCRIPTURE ═══ -->
+<section class="scripture-section">
+  <div class="scripture-inner">
+    <div class="scripture-stamp sr">
+      <div class="stamp-sq">벧</div>
+      <div class="stamp-meta">
+        <span class="stamp-name">베드로전서 · 1 Peter</span>
+        <span class="stamp-ref">4장 11절 · Chapter 4 Verse 11</span>
+      </div>
+    </div>
+
+    <p class="verse-text sr">말씀을 전하려는 사람은 <strong>하나님의 말씀으로 전하고,</strong> 봉사를 하려는 사람은 <strong>하나님께서 공급하시는 힘으로 봉사하십시오.</strong> 그것은 하나님께서 모든 일에서 예수 그리스도를 통하여 영광스럽게 되시도록 하기 위한 것입니다. 영광과 권능이 그분께 영원무궁히 있으시기를 바랍니다. 아멘.</p>
+
+    <p class="verse-ref sr">베드로 전서 4장 11절</p>
+  </div>
+</section>
+
+<!-- ═══ MEDITATION ═══ -->
+<section class="meditation-section">
+  <div class="meditation-inner">
+    <h2 class="med-title sr">무엇으로 충만합니까</h2>
+    <div class="med-rule"></div>
+
+    <p class="med-p sr">베드로 전서 4장 11절에서는 우리가 은혜의 봉사에서 하나님의 말씀을 하는 것은 신성한 말함이며 계시의 발언입니다. 이러한 은혜의 말함과 봉사에 있어서는 하나님이 공급하시는 힘을 언급하고 있습니다.</p>
+
+    <p class="med-p sr">하나님은 우리에게 그리스도의 영을 통하여 그리스도의 부활 생명에 속한 섬기는 힘을 공급하십니다. 하나님의 말씀을 하는 것같이 말하는 것과 하나님이 공급하시는 힘으로 봉사하는 목적은 "범사에 예수 그리스도로 말미암아 하나님이 영화롭게 되시기 위함"입니다.</p>
+
+    <p class="med-p sr">이것은 말함에 있어서든지 섬김에 있어서든지 모든 우리의 은혜의 봉사는 하나님이 범사에 그리스도로 말미암아 영화롭게 되시도록 그리스도로 충만해야 함을 지적하는 것입니다.</p>
+
+    <div class="callout sr">
+      <p class="callout-text">당신에게서 무엇으로 충만 되어 있는지에 따라서<br>그 충만함이 다른 사람들에게 전하여 질 것입니다.</p>
+      <p class="callout-sub">시기와 질투와 미움이 가득하다면 다른 사람에게 비방과 성냄과 다툼이 전달될 것이지만 사랑과 은혜가 가득하다면 당신의 말함과 봉사를 통하여 그리스도의 사랑과 은혜가 전달되어 하나님의 영광과 권능이 전달 될 것이며 이를 통하여 하나님이 영화롭게 되기 때문입니다.</p>
+    </div>
+  </div>
+</section>
+
+<script>
+// ══ TIN can interactive ══
+const tinWrap = document.getElementById('tinWrap');
+const tinLid  = document.getElementById('tinLid');
+const tinHint = document.getElementById('tinHint');
+let isOpen = false;
+
+tinWrap.addEventListener('click', () => {
+  isOpen = !isOpen;
+  if(isOpen){
+    tinLid.style.transform = 'translateY(-48px) rotate(-22deg)';
+    tinHint.textContent = '30년의 비밀이 열렸습니다...';
+    tinHint.style.color = 'var(--rust)';
+    // Also trigger the paper note
+    setTimeout(() => {
+      document.getElementById('paperNote').classList.add('visible');
+    }, 400);
+  } else {
+    tinLid.style.transform = '';
+    tinHint.textContent = '👆 눌러서 열어보세요';
+    tinHint.style.color = '';
+  }
+});
+
+tinLid.style.transition = 'transform 0.6s cubic-bezier(0.34,1.2,0.64,1)';
+
+// ══ SCROLL REVEAL ══
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting) e.target.classList.add('visible');
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.sr, .promise-box, .paper-note, .recipe-card, .callout').forEach(el => obs.observe(el));
+
+// Auto-reveal paper note on scroll even if tin not clicked
+const paperNote = document.getElementById('paperNote');
+const noteObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      setTimeout(() => paperNote.classList.add('visible'), 200);
+    }
+  });
+}, { threshold: 0.3 });
+noteObs.observe(paperNote);
+</script>
+</body>
+</html>

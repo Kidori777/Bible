@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나인 성 - 교회 집회 말씀 개요</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --surface-color: #161b22;
+            --gold-color: #d4a017;
+            --blue-point: #58a6ff;
+            --green-point: #3fb950;
+            --text-main: #c9d1d9;
+            --text-muted: #8b949e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(circle at 2px 2px, rgba(212, 160, 23, 0.05) 1px, transparent 0);
+            background-size: 40px 40px;
+            color: var(--text-main);
+            font-family: 'Noto Sans KR', sans-serif;
+            line-height: 1.8;
+            word-break: keep-all;
+        }
+
+        h1, h2, h3, .serif {
+            font-family: 'Noto Serif KR', serif;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 60px 0;
+            margin-bottom: 40px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border: 1px solid var(--gold-color);
+            color: var(--gold-color);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            color: var(--gold-color);
+            margin-bottom: 20px;
+        }
+
+        .hero-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* Section Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+            margin-bottom: 60px;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Verse Card */
+        .verse-card {
+            background: var(--surface-color);
+            border-left: 4px solid var(--gold-color);
+            padding: 30px;
+            margin: 30px 0;
+            position: relative;
+            border-radius: 0 8px 8px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .verse-card::before {
+            content: '"';
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 80px;
+            color: rgba(212, 160, 23, 0.1);
+            font-family: 'Noto Serif KR';
+        }
+
+        .verse-card p {
+            font-weight: 700;
+            color: #ffffff;
+            font-size: 1.1rem;
+            white-space: normal;
+            word-wrap: break-word;
+        }
+
+        /* Cards & Grids */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .person-card, .front-card {
+            background: var(--surface-color);
+            border: 1px solid #30363d;
+            padding: 25px;
+            border-radius: 12px;
+            transition: border-color 0.3s, transform 0.3s;
+        }
+
+        .person-card:hover {
+            border-color: var(--gold-color);
+            transform: translateY(-5px);
+        }
+
+        .card-title {
+            color: var(--gold-color);
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: block;
+            font-size: 1.2rem;
+        }
+
+        /* Dialogue */
+        .dialogue {
+            font-style: italic;
+            color: var(--blue-point);
+            padding: 15px 25px;
+            border-radius: 8px;
+            background: rgba(88, 166, 255, 0.05);
+            margin: 15px 0;
+            border-left: 2px solid var(--blue-point);
+        }
+
+        /* Lists */
+        .mission-list {
+            list-style: none;
+            padding-left: 10px;
+        }
+
+        .mission-list li {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 12px;
+        }
+
+        .mission-list li::before {
+            content: '✦';
+            position: absolute;
+            left: 0;
+            color: var(--gold-color);
+        }
+
+        /* Table Style */
+        .table-container {
+            overflow-x: auto;
+            margin: 25px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--surface-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #30363d;
+        }
+
+        th {
+            background: rgba(212, 160, 23, 0.1);
+            color: var(--gold-color);
+            font-weight: 700;
+        }
+
+        /* Footer */
+        .footer-text {
+            text-align: center;
+            margin-top: 80px;
+            padding: 40px 0;
+            color: var(--text-muted);
+            border-top: 1px solid #30363d;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--gold-color), transparent);
+            margin: 40px 0;
+        }
+
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 2.2rem; }
+            .verse-card { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header class="hero">
+        <span class="hero-icon">✨</span>
+        <div class="badge">Sermon Outline</div>
+        <h1>나인 성</h1>
+        <p class="serif" style="font-size: 1.2rem; color: var(--text-muted);">죽음의 행렬에서 생명의 축제로</p>
+    </header>
+
+    <section class="reveal">
+        <div class="front-card">
+            <p>본 문서는 개인적인 삶의 고난과 죽음의 위기를 통해 제기된 실존적 질문에 대한 해답을 신앙의 관점에서 탐구한다. 저자의 여러 차례에 걸친 죽을 고비(장티푸스, 질식, 폐기흉, 하반신 마비 등)는 삶의 의미와 죽음 이후의 세계에 대한 깊은 고뇌로 이어졌다.</p>
+            <p style="margin-top: 15px;">핵심은 누가복음 7장에 기록된 '나인 성 과부의 아들을 살리신 예수' 이야기를 비유적으로 해석하는 데 있다. 이 해석에 따르면, '나인 성'은 겉보기에 아름답지만 실상은 죽음과 슬픔을 낳는 세상을 상징한다. '과부'는 본질적인 의지처를 잃고 외로움과 불안 속에서 살아가는 인간을, '독자'는 그 공허함을 채우기 위해 추구하는 세상적인 목표(성공, 부, 쾌락 등)를 의미한다. 그러나 이 '독자'는 결국 죽음을 맞이하며, 인간은 피할 수 없는 허무감과 함께 죽음으로 향하는 '하행선'에 올라타게 된다.</p>
+        </div>
+    </section>
+
+    <section class="reveal">
+        <h2 class="serif" style="color: var(--gold-color); margin-bottom: 20px;">1. 서론: 삶의 고난과 실존적 질문</h2>
+        <p>저자는 자신의 삶을 관통한 여러 번의 죽을 고비를 서술하며 글을 시작한다. 이러한 경험들은 삶의 본질과 죽음에 대한 근원적인 질문을 촉발시키는 계기가 되었다.</p>
+        
+        <div class="info-grid">
+            <div class="person-card">
+                <span class="card-title">유년 시절의 위기</span>
+                <ul class="mission-list">
+                    <li>5세 때 장티푸스에 걸려 혼수상태에 빠졌으나 수혈과 치료로 회복했다.</li>
+                    <li>3~5세 경 음식이 목에 걸려 질식 상태에 이르렀을 때, 12살 많은 외삼촌이 병원으로 달려가던 중 목숨을 구했다.</li>
+                </ul>
+            </div>
+            <div class="person-card">
+                <span class="card-title">청년 및 중년 시절의 위기</span>
+                <ul class="mission-list">
+                    <li>20대 초반, 원인 불명의 호흡 곤란을 겪다 폐기흉 진단을 받고 응급 시술로 생명을 건졌다. 당시 체내에서 약 2리터의 피가 나왔다.</li>
+                    <li>40세(2007년)에 허리디스크 파열로 하반신이 마비되어 1년 넘게 치료받았으며, 이로 인해 "차라리 이렇게 사느니 죽는 것이 더 나으리라"는 극단적인 생각까지 했다.</li>
+                    <li>2009년에는 담석으로 인해 수술을 받았다.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="dialogue">
+            "내가 왜 사는 걸까?"<br>
+            "나는 죽어서 어디로 갈까?"<br>
+            "죽음 이후의 세상은 어떨까?"<br>
+            "정말 천국과 지옥이 있을까? 있다면 난 어디로 갈까?"
+        </div>
+        <p>저자는 이러한 의문에 대한 해답을 스스로 찾은 것이 아니라, 하나님의 은혜로 그리스도의 사랑을 깨닫게 되면서 진정한 마음의 안식을 얻었다고 고백한다. 더불어, 현대 의학이 없던 백 년 전에 태어났다면 일찍 생을 마감했을 것이라 회고하며, 여러 죽을 고비를 넘긴 것이 오히려 하나님의 은혜를 발견할 기회가 되었음에 감사함을 표한다.</p>
+    </section>
+
+    <section class="reveal">
+        <h2 class="serif" style="color: var(--gold-color); margin-bottom: 20px;">2. 나인 성 과부의 비유: 인간 실존에 대한 상징적 표현</h2>
+        <p>저자는 다음의 이야기를 통해 인간 세상의 본질과 개인의 실존적 상태를 설명한다. 이는 '하행선'이라는 개념으로 요약되며, 아름다운 세상에서 출발하여 결국 사망에 이르는 여정을 의미한다.</p>
+
+        <div class="verse-card">
+            <p>**누가복음 7장 11절~17절**</p>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>상징</th>
+                        <th>원문 표현</th>
+                        <th>해석 및 의미</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>나인 성</td>
+                        <td>'잘생긴, 아름다운' (히브리어)</td>
+                        <td>겉으로 행복하고 즐거워 보이는 아름다운 세상을 상징. 사람들은 이곳에서 행복한 삶을 설계하고 꿈꾼다.</td>
+                    </tr>
+                    <tr>
+                        <td>장례 행렬</td>
+                        <td>"사람들이 한 죽은 자를 메고 나오니"</td>
+                        <td>아름다운 세상(나인 성)에서 나오는 것의 본질은 행복이 아니라 '사망과 슬픔'임을 보여준다.</td>
+                    </tr>
+                    <tr>
+                        <td>과부</td>
+                        <td>남편을 잃어버린 여인</td>
+                        <td>본질적인 의지처(남편)를 상실한 인간의 상태를 상징. 외로움, 그리움, 미래에 대한 불안함, 서글픔 등의 감정에 사로잡혀 있다.</td>
+                    </tr>
+                    <tr>
+                        <td>독자 (獨子)</td>
+                        <td>과부의 하나뿐인 아들</td>
+                        <td>과부(인간)가 상실감을 잊고 미래를 위탁하기 위해 모든 정성을 쏟아붓는 세상적인 추구 대상. 결혼, 직장, 돈, 건강, 쾌락 등이 이에 해당한다.</td>
+                    </tr>
+                    <tr>
+                        <td>독자의 죽음</td>
+                        <td>"그 독자는 죽는다"</td>
+                        <td>인생의 목표로 삼았던 세상적인 추구가 결국에는 의미를 잃고 참기 어려운 허무감을 안겨주는 상태를 의미한다.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="serif" style="margin-top: 30px;">2.1. 독자의 죽음: 세상적 성취의 허무</h3>
+        <p>저자는 과부가 모든 희망을 걸었던 '독자'가 결국 죽는다는 사실에 주목하며, 이는 세상적인 성공이나 성취가 궁극적인 만족을 주지 못함을 의미한다고 분석한다. 이에 대한 증거로 2001년 동아일보에 실린 한 세계적인 성악가의 인터뷰를 인용한다.</p>
+        <div class="dialogue">
+            "...무대가 화려한 만큼 불이 꺼지면 더 어둡잖아요. 혼자서 나와 호텔 방에서 화장을 지우면 참기 어려운 허무감이 밀려오죠."
+        </div>
+
+        <h3 class="serif" style="margin-top: 30px;">2.2. 하행선: 죽음을 향하는 보편적 여정</h3>
+        <p>나인 성에서 나오는 장례 행렬은 모든 인간이 동참하고 있는 보편적인 여정을 상징한다.</p>
+        <ul class="mission-list">
+            <li><strong>출발역:</strong> 아름다운 세상 (나인)</li>
+            <li><strong>선두:</strong> 죽은 독자의 관</li>
+            <li><strong>동행자:</strong> 독자를 잃은 과부(인간)와 그의 슬픔에 공감하며 뒤따르는 수많은 사람들</li>
+            <li><strong>종착역:</strong> 무덤 (사망)</li>
+        </ul>
+
+        <div class="verse-card">
+            <p>**전도서 3장 19절~21절**</p>
+        </div>
+        <p>을 인용하여, 사람 역시 짐승처럼 죽음을 맞이하며 모든 것이 헛되다는 점을 강조한다. 이처럼 인생은 세상적인 목표(독자)를 잃고 허무감 속에서 살다가 결국 죽음으로 끝나는 '하행선'의 과정과 결말을 맞이하게 된다.</p>
+    </section>
+
+    <section class="reveal">
+        <h2 class="serif" style="color: var(--gold-color); margin-bottom: 20px;">3. 주님의 개입과 구원: 예수의 역할 (상행선)</h2>
+        <p>죽음을 향해 가는 '하행선'과 대조적으로, 저자는 예수를 생명으로 향하는 '상행선'으로 묘사한다. 예수는 나인 성으로 들어가면서 성에서 나오는 장례 행렬과 마주치며, 죽음의 흐름을 거슬러 생명을 부여하는 역할을 한다.</p>
+
+        <h3 class="serif" style="margin-top: 25px;">3.1. 주도적인 긍휼과 위로</h3>
+        <ul class="mission-list">
+            <li><strong>"주께서 과부를 보시고 불쌍히 여기사":</strong> 과부가 예수를 찾지 않았음에도, 예수는 먼저 그녀의 슬픔을 보고 긍휼히 여겼다. 이는 신이 먼저 고통받는 인간에게 다가옴을 의미한다.</li>
+            <li><strong>"울지 말라":</strong> 이 말은 단순한 위로가 아니다. 세상 사람은 슬픔의 원인을 해결할 수 없기에 위로의 말만 할 수 있지만, 예수는 슬픔의 근본 원인(죽음)을 해결할 능력을 가졌기에 울음을 그치게 할 수 있다.</li>
+        </ul>
+
+        <h3 class="serif" style="margin-top: 25px;">3.2. 죽음의 행렬을 멈추는 권능</h3>
+        <p>예수는 구체적인 행동을 통해 사망의 행렬을 멈춘다.</p>
+        <div class="dialogue">
+            "가까이 가서 그 관에 손을 대시니 멘 자들이 서는지라"
+        </div>
+        <p>예수의 접촉은 죽음의 진행을 정지시킨다. 저자는 이를 독자에게 "주님으로 하여금 나의 죽은 독자의 관을 만지게 하십시오"라고 권하며, 자신의 고통스러운 상황에 주님이 개입하도록 허락하라고 요청한다. 마음속의 슬픔과 사망의 관에 주님이 손을 댈 때, 비로소 죽음으로 향하던 발걸음이 멈출 수 있다.</p>
+
+        <h3 class="serif" style="margin-top: 25px;">3.3. 말씀을 통한 생명의 회복</h3>
+        <p>생명의 회복은 시각적 기적이 아닌, 들리는 말씀을 통해 이루어진다.</p>
+        <div class="verse-card">
+            <p>**"청년아 내가 네게 말하노니 일어나라 하시매"**</p>
+        </div>
+        <p>죽은 청년은 예수를 보지 못했지만, 그의 말씀을 듣고 살아났다. 이는 오늘날 육신의 눈으로 예수를 볼 수 없더라도, 성경의 말씀을 통해 생명을 얻을 수 있음을 시사한다.</p>
+        <p style="margin-top: 10px;"><strong>마음의 귀:</strong> 죽은 청년이 주님의 말씀을 듣는 귀는 열려 있었던 것처럼, 인간의 마음이 사망과 슬픔에 잠겨 있더라도 주님의 말씀을 듣는 '마음의 귀'를 연다면 새로운 생명을 얻을 수 있다.</p>
+    </section>
+
+    <section class="reveal">
+        <h2 class="serif" style="color: var(--gold-color); margin-bottom: 20px;">4. 변화와 결과: 삶의 의미 회복과 하나님께 드리는 영광</h2>
+        <p>예수와의 만남은 개인의 삶에 근본적인 변화를 가져온다.</p>
+
+        <div class="info-grid">
+            <div class="front-card">
+                <span class="card-title">독자의 회복과 삶의 의미 재발견</span>
+                <p><strong>"죽었던 자가 일어나 앉고 말도 하거늘 예수께서 그를 어머니에게 주시니"</strong> : 이는 죽었던 '독자', 즉 허무하게 느껴졌던 삶의 모든 요소(직업, 결혼, 수고 등)가 다시 의미를 되찾고 생명력을 얻게 됨을 상징한다. 주님을 만난 후에야 비로소 자신이 왜 사는지 분명하게 알게 되고, 일상의 모든 일이 의미 있게 되살아난다.</p>
+            </div>
+            <div class="front-card">
+                <span class="card-title">하나님께 돌아가는 영광</span>
+                <p><strong>"모든 사람이 두려워하며 하나님께 영광을 돌려...하나님께서 자기 백성을 돌아보셨다 하더라"</strong> : 개인의 삶에 주님이 개입하신 최종 결과는 하나님께 영광이 돌아가는 것이다. 이는 곧 하나님의 속성이 개인의 삶을 통해 표현됨을 의미하며, 하나님이 당신의 삶 또한 돌아보시기 원한다는 메시지를 전달한다.</p>
+            </div>
+        </div>
+
+        <hr>
+        <div style="text-align: center;">
+            <p style="font-size: 1.2rem;">이러한 과정을 통해, 아름다운 세상에서 시작해 사망으로 끝나던 '하행선'의 삶은, 예수와의 만남을 통해 사망에서 시작하여 영원한 생명과 기쁨으로 나아가는 '상행선'의 삶으로 전환된다.</p>
+            <h2 class="serif" style="color: var(--gold-color); margin-top: 20px;">상행선: 영원한 생명과 기쁨</h2>
+        </div>
+    </section>
+
+    <footer class="footer-text">
+        부산교회 2구역
+    </footer>
+</div>
+
+<script>
+    const observerOptions = {
+        threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

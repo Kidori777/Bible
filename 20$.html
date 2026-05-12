@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>20달러 — 사도행전 20:35</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700;900&family=Noto+Sans+KR:wght@300;400&family=Alfa+Slab+One&family=Arvo:wght@400;700&family=Caveat:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+
+:root{
+  --midnight: #0a0e1a;
+  --deep:     #111828;
+  --navy:     #1a2540;
+  --circus:   #c8321e;
+  --circus2:  #e84830;
+  --gold:     #e8a020;
+  --gold2:    #f0bc50;
+  --cream:    #f5ead0;
+  --parch:    #ede0b8;
+  --sage:     #4a7060;
+  --lime:     #8ab040;
+  --ink:      #0e1420;
+  --fog:      #c0b8a8;
+}
+
+body{
+  background: var(--midnight);
+  color: var(--cream);
+  font-family: 'Noto Serif KR', serif;
+  overflow-x: hidden;
+}
+
+/* ══ STAR FIELD BG ══ */
+body::before{
+  content:'';
+  position:fixed; inset:0;
+  background-image:
+    radial-gradient(1px 1px at 20% 15%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 80% 25%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 40% 60%, rgba(255,255,255,0.2) 0%, transparent 100%),
+    radial-gradient(1px 1px at 60% 80%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 10% 40%, rgba(255,255,255,0.25) 0%, transparent 100%),
+    radial-gradient(1px 1px at 90% 70%, rgba(255,255,255,0.2) 0%, transparent 100%),
+    radial-gradient(1px 1px at 30% 90%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(2px 2px at 70% 45%, rgba(255,255,255,0.15) 0%, transparent 100%);
+  pointer-events:none;
+  z-index:0;
+}
+
+/* ══ CIRCUS TENT HERO ══ */
+#hero{
+  position:relative;
+  width:100vw;
+  min-height:100vh;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  z-index:1;
+  padding:60px 24px 80px;
+}
+
+/* Tent stripe pattern */
+#hero::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent 0px,
+    transparent 40px,
+    rgba(200,50,30,0.04) 40px,
+    rgba(200,50,30,0.04) 80px
+  );
+  pointer-events:none;
+}
+
+/* Spotlight cone from top */
+.spotlight{
+  position:absolute;
+  top:-100px; left:50%;
+  transform:translateX(-50%);
+  width:600px; height:700px;
+  background: radial-gradient(ellipse at 50% 0%,
+    rgba(232,160,32,0.12) 0%,
+    rgba(232,160,32,0.06) 30%,
+    transparent 70%);
+  pointer-events:none;
+}
+
+/* Hero marquee — top banner */
+.marquee-banner{
+  position:absolute;
+  top:0; left:0; right:0;
+  background: var(--circus);
+  padding:8px 0;
+  display:flex;
+  overflow:hidden;
+}
+
+.marquee-track{
+  display:flex;
+  gap:0;
+  animation:marqueeScroll 20s linear infinite;
+  white-space:nowrap;
+}
+
+.marquee-item{
+  font-family:'Alfa Slab One', serif;
+  font-size:11px;
+  letter-spacing:0.35em;
+  color:rgba(245,234,208,0.8);
+  text-transform:uppercase;
+  padding:0 32px;
+}
+
+.marquee-sep{
+  color:var(--gold);
+  padding:0 8px;
+}
+
+@keyframes marqueeScroll{
+  0%{transform:translateX(0);}
+  100%{transform:translateX(-50%);}
+}
+
+/* HERO TITLE — stacked circus poster */
+.hero-inner{
+  position:relative;
+  z-index:2;
+  text-align:center;
+  margin-top:40px;
+}
+
+.hero-eyebrow{
+  font-family:'Noto Sans KR', sans-serif;
+  font-size:9px;
+  font-weight:300;
+  letter-spacing:0.6em;
+  text-transform:uppercase;
+  color:rgba(245,234,208,0.35);
+  margin-bottom:16px;
+  opacity:0;
+  animation:fadeUp 0.6s ease 0.3s forwards;
+}
+
+/* Big dollar sign */
+.hero-dollar{
+  font-family:'Alfa Slab One', serif;
+  font-size:clamp(120px,28vw,280px);
+  line-height:0.85;
+  color:var(--gold);
+  text-shadow:
+    4px 6px 0 rgba(200,50,30,0.4),
+    8px 12px 0 rgba(200,50,30,0.15);
+  letter-spacing:-0.04em;
+  opacity:0;
+  animation:fadeUp 1s cubic-bezier(0.16,1,0.3,1) 0.5s forwards;
+  display:block;
+}
+
+.hero-twenty{
+  font-family:'Alfa Slab One', serif;
+  font-size:clamp(48px,10vw,100px);
+  line-height:1;
+  color:var(--cream);
+  letter-spacing:0.06em;
+  opacity:0;
+  animation:fadeUp 0.8s ease 0.9s forwards;
+  display:block;
+  margin-top:-8px;
+}
+
+.hero-sub{
+  font-family:'Noto Serif KR', serif;
+  font-size:clamp(14px,2vw,18px);
+  line-height:1.9;
+  color:rgba(245,234,208,0.55);
+  margin-top:20px;
+  opacity:0;
+  animation:fadeUp 0.8s ease 1.2s forwards;
+}
+
+/* Scroll cue */
+.scroll-cue{
+  position:absolute;
+  bottom:28px; left:50%;
+  transform:translateX(-50%);
+  z-index:3;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+  opacity:0;
+  animation:fadeIn 1s ease 2s forwards;
+}
+
+.sc-stem{
+  width:1px; height:48px;
+  background:linear-gradient(180deg, var(--gold), transparent);
+  animation:stemPulse 2s ease-in-out infinite;
+}
+
+.sc-text{
+  font-family:'Arvo', serif;
+  font-size:9px;
+  letter-spacing:0.4em;
+  color:rgba(232,160,32,0.4);
+  text-transform:uppercase;
+}
+
+@keyframes stemPulse{0%,100%{opacity:1;}50%{opacity:0.2;}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeIn{to{opacity:1;}}
+
+/* ══ QUEUE SECTION — vertical people in line ══ */
+.queue-section{
+  position:relative;
+  z-index:1;
+  background:var(--deep);
+  padding:0;
+  overflow:hidden;
+}
+
+/* Vertical dashed line — the queue */
+.queue-line{
+  position:absolute;
+  left:50%;
+  top:0; bottom:0;
+  width:1px;
+  background:repeating-linear-gradient(
+    180deg,
+    rgba(245,234,208,0.08) 0px,
+    rgba(245,234,208,0.08) 8px,
+    transparent 8px,
+    transparent 16px
+  );
+  transform:translateX(-50%);
+}
+
+/* Each queue "slot" */
+.queue-slot{
+  position:relative;
+  padding:60px 0;
+  display:flex;
+  align-items:center;
+  max-width:900px;
+  margin:0 auto;
+  padding-left:40px;
+  padding-right:40px;
+}
+
+/* Alternate: content left / right */
+.queue-slot:nth-child(odd){
+  flex-direction:row;
+}
+.queue-slot:nth-child(even){
+  flex-direction:row-reverse;
+}
+
+/* Central dot on queue line */
+.queue-dot{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:14px; height:14px;
+  border-radius:50%;
+  border:2px solid;
+  background:var(--deep);
+  z-index:2;
+  flex-shrink:0;
+}
+
+.dot-gold{border-color:var(--gold); box-shadow:0 0 12px rgba(232,160,32,0.4);}
+.dot-red{border-color:var(--circus); box-shadow:0 0 12px rgba(200,50,30,0.4);}
+.dot-sage{border-color:var(--sage); box-shadow:0 0 12px rgba(74,112,96,0.4);}
+.dot-lime{border-color:var(--lime); box-shadow:0 0 12px rgba(138,176,64,0.4);}
+
+/* Content pane */
+.slot-content{
+  flex:1;
+  max-width:calc(50% - 40px);
+  opacity:0;
+  transition:all 0.7s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+
+.queue-slot:nth-child(odd) .slot-content{
+  padding-right:48px;
+  transform:translateX(-20px);
+}
+
+.queue-slot:nth-child(even) .slot-content{
+  padding-left:48px;
+  transform:translateX(20px);
+}
+
+.slot-content.visible{
+  opacity:1;
+  transform:translateX(0) !important;
+}
+
+/* People figure */
+.slot-figure{
+  flex-shrink:0;
+  width:80px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+  opacity:0;
+  transition:all 0.5s ease 0.2s;
+}
+
+.slot-figure.visible{opacity:1;}
+
+.fig-label{
+  font-family:'Noto Sans KR', sans-serif;
+  font-size:9px;
+  font-weight:300;
+  letter-spacing:0.3em;
+  color:rgba(245,234,208,0.3);
+  text-align:center;
+  text-transform:uppercase;
+}
+
+/* Slot content inner */
+.slot-tag{
+  font-family:'Noto Sans KR', sans-serif;
+  font-size:9px;
+  font-weight:300;
+  letter-spacing:0.5em;
+  text-transform:uppercase;
+  display:block;
+  margin-bottom:12px;
+}
+
+.tag-gold{color:var(--gold);}
+.tag-red{color:var(--circus);}
+.tag-sage{color:var(--sage);}
+.tag-lime{color:var(--lime);}
+
+.slot-title{
+  font-family:'Arvo', serif;
+  font-size:clamp(18px,2.8vw,26px);
+  font-weight:700;
+  color:var(--cream);
+  line-height:1.3;
+  margin-bottom:16px;
+}
+
+.slot-p{
+  font-family:'Noto Serif KR', serif;
+  font-size:clamp(13px,1.7vw,15px);
+  line-height:2.1;
+  color:rgba(245,234,208,0.65);
+}
+
+/* Speech bubble style */
+.speech-slot{
+  margin-top:16px;
+  padding:16px 20px;
+  border:1px solid rgba(245,234,208,0.1);
+  position:relative;
+  background:rgba(255,255,255,0.03);
+}
+
+.speech-slot::before{
+  content:'';
+  position:absolute;
+  top:0; left:0;
+  width:12px; height:12px;
+  border-top:2px solid;
+  border-left:2px solid;
+}
+
+.speech-slot::after{
+  content:'';
+  position:absolute;
+  bottom:0; right:0;
+  width:12px; height:12px;
+  border-bottom:2px solid;
+  border-right:2px solid;
+}
+
+.speech-gold::before,.speech-gold::after{border-color:var(--gold);}
+.speech-red::before,.speech-red::after{border-color:var(--circus);}
+
+.speech-text{
+  font-family:'Caveat', cursive;
+  font-size:clamp(15px,2.2vw,20px);
+  font-weight:600;
+  line-height:1.7;
+  color:var(--cream);
+}
+
+/* ══ THE BILL DROP MOMENT ══ */
+.bill-section{
+  position:relative;
+  z-index:1;
+  background:var(--navy);
+  min-height:60vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  padding:80px 24px;
+}
+
+/* Spotlight for this section */
+.bill-section::before{
+  content:'';
+  position:absolute;
+  top:0; left:50%;
+  transform:translateX(-50%);
+  width:400px; height:100%;
+  background:radial-gradient(ellipse at 50% 0%,
+    rgba(232,160,32,0.1) 0%,
+    transparent 60%);
+  pointer-events:none;
+}
+
+/* The $20 bill — animated falling */
+.bill-wrap{
+  position:relative;
+  z-index:2;
+  margin-bottom:48px;
+}
+
+.bill{
+  width:clamp(260px,50vw,400px);
+  height:auto;
+  opacity:0;
+  transform:translateY(-60px) rotate(-8deg);
+  transition:all 1.2s cubic-bezier(0.34,1.2,0.64,1);
+  filter:drop-shadow(0 20px 40px rgba(0,0,0,0.5));
+}
+
+.bill.visible{
+  opacity:1;
+  transform:translateY(0) rotate(-2deg);
+}
+
+/* The key dialogue */
+.moment-inner{
+  position:relative;
+  z-index:2;
+  max-width:680px;
+  text-align:center;
+}
+
+.moment-label{
+  font-family:'Noto Sans KR', sans-serif;
+  font-size:9px;
+  font-weight:300;
+  letter-spacing:0.55em;
+  text-transform:uppercase;
+  color:rgba(232,160,32,0.45);
+  display:block;
+  margin-bottom:24px;
+}
+
+.moment-quote{
+  font-family:'Arvo', serif;
+  font-size:clamp(18px,3vw,30px);
+  font-weight:700;
+  line-height:1.5;
+  color:var(--cream);
+  margin-bottom:20px;
+}
+
+.moment-quote .gold-text{color:var(--gold2);}
+
+.moment-follow{
+  font-family:'Caveat', cursive;
+  font-size:clamp(16px,2.5vw,24px);
+  font-weight:500;
+  line-height:1.7;
+  color:rgba(245,234,208,0.6);
+  margin-top:16px;
+}
+
+/* ══ REVELATION ══ */
+.reveal-section{
+  position:relative;
+  z-index:1;
+  background:var(--deep);
+  padding:80px 40px;
+  overflow:hidden;
+}
+
+.reveal-inner{
+  max-width:800px;
+  margin:0 auto;
+}
+
+/* Big number */
+.bg-number{
+  font-family:'Alfa Slab One', serif;
+  font-size:clamp(120px,20vw,220px);
+  color:rgba(232,160,32,0.04);
+  line-height:0.85;
+  text-align:center;
+  margin-bottom:-60px;
+  letter-spacing:-0.04em;
+  user-select:none;
+  pointer-events:none;
+}
+
+.reveal-tag{
+  font-family:'Noto Sans KR', sans-serif;
+  font-size:9px;
+  font-weight:300;
+  letter-spacing:0.55em;
+  text-transform:uppercase;
+  color:rgba(232,160,32,0.4);
+  display:block;
+  margin-bottom:16px;
+}
+
+.reveal-title{
+  font-family:'Arvo', serif;
+  font-size:clamp(24px,4vw,42px);
+  font-weight:700;
+  color:var(--cream);
+  line-height:1.2;
+  margin-bottom:32px;
+}
+
+.reveal-p{
+  font-family:'Noto Serif KR', serif;
+  font-size:clamp(14px,1.9vw,17px);
+  line-height:2.1;
+  color:rgba(245,234,208,0.65);
+  margin-bottom:20px;
+}
+
+.reveal-bold{
+  font-family:'Arvo', serif;
+  font-size:clamp(17px,2.5vw,24px);
+  font-weight:700;
+  color:var(--cream);
+  line-height:1.6;
+  padding:24px 0;
+  border-top:1px solid rgba(245,234,208,0.08);
+  border-bottom:1px solid rgba(245,234,208,0.08);
+  margin:32px 0;
+}
+
+.reveal-bold .gold{color:var(--gold2);}
+
+/* ══ SCRIPTURE ══ */
+.scripture-section{
+  position:relative;
+  z-index:1;
+  background: var(--circus);
+  padding:100px 40px;
+  overflow:hidden;
+}
+
+.scripture-section::before{
+  content:'';
+  position:absolute; inset:0;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent 0px, transparent 30px,
+    rgba(0,0,0,0.04) 30px, rgba(0,0,0,0.04) 60px
+  );
+}
+
+.scripture-section::after{
+  content:'20:35';
+  position:absolute;
+  right:-20px; bottom:20px;
+  font-family:'Alfa Slab One', serif;
+  font-size:200px;
+  color:rgba(0,0,0,0.06);
+  line-height:1;
+  pointer-events:none;
+}
+
+.scripture-inner{
+  max-width:760px;
+  margin:0 auto;
+  position:relative;
+  z-index:1;
+}
+
+.sc-stamp{
+  display:inline-flex;
+  align-items:center;
+  gap:16px;
+  margin-bottom:40px;
+}
+
+.sc-box{
+  width:52px; height:52px;
+  background:rgba(0,0,0,0.25);
+  border:1px solid rgba(245,234,208,0.3);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Alfa Slab One', serif;
+  font-size:18px;
+  color:var(--cream);
+}
+
+.sc-meta{display:flex;flex-direction:column;gap:4px;}
+
+.sc-book{
+  font-family:'Noto Sans KR', sans-serif;
+  font-size:9px;
+  font-weight:400;
+  letter-spacing:0.45em;
+  color:rgba(245,234,208,0.6);
+  text-transform:uppercase;
+}
+
+.sc-ref{
+  font-family:'Arvo', serif;
+  font-size:13px;
+  color:rgba(245,234,208,0.85);
+}
+
+.verse-text{
+  font-family:'Noto Serif KR', serif;
+  font-size:clamp(16px,2.4vw,22px);
+  line-height:2;
+  color:var(--cream);
+  margin-bottom:20px;
+}
+
+.verse-text strong{font-weight:700;color:#fff;}
+
+/* ══ CLOSING ══ */
+.closing-section{
+  position:relative;
+  z-index:1;
+  background:var(--midnight);
+  padding:100px 40px 140px;
+  text-align:center;
+  overflow:hidden;
+}
+
+.closing-section::before{
+  content:'';
+  position:absolute;
+  left:50%; top:30%;
+  transform:translateX(-50%);
+  width:500px; height:500px;
+  background:radial-gradient(circle, rgba(232,160,32,0.06) 0%, transparent 70%);
+  border-radius:50%;
+  pointer-events:none;
+}
+
+.closing-inner{
+  max-width:640px;
+  margin:0 auto;
+  position:relative;
+  z-index:1;
+}
+
+.closing-big{
+  font-family:'Alfa Slab One', serif;
+  font-size:clamp(28px,6vw,64px);
+  line-height:1.15;
+  color:var(--gold);
+  margin-bottom:16px;
+}
+
+.closing-rule{
+  width:48px; height:3px;
+  background:var(--circus);
+  margin:24px auto;
+}
+
+.closing-body{
+  font-family:'Noto Serif KR', serif;
+  font-size:clamp(14px,1.9vw,17px);
+  line-height:2.1;
+  color:rgba(245,234,208,0.6);
+  margin-bottom:16px;
+  text-align:left;
+}
+
+.closing-final{
+  margin-top:60px;
+  padding:32px 36px;
+  border:1px solid rgba(232,160,32,0.2);
+  position:relative;
+  text-align:left;
+  opacity:0;
+  transform:translateY(20px);
+  transition:all 0.8s ease;
+}
+
+.closing-final.visible{opacity:1;transform:translateY(0);}
+
+.closing-final::before{
+  content:'';
+  position:absolute;
+  top:-1px; left:-1px;
+  width:20px; height:20px;
+  border-top:2px solid var(--gold);
+  border-left:2px solid var(--gold);
+}
+.closing-final::after{
+  content:'';
+  position:absolute;
+  bottom:-1px; right:-1px;
+  width:20px; height:20px;
+  border-bottom:2px solid var(--gold);
+  border-right:2px solid var(--gold);
+}
+
+.closing-final-text{
+  font-family:'Arvo', serif;
+  font-size:clamp(14px,2vw,18px);
+  font-weight:700;
+  color:var(--gold2);
+  line-height:1.8;
+  margin-bottom:12px;
+}
+
+.closing-final-body{
+  font-family:'Noto Serif KR', serif;
+  font-size:clamp(13px,1.7vw,16px);
+  line-height:2;
+  color:rgba(245,234,208,0.6);
+}
+
+/* Dividers */
+.qdivider{
+  height:1px;
+  background:linear-gradient(90deg, transparent, rgba(245,234,208,0.08), transparent);
+  position:relative;
+  z-index:1;
+}
+
+/* Scroll reveals */
+.sr{
+  opacity:0; transform:translateY(20px);
+  transition:all 0.65s ease;
+}
+.sr.visible{opacity:1;transform:translateY(0);}
+.sr:nth-child(2){transition-delay:0.08s;}
+.sr:nth-child(3){transition-delay:0.16s;}
+
+@media(max-width:600px){
+  .queue-slot{flex-direction:column!important;padding-left:24px;padding-right:24px;}
+  .slot-content{max-width:100%;padding:0!important;margin-top:16px;}
+  .queue-line{left:24px;}
+  .queue-dot{left:24px;}
+  .slot-figure{display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ HERO ══ -->
+<section id="hero">
+  <!-- Scrolling marquee banner -->
+  <div class="marquee-banner">
+    <div class="marquee-track">
+      <span class="marquee-item">서커스<span class="marquee-sep">★</span>Circus<span class="marquee-sep">★</span>주는 것이 받는 것보다 복이 있습니다<span class="marquee-sep">★</span>Acts 20:35<span class="marquee-sep">★</span>사도행전 20장 35절<span class="marquee-sep">★</span></span>
+      <span class="marquee-item">서커스<span class="marquee-sep">★</span>Circus<span class="marquee-sep">★</span>주는 것이 받는 것보다 복이 있습니다<span class="marquee-sep">★</span>Acts 20:35<span class="marquee-sep">★</span>사도행전 20장 35절<span class="marquee-sep">★</span></span>
+    </div>
+  </div>
+
+  <div class="spotlight"></div>
+
+  <div class="hero-inner">
+    <div class="hero-eyebrow">마음을 열어주는 이야기 · 서커스 매표소 앞에서</div>
+    <span class="hero-dollar">20</span>
+    <span class="hero-twenty">달러</span>
+    <p class="hero-sub">바닥에 떨어진 한 장의 지폐 — 그리고 존엄을 지킨 사랑</p>
+  </div>
+
+  <div class="scroll-cue">
+    <div class="sc-stem"></div>
+    <span class="sc-text">scroll</span>
+  </div>
+</section>
+
+<!-- ══ QUEUE: THE LINE ══ -->
+<section class="queue-section">
+  <div class="queue-line"></div>
+
+  <!-- Slot 1: narrator & father -->
+  <div class="queue-slot">
+    <div class="slot-figure sr">
+      <svg width="40" height="80" viewBox="0 0 40 80" fill="none">
+        <circle cx="20" cy="12" r="9" stroke="rgba(232,160,32,0.5)" stroke-width="1.5" fill="none"/>
+        <line x1="20" y1="21" x2="20" y2="52" stroke="rgba(232,160,32,0.4)" stroke-width="1.5"/>
+        <line x1="20" y1="32" x2="8" y2="44" stroke="rgba(232,160,32,0.4)" stroke-width="1.5"/>
+        <line x1="20" y1="32" x2="32" y2="44" stroke="rgba(232,160,32,0.4)" stroke-width="1.5"/>
+        <line x1="20" y1="52" x2="12" y2="70" stroke="rgba(232,160,32,0.4)" stroke-width="1.5"/>
+        <line x1="20" y1="52" x2="28" y2="70" stroke="rgba(232,160,32,0.4)" stroke-width="1.5"/>
+      </svg>
+      <span class="fig-label">나 &<br>아버지</span>
+    </div>
+
+    <div class="queue-dot dot-gold"></div>
+
+    <div class="slot-content sr">
+      <span class="slot-tag tag-gold">The Story Begins · 이야기의 시작</span>
+      <h2 class="slot-title">매표소 앞 줄에서</h2>
+      <p class="slot-p">내가 십대였을 때의 일이다. 어느 날 나는 아버지와 함께 서커스를 구경하기 위해 매표소 앞에 줄을 서 있었다. 표를 산 사람들이 차례로 서커스장 안으로 들어가고, 마침내 매표소와 우리 사이에는 한 가족만이 남았다.</p>
+    </div>
+  </div>
+
+  <div class="qdivider"></div>
+
+  <!-- Slot 2: the family -->
+  <div class="queue-slot">
+    <div class="slot-content sr">
+      <span class="slot-tag tag-red">The Family · 그 가족</span>
+      <h2 class="slot-title">여덟 명의 아이들, 깨끗한 옷차림</h2>
+      <p class="slot-p">그 가족은 무척 인상적이었다. 열두 살 이하의 아이들이 무려 여덟 명이나 되는 대식구였다. 하지만 그들이 입고 있는 옷은 비싼지 않아도 깨끗했고 아이들의 행동에는 기품이 있었다. 아이들은 둘씩 짝을 지어 부모 뒤에 손을 잡고 서 있었다.</p>
+      <p class="slot-p" style="margin-top:12px;">아이들은 그날 밤 구경하게 될 어릿광대와 코끼리, 그리고 온갖 곡예들에 대해 흥분한 목소리로 이야기를 나누었다. 그들이 전에는 한 번도 서커스를 구경한 적이 없다는 것을 알 수 있었다. 그날 밤은 그들의 어린 시절에 결코 잊지 못할 추억이 될 것이 틀림없었다.</p>
+    </div>
+
+    <div class="queue-dot dot-red"></div>
+
+    <div class="slot-figure sr">
+      <svg width="60" height="80" viewBox="0 0 60 80" fill="none">
+        <!-- Dad -->
+        <circle cx="15" cy="10" r="7" stroke="rgba(200,50,30,0.5)" stroke-width="1.5" fill="none"/>
+        <line x1="15" y1="17" x2="15" y2="42" stroke="rgba(200,50,30,0.4)" stroke-width="1.5"/>
+        <!-- Mom -->
+        <circle cx="35" cy="10" r="7" stroke="rgba(200,50,30,0.5)" stroke-width="1.5" fill="none"/>
+        <line x1="35" y1="17" x2="35" y2="42" stroke="rgba(200,50,30,0.4)" stroke-width="1.5"/>
+        <!-- Hand together -->
+        <line x1="22" y1="29" x2="28" y2="29" stroke="rgba(200,50,30,0.6)" stroke-width="2"/>
+        <!-- 4 small kids -->
+        <circle cx="8" cy="55" r="5" stroke="rgba(200,50,30,0.3)" stroke-width="1" fill="none"/>
+        <circle cx="20" cy="55" r="5" stroke="rgba(200,50,30,0.3)" stroke-width="1" fill="none"/>
+        <circle cx="32" cy="55" r="5" stroke="rgba(200,50,30,0.3)" stroke-width="1" fill="none"/>
+        <circle cx="44" cy="55" r="5" stroke="rgba(200,50,30,0.3)" stroke-width="1" fill="none"/>
+        <text x="30" y="78" text-anchor="middle" font-family="sans-serif" font-size="8" fill="rgba(200,50,30,0.3)">×8</text>
+      </svg>
+      <span class="fig-label">대가족</span>
+    </div>
+  </div>
+
+  <div class="qdivider"></div>
+
+  <!-- Slot 3: the parents' eyes -->
+  <div class="queue-slot">
+    <div class="slot-figure sr">
+      <svg width="50" height="80" viewBox="0 0 50 80" fill="none">
+        <circle cx="18" cy="14" r="9" stroke="rgba(74,112,96,0.5)" stroke-width="1.5" fill="none"/>
+        <circle cx="36" cy="14" r="9" stroke="rgba(74,112,96,0.5)" stroke-width="1.5" fill="none"/>
+        <path d="M18 23 Q27 35 36 23" stroke="rgba(74,112,96,0.4)" stroke-width="1.5" fill="none"/>
+        <!-- Eyes meeting -->
+        <line x1="18" y1="14" x2="36" y2="14" stroke="rgba(74,112,96,0.3)" stroke-width="1" stroke-dasharray="2,2"/>
+      </svg>
+      <span class="fig-label">부부</span>
+    </div>
+
+    <div class="queue-dot dot-sage"></div>
+
+    <div class="slot-content sr">
+      <span class="slot-tag tag-sage">Silent Love · 말없는 사랑</span>
+      <h2 class="slot-title">아내는 남편의 손을 잡고</h2>
+      <p class="slot-p">아이들의 아버지와 어머니는 자랑스러운 얼굴로 맨 앞줄에 서 있었다. 아내는 남편의 손을 잡고 자랑스럽게 남편을 쳐다보았다.</p>
+      <div class="speech-slot speech-gold sr" style="margin-top:16px;">
+        <p class="speech-text">"당신은 정말 멋진 가장이에요."</p>
+      </div>
+      <p class="slot-p" style="margin-top:12px;">남편도 미소를 보내며 아내를 바라보았다. 그의 시선은 이렇게 말하고 있었다.</p>
+      <div class="speech-slot speech-gold sr">
+        <p class="speech-text">"당신 역시 훌륭한 여성이오."</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="qdivider"></div>
+
+  <!-- Slot 4: the moment of crisis -->
+  <div class="queue-slot">
+    <div class="slot-content sr">
+      <span class="slot-tag tag-red">The Crisis · 위기</span>
+      <h2 class="slot-title">고개를 떨구고 말았다</h2>
+      <p class="slot-p">이때 매표소의 여직원이 남자에게 몇 장의 표를 원하느냐고 물었다. 남자는 목소리에 힘을 주어 자랑하듯이 말했다.</p>
+      <div class="speech-slot speech-red sr">
+        <p class="speech-text">"우리 온 가족이 서커스 구경을 할 수 있도록 어린이표 여덟 장과 어른 표 두 장을 주시오."</p>
+      </div>
+      <p class="slot-p" style="margin-top:12px;">여직원이 입장료를 말했다. 그 순간 아이들의 어머니는 잡고 있던 남편의 손을 놓고 고개를 떨구고 말았다. 남자의 입술이 가늘게 떨렸다.</p>
+      <p class="slot-p" style="margin-top:8px;">남자는 그만큼의 돈을 갖고 있지 않은 게 분명했다. 그러나 이제 와서 어떻게 아이들에게 그 사실을 말할 것인가. 한껏 기대에 부푼 아이들에게 이제 와서 서커스를 구경할 돈이 모자란다고 말할 순 없는 일이었다.</p>
+    </div>
+
+    <div class="queue-dot dot-red"></div>
+
+    <div class="slot-figure sr">
+      <svg width="40" height="80" viewBox="0 0 40 80" fill="none">
+        <circle cx="20" cy="10" r="9" stroke="rgba(200,50,30,0.5)" stroke-width="1.5" fill="none"/>
+        <!-- Head bowing down -->
+        <line x1="20" y1="19" x2="20" y2="50" stroke="rgba(200,50,30,0.4)" stroke-width="1.5"/>
+        <!-- Arms hanging -->
+        <line x1="20" y1="30" x2="8" y2="38" stroke="rgba(200,50,30,0.3)" stroke-width="1.5"/>
+        <line x1="20" y1="30" x2="32" y2="38" stroke="rgba(200,50,30,0.3)" stroke-width="1.5"/>
+        <!-- Trembling lip indicator -->
+        <path d="M15 8 Q20 10 25 8" stroke="rgba(200,50,30,0.4)" stroke-width="1" fill="none"/>
+      </svg>
+      <span class="fig-label">위기</span>
+    </div>
+  </div>
+
+</section>
+
+<!-- ══ THE BILL DROP ══ -->
+<section class="bill-section">
+  <!-- Falling $20 bill SVG -->
+  <div class="bill-wrap">
+    <svg class="bill" id="billSvg" viewBox="0 0 400 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="2" y="2" width="396" height="176" rx="8" fill="#2d4a2a" stroke="#4a7a42" stroke-width="2"/>
+      <rect x="8" y="8" width="384" height="164" rx="6" fill="none" stroke="rgba(138,176,64,0.3)" stroke-width="1"/>
+      <!-- Center oval -->
+      <ellipse cx="200" cy="90" rx="55" ry="42" fill="none" stroke="rgba(138,176,64,0.2)" stroke-width="1"/>
+      <!-- $20 text -->
+      <text x="200" y="72" text-anchor="middle" font-family="serif" font-size="28" font-weight="bold" fill="rgba(232,224,184,0.9)">20</text>
+      <text x="200" y="100" text-anchor="middle" font-family="serif" font-size="11" fill="rgba(232,224,184,0.6)" letter-spacing="2">TWENTY DOLLARS</text>
+      <!-- LEFT: TWENTY -->
+      <text x="32" y="60" font-family="serif" font-size="10" fill="rgba(232,224,184,0.4)" letter-spacing="1">TWENTY</text>
+      <text x="32" y="76" font-family="serif" font-size="10" fill="rgba(232,224,184,0.4)" letter-spacing="1">DOLLARS</text>
+      <text x="32" y="105" font-family="serif" font-size="40" font-weight="bold" fill="rgba(232,224,184,0.25)">20</text>
+      <!-- RIGHT: 20 -->
+      <text x="368" y="105" text-anchor="end" font-family="serif" font-size="40" font-weight="bold" fill="rgba(232,224,184,0.25)">20</text>
+      <!-- Decorative lines -->
+      <line x1="20" y1="30" x2="380" y2="30" stroke="rgba(138,176,64,0.15)" stroke-width="0.5"/>
+      <line x1="20" y1="150" x2="380" y2="150" stroke="rgba(138,176,64,0.15)" stroke-width="0.5"/>
+      <!-- Serial number-like text -->
+      <text x="80" y="140" font-family="monospace" font-size="8" fill="rgba(232,224,184,0.25)" letter-spacing="2">A 12345678 B</text>
+      <text x="320" y="140" text-anchor="end" font-family="monospace" font-size="8" fill="rgba(232,224,184,0.25)" letter-spacing="2">A 12345678 B</text>
+      <!-- Shine effect -->
+      <rect x="2" y="2" width="396" height="176" rx="8"
+        fill="url(#billShine)" opacity="0.15"/>
+      <defs>
+        <linearGradient id="billShine" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="white" stop-opacity="0.3"/>
+          <stop offset="50%" stop-color="white" stop-opacity="0"/>
+          <stop offset="100%" stop-color="white" stop-opacity="0.1"/>
+        </linearGradient>
+      </defs>
+    </svg>
+  </div>
+
+  <div class="moment-inner">
+    <span class="moment-label">The Moment · 그 순간</span>
+    <p class="moment-quote">
+      상황을 지켜보고 있던 나의 아버지가<br>
+      말없이 주머니에 손을 넣더니<br>
+      <span class="gold-text">20달러짜리 지폐를 꺼내 바닥에 떨어뜨렸다.</span>
+    </p>
+    <p class="moment-follow">
+      "여보시오, 선생, 방금 당신의 호주머니에서<br>이것이 떨어졌습니다."
+    </p>
+  </div>
+</section>
+
+<!-- ══ AFTERMATH ══ -->
+<section class="queue-section" style="padding:60px 0;">
+  <div class="queue-line"></div>
+
+  <!-- Slot 5: response -->
+  <div class="queue-slot">
+    <div class="slot-figure sr">
+      <svg width="50" height="80" viewBox="0 0 50 80" fill="none">
+        <circle cx="25" cy="12" r="9" stroke="rgba(138,176,64,0.5)" stroke-width="1.5" fill="none"/>
+        <line x1="25" y1="21" x2="25" y2="50" stroke="rgba(138,176,64,0.4)" stroke-width="1.5"/>
+        <!-- Hands clasped -->
+        <path d="M15 35 Q25 42 35 35" stroke="rgba(138,176,64,0.4)" stroke-width="1.5" fill="none"/>
+        <!-- Tear -->
+        <circle cx="22" cy="14" r="2" fill="rgba(138,176,64,0.3)"/>
+      </svg>
+      <span class="fig-label">아버지</span>
+    </div>
+
+    <div class="queue-dot dot-lime"></div>
+
+    <div class="slot-content sr">
+      <span class="slot-tag tag-lime">The Response · 반응</span>
+      <h2 class="slot-title">남자의 눈에서는 눈물이 글썽거렸다</h2>
+      <p class="slot-p">남자는 무슨 영문인지 금방 알아차렸다. 그는 결코 남의 적선을 요구하지 않았지만 절망적이고 당혹스런 그 상황에서 아버지가 내밀어 준 도움의 손길은 실로 큰 의미를 가진 것이었다.</p>
+      <p class="slot-p" style="margin-top:12px;">남자는 아버지의 눈을 똑바로 쳐다보더니 아버지의 손을 잡았다. 그리고 20달러 지폐를 꼭 움켜잡으며 떨리는 목소리로 말했다.</p>
+      <div class="speech-slot speech-gold sr">
+        <p class="speech-text">"고맙소, 선생. 이것은 나와 내 가족에게 정말로 큰 선물이 될 것이오."</p>
+      </div>
+      <p class="slot-p" style="margin-top:12px;">그들은 곧 표를 사갖고 서커스장 안으로 들어갔다. 나와 아버지는 차를 타고 집으로 돌아와야 했다. 그 당시 우리 집 역시 전혀 부자가 아니었던 것이다. 우리는 그날 밤 서커스 구경을 못 했지만 마음은 결코 허전하지 않았다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ REVELATION ══ -->
+<section class="reveal-section">
+  <div class="reveal-inner">
+    <div class="bg-number">35</div>
+    <span class="reveal-tag sr">Reflection · 묵상</span>
+    <h2 class="reveal-title sr">잃어버린 만큼 복된 삶</h2>
+
+    <p class="reveal-p sr">주는 것이 받는 것보다 복이 있습니다. 라는 말씀은 사복음서에는 나와 있지 않습니다. 아마도 예수님의 말씀이 구전으로 전하여진 것이 사도행전에 기록 되었나 봅니다. 그러나 이 말씀은 우리의 생활에 많은 교훈과 삶의 방향을 제시하는 것 같습니다.</p>
+
+    <p class="reveal-p sr">바울의 삶은 사도로서 성도들에게 섬김 받고 대접 받는 생활이 아니라 그의 삶은 베풀고 섬기는 삶으로서 그의 일생에 우리들에게 본을 보였습니다. 그 본은 바로 주님이 먼저 삼십 삼년 반을 이 세상에 사시면서 우리에게 보여준 삶이기도 합니다.</p>
+
+    <div class="reveal-bold sr">
+      잃어버리는 삶은 하루아침에 갑자기 되는 것이 아니라<br>
+      우리의 생명이 자라고 성숙할수록<br>
+      <span class="gold">나의 것이 조금씩 잃어버려지는 것으로 행복을 느끼는</span> 것입니다.
+    </div>
+
+    <p class="reveal-p sr">그러나 우리의 삶이 직장과 이웃에서 살면서 나의 것이 조금 잃어버려졌는데 화가 나고 마음이 분하고 흥분된다면 그 또한 감사하여야 할 것이 아직 변화 받아야 할 나 자신을 발견하고 주님께 은혜의 다루심을 받으면 됩니다.</p>
+  </div>
+</section>
+
+<!-- ══ SCRIPTURE ══ -->
+<section class="scripture-section">
+  <div class="scripture-inner">
+    <div class="sc-stamp sr">
+      <div class="sc-box">행</div>
+      <div class="sc-meta">
+        <span class="sc-book">사도행전 · Acts</span>
+        <span class="sc-ref">20장 35절 · Chapter 20:35</span>
+      </div>
+    </div>
+
+    <p class="verse-text sr">
+      "내가 모든 일에서 여러분에게 본을 보였으니, 여러분도 이렇게 수고하여 약한 사람들을 도와주어야 하고, 또한 <strong>'주는 것이 받는 것보다 복이 있습니다.'</strong>라고 하신 주 예수님의 말씀을 기억해야 합니다."
+    </p>
+  </div>
+</section>
+
+<!-- ══ CLOSING ══ -->
+<section class="closing-section">
+  <div class="closing-inner">
+    <h2 class="closing-big sr">주는 것이<br>받는 것보다<br>복이 있습니다</h2>
+    <div class="closing-rule"></div>
+
+    <p class="closing-body sr">때로 여러분이 누굴 위하여 준 것이 아깝다고 여기신 적이 있으신가요? 많이 베푼 만큼 많이 아깝고 아쉽다면 먼저 나의 마음을 살펴보아야 할 것입니다.</p>
+
+    <div class="closing-final sr">
+      <p class="closing-final-text">잃어버린 만큼 복된 삶!<br>주는 것이 받는 것보다 복된 생활!</p>
+      <p class="closing-final-body">예수님의 말씀을 기억하면서 주님과 바울이 걸어갔던 약한 사람들을 도와주는 그 삶을 본받기 바랍니다.</p>
+    </div>
+  </div>
+</section>
+
+<script>
+// ══ BILL DROP on scroll ══
+const billSvg = document.getElementById('billSvg');
+const billObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting) billSvg.classList.add('visible');
+  });
+}, {threshold: 0.3});
+billObs.observe(billSvg);
+
+// ══ SCROLL REVEAL ══
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting) e.target.classList.add('visible');
+  });
+}, {threshold: 0.1, rootMargin: '0px 0px -30px 0px'});
+
+document.querySelectorAll(
+  '.sr, .slot-content, .slot-figure, .speech-slot, .closing-final'
+).forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

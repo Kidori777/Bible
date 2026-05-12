@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>구경꾼은 없다 — 싸우는 신앙에 대하여</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700;900&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --dark: #0f0d0a;
+    --dark-2: #1a1714;
+    --dark-3: #252119;
+    --cream: #f5f0e8;
+    --cream-2: #ede6d6;
+    --text: #2c2515;
+    --muted: #7a6d55;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--dark);
+    color: var(--cream);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 300;
+    line-height: 1.9;
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 24px;
+    position: relative;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 30%, rgba(201,168,76,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 80% at 20% 80%, rgba(201,168,76,0.06) 0%, transparent 60%),
+      var(--dark);
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(201,168,76,0.03) 60px, rgba(201,168,76,0.03) 61px),
+      repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(201,168,76,0.03) 60px, rgba(201,168,76,0.03) 61px);
+    pointer-events: none;
+  }
+
+  .hero-tag {
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 900;
+    font-size: clamp(2.4rem, 7vw, 5rem);
+    line-height: 1.15;
+    color: var(--cream);
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s forwards;
+  }
+
+  .hero-title em {
+    font-style: normal;
+    color: var(--gold);
+    display: block;
+  }
+
+  .hero-sub {
+    font-size: clamp(0.85rem, 2.5vw, 1rem);
+    color: rgba(245,240,232,0.5);
+    letter-spacing: 2px;
+    margin-bottom: 56px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.6s forwards;
+  }
+
+  .hero-divider {
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 0 auto 48px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.7s forwards;
+  }
+
+  .hero-prologue {
+    max-width: 520px;
+    font-size: clamp(0.95rem, 2.5vw, 1.05rem);
+    color: rgba(245,240,232,0.75);
+    line-height: 2;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.9s forwards;
+  }
+
+  .hero-prologue strong {
+    color: var(--cream);
+    font-weight: 500;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    animation: fadeIn 1s 1.5s forwards;
+  }
+
+  .scroll-hint span {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    opacity: 0.6;
+    text-transform: uppercase;
+  }
+
+  .scroll-arrow {
+    width: 20px;
+    height: 20px;
+    border-right: 1.5px solid var(--gold);
+    border-bottom: 1.5px solid var(--gold);
+    transform: rotate(45deg);
+    opacity: 0.5;
+    animation: bounce 1.6s ease-in-out infinite;
+  }
+
+  /* ── MAIN ── */
+  .main {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 24px 100px;
+  }
+
+  /* ── CHAPTER ── */
+  .chapter {
+    padding: 80px 0;
+    border-bottom: 1px solid rgba(201,168,76,0.12);
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .chapter.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .chapter-num {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+
+  .chapter-num::after {
+    content: '';
+    display: block;
+    width: 30px;
+    height: 1px;
+    background: var(--gold);
+    opacity: 0.5;
+  }
+
+  .chapter-title {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 700;
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    color: var(--cream);
+    margin-bottom: 36px;
+    line-height: 1.3;
+  }
+
+  .chapter-body {
+    font-size: clamp(0.95rem, 2.5vw, 1.05rem);
+    color: rgba(245,240,232,0.78);
+    line-height: 2.1;
+  }
+
+  .chapter-body p {
+    margin-bottom: 20px;
+  }
+
+  .chapter-body p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ── VERSE BLOCK ── */
+  .verse {
+    margin: 36px 0;
+    padding: 32px 36px;
+    background: rgba(201,168,76,0.06);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 8px 8px 0;
+    position: relative;
+  }
+
+  .verse::before {
+    content: '"';
+    position: absolute;
+    top: -10px;
+    left: 24px;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 60px;
+    color: var(--gold);
+    opacity: 0.3;
+    line-height: 1;
+  }
+
+  .verse-text {
+    font-family: 'Noto Serif KR', serif;
+    font-size: clamp(1rem, 2.8vw, 1.15rem);
+    font-weight: 400;
+    color: var(--cream);
+    line-height: 1.9;
+    font-style: italic;
+    margin-bottom: 14px;
+  }
+
+  .verse-ref {
+    font-size: 0.8rem;
+    letter-spacing: 1.5px;
+    color: var(--gold);
+    opacity: 0.8;
+  }
+
+  /* ── LIST ITEM ── */
+  .trio {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 28px 0;
+  }
+
+  .trio-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px 20px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 8px;
+    border: 1px solid rgba(201,168,76,0.1);
+  }
+
+  .trio-icon {
+    color: var(--gold);
+    font-size: 1rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .trio-text {
+    font-size: 0.95rem;
+    color: rgba(245,240,232,0.8);
+    line-height: 1.7;
+  }
+
+  /* ── STAT CARD ── */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 32px 0;
+  }
+
+  .stat {
+    text-align: center;
+    padding: 24px 12px;
+    background: rgba(201,168,76,0.06);
+    border-radius: 10px;
+    border: 1px solid rgba(201,168,76,0.15);
+  }
+
+  .stat-num {
+    font-family: 'Noto Serif KR', serif;
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    font-weight: 700;
+    color: var(--gold);
+    display: block;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .stat-label {
+    font-size: 0.78rem;
+    color: rgba(245,240,232,0.5);
+    letter-spacing: 1px;
+  }
+
+  /* ── HIGHLIGHT TEXT ── */
+  .highlight {
+    font-family: 'Noto Serif KR', serif;
+    font-size: clamp(1.15rem, 3vw, 1.4rem);
+    font-weight: 600;
+    color: var(--cream);
+    text-align: center;
+    padding: 32px 24px;
+    line-height: 1.8;
+    margin: 32px 0;
+  }
+
+  .highlight span {
+    color: var(--gold);
+  }
+
+  /* ── CHOICES ── */
+  .choices {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 28px 0;
+  }
+
+  .choice {
+    padding: 24px 20px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .choice.bad {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: rgba(245,240,232,0.45);
+  }
+
+  .choice.good {
+    background: rgba(201,168,76,0.1);
+    border: 1px solid rgba(201,168,76,0.3);
+    color: var(--cream);
+  }
+
+  .choice-label {
+    display: block;
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    opacity: 0.6;
+  }
+
+  .choice.good .choice-label { color: var(--gold); opacity: 1; }
+
+  /* ── EPILOGUE ── */
+  .epilogue {
+    padding: 80px 0 40px;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .epilogue.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .epilogue-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: clamp(1.4rem, 4vw, 2rem);
+    font-weight: 700;
+    color: var(--cream);
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .roles {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 40px 0;
+  }
+
+  .role {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 24px;
+    background: rgba(201,168,76,0.05);
+    border-radius: 10px;
+    border: 1px solid rgba(201,168,76,0.15);
+  }
+
+  .role-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(201,168,76,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+
+  .role-text {
+    font-size: 1rem;
+    color: rgba(245,240,232,0.85);
+    font-weight: 400;
+  }
+
+  .closing-question {
+    text-align: center;
+    padding: 60px 24px;
+    border-top: 1px solid rgba(201,168,76,0.15);
+    margin-top: 60px;
+  }
+
+  .closing-question p {
+    font-family: 'Noto Serif KR', serif;
+    font-size: clamp(1.2rem, 3.5vw, 1.6rem);
+    font-weight: 600;
+    color: var(--cream);
+    line-height: 1.9;
+    margin-bottom: 24px;
+  }
+
+  .closing-question .emphasis {
+    color: var(--gold);
+    font-size: clamp(1.4rem, 4vw, 1.9rem);
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    text-align: center;
+    padding: 40px 24px;
+    border-top: 1px solid rgba(201,168,76,0.1);
+    font-size: 0.82rem;
+    letter-spacing: 2px;
+    color: rgba(201,168,76,0.5);
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: rotate(45deg) translateY(0); }
+    50%       { transform: rotate(45deg) translateY(6px); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 480px) {
+    .stats { grid-template-columns: 1fr; }
+    .choices { grid-template-columns: 1fr; }
+    .verse { padding: 24px 20px; }
+    .chapter { padding: 60px 0; }
+    .hero { padding: 80px 20px 60px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-tag">부산교회 2구역 · 성경 말씀</div>
+  <h1 class="hero-title">
+    구경꾼은 없다
+    <em>싸우는 신앙에 대하여</em>
+  </h1>
+  <p class="hero-sub">There Are No Spectators</p>
+  <div class="hero-divider"></div>
+  <div class="hero-prologue">
+    어느 날 한 병사가 전쟁터에 도착했습니다.<br>
+    총성이 울리고, 연기가 피어오르고,<br>
+    동료들이 뛰어나갑니다.<br><br>
+    그런데 그는 멈춥니다.<br><br>
+    <strong>"나는 그냥 지켜볼게요."</strong><br><br>
+    그 말이 가능한 곳이 있습니다.<br>
+    야구장, 영화관, 경기장.<br><br>
+    하지만 전쟁터에서는?<br>
+    <strong>그 자리는 존재하지 않습니다.</strong>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- 1장 -->
+  <article class="chapter">
+    <div class="chapter-num">1장</div>
+    <h2 class="chapter-title">두려움은 전염된다</h2>
+    <div class="chapter-body">
+      <p>때는 이스라엘이 가나안 땅을 앞에 두고 서 있던 시절입니다. 하나님은 전쟁에 나서는 군대를 준비시키면서 뜻밖의 명령을 내리셨습니다.</p>
+
+      <div class="verse">
+        <p class="verse-text">"두려워하며 겁을 내는 사람이 있습니까? 그런 사람은 집으로 돌아가십시오. 그래야 그의 형제들의 간담이 그의 간담처럼 녹아 버리는 일이 없게 됩니다."</p>
+        <span class="verse-ref">— 신명기 20:8</span>
+      </div>
+
+      <p>왜 그냥 데려가지 않으셨을까요?</p>
+      <p><strong>두려움은 조용히 퍼지기 때문입니다.</strong></p>
+
+      <div class="trio">
+        <div class="trio-item"><span class="trio-icon">▸</span><span class="trio-text">"이건 너무 힘들어." — 한 사람의 말이 옆 사람의 마음을 흔들고</span></div>
+        <div class="trio-item"><span class="trio-icon">▸</span><span class="trio-text">"우리가 질 것 같아." — 그 사람이 또 다른 사람에게 전하고</span></div>
+        <div class="trio-item"><span class="trio-icon">▸</span><span class="trio-text">"그냥 포기하자." — 결국 군대 전체가 무너집니다.</span></div>
+      </div>
+
+      <p>하나님은 숫자보다 마음의 질을 보셨습니다. 하나님이 원하신 것은 결국 — <strong>싸울 준비가 된 사람</strong>이었습니다.</p>
+    </div>
+  </article>
+
+  <!-- 2장 -->
+  <article class="chapter">
+    <div class="chapter-num">2장</div>
+    <h2 class="chapter-title">300명의 비밀</h2>
+    <div class="chapter-body">
+      <p>기드온은 혼란스러웠습니다. 미디안 군대는 메뚜기 떼처럼 많았고, 이스라엘 군사는 겨우 32,000명이었습니다. 그런데 하나님이 말씀하십니다.</p>
+      <p><strong>"군사가 너무 많다. 줄여라."</strong></p>
+
+      <div class="stats">
+        <div class="stat"><span class="stat-num">32,000</span><span class="stat-label">처음 군사</span></div>
+        <div class="stat"><span class="stat-num">10,000</span><span class="stat-label">1차 감소 후</span></div>
+        <div class="stat"><span class="stat-num">300</span><span class="stat-label">최종 선택</span></div>
+      </div>
+
+      <div class="verse">
+        <p class="verse-text">"너와 함께하는 백성이 너무 많아 내가 미디안을 너희 손에 넘겨줄 수 없다. 이스라엘이 나에게 자랑하며 '내 손이 나를 구원하였다.'라고 말할지도 모른다."</p>
+        <span class="verse-ref">— 사사기 7:2</span>
+      </div>
+
+      <p>하나님은 많은 사람이 필요하지 않았습니다. <strong>믿음으로 싸우는 사람이 필요했습니다.</strong> 그 300명이 나팔을 불고 항아리를 깨뜨렸을 때, 미디안 군대는 스스로 무너졌습니다.</p>
+
+      <div class="highlight">하나님은 지금도 묻고 계십니다.<br><span>"300명 안에 있겠느냐,<br>아니면 집으로 돌아간 22,000명 안에 있겠느냐?"</span></div>
+    </div>
+  </article>
+
+  <!-- 3장 -->
+  <article class="chapter">
+    <div class="chapter-num">3장</div>
+    <h2 class="chapter-title">쉬었을 때 찾아온 것들</h2>
+    <div class="chapter-body">
+      <p>다윗은 이스라엘 역사상 가장 위대한 왕이었습니다. 골리앗을 쓰러뜨리고, 수많은 전쟁을 이겼으며, <strong>하나님의 마음에 합한 자</strong>라는 칭호까지 받았습니다. 그런 다윗에게 어떤 봄날이 찾아왔습니다.</p>
+
+      <div class="verse">
+        <p class="verse-text">"해가 바뀌어 왕들이 싸우러 나가는 때가 되자, 다윗은 요압과 함께 자신의 신하들과 온 이스라엘을 내보냈다... 그러나 다윗은 예루살렘에 머물러 있었다."</p>
+        <span class="verse-ref">— 사무엘기하 11:1</span>
+      </div>
+
+      <p>별것 아닌 것처럼 보이는 이 한 문장이, 그의 인생에서 가장 비극적인 챕터의 시작이었습니다. 나가야 할 때 머물렀던 그 저녁, 다윗은 지붕 위를 거닐다 밧세바를 보았습니다. 그리고 모든 것이 무너지기 시작했습니다.</p>
+
+      <div class="trio">
+        <div class="trio-item"><span class="trio-icon">⚠</span><span class="trio-text">간음과 거짓</span></div>
+        <div class="trio-item"><span class="trio-icon">⚠</span><span class="trio-text">살인과 은폐</span></div>
+        <div class="trio-item"><span class="trio-icon">⚠</span><span class="trio-text">가정 파탄과 왕국의 혼란</span></div>
+      </div>
+
+      <p>싸워야 할 자리를 비웠을 때, 그 자리에 다른 것이 채워졌습니다. 싸움을 피할 때, 우리는 안전해지는 것이 아니라 <strong>오히려 더 위험한 곳으로 들어가게 됩니다.</strong></p>
+    </div>
+  </article>
+
+  <!-- 4장 -->
+  <article class="chapter">
+    <div class="chapter-num">4장</div>
+    <h2 class="chapter-title">중립은 없다</h2>
+    <div class="chapter-body">
+      <p>누군가 예수님께 물었을지 모릅니다. "그냥 조용히 살면 안 되나요? 적도 아니고, 편도 아니고, 그냥 중간 어딘가에 있으면 안 되나요?"</p>
+
+      <div class="verse">
+        <p class="verse-text">"나와 함께하지 않는 사람은 나를 반대하는 사람이며, 나와 함께 모으지 않는 사람은 흩어지게 하는 사람입니다."</p>
+        <span class="verse-ref">— 마태복음 12:30</span>
+      </div>
+
+      <div class="choices">
+        <div class="choice bad">
+          <span class="choice-label">존재하지 않는 자리</span>
+          관중석<br>중립지대<br>방관자의 자리
+        </div>
+        <div class="choice good">
+          <span class="choice-label">하나님이 찾는 자리</span>
+          함께 싸우는 자리<br>기도하며 돕는 자리
+        </div>
+      </div>
+
+      <p>조용히 서 있다고 생각했는데, 사실은 반대편에 서 있는 것입니다. 이것은 위협이 아닙니다. <strong>현실입니다.</strong> 빛이 없는 곳은 어두운 것처럼, 싸우지 않는 신앙은 결국 무너지는 신앙입니다.</p>
+    </div>
+  </article>
+
+  <!-- 5장 -->
+  <article class="chapter">
+    <div class="chapter-num">5장</div>
+    <h2 class="chapter-title">아무것도 안 한 종의 최후</h2>
+    <div class="chapter-body">
+      <p>주인이 먼 길을 떠나면서 세 종에게 각각 달란트를 맡겼습니다. 첫 번째 종은 다섯 달란트로 다섯을 더 벌었습니다. 두 번째 종은 두 달란트로 두 개를 더 남겼습니다.</p>
+      <p><strong>세 번째 종은?</strong> 훔치지도 않았고, 낭비하지도 않았습니다. 그냥 — 아무것도 하지 않았습니다.</p>
+
+      <div class="verse">
+        <p class="verse-text">"악하고 게으른 노예야."</p>
+        <span class="verse-ref">— 마태복음 25:26</span>
+      </div>
+
+      <p>이 종의 죄목은 도둑질이 아니었습니다. 반역도 아니었습니다. 오직 하나, <strong>아무것도 하지 않은 것이었습니다.</strong></p>
+      <p>우리는 종종 이렇게 생각합니다. "나쁜 짓만 안 하면 되겠지." 하지만 하나님은 다르게 보십니다. <strong>주신 것을 가지고 싸운 흔적이 있는가.</strong> 그것을 보십니다.</p>
+    </div>
+  </article>
+
+  <!-- 6장 -->
+  <article class="chapter">
+    <div class="chapter-num">6장</div>
+    <h2 class="chapter-title">가장 위험한 신앙</h2>
+    <div class="chapter-body">
+      <p>성경에 나오는 일곱 교회 중, 예수님이 가장 강하게 책망하신 교회가 있습니다. <strong>라오디게아 교회</strong>입니다. 이 교회는 이단을 가르치지 않았습니다. 분쟁도 없었고, 박해도 없었고, 큰 문제도 없었습니다. 그냥 — 편안했습니다.</p>
+
+      <div class="verse">
+        <p class="verse-text">"네가 이렇게 미지근하여 뜨겁지도 않고 차지도 않기 때문에, 나는 너를 나의 입에서 토하여 낼 것이다."</p>
+        <span class="verse-ref">— 요한계시록 3:16</span>
+      </div>
+
+      <div class="trio">
+        <div class="trio-item"><span class="trio-icon">✗</span><span class="trio-text">핍박도 없음 — 그래서 더욱 무감각해졌습니다</span></div>
+        <div class="trio-item"><span class="trio-icon">✗</span><span class="trio-text">눈물도 없음 — 감동이 사라진 신앙이었습니다</span></div>
+        <div class="trio-item"><span class="trio-icon">✗</span><span class="trio-text">싸움도 없음 — 편안함이 곧 위기였습니다</span></div>
+      </div>
+
+      <p>예수님은 그것을 가장 싫어하셨습니다. 왜냐하면 그 상태는 <strong>이미 죽어가고 있기 때문입니다.</strong> 아프지도 않으니, 치료받으러 오지도 않습니다.</p>
+    </div>
+  </article>
+
+  <!-- 7장 -->
+  <article class="chapter">
+    <div class="chapter-num">7장</div>
+    <h2 class="chapter-title">바울의 마지막 말</h2>
+    <div class="chapter-body">
+      <p>사도 바울은 감옥에서 마지막 편지를 씁니다. 곧 처형될 것을 알면서, 그가 남긴 말은 이것이었습니다.</p>
+
+      <div class="verse">
+        <p class="verse-text">"나는 선한 싸움을 싸웠고, 달려야 할 길을 다 달렸으며, 믿음을 지켰습니다."</p>
+        <span class="verse-ref">— 디모데후서 4:7</span>
+      </div>
+
+      <p>그는 편안한 삶을 살지 않았습니다. 매를 맞고, 감옥에 갇히고, 돌에 맞고, 파선하고, 그 모든 것을 겪으면서 달려갔습니다. 그리고 마지막에 — <strong>후회가 없었습니다.</strong></p>
+      <p>편안하게 살았다는 자랑이 아니라, <strong>싸웠다는 것이 그의 자랑이었습니다.</strong></p>
+
+      <div class="highlight">당신의 인생 마지막 날,<br>어떤 말을 남기고 싶습니까?</div>
+
+      <div class="choices">
+        <div class="choice bad">
+          <span class="choice-label">구경꾼의 고백</span>
+          "나는 조용히 살았다."<br>"나는 구경만 했다."
+        </div>
+        <div class="choice good">
+          <span class="choice-label">싸운 자의 고백</span>
+          <strong>"나는 싸웠다."</strong>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- EPILOGUE -->
+  <section class="epilogue">
+    <h2 class="epilogue-title">교회는 전쟁터입니다</h2>
+
+    <div class="chapter-body">
+      <p style="text-align:center; margin-bottom:36px; color:rgba(245,240,232,0.7);">
+        교회는 박물관이 아닙니다.<br>
+        완성된 작품을 전시하는 곳이 아닙니다.<br><br>
+        교회는 <strong style="color:var(--cream)">병원</strong>이며, 동시에 <strong style="color:var(--cream)">군대</strong>입니다.
+      </p>
+    </div>
+
+    <div class="roles">
+      <div class="role">
+        <div class="role-icon">⚔</div>
+        <span class="role-text">앞에서 싸우는 사람</span>
+      </div>
+      <div class="role">
+        <div class="role-icon">🙏</div>
+        <span class="role-text">뒤에서 기도하며 돕는 사람</span>
+      </div>
+      <div class="role">
+        <div class="role-icon">🤝</div>
+        <span class="role-text">상처 입은 사람을 돌보는 사람</span>
+      </div>
+    </div>
+
+    <p style="text-align:center; color:rgba(245,240,232,0.65); margin:32px 0; font-size:0.95rem; line-height:2;">
+      하나님은 나이 많은 사람을 찾지 않습니다.<br>
+      능력 있는 사람을 찾지 않습니다.<br>
+      완벽한 사람을 찾지 않습니다.
+    </p>
+
+    <div class="highlight" style="font-size:clamp(1.3rem,4vw,1.8rem);">
+      하나님은 <span>싸우는 사람</span>을 찾으십니다.
+    </div>
+
+    <div class="closing-question">
+      <p>당신은 지금,</p>
+      <p class="emphasis">어디에 서 있습니까?</p>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  부산교회 2구역
+</footer>
+
+<script>
+  // Intersection Observer for fade-in
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+
+  document.querySelectorAll('.chapter, .epilogue').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

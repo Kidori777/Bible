@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>나아만 장군 이야기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@200;300;400;500;600;700;800&family=Noto+Serif+KR:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-style:normal !important;}
+html{scroll-behavior:smooth;}
+
+:root{
+  --night:   #07091A;
+  --indigo:  #0F1235;
+  --purple:  #5B3FA0;
+  --purp-d:  rgba(91,63,160,0.3);
+  --river:   #041E2C;
+  --water:   #0A3550;
+  --teal:    #2A8BAA;
+  --text:    #E8E0F5;
+  --dim:     rgba(232,224,245,0.5);
+  --gold:    #C8900A;
+  --goldbr:  #F5C030;
+  --heal:    #FFFFF8;
+  --spec:    'Spectral', serif;
+  --serif:   'Noto Serif KR', serif;
+}
+
+body{
+  background: var(--night);
+  color: var(--text);
+  font-family: var(--serif);
+  overflow-x: hidden;
+  transition: background 1.5s ease;
+}
+::-webkit-scrollbar{width:2px;}
+::-webkit-scrollbar-thumb{background:rgba(91,63,160,0.4);border-radius:2px;}
+
+/* ══════════════════════════════
+   STAR CANVAS
+══════════════════════════════ */
+#starCanvas{
+  position:fixed;inset:0;
+  width:100vw;height:100vh;
+  z-index:0;pointer-events:none;
+}
+
+/* ══════════════════════════════
+   TOP FIXED — 7 WATER DROPS BAR
+══════════════════════════════ */
+#dropBar{
+  position:fixed;
+  top:0;left:0;right:0;
+  height:52px;
+  background:rgba(7,9,26,0.95);
+  border-bottom:1px solid rgba(91,63,160,0.2);
+  z-index:300;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:0;
+  padding:0 clamp(20px,5vw,60px);
+}
+
+.drop-wrap{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  position:relative;
+}
+
+/* Connecting line */
+.drop-wrap::before{
+  content:'';
+  position:absolute;
+  left:18px;right:18px;
+  top:50%;transform:translateY(-50%);
+  height:1px;
+  background:rgba(91,63,160,0.2);
+}
+
+.drop{
+  width:36px;height:36px;
+  position:relative;
+  z-index:1;
+  flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.6s ease;
+}
+
+/* Drop SVG shape via clip-path */
+.drop-inner{
+  width:22px;height:26px;
+  border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;
+  border:1.5px solid rgba(91,63,160,0.3);
+  background:transparent;
+  transition:background 0.7s ease,border-color 0.7s ease,
+             box-shadow 0.7s ease,transform 0.5s ease;
+  transform:rotate(0deg) scale(0.95);
+}
+.drop.lit .drop-inner{
+  background:var(--purple);
+  border-color:rgba(91,63,160,0.8);
+  box-shadow:0 0 12px rgba(91,63,160,0.5);
+  transform:rotate(0deg) scale(1.05);
+}
+.drop.miracle .drop-inner{
+  background:var(--goldbr) !important;
+  border-color:var(--gold) !important;
+  box-shadow:0 0 20px rgba(245,192,48,0.7) !important;
+  transform:scale(1.15) !important;
+}
+
+.drop-num{
+  position:absolute;
+  bottom:-14px;left:50%;transform:translateX(-50%);
+  font-family:var(--spec);
+  font-size:9px;font-weight:300;
+  letter-spacing:0.1em;
+  color:rgba(232,224,245,0.25);
+  transition:color 0.5s ease;
+  white-space:nowrap;
+}
+.drop.lit .drop-num{color:rgba(91,63,160,0.6);}
+.drop.miracle .drop-num{color:rgba(245,192,48,0.7);}
+
+/* Right side: current dip state */
+#barState{
+  margin-left:auto;
+  font-family:var(--spec);
+  font-size:11px;font-weight:300;
+  letter-spacing:0.25em;
+  color:rgba(232,224,245,0.3);
+  transition:color 0.6s ease;
+  flex-shrink:0;
+  padding-left:28px;
+  white-space:nowrap;
+}
+
+/* Scroll progress line at bottom of bar */
+#barProgress{
+  position:absolute;
+  bottom:0;left:0;
+  height:2px;
+  width:0%;
+  background:linear-gradient(90deg,var(--purple),var(--goldbr));
+  transition:width 0.15s linear;
+  box-shadow:0 0 8px rgba(91,63,160,0.4);
+}
+
+/* ══════════════════════════════
+   MAIN
+══════════════════════════════ */
+.main{
+  padding-top:52px;
+  position:relative;
+  z-index:1;
+}
+
+/* ══════════════════════════════
+   HERO
+══════════════════════════════ */
+.hero{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  padding:clamp(50px,8vw,110px);
+  padding-bottom:clamp(90px,13vh,150px);
+  position:relative;
+  overflow:hidden;
+  border-bottom:1px solid rgba(91,63,160,0.15);
+}
+
+/* Large ghost: NAAMAN in Spectral ultralight */
+.hero-ghost{
+  position:absolute;
+  right:-0.03em;top:52px;
+  font-family:var(--spec);
+  font-weight:200;
+  font-size:clamp(160px,28vw,440px);
+  color:rgba(91,63,160,0.05);
+  line-height:1;pointer-events:none;
+  letter-spacing:-0.03em;
+}
+
+.hero-kicker{
+  font-family:var(--spec);
+  font-weight:300;
+  font-size:11px;
+  letter-spacing:0.48em;
+  color:rgba(91,63,160,0.55);
+  margin-bottom:26px;
+  display:flex;align-items:center;gap:16px;
+}
+.hero-kicker::before{
+  content:'';width:28px;height:1px;
+  background:rgba(91,63,160,0.45);display:block;
+}
+
+h1.hero-h1{
+  font-family:var(--spec);
+  font-weight:800;
+  font-size:clamp(52px,9vw,130px);
+  line-height:0.95;
+  letter-spacing:-0.02em;
+  color:var(--text);
+  max-width:720px;
+  text-shadow:0 0 80px rgba(91,63,160,0.25);
+}
+h1.hero-h1 .sub{
+  display:block;
+  font-weight:200;
+  font-size:0.42em;
+  letter-spacing:0.1em;
+  color:rgba(91,63,160,0.7);
+  margin-top:14px;
+}
+
+.hero-desc{
+  font-size:clamp(13px,1.6vw,16px);
+  color:var(--dim);
+  line-height:1.9;
+  margin-top:26px;
+  font-weight:300;
+  max-width:480px;
+}
+
+/* ══════════════════════════════
+   PROSE CHAPTERS
+══════════════════════════════ */
+.ch{
+  max-width:680px;
+  padding:clamp(55px,7vh,90px) clamp(44px,9vw,110px);
+  opacity:0;transform:translateY(24px);
+  transition:opacity 0.8s ease,transform 0.8s ease;
+  border-bottom:1px solid rgba(91,63,160,0.1);
+}
+.ch.in{opacity:1;transform:translateY(0);}
+.ch.right{margin-left:auto;text-align:right;}
+.ch.wide{max-width:100%;}
+
+.ch-tag{
+  font-family:var(--spec);
+  font-weight:300;font-size:10px;
+  letter-spacing:0.42em;
+  color:rgba(91,63,160,0.5);
+  margin-bottom:18px;
+  display:flex;align-items:center;gap:12px;
+}
+.ch-tag::after{content:'';width:32px;height:1px;background:rgba(91,63,160,0.18);display:block;}
+.ch.right .ch-tag{flex-direction:row-reverse;margin-left:auto;}
+.ch.right .ch-tag::after{display:none;}
+.ch.right .ch-tag::before{content:'';width:32px;height:1px;background:rgba(91,63,160,0.18);display:block;}
+
+.ch-title{
+  font-family:var(--spec);
+  font-weight:700;
+  font-size:clamp(26px,4.2vw,54px);
+  line-height:1.12;
+  letter-spacing:-0.01em;
+  color:var(--text);
+  margin-bottom:24px;
+}
+.ch-title .accent{color:rgba(91,63,160,0.85);}
+
+.prose{
+  font-size:clamp(15px,1.85vw,18px);
+  line-height:2.1;
+  color:rgba(232,224,245,0.85);
+  font-weight:400;
+  max-width:580px;
+  margin-bottom:1.2em;
+}
+.prose:last-child{margin-bottom:0;}
+.ch.right .prose{margin-left:auto;}
+
+.qt{
+  margin:20px 0;padding:16px 24px;
+  border-left:2px solid rgba(91,63,160,0.4);
+  background:rgba(91,63,160,0.07);
+  max-width:540px;
+}
+.ch.right .qt{border-left:none;border-right:2px solid rgba(91,63,160,0.4);margin-left:auto;}
+.qt p{
+  font-family:var(--spec);
+  font-weight:500;font-size:clamp(15px,2vw,21px);
+  line-height:1.75;color:rgba(232,224,245,0.9);
+  letter-spacing:0.01em;
+}
+
+.b-list{margin:16px 0;display:flex;flex-direction:column;gap:9px;max-width:440px;}
+.b-item{
+  display:flex;align-items:flex-start;gap:12px;
+  font-size:clamp(14px,1.7vw,16px);
+  color:rgba(232,224,245,0.7);line-height:1.85;
+}
+.b-item::before{
+  content:'';width:5px;height:5px;border-radius:50%;
+  background:rgba(91,63,160,0.7);flex-shrink:0;margin-top:0.65em;
+  box-shadow:0 0 5px rgba(91,63,160,0.4);
+}
+
+/* Scripture */
+.scripture{
+  margin:16px clamp(44px,9vw,110px);
+  padding:24px 30px;border-left:2px solid;
+  opacity:0;transform:translateX(-14px);
+  transition:opacity 0.8s ease,transform 0.8s ease;
+}
+.scripture.in{opacity:1;transform:translateX(0);}
+.scripture.purple{border-color:rgba(91,63,160,0.6);background:rgba(91,63,160,0.07);}
+.scripture.gold{border-color:var(--gold);background:rgba(200,144,10,0.07);}
+.scripture.river{border-color:rgba(42,139,170,0.6);background:rgba(4,30,44,0.4);}
+.scripture.green{border-color:#40A060;background:rgba(40,140,70,0.06);}
+.scr-ref{
+  font-family:var(--spec);font-weight:300;font-size:9px;
+  letter-spacing:0.3em;display:block;margin-bottom:10px;
+}
+.scripture.purple .scr-ref{color:rgba(91,63,160,0.65);}
+.scripture.gold   .scr-ref{color:rgba(200,144,10,0.65);}
+.scripture.river  .scr-ref{color:rgba(42,139,170,0.6);}
+.scripture.green  .scr-ref{color:rgba(64,160,96,0.65);}
+.scripture p{
+  font-family:var(--spec);
+  font-size:clamp(15px,1.95vw,19px);
+  line-height:1.9;font-weight:600;color:var(--text);
+}
+
+/* Dark text for scriptures in light background zones */
+.after-zone .scripture p,
+.final-zone .scripture p {
+  color: #1A0E00;
+}
+.after-zone .scripture.gold .scr-ref {
+  color: rgba(140,80,5,0.7);
+}
+.after-zone .scripture.green .scr-ref {
+  color: rgba(30,100,50,0.75);
+}
+.after-zone .scripture.purple .scr-ref {
+  color: rgba(60,30,120,0.65);
+}
+.final-zone .scripture p { color: #1A0E00; }
+.final-zone .scripture.green .scr-ref { color: rgba(30,100,50,0.75); }
+
+/* ══════════════════════════════
+   FAITH CHAIN
+══════════════════════════════ */
+.faith-chain{
+  padding:clamp(50px,6vh,80px) clamp(44px,9vw,110px);
+  border-bottom:1px solid rgba(91,63,160,0.1);
+  opacity:0;transform:translateY(20px);
+  transition:opacity 0.85s ease,transform 0.85s ease;
+}
+.faith-chain.in{opacity:1;transform:translateY(0);}
+.chain-label{
+  font-family:var(--spec);font-size:10px;font-weight:300;
+  letter-spacing:0.4em;color:rgba(91,63,160,0.45);margin-bottom:26px;
+}
+.chain-flow{
+  display:flex;flex-wrap:wrap;align-items:center;gap:4px;
+}
+.chain-node{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  padding:0 6px;
+  opacity:0;transform:translateY(10px);
+  transition:opacity 0.4s ease,transform 0.4s ease;
+}
+.chain-node.in{opacity:1;transform:translateY(0);}
+.chain-node:nth-child(2){transition-delay:0.08s;}
+.chain-node:nth-child(4){transition-delay:0.16s;}
+.chain-node:nth-child(6){transition-delay:0.24s;}
+.chain-node:nth-child(8){transition-delay:0.32s;}
+.chain-node:nth-child(10){transition-delay:0.40s;}
+.chain-node:nth-child(12){transition-delay:0.48s;}
+.cn-circle{
+  width:60px;height:60px;border-radius:50%;
+  border:1px solid rgba(91,63,160,0.3);
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(91,63,160,0.08);
+  font-family:var(--serif);font-size:11px;
+  color:rgba(232,224,245,0.75);text-align:center;line-height:1.35;
+  font-weight:400;
+}
+.cn-circle.hero{
+  border-color:rgba(91,63,160,0.65);
+  background:rgba(91,63,160,0.18);
+  box-shadow:0 0 16px rgba(91,63,160,0.15);
+}
+.cn-circle.prophet{
+  border-color:rgba(200,144,10,0.65);
+  background:rgba(200,144,10,0.12);
+  box-shadow:0 0 16px rgba(200,144,10,0.15);
+}
+.cn-label{
+  font-family:var(--spec);font-size:8px;font-weight:300;
+  letter-spacing:0.15em;color:rgba(91,63,160,0.45);text-align:center;
+}
+.chain-arrow{
+  width:20px;height:2px;flex-shrink:0;margin-top:-16px;
+  background:linear-gradient(90deg,rgba(91,63,160,0.3),rgba(91,63,160,0.55));
+  position:relative;
+}
+.chain-arrow::after{
+  content:'▶';position:absolute;right:-5px;top:50%;
+  transform:translateY(-50%);font-size:7px;
+  color:rgba(91,63,160,0.5);
+}
+
+/* ══════════════════════════════
+   TRANSITION TO WATER
+══════════════════════════════ */
+.to-water{
+  padding:clamp(70px,9vh,120px) clamp(44px,9vw,110px);
+  background:linear-gradient(180deg,var(--night) 0%,var(--river) 100%);
+  position:relative;overflow:hidden;
+  opacity:0;transform:translateY(20px);
+  transition:opacity 0.85s ease,transform 0.85s ease;
+  border-top:1px solid rgba(42,139,170,0.1);
+}
+.to-water::after{
+  content:'';position:absolute;
+  bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,
+    transparent,rgba(42,139,170,0.4) 30%,
+    rgba(42,139,170,0.4) 70%,transparent);
+}
+.to-water.in{opacity:1;transform:translateY(0);}
+.to-water .ch-title{color:#C0E0F0;}
+.to-water .prose{color:rgba(192,224,248,0.8);}
+
+.armor-strip{
+  margin:26px 0;display:flex;align-items:center;gap:18px;
+  padding:18px 24px;
+  background:rgba(4,30,44,0.6);
+  border:1px solid rgba(42,139,170,0.2);
+  max-width:500px;
+}
+.armor-sym{
+  font-size:clamp(22px,3vw,34px);color:rgba(42,139,170,0.55);flex-shrink:0;
+}
+.armor-desc{
+  font-size:clamp(14px,1.7vw,16px);
+  color:rgba(192,224,248,0.72);line-height:1.95;font-weight:400;
+}
+
+/* ══════════════════════════════
+   DIP SECTIONS (1-6)
+══════════════════════════════ */
+.dip-section{
+  position:relative;
+  padding:clamp(70px,9vh,120px) clamp(44px,9vw,110px);
+  overflow:hidden;
+  opacity:0;transform:translateY(20px);
+  transition:opacity 0.8s ease,transform 0.8s ease;
+  border-bottom:1px solid rgba(42,139,170,0.12);
+}
+.dip-section.in{opacity:1;transform:translateY(0);}
+
+/* Each dip progressively darker */
+.dip-section[data-n="1"]{background:linear-gradient(180deg,#041E2C,#051F2E);}
+.dip-section[data-n="2"]{background:linear-gradient(180deg,#051F2E,#062030);}
+.dip-section[data-n="3"]{background:linear-gradient(180deg,#062030,#062132);}
+.dip-section[data-n="4"]{background:linear-gradient(180deg,#062132,#062234);}
+.dip-section[data-n="5"]{background:linear-gradient(180deg,#062234,#062236);}
+.dip-section[data-n="6"]{background:linear-gradient(180deg,#062236,#062138);}
+
+/* Giant number ghost — centered behind text */
+.dip-ghost{
+  position:absolute;
+  left:50%;top:50%;
+  transform:translate(-50%,-52%);
+  font-family:var(--spec);font-weight:800;
+  line-height:1;pointer-events:none;
+  letter-spacing:-0.06em;
+  user-select:none;
+  transition:color 0.8s ease,text-shadow 0.8s ease;
+}
+/* Color darkens with doubt */
+.dip-section[data-n="1"] .dip-ghost{font-size:clamp(200px,38vw,580px);color:rgba(42,139,170,0.08);}
+.dip-section[data-n="2"] .dip-ghost{font-size:clamp(200px,38vw,580px);color:rgba(42,139,170,0.07);}
+.dip-section[data-n="3"] .dip-ghost{font-size:clamp(200px,38vw,580px);color:rgba(42,100,140,0.07);}
+.dip-section[data-n="4"] .dip-ghost{font-size:clamp(200px,38vw,580px);color:rgba(40,80,120,0.07);}
+.dip-section[data-n="5"] .dip-ghost{font-size:clamp(200px,38vw,580px);color:rgba(35,60,100,0.07);}
+.dip-section[data-n="6"] .dip-ghost{font-size:clamp(200px,38vw,580px);color:rgba(30,45,80,0.07);}
+
+.dip-badge{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--spec);font-weight:300;font-size:10px;
+  letter-spacing:0.38em;color:rgba(42,139,170,0.5);
+  border:1px solid rgba(42,139,170,0.2);
+  padding:5px 14px;margin-bottom:22px;
+  position:relative;z-index:1;
+}
+.dip-badge::before{content:'◈';font-size:7px;}
+
+.dip-title{
+  font-family:var(--spec);font-weight:700;
+  font-size:clamp(28px,5vw,64px);
+  line-height:1.1;letter-spacing:-0.01em;
+  color:#C0E0F0;margin-bottom:18px;
+  position:relative;z-index:1;
+}
+.dip-prose{
+  font-size:clamp(15px,1.85vw,18px);line-height:2.1;
+  color:rgba(180,215,238,0.8);font-weight:400;
+  max-width:540px;margin-bottom:1em;
+  position:relative;z-index:1;
+}
+.dip-prose.doubt{color:rgba(140,180,210,0.6);}
+.dip-prose.em{color:#C0E0F5;font-weight:600;}
+
+/* ══════════════════════════════
+   7th DIP — MIRACLE EXPLOSION
+══════════════════════════════ */
+.dip7-zone{
+  min-height:100vh;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;
+  padding:clamp(80px,10vh,140px) clamp(44px,9vw,110px);
+  position:relative;overflow:hidden;
+  opacity:0;
+  transition:opacity 1.2s ease;
+}
+.dip7-zone.in{
+  opacity:1;
+  animation:d7bg 3.5s ease forwards;
+}
+@keyframes d7bg{
+  0%{background:#062138;}
+  18%{background:#1A5080;}
+  35%{background:#60A8C8;}
+  52%{background:#E8F4FF;}
+  68%{background:#FFF8E0;}
+  82%{background:#FFFDF0;}
+  100%{background:#FFFFF8;}
+}
+
+.d7-burst{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:0;height:0;border-radius:50%;
+  background:radial-gradient(circle,
+    rgba(255,255,248,1) 0%,
+    rgba(255,240,160,0.8) 30%,
+    rgba(245,192,48,0.4) 60%,
+    transparent 100%);
+  pointer-events:none;z-index:0;
+  transition:width 3s cubic-bezier(0.16,1,0.3,1),
+             height 3s cubic-bezier(0.16,1,0.3,1);
+}
+.dip7-zone.in .d7-burst{width:280vw;height:280vw;}
+
+.d7-content{position:relative;z-index:1;}
+
+.d7-kicker{
+  font-family:var(--spec);font-weight:300;font-size:10px;
+  letter-spacing:0.45em;
+  color:rgba(42,139,170,0.6);display:block;margin-bottom:18px;
+  animation:d7fade 3.5s ease forwards 0.3s;opacity:0;
+}
+@keyframes d7fade{0%{opacity:0}100%{opacity:1}}
+
+.d7-numeral{
+  font-family:var(--spec);font-weight:800;
+  font-size:clamp(100px,20vw,280px);
+  line-height:0.9;letter-spacing:-0.05em;
+  display:block;
+  animation:d7num 3.5s ease forwards 0.2s;opacity:0;
+}
+@keyframes d7num{
+  0%{opacity:0;color:#2A8BAA;text-shadow:none;}
+  30%{color:#8B6010;}
+  60%{color:var(--gold);text-shadow:0 0 60px rgba(200,144,10,0.6);}
+  100%{opacity:1;color:var(--gold);
+       text-shadow:0 0 100px rgba(245,192,48,0.8),0 0 200px rgba(245,192,48,0.3);}
+}
+
+.d7-word{
+  font-family:var(--spec);font-weight:200;
+  font-size:clamp(22px,4.5vw,58px);
+  letter-spacing:0.2em;
+  display:block;margin:16px 0 30px;
+  animation:d7fade 3.5s ease forwards 0.8s;opacity:0;
+  color:var(--gold);
+}
+
+.d7-verse{
+  font-family:var(--serif);font-weight:600;
+  font-size:clamp(15px,2vw,20px);line-height:1.9;
+  color:rgba(60,30,5,0.85);max-width:580px;margin:0 auto 12px;
+  animation:d7fade 3.5s ease forwards 1.2s;opacity:0;
+}
+.d7-ref{
+  font-family:var(--spec);font-weight:300;font-size:9px;
+  letter-spacing:0.3em;color:rgba(140,90,10,0.6);
+  animation:d7fade 3.5s ease forwards 1.5s;opacity:0;
+}
+
+/* ══════════════════════════════
+   AFTER SECTIONS — warm cream
+══════════════════════════════ */
+.after-zone{background:#FFFCF0;}
+
+.after-ch{
+  max-width:700px;
+  padding:clamp(55px,7vh,90px) clamp(44px,9vw,110px);
+  border-bottom:1px solid rgba(200,144,10,0.12);
+  opacity:0;transform:translateY(20px);
+  transition:opacity 0.85s ease,transform 0.85s ease;
+}
+.after-ch.in{opacity:1;transform:translateY(0);}
+
+.after-ch .ch-tag{color:rgba(140,90,10,0.45);}
+.after-ch .ch-tag::after{background:rgba(140,90,10,0.12);}
+.after-ch .ch-title{color:#18080A;}
+.after-ch .prose{color:rgba(30,12,5,0.78);}
+.after-ch .qt{
+  border-left-color:rgba(200,144,10,0.4);
+  background:rgba(200,144,10,0.07);
+}
+.after-ch .qt p{color:rgba(50,18,5,0.88);}
+.after-ch .b-item{color:rgba(30,12,5,0.68);}
+.after-ch .b-item::before{background:var(--gold);box-shadow:0 0 5px rgba(200,144,10,0.3);}
+
+/* Naaman's confession zone */
+.confession{
+  padding:clamp(60px,8vh,100px) clamp(44px,9vw,110px);
+  background:#18050A;
+  position:relative;overflow:hidden;
+  opacity:0;transform:scale(0.97);
+  transition:opacity 0.9s ease,transform 0.9s ease;
+}
+.confession.in{opacity:1;transform:scale(1);}
+.confession::before{
+  content:'하나님';position:absolute;
+  right:-0.02em;bottom:-0.08em;
+  font-family:var(--spec);font-weight:800;
+  font-size:clamp(100px,18vw,280px);
+  color:rgba(200,144,10,0.04);
+  line-height:1;pointer-events:none;
+}
+.confession .ch-tag{color:rgba(200,144,10,0.4);}
+.confession .ch-tag::after{background:rgba(200,144,10,0.12);}
+.confession .ch-title{color:rgba(255,245,220,0.95);}
+.confession .prose{color:rgba(255,235,190,0.8);max-width:640px;}
+.confession .b-item{color:rgba(255,230,180,0.72);}
+.confession .b-item::before{background:var(--goldbr);}
+
+/* Jesus final */
+.final-zone{
+  padding:clamp(60px,8vh,100px) clamp(44px,9vw,110px);
+  background:#FFFCF0;
+  border-bottom:1px solid rgba(200,144,10,0.12);
+  opacity:0;transform:translateY(20px);
+  transition:opacity 0.85s ease,transform 0.85s ease;
+}
+.final-zone.in{opacity:1;transform:translateY(0);}
+.final-zone .prose{color:rgba(30,12,5,0.78);max-width:640px;}
+
+/* Closing */
+.closing{
+  min-height:75vh;display:flex;align-items:center;
+  padding:clamp(70px,10vw,140px);
+  background:#FFFCF0;
+  position:relative;overflow:hidden;
+  opacity:0;transform:translateY(18px);
+  transition:opacity 1s ease,transform 1s ease;
+}
+.closing::before{
+  content:'은혜';position:absolute;
+  right:-0.03em;bottom:-0.1em;
+  font-family:var(--spec);font-weight:800;
+  font-size:clamp(140px,22vw,360px);
+  color:rgba(200,144,10,0.04);
+  line-height:1;pointer-events:none;
+}
+.closing.in{opacity:1;transform:translateY(0);}
+.closing p{
+  font-size:clamp(16px,2.2vw,23px);line-height:2.2;
+  color:rgba(30,12,5,0.8);font-weight:400;
+  max-width:640px;margin-bottom:1em;position:relative;
+}
+.closing p.em{
+  color:#18050A;font-family:var(--spec);font-weight:700;
+  font-size:clamp(18px,2.8vw,32px);letter-spacing:-0.01em;
+}
+</style>
+</head>
+<body>
+
+<canvas id="starCanvas"></canvas>
+
+<div id="dropBar">
+  <div class="drop-wrap" id="dropWrap">
+    <div class="drop" id="d1"><div class="drop-inner"></div><span class="drop-num">1</span></div>
+    <div class="drop" id="d2"><div class="drop-inner"></div><span class="drop-num">2</span></div>
+    <div class="drop" id="d3"><div class="drop-inner"></div><span class="drop-num">3</span></div>
+    <div class="drop" id="d4"><div class="drop-inner"></div><span class="drop-num">4</span></div>
+    <div class="drop" id="d5"><div class="drop-inner"></div><span class="drop-num">5</span></div>
+    <div class="drop" id="d6"><div class="drop-inner"></div><span class="drop-num">6</span></div>
+    <div class="drop" id="d7m"><div class="drop-inner"></div><span class="drop-num">7</span></div>
+  </div>
+  <div id="barState">요단강 입수 전</div>
+  <div id="barProgress"></div>
+</div>
+
+<div class="main">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-ghost">NAAMAN</div>
+  <div class="hero-kicker">SECOND KINGS 5 · 열왕기하 5장 · 기원전 9세기</div>
+  <h1 class="hero-h1">
+    나아만 장군
+    <span class="sub">COMMANDER · CONQUEROR · LEPER</span>
+  </h1>
+  <p class="hero-desc">위대한 장군, 그러나 갑옷 속에 감춰진 절망의 이야기</p>
+</section>
+
+<!-- 1 -->
+<div class="ch" id="ch1">
+  <div class="ch-tag">CHAPTER I · 위대한 장군, 그러나 감춰진 절망</div>
+  <div class="ch-title">위대한 장군,<br>그러나 <span class="accent">감춰진 절망</span></div>
+  <p class="prose">기원전 9세기경 이스라엘 북쪽에는 아람(Aram)이라는 강한 나라가 있었습니다. 오늘날로 보면 대부분 시리아(Syria) 지역입니다. 수도는 지금도 존재하는 오래된 도시 다메섹입니다.</p>
+  <p class="prose">그 나라 군대를 이끄는 사람이 바로 나아만 장군이었습니다. 성경은 그를 이렇게 소개합니다.</p>
+</div>
+
+<div class="scripture purple" id="scr1">
+  <span class="scr-ref">열왕기하 5장 1절</span>
+  <p>"아람 왕의 군대 장관 나아만은 그의 주인 앞에서 크고 존귀한 자요 여호와께서 전에 그에게 아람을 구원하게 하셨으므로 그는 큰 용사이나 나병환자더라."</p>
+</div>
+
+<div class="ch" id="ch1b">
+  <p class="prose">이 문장은 놀라운 대비를 보여 줍니다.</p>
+  <div class="qt"><p>큰 용사 — 그러나 — 나병환자</p></div>
+  <p class="prose">세상 사람들은 그의 명예와 권력을 보았지만 그의 갑옷 속에는 아무도 해결할 수 없는 절망이 있었습니다.</p>
+</div>
+
+<!-- 2 -->
+<div class="ch right" id="ch2">
+  <div class="ch-tag">CHAPTER II · 갑옷 속에 숨겨진 병</div>
+  <div class="ch-title">갑옷 속에 숨겨진 <span class="accent">병</span></div>
+  <p class="prose">나병은 처음에는 작은 흰 반점으로 시작합니다. 그러나 시간이 지나면</p>
+  <div class="b-list" style="margin-left:auto;text-align:left;">
+    <div class="b-item">피부 감각이 사라지고</div>
+    <div class="b-item">상처가 곪고</div>
+    <div class="b-item">신경이 망가집니다</div>
+  </div>
+  <p class="prose">고대에는 사실상 치료법이 없었습니다. 나아만은 아마 이 병을 숨기고 있었을 것입니다. 사람들 앞에서는 위대한 장군이었습니다.</p>
+  <p class="prose">그러나 밤이 되면 그는 자신의 몸을 바라보며 생각했을지도 모릅니다.</p>
+  <div class="qt" style="margin-left:auto;"><p>"나는 전쟁에서는 수많은 적을 이겼는데 이 병 하나는 이길 수 없구나…"</p></div>
+</div>
+
+<!-- 3 -->
+<div class="ch" id="ch3">
+  <div class="ch-tag">CHAPTER III · 가장 낮은 곳에서 시작된 희망</div>
+  <div class="ch-title">가장 낮은 곳에서<br>시작된 <span class="accent">희망</span></div>
+  <p class="prose">그의 집에는 이스라엘에서 끌려온 어린 포로 소녀가 있었습니다. 아람 군대가 이스라엘을 공격할 때 잡혀 온 아이였습니다. 그녀는 집안일을 했습니다.</p>
+  <p class="prose">어느 날 장군의 옷을 빨래하다가 피고름 자국을 보았을지도 모릅니다. 그리고 어느 순간 그의 팔에 있는 하얀 반점을 보았을지도 모릅니다.</p>
+  <p class="prose">그녀는 마음속에서 갈등했습니다.</p>
+  <div class="qt"><p>"이 말을 해야 할까… 괜히 말했다가 화를 입으면 어떡하지…"</p></div>
+  <p class="prose">그러나 그녀는 결국 여주인에게 말합니다.</p>
+</div>
+
+<div class="scripture purple" id="scr2">
+  <span class="scr-ref">열왕기하 5장 3절</span>
+  <p>"주인어른께서 사마리아에 계신 선지자와 함께 계셨다면 얼마나 좋았을까요? 그랬다면 그분이 주인어른의 나병을 치료해 주셨을 텐데요."</p>
+</div>
+
+<!-- 4 - Faith Chain -->
+<div class="faith-chain" id="ch4">
+  <div class="chain-label">CHAPTER IV · 믿음의 전달 · THE CHAIN OF FAITH</div>
+  <p class="prose" style="margin-bottom:28px;">이 작은 말은 놀라운 길을 따라 전달됩니다.</p>
+  <div class="chain-flow" id="chainFlow">
+    <div class="chain-node"><div class="cn-circle hero">포로된 <br>소녀</div><div class="cn-label">GIRL</div></div>
+    <div class="chain-arrow"></div>
+    <div class="chain-node"><div class="cn-circle">나아만의<br>아내</div><div class="cn-label">WIFE</div></div>
+    <div class="chain-arrow"></div>
+    <div class="chain-node"><div class="cn-circle">나아만<br>장군</div><div class="cn-label">NAAMAN</div></div>
+    <div class="chain-arrow"></div>
+    <div class="chain-node"><div class="cn-circle">아람 왕</div><div class="cn-label">ARAM KING</div></div>
+    <div class="chain-arrow"></div>
+    <div class="chain-node"><div class="cn-circle">이스라엘<br>왕에게<br>서신</div><div class="cn-label">LETTER</div></div>
+    <div class="chain-arrow"></div>
+    <div class="chain-node"><div class="cn-circle prophet">선지자<br>엘리사</div><div class="cn-label">ELISHA</div></div>
+  </div>
+  <p class="prose" style="margin-top:28px;">한 작은 소녀의 말이 결국 왕까지 움직였습니다. 믿음은 작은 곳에서 시작될 수 있습니다.</p>
+</div>
+
+<!-- 5 -->
+<div class="ch" id="ch5">
+  <div class="ch-tag">CHAPTER V · 인간의 방법</div>
+  <div class="ch-title">인간의 <span class="accent">방법</span></div>
+  <p class="prose">나아만은 이스라엘로 옵니다. 그는</p>
+  <div class="b-list">
+    <div class="b-item">은</div>
+    <div class="b-item">금</div>
+    <div class="b-item">값비싼 옷</div>
+  </div>
+  <p class="prose">을 가져옵니다. 그는 아마 이렇게 생각했을 것입니다.</p>
+  <div class="qt"><p>"선지자가 나와서 환부 위에 손을 올리고 여호와의 이름을 부르며 내 병을 고칠 것이다."</p></div>
+  <p class="prose">그러나 하나님의 방법은 그의 생각과 달랐습니다.</p>
+</div>
+
+<!-- 6 -->
+<div class="ch" id="ch6">
+  <div class="ch-tag">CHAPTER VI · 하나님의 길</div>
+  <div class="ch-title">하나님의 <span class="accent">길</span></div>
+  <p class="prose">선지자 엘리사는 그를 만나지도 않았습니다. 단지 사람을 보내 말했습니다.</p>
+</div>
+
+<div class="scripture gold" id="scr3">
+  <span class="scr-ref">열왕기하 5장 10절</span>
+  <p>"가서 요단강에서 일곱 번 씻으십시오. 그러면 그대의 살이 회복되어 그대가 깨끗하게 될 것입니다."</p>
+</div>
+
+<div class="ch" id="ch6b">
+  <p class="prose">나아만은 분노했습니다.</p>
+</div>
+
+<div class="scripture purple" id="scr4">
+  <span class="scr-ref">열왕기하 5장 11절</span>
+  <p>"나는 분명 그가 나에게 나아와 내 앞에 서서 여호와 자기 하나님의 이름을 부르며 환부 위에 손을 흔들어 나병을 치료해 줄 줄 알았다."</p>
+</div>
+
+<div class="ch" id="ch6c">
+  <p class="prose">왜냐하면 하나님의 방법이 그의 생각과 달랐기 때문입니다. 성경은 말합니다.</p>
+</div>
+
+<div class="scripture gold" id="scr5">
+  <span class="scr-ref">이사야 55장 8-9절</span>
+  <p>"내 생각은 너희 생각과 다르고 너희 길은 내 길과 다르다. 하늘들이 땅보다 높은 것처럼 내 길은 너희 길보다 높고 내 생각은 너희 생각보다 높다."</p>
+</div>
+
+<!-- JORDAN TRANSITION -->
+<div class="to-water" id="toWater">
+  <div class="ch-tag">CHAPTER VII · 요단강에서</div>
+  <div class="ch-title" style="color:#C0E0F0;">요단강에서</div>
+  <p class="prose">마침내 그는 요단강으로 갑니다.</p>
+  <div class="armor-strip">
+    <div class="armor-sym">⚔</div>
+    <div class="armor-desc">그는 갑옷을 벗습니다.<br>그동안 숨겨왔던 나병의 상처가 드러납니다.<br>그리고 그는 물 속으로 들어갑니다.</div>
+  </div>
+</div>
+
+<!-- DIP 1 -->
+<div class="dip-section" data-n="1" id="dip1">
+  <div class="dip-ghost">1</div>
+  <div class="dip-badge">첫 번째 입수 · FIRST</div>
+  <div class="dip-title">첫 번째</div>
+  <p class="dip-prose em">아무 변화 없습니다.</p>
+</div>
+
+<!-- DIP 2 -->
+<div class="dip-section" data-n="2" id="dip2">
+  <div class="dip-ghost">2</div>
+  <div class="dip-badge">두 번째 입수 · SECOND</div>
+  <div class="dip-title">두 번째</div>
+  <p class="dip-prose em">여전히 그대로입니다.</p>
+</div>
+
+<!-- DIP 3 -->
+<div class="dip-section" data-n="3" id="dip3">
+  <div class="dip-ghost">3</div>
+  <div class="dip-badge">세 번째 입수 · THIRD</div>
+  <div class="dip-title">세 번째</div>
+  <p class="dip-prose em">변화 없습니다.</p>
+</div>
+
+<!-- DIP 4 -->
+<div class="dip-section" data-n="4" id="dip4">
+  <div class="dip-ghost">4</div>
+  <div class="dip-badge">네 번째 입수 · FOURTH</div>
+  <div class="dip-title">네 번째</div>
+  <p class="dip-prose doubt">의심이 생깁니다.</p>
+</div>
+
+<!-- DIP 5 -->
+<div class="dip-section" data-n="5" id="dip5">
+  <div class="dip-ghost">5</div>
+  <div class="dip-badge">다섯 번째 입수 · FIFTH</div>
+  <div class="dip-title">다섯 번째</div>
+  <p class="dip-prose doubt">실망이 올라옵니다.</p>
+</div>
+
+<!-- DIP 6 -->
+<div class="dip-section" data-n="6" id="dip6">
+  <div class="dip-ghost">6</div>
+  <div class="dip-badge">여섯 번째 입수 · SIXTH</div>
+  <div class="dip-title">여섯 번째</div>
+  <p class="dip-prose doubt">"정말 이게 맞는 것인가…"</p>
+  <p class="dip-prose">그러나 그는 마지막으로 한 번 더 몸을 담급니다.</p>
+</div>
+
+<!-- DIP 7 MIRACLE -->
+<div class="dip7-zone" id="dip7">
+  <div class="d7-burst"></div>
+  <div class="d7-content">
+    <span class="d7-kicker">일곱 번째 입수 · SEVENTH · 기적</span>
+    <span class="d7-numeral">七</span>
+    <span class="d7-word">깨끗하게 되었다</span>
+    <p class="d7-verse">"그리하여 나아만은 내려가 하나님의 사람이 말한 대로 요단강에 일곱 번 몸을 담갔다. 그러자 그의 살이 어린 소년의 살처럼 회복되어 깨끗하게 되었다."</p>
+    <span class="d7-ref">열왕기하 5장 14절</span>
+  </div>
+</div>
+
+<!-- AFTER SECTIONS -->
+<div class="after-zone">
+
+  <div class="after-ch" id="ach1">
+    <div class="ch-tag">CHAPTER VIII · 무엇이 그를 고쳤는가</div>
+    <div class="ch-title">무엇이 그를 고쳤는가</div>
+    <p class="prose">그를 고친 것은 그의 완벽한 믿음이 아니었습니다. 중간에 그는</p>
+    <div class="b-list">
+      <div class="b-item">의심했고</div>
+      <div class="b-item">실망했고</div>
+      <div class="b-item">포기하고 싶었을지도 모릅니다</div>
+    </div>
+    <p class="prose">그러나 결국 이루어진 것은 하나님의 말씀이었습니다.</p>
+  </div>
+
+  <div class="after-ch" id="ach2">
+    <div class="ch-tag">CHAPTER IX · 놀라운 반전</div>
+    <div class="ch-title">놀라운 반전</div>
+    <p class="prose">여기서 놀라운 사실이 있습니다. 나아만은 이스라엘 사람이 아니었습니다. 그는 이방 나라 장군이었습니다.</p>
+    <p class="prose">그런데 하나님은 이스라엘 사람이 아니라 이방 장군을 고치셨습니다.</p>
+    <p class="prose">이것은 중요한 메시지입니다. 하나님의 구원은 한 민족만을 위한 것이 아니라 모든 사람을 위한 것이라는 것입니다.</p>
+    <p class="prose">예수님도 이 이야기를 언급하셨습니다.</p>
+  </div>
+
+  <div class="scripture gold" id="scr6" style="margin:0 clamp(44px,9vw,110px);">
+    <span class="scr-ref">누가복음 4장 27절</span>
+    <p>"선지자 엘리사 시대에 이스라엘에 많은 나병 환자가 있었지만, 시리아 사람 나아만 외에는 아무도 깨끗하게 되지 못하였습니다."</p>
+  </div>
+
+</div>
+
+<!-- CONFESSION -->
+<div class="confession" id="conf">
+  <div class="ch-tag">마지막 장면 · FINAL SCENE</div>
+  <div class="ch-title">나아만은 선지자에게<br>돌아와 말합니다</div>
+</div>
+
+<div class="scripture gold" id="scr7" style="margin:0;background:#120308;border-left:2px solid var(--goldbr);padding:32px clamp(44px,9vw,110px);">
+  <span class="scr-ref" style="color:rgba(245,192,48,0.55);">열왕기하 5장 15절</span>
+  <p style="color:#FFF8E8;">“이제 나는 온 땅에 이스라엘 외에는 하나님께서 계시지 않는다는 것을 알았습니다."</p>
+</div>
+
+<div class="after-ch" id="ach3">
+  <div class="ch-tag">그날 요단강에서</div>
+  <div class="b-list">
+    <div class="b-item">그의 피부가 새로워졌고</div>
+    <div class="b-item">그의 교만이 깨졌고</div>
+    <div class="b-item">그의 믿음이 시작되었습니다</div>
+  </div>
+</div>
+
+<div class="final-zone" id="finalZone">
+  <div class="ch-tag">이 이야기가 우리에게 말하는 것</div>
+  <div class="ch-title" style="color:#18080A;font-family:var(--spec);font-weight:700;font-size:clamp(24px,4vw,52px);line-height:1.15;letter-spacing:-0.01em;margin-bottom:22px;">이 이야기는 단순한 병 이야기가 아닙니다.</div>
+  <p class="prose">나아만에게 나병이 있었듯 우리에게도 우리 힘으로 해결할 수 없는 문제가 있습니다.</p>
+  <p class="prose">그러나 예수님은 오늘도 사람들에게 말씀하십니다.</p>
+</div>
+
+<div class="scripture green" id="scrFinal" style="margin:0 clamp(44px,9vw,110px);">
+  <span class="scr-ref">누가복음 5장 31절</span>
+  <p>"건강한 사람에게는 의사가 필요하지 않으나, 병든 사람에게는 필요합니다."</p>
+</div>
+
+<div class="closing" id="closing">
+  <div>
+    <p>요단강 물속에서 일어선 나아만처럼 오늘 우리도 그분께 나아갈 수 있습니다.</p>
+    <p class="em">하나님의 길은 우리의 생각보다 높습니다.<br>그러나 그 길은 열려 있습니다.<br>지금 이순간 주님의 이름을 불러보세요.<br>오! 주 예수님!</p>
+  </div>
+</div>
+
+</div><!-- main -->
+
+<script>
+/* ─── STAR CANVAS ──────────────────────── */
+const sc=document.getElementById('starCanvas');
+const sx=sc.getContext('2d');
+let sW=0,sH=0;
+const stars=[];
+
+function resizeStar(){sW=sc.width=window.innerWidth;sH=sc.height=window.innerHeight;}
+resizeStar();window.addEventListener('resize',resizeStar);
+
+for(let i=0;i<180;i++){
+  stars.push({
+    x:Math.random(),y:Math.random(),
+    r:0.3+Math.random()*1.2,
+    a:0.1+Math.random()*0.5,
+    tw:Math.random()*Math.PI*2,
+    spd:0.003+Math.random()*0.008
+  });
+}
+
+let sp=0;
+
+function paintStars(){
+  requestAnimationFrame(paintStars);
+  sx.clearRect(0,0,sW,sH);
+
+  // Only show stars in night/indigo zone (sp<0.35)
+  const starAlpha=sp<0.28?1:Math.max(0,1-(sp-0.28)/0.14);
+  if(starAlpha<=0) return;
+
+  stars.forEach(s=>{
+    s.tw+=s.spd;
+    const pulse=s.a*(0.7+0.3*Math.sin(s.tw));
+    sx.beginPath();
+    sx.arc(s.x*sW,s.y*sH,s.r,0,Math.PI*2);
+    sx.fillStyle=`rgba(200,190,240,${pulse*starAlpha})`;
+    sx.fill();
+  });
+}
+requestAnimationFrame(paintStars);
+
+/* ─── DROP BAR ─────────────────────────── */
+const dipIds=['dip1','dip2','dip3','dip4','dip5','dip6','dip7'];
+const dropEls=['d1','d2','d3','d4','d5','d6','d7m'];
+const stateLabels=[
+  '1번째 입수','2번째 입수','3번째 입수',
+  '4번째 입수 — 의심','5번째 입수 — 실망',
+  '6번째 입수 — 그러나…','✦ 일곱 번째 — 기적 ✦'
+];
+
+function updateBar(){
+  sp=window.scrollY/Math.max(1,document.documentElement.scrollHeight-window.innerHeight);
+  document.getElementById('barProgress').style.width=(sp*100)+'%';
+
+  const vh=window.innerHeight;
+  let active=-1;
+  dipIds.forEach((id,i)=>{
+    const el=document.getElementById(id);if(!el)return;
+    const r=el.getBoundingClientRect();
+    if(r.top<vh*0.6&&r.bottom>0) active=i;
+  });
+
+  const bsEl=document.getElementById('barState');
+  dropEls.forEach((did,i)=>{
+    const el=document.getElementById(did);if(!el)return;
+    el.classList.remove('lit','miracle');
+    if(i<=active){
+      if(i===6) el.classList.add('miracle');
+      else el.classList.add('lit');
+    }
+  });
+
+  if(active>=0){
+    bsEl.textContent=stateLabels[active];
+    bsEl.style.color=active===6?'rgba(245,192,48,0.7)':'rgba(42,139,170,0.65)';
+  } else if(sp>0.72){
+    bsEl.textContent='깨끗하게 되었다';
+    bsEl.style.color='rgba(200,144,10,0.7)';
+  } else {
+    bsEl.textContent='요단강 입수 전';
+    bsEl.style.color='rgba(232,224,245,0.3)';
+  }
+}
+window.addEventListener('scroll',updateBar,{passive:true});
+updateBar();
+
+/* ─── INTERSECTION OBSERVER ────────────── */
+document.querySelectorAll(
+  '.ch,.scripture,.faith-chain,.to-water,.dip-section,.dip7-zone,'+
+  '.after-ch,.confession,.final-zone,.closing,.chain-node'
+).forEach(el=>{
+  new IntersectionObserver(
+    e=>e.forEach(ev=>{if(ev.isIntersecting)ev.target.classList.add('in');}),
+    {threshold:0.06,rootMargin:'0px 0px -44px 0px'}
+  ).observe(el);
+});
+</script>
+</body>
+</html>

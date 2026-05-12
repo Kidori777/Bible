@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>교회 집회 말씀 개요</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&family=Noto+Serif+KR:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --surface-color: #161b22;
+            --gold: #d4a017;
+            --text-main: #e6edf3;
+            --text-muted: #8b949e;
+            --accent-blue: #58a6ff;
+            --accent-green: #3fb950;
+            --border-color: #30363d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(circle at 2px 2px, rgba(212, 160, 23, 0.05) 1px, transparent 0);
+            background-size: 40px 40px;
+            color: var(--text-main);
+            font-family: 'Noto Sans KR', sans-serif;
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 80px 0 60px;
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 4px 16px;
+            background: rgba(212, 160, 23, 0.1);
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .hero h1 {
+            font-family: 'Noto Serif KR', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            color: var(--gold);
+            margin-bottom: 20px;
+            font-weight: 900;
+        }
+
+        .hero-divider {
+            width: 60px;
+            height: 4px;
+            background: var(--gold);
+            margin: 0 auto 30px;
+        }
+
+        /* Typography & Layout */
+        h2 {
+            font-family: 'Noto Serif KR', serif;
+            font-size: 1.8rem;
+            color: var(--gold);
+            margin: 60px 0 30px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            color: var(--accent-blue);
+            margin: 40px 0 20px;
+        }
+
+        p {
+            margin-bottom: 16px;
+            word-break: keep-all;
+        }
+
+        /* Bible Verse Card */
+        .verse-card {
+            background: var(--surface-color);
+            border-left: 5px solid var(--gold);
+            padding: 30px;
+            margin: 30px 0;
+            position: relative;
+            border-radius: 0 12px 12px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .verse-card::before {
+            content: '"';
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 5rem;
+            color: rgba(212, 160, 23, 0.05);
+            font-family: 'Noto Serif KR', serif;
+        }
+
+        .bible-text {
+            font-weight: 700;
+            color: #ffffff;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            display: block;
+            white-space: normal;
+            word-wrap: break-word;
+        }
+
+        /* Cards */
+        .front-card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .front-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold);
+        }
+
+        .person-card {
+            background: linear-gradient(145deg, #1c2128, #161b22);
+            border: 1px solid var(--accent-blue);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 4px solid var(--accent-blue);
+        }
+
+        /* Dialogue & Lists */
+        .dialogue {
+            background: rgba(88, 166, 255, 0.05);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 3px solid var(--accent-blue);
+        }
+
+        .mission-list {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .mission-list li {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 12px;
+        }
+
+        .mission-list li::before {
+            content: '◈';
+            position: absolute;
+            left: 0;
+            color: var(--gold);
+        }
+
+        /* Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            background: var(--surface-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .data-table th {
+            background: var(--gold);
+            color: var(--bg-color);
+            padding: 12px;
+            text-align: center;
+        }
+
+        .data-table td {
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        /* Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .highlight {
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        .footer-text {
+            text-align: center;
+            margin-top: 80px;
+            padding: 40px 0;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--gold), transparent);
+            margin: 60px 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 20px; }
+            .hero { padding: 40px 0; }
+            .verse-card { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header class="hero">
+        <span class="hero-badge">BIBLE STUDY OUTLINE</span>
+        <h1>7년 대환란과 두 기수</h1>
+        <div class="hero-divider"></div>
+        <p class="highlight">요한계시록의 구체적 전개와 영적 통찰</p>
+    </header>
+
+    <section class="reveal">
+        <h2>Ⅰ. 7년 대환란의 성경적 근거</h2>
+        <div class="verse-card">
+            <span class="bible-text">**다니엘 9:24–27** 칠십 이레가 그대의 백성과 그대의 거룩한 성을 위하여 정해졌습니다. 이것은 잘못을 그치게 하고, 죄들을 끝내며, 죄악에 대하여 화해를 이루고, 만대의 의를 가져오며, 이상과 예언을 봉인하고, 지성소에 기름을 바르려는 것입니다. 그러니 깨달아 아십시오. 예루살렘을 복원하고 재건하라는 명령이 내려진 때부터 메시아 통치자의 때까지 일곱 이레와 육십이 이레가 지날 것입니다. 예루살렘이 거리와 해자까지 다시 세워질 것이나, 그때은 곤경의 때일 것입니다. 육십이 이레가 지난 후에는 메시아가 끊어져서 아무것도 갖지 못할 것이며, 장차 올 통치자의 백성이 그 성과 성소를 파괴할 것입니다. 그 끝은 홍수와 함께 올 것이고 끝까지 전쟁이 있을 것이니, 황폐함이 정해졌습니다. 그가 많은 사람들과 한 이레 동안의 견고한 언약을 맺을 것인데, 그 이레의 한중간에 희생 제물과 예물을 바치지 못하게 하고 황폐하게 하는 자의 가증한 것들로 희생 제물과 예물을 대치할 것이니, 이미 정해진 완전한 멸망이 그 황폐하게 하는 자 위에 쏟아부어질 때까지 그러할 것입니다.</span>
+        </div>
+        <div class="front-card">
+            <ul class="mission-list">
+                <li><span class="highlight">**다니엘 9:27**</span> **“그가 많은 사람들과 한 이레(7년) 동안의 견고한 언약을 맺을 것인데, 그 이레의 한중간에 희생 제물과 예물을 바치지 못하게 하고 …”**</li>
+                <li>**‘한 이레’ = 7년**</li>
+                <li>이 마지막 한 이레가 흔히 말하는 대환란 기간</li>
+                <li>절반(3년 반)을 기준으로 전반 / 후반이 갈라짐</li>
+            </ul>
+            <p>👉 요한계시록은 이 “마지막 한 이레”의 구체적 전개 상황을 보여주는 책입니다.</p>
+        </div>
+    </section>
+
+    <section class="reveal">
+        <h2>Ⅱ. 대환란의 시작 – ‘언약’과 첫째 인</h2>
+        <h3>1️⃣ 대환란의 공식적 시작</h3>
+        <div class="verse-card">
+            <span class="bible-text">**다니엘 9:27** “그가 많은 사람들과 한 이레 동안의 견고한 언약을 맺을 것인데,”</span>
+        </div>
+        <div class="person-card">
+            <p>여기서 **“그”**는 장차 올 세상의 한 왕 **적그리스도**이다.</p>
+            <ul class="mission-list">
+                <li>이스라엘과 평화·보호·질서의 언약체결</li>
+                <li>외형상 평화의 시작</li>
+            </ul>
+        </div>
+        <p>👉 아직 전쟁도, 재앙도 본격화되지 않음<br>👉 그러나 하늘에서는 이미 심판이 시작됨</p>
+
+        <h3>2️⃣ 첫째 인 – 가짜 평화의 등장</h3>
+        <div class="verse-card">
+            <span class="bible-text">**요한계시록 6:1–2** 나는 어린양께서 일곱 봉인 중에 하나를 떼시는 것을 보았습니다. 그리고 네 생물 중의 하나가 천둥과 같은 소리로 “오십시오.”라고 말하는 것을 들었습니다. 내가 보니, 흰색 말이 있고, 그 위에 탄 이는 활을 가지고 있었으며, 그에게 면류관이 주어졌습니다. 그래서 그는 정복하며 나아갔고 또 정복하려고 나아갔습니다.</span>
+        </div>
+        <div class="dialogue">
+            <p>🔑 봉인은 ‘복음 사역’이 아니라, 이미 봉인되어 있던 ‘심판의 두루마리’를 여는 행위입니다.</p>
+            <p>**고후 11장 14절** **이것은 놀랄 일이 아닙니다. 왜냐하면 사탄도 자기를 빛의 천사로 가장하기 때문입니다.**</p>
+        </div>
+        <div class="front-card">
+            <p>**“흰색 말이… 정복하며 나아갔고 또 정복하려고 나아갔습니다.”**</p>
+            <p>흰색 = 성경에서 의, 승리, 거룩의 색입니다. 그래서 많은 사람들이 ‘복음’으로 오해하고 있는 부분이지만 성경은 ‘흰색으로 가장한 속임’을 반복해서 경고하고 있습니다.</p>
+            <p><span class="highlight">**다니엘 8:25**</span> **그는 교활하여 / 제 손으로 속임수가 통하게도 하며 / 마음속에서 스스로를 높이며 / 평온하게 지내는 많은 이들을 멸망시킬 것입니다.**</p>
+            <ul class="mission-list">
+                <li>**적그리스도의 등장**</li>
+                <li>칼 없이 정복 → 외교·경제·사상적 지배(활은 있으나 화살에 대한 언급은 없습니다.)</li>
+                <li>세상은 “평화의 지도자”로 인식할 것입니다.</li>
+            </ul>
+        </div>
+        <div class="verse-card">
+            <span class="bible-text">**데살로니가전서 5:3** “사람들이 “평화롭다, 안전하다.”라고 말할 그때에 임신한 여자에게 진통이 오듯이, 멸망이 갑자기 그들에게 닥칠 것입니다. 그래서 그들이 결코 피하지 못할 것입니다.”</span>
+        </div>
+        <p>🔑 환란은 ‘혼란’이 아니라 ‘속임수’로 시작합니다. 평화롭다. 안전하다. 라고 말하며 사람의 마음을 속이며 마음이 무뎌질 때 멸망이 갑자기 올 것입니다.</p>
+    </section>
+
+    <section class="reveal">
+        <h2>Ⅲ. 환란 전반부 (3년 반)</h2>
+        <div class="front-card">
+            <p class="highlight">📌 기간 표기</p>
+            <ul class="mission-list">
+                <li>**42개월** (그들이 그 거룩한 성을 마흔두 달 동안 짓밟을 것이다. 계 11:2)</li>
+                <li>**1,260일** (내가 나의 두 증인을 시켜 천이백육십 일 동안 자루옷을 입고 예언하게 할 것이다. 계 11:3)</li>
+                <li>**한 때 두 때 반 때** (성도들은 한 때와 두 때와 반 때 동안 그의 손에 넘겨질 것입니다. 단 7:25)</li>
+            </ul>
+        </div>
+
+        <h3>1️⃣ 인(印) 심판 – 인간 사회 붕괴</h3>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>인</th>
+                    <th>1</th>
+                    <th>2</th>
+                    <th>3</th>
+                    <th>4</th>
+                    <th>5</th>
+                    <th>6</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>내용</td>
+                    <td>적그리스도</td>
+                    <td>전쟁</td>
+                    <td>기근</td>
+                    <td>죽음</td>
+                    <td>순교자 호소</td>
+                    <td>우주적 재앙</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>👉 인간의 정치·경제·군사 시스템은 붕괴되고 맙니다.</p>
+
+        <h3>2️⃣ 하나님의 보호 – 144,000 인침</h3>
+        <div class="verse-card">
+            <span class="bible-text">**요한계시록 7장 3절** 우리가 우리 하나님의 노예들의 이마에 도장을 찍기까지는</span>
+        </div>
+        <ul class="mission-list">
+            <li>이스라엘 12지파에서 144,000명</li>
+            <li>하나님의 종들에게 이마에 도장을 찍음</li>
+            <li>심판 중에도 구속 계획은 중단되지 않음</li>
+        </ul>
+        <div class="verse-card">
+            <span class="bible-text">**계 7:9** 이 일들이 있은 후에 내가 보니, 아무도 그 수를 셀 수 없을 정도로 큰 무리가 각 민족과 모든 지파와 백성과 언어에서 나와, 흰 겉옷을 입고 손에 야자나무 가지를 들고 보좌 앞과 어린양 앞에 서서,</span>
+            <span class="bible-text">**계 7:14** “이 사람들은 큰 환난에서 나오는 사람들인데, 그들의 겉옷을 어린양의 피로 빨아서 희게 하였습니다.”</span>
+        </div>
+    </section>
+
+    <section class="reveal">
+        <h2>Ⅳ. 환란의 중심점 – 결정적 전환</h2>
+        <p class="highlight">⚠️ 결정적 사건: 성전 모독</p>
+        <div class="verse-card">
+            <span class="bible-text">**다니엘 9:27** 그가 많은 사람들과 한 이레 동안의 견고한 언약을 맺을 것인데, 그 이레의 한중간에 희생 제물과 예물을 바치지 못하게 하고 황폐하게 하는 자의 가증한 것들로 희생 제물과 예물을 대치할 것이니,</span>
+            <span class="bible-text">**마태복음 24:15** 그러므로 신언자 다니엘을 통해 말씀하신, ‘황폐하게 하는 가증한 것’이 거룩한 곳에 서 있는 것을 보거든(읽는 사람은 깨달으십시오),</span>
+            <span class="bible-text">**데살로니가후서 2:3–4** 여러분은 어느 누구에게도 어떤 방식으로든지 속아 넘어가지 마십시오. 왜냐하면 먼저 변절하는 일이 생기고, 그 불법의 사람 곧 멸망의 아들이 나타나기 전에는 그날이 오지 않을 것이기 때문입니다. 그는 대적하는 자이며, 신이라고 불리는 모든 것이나 사람의 경배를 받는 모든 대상보다 자기를 높이고, 심지어 하나님의 성전에 앉아서 자기를 내세우며 자신을 하나님이라고 할 것입니다.</span>
+        </div>
+        <div class="front-card">
+            <ul class="mission-list">
+                <li>적그리스도가 하나님 자리에 앉음</li>
+                <li>스스로를 신이라고 선포함</li>
+                <li>이 순간부터 후반부 = **‘대(大)환란’**이 시작됩니다.</li>
+            </ul>
+        </div>
+        <div class="verse-card">
+            <span class="bible-text">**마태복음 24:21** “그때에 대환난이 있을 것인데, 그런 환난은 세상의 시작부터 지금까지 일어난 적이 없었고, 그 후로도 결코 다시 일어나지 않을 것입니다.”</span>
+        </div>
+    </section>
+
+    <section class="reveal">
+        <h2>Ⅴ. 환란 후반부 (3년 반) – 진짜 고통의 시작</h2>
+        <h3>1️⃣ 나팔 심판 (계 8–9장)</h3>
+        <ul class="mission-list">
+            <li>자연·생태·인구의 대규모 파괴</li>
+            <li>악한 영들의 활동 증가</li>
+            <li>인간의 완고함 드러나고 회개하지 않음</li>
+        </ul>
+
+        <h3>2️⃣ 짐승의 표 강요</h3>
+        <div class="verse-card">
+            <span class="bible-text">**요한계시록 13장** 매매 통제, 짐승의 이름·수의 표, 경배 강요</span>
+            <span class="bible-text">**계 13:8** “창세 때부터 죽음을 당한 어린양의 생명책에 이름이 기록되지 못하고 땅에 거하는 사람들은 모두 그 짐승에게 경배할 것입니다.”</span>
+        </div>
+        <p>👉 중립은 불가능합니다. 짐승에게 경배하거나, 순교하거나</p>
+
+        <h3>3️⃣ 성도들의 극심한 박해</h3>
+        <div class="verse-card">
+            <span class="bible-text">**계 12:17** 여자에게 화가 난 용은 여자의 씨 가운데 남아 있는 사람들, 곧 하나님의 계명들을 지키고 예수님의 증거를 가진 사람들에 대해 전쟁을 일으키려고 나가서,</span>
+            <span class="bible-text">**계 13:7** 또 그 짐승은 성도들과 싸워 이기는 것을 허락받았으며, 모든 지파와 백성과 언어와 민족을 다스리는 권세도 받았습니다.</span>
+        </div>
+        <div class="front-card">
+            <p>짐승은 그 기간 잠깐 성도들과 싸우고 이기므로 모든 백성과 민족을 다스림</p>
+            <p>성도들은 육체적 생존보다 충성의 문제로 박해를 당함</p>
+        </div>
+    </section>
+
+    <section class="reveal">
+        <h2>Ⅵ. 대환란의 끝 – 하나님의 진노 완성</h2>
+        <h3>1️⃣ 대접 심판 (계 16장)</h3>
+        <p>하나님의 진노가 완전히 쏟아짐 / 더 이상 회개의 기회가 없음</p>
+
+        <h3>2️⃣ 아마겟돈 전쟁</h3>
+        <div class="verse-card">
+            <span class="bible-text">**계 16:16** 더러운 영 셋은 히브리 말로 아마겟돈이라 하는 곳으로 왕들을 모았습니다.</span>
+            <span class="bible-text">**계 19:19** 또 내가 보니, 그 짐승과 땅의 왕들과 그들의 군대들이 함께 모여, 말을 타신 분과 그분의 군대와 전쟁을 하였습니다.</span>
+        </div>
+        <p>세상의 군대 vs 어린 양 / 실제 전투라기보다 주님의 일방적인 심판이 이루어짐.</p>
+
+        <h3>3️⃣ 예수 그리스도의 재림</h3>
+        <div class="verse-card">
+            <span class="bible-text">**요한계시록 19:11–16** “또 나는 하늘이 열린 것을 보았습니다. 보십시오, 흰색 말이 있고, 신실하시고 참되시다고 불리시는 분께서 그 위에 타셨는데, 그분은 의로 심판하시고 전쟁하시는 분이십니다.…”</span>
+        </div>
+        <p>적그리스도와 거짓 선지자 → 불못 / 사탄은 결박됨 (계 20:1–3)</p>
+    </section>
+
+    <section class="reveal">
+        <h2>Ⅶ. 환란 이후 – 새로운 국면</h2>
+        <div class="front-card">
+            <ul class="mission-list">
+                <li>1️⃣ 천년왕국 시작 (계 20장)</li>
+                <li>2️⃣ 사탄 최후 심판</li>
+                <li>3️⃣ 백보좌 심판</li>
+                <li>4️⃣ 새 하늘과 새 땅 (계 21–22장)</li>
+            </ul>
+        </div>
+    </section>
+
+    <hr>
+
+    <section class="reveal">
+        <div class="hero">
+            <h1>한 두루마리, 두 명의 기수</h1>
+            <p>요한계시록 6장과 19장의 흰 말에 대하여</p>
+        </div>
+        
+        <div class="front-card">
+            <p>요한 계시록을 보면 흰말을 타는 기수에 대한 이야기가 두 군데 있습니다. 하나는 요한계시록 6장이고 또 한 곳은 요한계시록 19장에서 볼 수 있습니다.</p>
+            <p>많은 사람들이 계시록 6장의 흰말을 탄 자가 그리스도라고 하는 분도 있는데 계시록 6장에서는 어린양이신 주님이 심판의 첫 봉인을 떼시는 것을 볼 수 있습니다. 첫 번 째 봉인부터 네 번째 봉인까지 네 마리의 말이 나오고 있습니다.</p>
+        </div>
+
+        <div class="person-card">
+            <p class="highlight">이 네 마리의 말은</p>
+            <p>1. 거짓 평화 (흰 말) 2. 폭력 (붉은 말) 3. 불의한 구조 (검은 말) 4. 죽음 (창백한 말)을 나타내고 있습니다.</p>
+        </div>
+
+        <div class="verse-card">
+            <span class="bible-text">**한 두루마리, 두 명의 기수** 요한은 같은 장면을 두 번 봅니다. 둘 다 흰 말을 탑니다. 겉으로 보면 너무 비슷해서, 많은 사람들이 “같은 분이 아닌가?” 하고 착각합니다. 하지만 요한은 계시록에 쓰여진 언어로 거짓을 벗겨냅니다.</span>
+        </div>
+
+        <h3>🐎 첫 번째 흰 말 – ‘받은 관’을 쓴 자 (계 6장)</h3>
+        <div class="dialogue">
+            <p>요한이 처음 본 흰 말은 세상이 열광할 만한 모습이었습니다. 흰 말을 타고 정복하였고 승리자처럼 보였습니다. 그리고 그의 머리 위에 면류관이 하나 주어 졌습니다. 그런데 요한은 이렇게 씁니다.</p>
+            <p>**“그에게 면류관이 주어졌고”(edothe auto stephanos)**</p>
+            <p>여기서 요한이 고른 단어는 **스테파노스**입니다. 스테파노스는 왕의 왕관이 아닙니다. 본래 소유한 관도 아닙니다. 누군가에게서 ‘받은’ 관입니다. 고대 경기장에서 우승자가 받던 화관 공로가 있을 때 잠시 씌워주는 면류관인 것입니다. 즉, 이 기수는 왕이 아닙니다. 다만 왕처럼 보이도록 허락받은 자입니다.</p>
+        </div>
+        <p>그는 칼도 없이 화살도 없이 활만 가지고 싸우지 않고 정복합니다. 세상은 말합니다. “평화롭다, 안전하다.” 하지만 요한은 이미 알고 있었습니다. 이 평화는 가면이라는 것을. 이 흰말은 “내가 답이다.” “내가 질서를 만들겠다.” “내가 평화를 가져오겠다.” 사람들은 그를 환영합니다. 왜냐하면 그는 전쟁보다 앞서 오기 때문입니다.</p>
+        <p>그러나 중요한 한 가지 사실은 그 관은 디아데마가 아니라 스테파노스 왕에게서 허락되어진 ‘주어진’ 면류관이며 이 관을 쓴 자는 왕이 아니라 왕에게서 허락받은 자인 것입니다. 이 흰 말은 그리스도를 흉내 내는 평화, 진리를 흉내 낸 거짓 질서의 왕인 것입니다.</p>
+
+        <h3>🐎 두 번째 말 – 붉은 말</h3>
+        <div class="verse-card">
+            <span class="bible-text">**“평화를 빼앗는 자”** “내가 보니, 다른 말 곧 붉은색 말이 나왔는데, 그 위에 탄 이에게는 평화를 땅에서 떠나가게 함으로써 사람들이 서로를 죽이게 하는 권위가 주어졌습니다” (계 6:4)</span>
+        </div>
+        <p>첫 번째 말이 가져온 “가짜 평화”는 오래가지 않습니다. 질서는 있었지만 진리는 없었고, 통제는 있었지만 하나님은 없었기 때문입니다. 그래서 두 번째 말이 등장합니다. 이 말은 평화를 ‘만들지’ 않습니다. 이미 있는 평화를 ‘빼앗습니다’. 사람과 사람 사이, 민족과 민족 사이, 이념과 이념 사이에 서로를 향한 칼이 들려집니다. 왜일까요? 하나님 없는 평화는 결국 폭력으로 유지될 수밖에 없기 때문입니다.</p>
+
+        <h3>🐎 세 번째 말 – 검은 말</h3>
+        <div class="verse-card">
+            <span class="bible-text">**“공의가 무너진 경제”** “한 데나리온에 밀 한 되요, 한 데나리온에 보리 세 되입니다.” (계 6:6)</span>
+        </div>
+        <p>전쟁은 반드시 경제를 무너뜨립니다. 세 번째 말은 저울을 들고 옵니다. 저울은 원래 공정함의 상징이지만, 여기서는 왜곡된 공정함입니다. 하루 종일 일해도 하루 먹을 양식밖에 얻지 못합니다. 흥미로운 말이 들립니다. “기름과 포도주는 해치지 말라” 생존 필수품은 부족하지만 사치품은 남아 있습니다. 즉, 가난한 자는 더 가난해지고 가진 자는 여전히 누립니다. 불의한 구조와 양심이 없는 시장은 단순한 경제 위기가 아니라 하나님 없는 세계가 만들어내는 구조적 모순입니다.</p>
+
+        <h3>🐎 네 번째 말 – 창백한 말</h3>
+        <div class="verse-card">
+            <span class="bible-text">**“죽음과 음부”** “그의 이름은 죽음이고, 음부가 그 뒤를 따랐습니다” (계 6:8)</span>
+        </div>
+        <p>마지막 말은 생기가 없습니다. 헬라어로는 **‘클로로스’**, 시체의 색, 병든 말의 살의 색입니다. 이 말의 이름은 죽음이고 그리고 그 뒤에는 음부가 따라옵니다. 이제 더 이상 꾸밈도, 명분도 없습니다. 거짓 평화와 전쟁 기근과 질병 그리고 죽음뒤에 따라오는 음부는 인간이 하나님 없이 세운 세계의 최종 도착지인 것입니다.</p>
+
+        <div class="front-card">
+            <p class="highlight">🔁 네 말의 숨겨진 구조</p>
+            <p>이 네 말은 무작위가 아닙니다. 거짓 평화(흰 말)와 폭력(붉은 말)과 공의롭지 못한 구조(검은 말)와 죽음(창백한 말)의 순서는 하나님이 없는 인간 세상의 역사의 반복 패턴입니다. 흰색 말의 활로 마음을 정복하고 붉은 말로 평화를 제거하며 검은 말로 생존을 통제하여 창백한 말로 죽음을 관리하는 바벨탑 이후 계속되어 온 인간의 길이기도 합니다.</p>
+            <p>**가장 중요한 반전** 이 모든 말은 사탄이 보낸 말이 아닙니다.</p>
+            <div class="dialogue">
+                <p>**“어린양께서 일곱 봉인 중에 하나를 떼시는 것을 보았습니다…”**</p>
+                <p>👉 어린양이 허락하신 역사입니다. 왜일까요? 심판을 위한 것이 아니라 회개를 위한 경고이기 때문입니다.</p>
+            </div>
+        </div>
+
+        <div class="person-card">
+            <p class="highlight">🌿 결론 – 아직 은혜의 시간</p>
+            <p>계시록 6장은 아직 일곱 번째 봉인을 열지 않았습니다. 지금 이 시대는 아직 복음이 전파되고 아직 어린양이 기다리시며 아직 돌아올 길이 열려 있습니다. 네 마리의 말은 이렇게 말합니다. “이 길은 생명의 길이 아니다.” “다른 왕, 만왕의 왕이 있다.” “진짜 흰 말은 아직 오지 않았다.”</p>
+            <p>그리고 그 진짜 흰 말은 계시록 19장에서 디아데마를 쓰고 심판과 구원을 함께 들고 오십니다.</p>
+        </div>
+
+        <h3>👑 두 번째 흰 말 – ‘본래 관’을 쓰신 분 (계 19장)</h3>
+        <p>이제 이야기는 끝으로 갑니다. 하늘이 열립니다. 다시 흰 말이 나타납니다. 그러나 이번에는 분위기가 완전히 다릅니다. 요한은 이렇게 씁니다.</p>
+        <div class="verse-card">
+            <span class="bible-text">**“그분의 눈은 불꽃이고, 머리에는 많은 왕관이 있고” (diademata polla)**</span>
+        </div>
+        <p>이번에 사용된 단어는 **디아데마**입니다. 디아데마는 경기 우승자의 관이 아닙니다. 수여받는 관이 아닙니다. 왕이기 때문에 쓰는 관입니다. 이 왕관은 혈통에 속하고 주권에 속하고 정체성에 속합니다. 이분은 왕관을 받은 분이 아닙니다. 이분은 왕관을 가지신 분입니다. 그리고 이번에는 하나가 아닙니다. 많습니다. 왜냐하면 한 나라의 왕이 아니라 만왕의 왕이시기 때문입니다.</p>
+
+        <div class="front-card">
+            <p class="highlight">⚖️ 요한이 일부러 갈라놓은 세 가지</p>
+            <ul class="mission-list">
+                <li>**① 관의 종류**<br>계 6장: 스테파노스(수여 받은 면류관) / 계 19장: 디아데마(본래의 왕관)</li>
+                <li>**② 동사의 방향**<br>계 6장: “정복하려고 나아감” / 계 19장: “그분은 의로 심판하시고 전쟁하시는 분이십니다”</li>
+                <li>**③ 시간의 위치**<br>계 6장: 심판의 시작 / 계 19장: 심판의 완성</li>
+            </ul>
+        </div>
+
+        <div class="dialogue">
+            <p>🕊️ **이야기의 결말**</p>
+            <p>요한은 이렇게 말하고 싶은 것입니다. 처음 흰 말은 왕처럼 보이지만 왕이 아니고, 마지막 흰 말은 왕이기 때문에 왕관을 쓰고 계신다. 6장의 관은 주어진 면류관이라면, 19장의 관은 빼앗을 수 없는 왕관인 것입니다. 처음 정복은 속임의 승리이고, 마지막 승리는 진리의 의로운 심판인 것입니다.</p>
+            <p>✨ **한 문장으로 요약하면**<br>스테파노스는 잠시 씌워진 가면이고, 디아데마는 영원히 벗겨지지 않는 왕권인 것입니다.</p>
+        </div>
+    </section>
+
+    <div class="footer-text">
+        부산교회 2구역
+    </div>
+</div>
+
+<script>
+    // Intersection Observer for Fade-in Effect
+    const observerOptions = {
+        threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal').forEach(el => {
+        observer.observe(el);
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>성경의 유래와 권위</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Serif+KR:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* ════════════════════════════════════════
+   BASE RESET
+════════════════════════════════════════ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;font-size:16px;}
+
+:root{
+  --bg:#06070e;
+  --bg2:#0b0c18;
+  --gold:#c9a84c;
+  --gold2:#e8c970;
+  --gold3:#f5e19a;
+  --gold-glow:rgba(201,168,76,0.18);
+  --parch:#f0e8d4;
+  --ink:#1a1408;
+  --white:rgba(255,255,255,0.92);
+  --dim:rgba(255,255,255,0.5);
+  --muted:rgba(255,255,255,0.25);
+  --border:rgba(255,255,255,0.08);
+  --border2:rgba(201,168,76,0.22);
+  --r:14px;
+}
+
+body{
+  background:var(--bg);
+  color:var(--white);
+  font-family:'Noto Sans KR',sans-serif;
+  line-height:1.75;
+  overflow-x:hidden;
+  word-break:keep-all;
+}
+
+/* ════════════════════════════════════════
+   CANVAS — 별/파티클 전체 배경
+════════════════════════════════════════ */
+#universe{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+}
+
+/* ════════════════════════════════════════
+   HERO
+════════════════════════════════════════ */
+.hero{
+  position:relative;z-index:1;
+  min-height:100vh;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;padding:80px 24px 60px;
+  overflow:hidden;
+}
+
+/* 황금 빛 후광 */
+.hero-halo{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:clamp(400px,80vw,900px);
+  height:clamp(400px,80vw,900px);
+  border-radius:50%;
+  background:radial-gradient(ellipse,rgba(201,168,76,0.07) 0%,transparent 70%);
+  pointer-events:none;
+  animation:halo-pulse 6s ease-in-out infinite;
+}
+@keyframes halo-pulse{0%,100%{opacity:0.6;transform:translate(-50%,-50%) scale(1);}50%{opacity:1;transform:translate(-50%,-50%) scale(1.08);}}
+
+/* 회전하는 점선 링 */
+.hero-ring{
+  position:absolute;top:50%;left:50%;
+  border-radius:50%;border:1px dashed rgba(201,168,76,0.2);
+  pointer-events:none;
+}
+.ring1{width:260px;height:260px;margin:-130px 0 0 -130px;animation:ring-spin 40s linear infinite;}
+.ring2{width:420px;height:420px;margin:-210px 0 0 -210px;animation:ring-spin 60s linear infinite reverse;}
+.ring3{width:580px;height:580px;margin:-290px 0 0 -290px;animation:ring-spin 90s linear infinite;}
+@keyframes ring-spin{to{transform:rotate(360deg);}}
+
+/* 책 SVG 아이콘 */
+.hero-book{
+  width:clamp(80px,12vw,120px);
+  height:auto;margin-bottom:28px;
+  filter:drop-shadow(0 0 30px rgba(201,168,76,0.6));
+  animation:book-float 4s ease-in-out infinite;
+  position:relative;z-index:1;
+}
+@keyframes book-float{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
+
+.hero-kicker{
+  font-size:0.65rem;font-weight:700;letter-spacing:0.4em;text-transform:uppercase;
+  color:var(--gold);background:rgba(201,168,76,0.1);
+  border:1px solid rgba(201,168,76,0.25);
+  padding:6px 18px;border-radius:100px;
+  margin-bottom:24px;display:inline-block;
+  position:relative;z-index:1;
+  animation:fade-in 1s 0.2s both;
+}
+
+.hero-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2.8rem,8vw,6.5rem);
+  font-weight:700;line-height:1.05;
+  letter-spacing:-0.03em;
+  color:var(--white);
+  position:relative;z-index:1;
+  margin-bottom:16px;
+  animation:fade-in 1s 0.4s both;
+}
+.hero-title .gold-word{
+  background:linear-gradient(135deg,var(--gold),var(--gold2),var(--gold3),var(--gold2));
+  background-size:200% 200%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  animation:shimmer 4s ease-in-out infinite;
+}
+@keyframes shimmer{0%,100%{background-position:0% 50%;}50%{background-position:100% 50%;}}
+
+.hero-sub{
+  font-size:clamp(0.9rem,2vw,1.1rem);
+  color:var(--dim);font-weight:300;
+  max-width:520px;margin:0 auto 48px;
+  position:relative;z-index:1;
+  animation:fade-in 1s 0.6s both;
+}
+
+/* 통계 배지 3개 */
+.hero-stats{
+  display:flex;gap:16px;flex-wrap:wrap;justify-content:center;
+  position:relative;z-index:1;margin-bottom:40px;
+  animation:fade-in 1s 0.8s both;
+}
+.stat-badge{
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--border2);
+  border-radius:var(--r);padding:16px 24px;text-align:center;
+  transition:transform 0.3s,box-shadow 0.3s;
+  cursor:default;
+}
+.stat-badge:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(201,168,76,0.15);}
+.stat-num{
+  font-family:'Cormorant Garamond',serif;
+  font-size:2.2rem;font-weight:700;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  display:block;line-height:1;
+}
+.stat-lbl{font-size:0.7rem;color:var(--dim);letter-spacing:0.1em;text-transform:uppercase;margin-top:4px;display:block;}
+
+/* 스크롤 다운 */
+.scroll-cue{
+  position:relative;z-index:1;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  animation:fade-in 1s 1.2s both;
+}
+.scroll-arrow{
+  width:24px;height:24px;
+  border-right:2px solid var(--gold);border-bottom:2px solid var(--gold);
+  transform:rotate(45deg);
+  animation:arrow-bounce 2s ease-in-out infinite;
+}
+@keyframes arrow-bounce{0%,100%{transform:rotate(45deg) translateY(0);}50%{transform:rotate(45deg) translateY(6px);}}
+.scroll-text{font-size:0.6rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--muted);}
+
+@keyframes fade-in{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+
+/* ════════════════════════════════════════
+   MAIN LAYOUT
+════════════════════════════════════════ */
+.page{
+  position:relative;z-index:1;
+  max-width:900px;margin:0 auto;
+  padding:0 20px 100px;
+}
+
+/* ════════════════════════════════════════
+   SECTION HEADERS
+════════════════════════════════════════ */
+.sec-head{
+  padding:70px 0 36px;
+  display:flex;align-items:center;gap:20px;
+}
+.sec-icon-wrap{
+  flex-shrink:0;
+  width:52px;height:52px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.5rem;
+  border:1px solid;
+  position:relative;overflow:hidden;
+}
+.si-gold{background:rgba(201,168,76,0.1);border-color:rgba(201,168,76,0.3);}
+.si-blue{background:rgba(99,179,237,0.1);border-color:rgba(99,179,237,0.3);}
+.si-green{background:rgba(104,211,145,0.1);border-color:rgba(104,211,145,0.3);}
+.si-purple{background:rgba(183,148,246,0.1);border-color:rgba(183,148,246,0.3);}
+
+.sec-title-wrap{}
+.sec-label{
+  font-size:0.6rem;font-weight:700;letter-spacing:0.3em;text-transform:uppercase;
+  margin-bottom:6px;display:block;
+}
+.sl-gold{color:var(--gold);}
+.sl-blue{color:#63b3ed;}
+.sl-green{color:#68d391;}
+.sl-purple{color:#b794f6;}
+
+.sec-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.6rem,4vw,2.4rem);
+  font-weight:700;color:var(--white);
+  line-height:1.2;letter-spacing:-0.02em;
+}
+.sec-rule{width:60px;height:2px;border-radius:2px;margin-top:14px;}
+.sr-gold{background:linear-gradient(90deg,var(--gold),transparent);}
+.sr-blue{background:linear-gradient(90deg,#63b3ed,transparent);}
+.sr-green{background:linear-gradient(90deg,#68d391,transparent);}
+.sr-purple{background:linear-gradient(90deg,#b794f6,transparent);}
+
+/* ════════════════════════════════════════
+   GLASS CARD
+════════════════════════════════════════ */
+.gcard{
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:28px 30px;
+  margin-bottom:16px;
+  position:relative;overflow:hidden;
+  transition:border-color 0.3s,transform 0.3s,box-shadow 0.3s;
+}
+.gcard:hover{
+  border-color:rgba(201,168,76,0.2);
+  transform:translateY(-2px);
+  box-shadow:0 20px 60px rgba(0,0,0,0.35);
+}
+.gcard::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(201,168,76,0.3),transparent);
+}
+.gcard p{
+  font-size:clamp(0.88rem,2vw,0.97rem);
+  color:rgba(255,255,255,0.78);
+  line-height:2;word-break:keep-all;
+  margin-bottom:14px;text-align:left;
+}
+.gcard p:last-child{margin-bottom:0;}
+.gcard strong,.gcard b{color:var(--white);font-weight:600;}
+.bible-ref{
+  color:var(--gold2);font-weight:700;
+  background:rgba(201,168,76,0.1);
+  padding:1px 6px;border-radius:4px;
+  font-size:0.88em;
+}
+
+/* card 레이블 */
+.card-lbl{
+  font-size:0.6rem;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;
+  display:flex;align-items:center;gap:8px;margin-bottom:16px;
+}
+.card-lbl::after{content:'';flex:1;height:1px;background:var(--border);}
+.cl-gold{color:var(--gold);}
+.cl-blue{color:#63b3ed;}
+.cl-green{color:#68d391;}
+.cl-purple{color:#b794f6);}
+
+/* ════════════════════════════════════════
+   인터랙티브 타임라인
+════════════════════════════════════════ */
+.timeline-wrap{
+  position:relative;margin:32px 0;
+}
+/* 세로 선 */
+.timeline-wrap::before{
+  content:'';position:absolute;left:20px;top:0;bottom:0;width:2px;
+  background:linear-gradient(180deg,transparent,var(--gold),var(--gold2),var(--gold),transparent);
+  opacity:0.5;
+}
+.tl-item{
+  display:flex;gap:20px;align-items:flex-start;
+  margin-bottom:28px;padding-left:0;
+  cursor:pointer;
+  opacity:0;transform:translateX(-20px);
+  transition:opacity 0.6s ease,transform 0.6s ease;
+}
+.tl-item.visible{opacity:1;transform:translateX(0);}
+
+.tl-dot{
+  flex-shrink:0;
+  width:42px;height:42px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.7rem;font-weight:800;
+  border:2px solid;
+  position:relative;z-index:1;
+  background:var(--bg2);
+  transition:transform 0.3s,box-shadow 0.3s;
+}
+.tl-item:hover .tl-dot{transform:scale(1.1);}
+.td-gold{border-color:var(--gold);color:var(--gold);box-shadow:0 0 0 0 rgba(201,168,76,0.4);}
+.tl-item:hover .td-gold{box-shadow:0 0 0 6px rgba(201,168,76,0.15);}
+.td-blue{border-color:#63b3ed;color:#63b3ed;}
+.tl-item:hover .td-blue{box-shadow:0 0 0 6px rgba(99,179,237,0.15);}
+.td-green{border-color:#68d391;color:#68d391;}
+.tl-item:hover .td-green{box-shadow:0 0 0 6px rgba(104,211,145,0.15);}
+.td-purple{border-color:#b794f6;color:#b794f6;}
+.tl-item:hover .td-purple{box-shadow:0 0 0 6px rgba(183,148,246,0.15);}
+.td-rose{border-color:#f687b3;color:#f687b3;}
+.tl-item:hover .td-rose{box-shadow:0 0 0 6px rgba(246,135,179,0.15);}
+
+.tl-content{
+  flex:1;padding:20px 22px 18px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border);
+  border-radius:14px;
+  position:relative;overflow:hidden;
+  transition:border-color 0.3s,background 0.3s;
+}
+.tl-item:hover .tl-content{
+  background:rgba(255,255,255,0.055);
+  border-color:rgba(201,168,76,0.18);
+}
+.tl-content::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(201,168,76,0.25),transparent);
+}
+
+.tl-year{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.35rem;font-weight:700;
+  color:var(--gold2);line-height:1;margin-bottom:6px;
+}
+.tl-event{
+  font-size:0.8rem;font-weight:700;letter-spacing:0.06em;
+  color:var(--white);margin-bottom:8px;
+}
+.tl-desc{
+  font-size:clamp(0.83rem,1.9vw,0.91rem);
+  color:rgba(255,255,255,0.65);line-height:1.85;word-break:keep-all;
+}
+
+/* ════════════════════════════════════════
+   중요 사본 카드들 (3열 그리드)
+════════════════════════════════════════ */
+.ms-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:14px;
+  margin:24px 0;
+}
+@media(max-width:600px){.ms-grid{grid-template-columns:1fr;}}
+
+.ms-card{
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--border);border-radius:16px;
+  padding:22px 18px;
+  position:relative;overflow:hidden;
+  transition:transform 0.3s,box-shadow 0.3s;
+  text-align:center;
+}
+.ms-card:hover{transform:translateY(-4px);box-shadow:0 20px 50px rgba(0,0,0,0.4);}
+.ms-card::before{
+  content:'';position:absolute;inset:0;
+  background:var(--ms-bg,rgba(201,168,76,0.04));
+  pointer-events:none;
+}
+.ms-icon{font-size:2rem;margin-bottom:10px;display:block;}
+.ms-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.05rem;font-weight:700;color:var(--ms-c,var(--gold2));
+  margin-bottom:6px;
+}
+.ms-date{font-size:0.7rem;font-weight:700;letter-spacing:0.12em;
+  color:var(--ms-c,var(--gold));opacity:0.7;margin-bottom:8px;display:block;}
+.ms-loc{font-size:0.78rem;color:var(--dim);line-height:1.6;}
+
+/* ════════════════════════════════════════
+   성경 번역본 타임라인 (수평 슬라이드)
+════════════════════════════════════════ */
+.trans-scroll{
+  overflow-x:auto;padding-bottom:16px;
+  scroll-snap-type:x mandatory;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(201,168,76,0.3) transparent;
+}
+.trans-scroll::-webkit-scrollbar{height:4px;}
+.trans-scroll::-webkit-scrollbar-track{background:transparent;}
+.trans-scroll::-webkit-scrollbar-thumb{background:rgba(201,168,76,0.3);border-radius:2px;}
+
+.trans-track{
+  display:flex;gap:14px;width:max-content;padding:4px 2px;
+}
+.trans-card{
+  flex-shrink:0;
+  width:220px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--border);border-radius:16px;
+  padding:20px 18px;
+  scroll-snap-align:start;
+  position:relative;overflow:hidden;
+  transition:border-color 0.3s,transform 0.3s;
+  cursor:pointer;
+}
+.trans-card:hover{
+  border-color:rgba(201,168,76,0.25);
+  transform:translateY(-3px);
+}
+.trans-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--tc-color,var(--gold));
+  opacity:0.5;
+}
+.tc-year{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.8rem;font-weight:700;
+  color:var(--tc-color,var(--gold2));
+  line-height:1;margin-bottom:8px;
+}
+.tc-name{
+  font-size:0.82rem;font-weight:700;
+  color:var(--white);margin-bottom:6px;
+}
+.tc-desc{
+  font-size:0.75rem;color:var(--dim);
+  line-height:1.7;word-break:keep-all;
+}
+
+/* ════════════════════════════════════════
+   성경 권위 섹션 — 큰 인용 카드
+════════════════════════════════════════ */
+.big-verse{
+  margin:24px 0;
+  padding:32px 32px 28px;
+  border-radius:20px;
+  background:linear-gradient(135deg,rgba(201,168,76,0.07),rgba(201,168,76,0.03));
+  border:1px solid rgba(201,168,76,0.2);
+  position:relative;overflow:hidden;
+}
+.big-verse::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+}
+.bv-quote-mark{
+  position:absolute;top:-10px;left:20px;
+  font-family:'Cormorant Garamond',serif;
+  font-size:7rem;line-height:1;
+  color:rgba(201,168,76,0.12);
+  pointer-events:none;
+}
+.bv-text{
+  font-family:'Noto Serif KR',serif;
+  font-size:clamp(0.95rem,2.2vw,1.1rem);
+  color:var(--white);line-height:1.95;
+  font-weight:700;position:relative;z-index:1;
+  word-break:keep-all;
+}
+.bv-ref{
+  display:block;margin-top:12px;
+  font-size:0.75rem;color:var(--gold);
+  letter-spacing:0.12em;text-transform:uppercase;
+  position:relative;z-index:1;
+}
+
+/* 특성 카드 그리드 */
+.feat-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:14px;
+  margin:20px 0;
+}
+@media(max-width:500px){.feat-grid{grid-template-columns:1fr;}}
+
+.feat-card{
+  padding:20px 18px;border-radius:14px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border);
+  transition:transform 0.3s,border-color 0.3s;
+}
+.feat-card:hover{transform:translateY(-2px);border-color:rgba(201,168,76,0.2);}
+.feat-icon{font-size:1.4rem;margin-bottom:8px;display:block;}
+.feat-title{
+  font-size:0.85rem;font-weight:700;color:var(--white);
+  margin-bottom:6px;
+}
+.feat-body{
+  font-size:0.8rem;color:var(--dim);line-height:1.75;word-break:keep-all;
+}
+
+/* ════════════════════════════════════════
+   FINAL CTA
+════════════════════════════════════════ */
+.final-block{
+  margin:50px 0 0;
+  padding:52px 40px;
+  border-radius:24px;
+  background:linear-gradient(135deg,
+    rgba(201,168,76,0.07) 0%,
+    rgba(201,168,76,0.03) 50%,
+    rgba(99,179,237,0.04) 100%);
+  border:1px solid rgba(201,168,76,0.2);
+  text-align:center;
+  position:relative;overflow:hidden;
+}
+.final-block::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),var(--gold2),transparent);
+}
+.final-block::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold2),var(--gold),transparent);
+}
+/* 배경 빛 원 */
+.final-block .fb-glow{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:400px;height:400px;border-radius:50%;
+  background:radial-gradient(circle,rgba(201,168,76,0.06),transparent 70%);
+  pointer-events:none;
+  animation:halo-pulse 5s ease-in-out infinite;
+}
+.fb-icon{font-size:2.8rem;margin-bottom:16px;display:block;position:relative;z-index:1;}
+.fb-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.5rem,4vw,2.4rem);
+  font-weight:700;color:var(--white);
+  margin-bottom:16px;line-height:1.3;letter-spacing:-0.02em;
+  position:relative;z-index:1;
+}
+.fb-title .g{
+  background:linear-gradient(135deg,var(--gold),var(--gold2),var(--gold3));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.fb-body{
+  font-size:clamp(0.9rem,2vw,1rem);
+  color:var(--dim);line-height:2;max-width:540px;margin:0 auto;
+  word-break:keep-all;position:relative;z-index:1;
+}
+
+/* ════════════════════════════════════════
+   FOOTER
+════════════════════════════════════════ */
+.site-footer{
+  position:relative;z-index:1;
+  text-align:center;padding:40px 20px 56px;
+  border-top:1px solid var(--border);
+}
+.sf-dot{width:4px;height:4px;background:var(--gold);border-radius:50%;margin:0 auto 14px;}
+.sf-name{font-size:0.75rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);}
+
+/* ════════════════════════════════════════
+   SCROLL REVEAL
+════════════════════════════════════════ */
+.rev{opacity:0;transform:translateY(24px);transition:opacity 0.65s ease,transform 0.65s ease;}
+.rev.in{opacity:1;transform:translateY(0);}
+
+/* hr */
+hr.divider{border:none;height:1px;
+  background:linear-gradient(90deg,transparent,var(--border2),transparent);margin:0;}
+
+@media(max-width:480px){
+  .hero{padding:70px 18px 50px;}
+  .final-block{padding:36px 24px;}
+  .ms-grid{grid-template-columns:1fr 1fr;}
+  .page{padding:0 16px 80px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ 우주 캔버스 배경 ═══ -->
+<canvas id="universe"></canvas>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="hero-halo"></div>
+  <div class="hero-ring ring1"></div>
+  <div class="hero-ring ring2"></div>
+  <div class="hero-ring ring3"></div>
+
+  <!-- SVG 책 아이콘 -->
+  <svg class="hero-book" viewBox="0 0 100 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="8" y="8" width="38" height="64" rx="4" fill="rgba(201,168,76,0.15)" stroke="#c9a84c" stroke-width="1.5"/>
+    <rect x="54" y="8" width="38" height="64" rx="4" fill="rgba(201,168,76,0.1)" stroke="#c9a84c" stroke-width="1.5"/>
+    <path d="M46 12 Q50 8 54 12 L54 70 Q50 74 46 70 Z" fill="#c9a84c" opacity="0.6"/>
+    <line x1="16" y1="24" x2="38" y2="24" stroke="#c9a84c" stroke-width="1" opacity="0.5"/>
+    <line x1="16" y1="32" x2="38" y2="32" stroke="#c9a84c" stroke-width="1" opacity="0.4"/>
+    <line x1="16" y1="40" x2="38" y2="40" stroke="#c9a84c" stroke-width="1" opacity="0.35"/>
+    <line x1="16" y1="48" x2="38" y2="48" stroke="#c9a84c" stroke-width="1" opacity="0.3"/>
+    <line x1="62" y1="24" x2="84" y2="24" stroke="#c9a84c" stroke-width="1" opacity="0.5"/>
+    <line x1="62" y1="32" x2="84" y2="32" stroke="#c9a84c" stroke-width="1" opacity="0.4"/>
+    <line x1="62" y1="40" x2="84" y2="40" stroke="#c9a84c" stroke-width="1" opacity="0.35"/>
+    <line x1="62" y1="48" x2="84" y2="48" stroke="#c9a84c" stroke-width="1" opacity="0.3"/>
+  </svg>
+
+  <span class="hero-kicker">부산교회 2구역 · 성경 연구</span>
+  <h1 class="hero-title">
+    성경의<br><span class="gold-word">유래와 권위</span>
+  </h1>
+  <p class="hero-sub">
+    이 세상에서 가장 놀랍고 신비스러운 책 —<br>
+    40여 명의 저자, 1600여 년, 66권의 완전한 조화
+  </p>
+
+  <div class="hero-stats">
+    <div class="stat-badge">
+      <span class="stat-num">40+</span>
+      <span class="stat-lbl">저자</span>
+    </div>
+    <div class="stat-badge">
+      <span class="stat-num">1600</span>
+      <span class="stat-lbl">년의 기간</span>
+    </div>
+    <div class="stat-badge">
+      <span class="stat-num">66</span>
+      <span class="stat-lbl">권</span>
+    </div>
+  </div>
+
+  <div class="scroll-cue">
+    <div class="scroll-arrow"></div>
+    <span class="scroll-text">스크롤하여 탐구하기</span>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ═══ MAIN CONTENT ═══ -->
+<main class="page">
+
+  <!-- ─── 도입 ─── -->
+  <section>
+    <div class="sec-head rev">
+      <div class="sec-icon-wrap si-gold">📖</div>
+      <div class="sec-title-wrap">
+        <span class="sec-label sl-gold">Introduction</span>
+        <h2 class="sec-title">성경의 유래</h2>
+        <div class="sec-rule sr-gold"></div>
+      </div>
+    </div>
+
+    <div class="gcard rev">
+      <p>이 세상에서 가장 놀랍고 신비스러운 책에 대한 연구를 시작하게 됩니다. 그것은 흔히 "책"(the Book)이라고도 불립니다. 이같이 칭하는 이유는 그 책 자체가 벌써 하나의 독특한 위치를 차지하고 있기 때문입니다. 성경을 영어로 "바이블"(Bible)이라고 하는데 그것은 원래 "책"이라는 뜻입니다.</p>
+      <p>사실, 이 성경은 여러 곳에 산재해 있던 40여명의 저자들이 1600여 년 동안에 걸쳐 저술한 것으로서 66권의 책을 편집한 것입니다. 그런데 그 각 부분의 내용이 서로 모순됨이 없이 오히려 완전한 조화를 이루고 있어서 오늘 우리가 이 책을 갖게 된 것은 참으로 복된 일입니다. 실지로 우리가 이것을 더욱 깊이 연구해 가면 그것이 오직 하나님으로부터만 올 수 있었을 것이라는 결론에 도달하게 됩니다.</p>
+    </div>
+  </section>
+
+  <!-- ─── 기록 방법 ─── -->
+  <section>
+    <div class="sec-head rev">
+      <div class="sec-icon-wrap si-blue">✍️</div>
+      <div class="sec-title-wrap">
+        <span class="sec-label sl-blue">Recording Method</span>
+        <h2 class="sec-title">성경이 기록된 방법</h2>
+        <div class="sec-rule sr-blue"></div>
+      </div>
+    </div>
+
+    <div class="gcard rev">
+      <p>성경은 구약과 신약으로 알려진 두개의 큰 부분으로 구분할 수 있습니다. 구약은 신약에 비해 3배나 분량이 많으며 기록도 그리스도의 탄생 400여 년 전에 완성된 것입니다. 성경의 원본은 동물의 가죽(양피지)이나 파피루스 초목으로 만들어진 종이 위에 손으로 써 놓았다 합니다. 그 당시에는 인쇄술이 발달되지 않았기 때문에 매 장마다 손으로 만들어 내지 않으면 안되었습니다. 그러므로 사본들이 드물었고 매우 귀중했습니다.</p>
+      <p>구약의 39권은 아람어로 된 일부분을 제외하고는 히브리어로 기록되었습니다. 39 권 중 처음 5권은 주전 1500 년경에 모세가 쓴 것이고, 나머지 책들은 그 후 약 천년동안에 저술된 것인데 주전 400년경 서기관 에스라가 그 책들을 편집하여 한 권의 책으로 만들었습니다 <span class="bible-ref">느헤미야 8:5</span>. 최초의 훌륭한 구약의 번역서는 기원전 3세기에 이집트의 알렉산드리아에서 번역한 것으로 셉투아진트(70이 라는 뜻)라고 불립니다. 그 까닭은 아마 70명의 학자들에 의해 히브리어로 기록된 구약을 희랍어로 번역했기 때문이 아닌가 싶습니다. 그리스도께서도 가르치실 때 이 번역서를 자주 인용하셨습니다.</p>
+      <p>신약 27권은 여덟 사람이 희랍어로 원본을 쓴 것인데 그 대부분의 저자가 그리스도의 사도들이었으며, 주후 1세기에 완성되었습니다. 이것은 그리스도의 생애와 그 당시에 일어났던 획기적인 일들과 그리스도의 교회가 세워진 일을 포함하는 여러 가지 사실들을 내용으로 하고 있습니다. 성경 각 권의 원본은 모두 분실되었거나 파손되어 버렸지만 오늘날 우리가 가지고 있는 성경은 원본의 내용과 동일합니다.</p>
+      <p>이 원본들의 사본은 지금까지 보존되어 있으며, 그 중에서 가장 중요한 3개의 사본은 로마의 바티칸에 보존되어 있는 주후 4세기에 기록한 바티칸 사본과, 런던 대영 제국 박물관에 보존되어 있는 주후 5세기에 기록된 알렉산드리아 사본, 그리고 역시 대영 제국 박물관에 보존되어 있는 주후 4세기에 기록한 시내 사본 등입니다. 이외에도 이만큼 중요하지는 않아도 수많은 사본들이 보존되어 있습니다.</p>
+    </div>
+
+    <!-- 3대 사본 카드 -->
+    <div class="ms-grid rev">
+      <div class="ms-card" style="--ms-bg:rgba(201,168,76,0.05);--ms-c:#e8c970;">
+        <span class="ms-icon">📜</span>
+        <div class="ms-name">바티칸 사본</div>
+        <span class="ms-date">주후 4세기</span>
+        <div class="ms-loc">로마 바티칸 보존</div>
+      </div>
+      <div class="ms-card" style="--ms-bg:rgba(99,179,237,0.05);--ms-c:#63b3ed;">
+        <span class="ms-icon">📜</span>
+        <div class="ms-name">알렉산드리아 사본</div>
+        <span class="ms-date">주후 5세기</span>
+        <div class="ms-loc">런던 대영박물관 보존</div>
+      </div>
+      <div class="ms-card" style="--ms-bg:rgba(104,211,145,0.05);--ms-c:#68d391;">
+        <span class="ms-icon">📜</span>
+        <div class="ms-name">시내 사본</div>
+        <span class="ms-date">주후 4세기</span>
+        <div class="ms-loc">런던 대영박물관 보존</div>
+      </div>
+    </div>
+
+    <div class="gcard rev">
+      <p>사해사본은 1947년에 사해근처의 동굴에서 발견되었는데, 그것은 주전 1세기나 2세기경에 기록된 것으로 최근의 구약의 번역에 도움을 주고 있습니다. 이 외에도 사해사본 보다 먼저 기록 된 사본들과의 원문 대조를 통해 우리는 오늘날 구약성경의 저자들의 본래의 메시지를 갖고 있다는 확신을 가질 수 있게 되었습니다.</p>
+      <p>우리는 두 가지 방법으로 신약 원본에 대한 내용을 알 수 있습니다. 그 하나는 신약이 저술된 직후에 만들어진 번역서들인데 무엇보다도 중요한 것은 라틴어로 기록한 불가타(Vulgate)라고 부르는 것으로 주후 405년에 제롬에 의해 완성된 것입니다. 그리고 우리에게는 초대교회 교부들이 만든 수많은 성경 인용문들이 있습니다. 희랍어 원본과 초기 번역서들 그리고 교부들의 인용문들을 학자들은 서로 비교해 가며 신약저자들이 쓴 내용을 거의 정확하게 단정할 수가 있었던 것입니다. 사실, 우리가 가지고 있는 성경은 최초에 준 그것과 동일한 것으로 필사할 때 다소 어려움이 있었더라도 성경의 뜻과 내용에는 변화가 가해지지 않았다는 것을 분명하게 말할 수 있습니다.</p>
+    </div>
+  </section>
+
+  <!-- ─── 성경 번역본 ─── -->
+  <section>
+    <div class="sec-head rev">
+      <div class="sec-icon-wrap si-green">📜</div>
+      <div class="sec-title-wrap">
+        <span class="sec-label sl-green">Translations</span>
+        <h2 class="sec-title">성경 번역본</h2>
+        <div class="sec-rule sr-green"></div>
+      </div>
+    </div>
+
+    <!-- 인터랙티브 타임라인 -->
+    <div class="timeline-wrap rev">
+      <div class="tl-item">
+        <div class="tl-dot td-gold">1382</div>
+        <div class="tl-content">
+          <div class="tl-year">1382년</div>
+          <div class="tl-event">존 위클리프 — 최초 영어 성경</div>
+          <div class="tl-desc">22년 동안의 힘든 노력으로 완성한 최초의 영어 성경</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot td-blue">1456</div>
+        <div class="tl-content">
+          <div class="tl-year">1456년</div>
+          <div class="tl-event">구텐베르크 — 인쇄술 발명</div>
+          <div class="tl-desc">요한 구텐베르그에 의해 인쇄술이 발명됨. 최초 인쇄 책은 라틴어 성경</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot td-purple">1525</div>
+        <div class="tl-content">
+          <div class="tl-year">1525년</div>
+          <div class="tl-event">윌리암 틴데일 — 신약 번역 및 순교</div>
+          <div class="tl-desc">천주교회의 반대를 무릅쓰고 신약을 번역하여 인쇄. 사형대에서 "주님이시여, 영국 왕의 눈을 뜨게 하옵소서"라는 마지막 말을 남기고 화형 당함</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot td-green">1535</div>
+        <div class="tl-content">
+          <div class="tl-year">1535년</div>
+          <div class="tl-event">마일스 커버데일 — 최초 영어 성경전서 인쇄</div>
+          <div class="tl-desc">처음으로 성경전서를 영어로 인쇄</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot td-gold">1611</div>
+        <div class="tl-content">
+          <div class="tl-year">1611년</div>
+          <div class="tl-event">킹 제임스판(KJV) 완성</div>
+          <div class="tl-desc">54명의 학자들이 1604년부터 번역. 수 백년이 지난 지금도 가장 많이 애독되는 영어 번역본</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot td-blue">1582</div>
+        <div class="tl-content">
+          <div class="tl-year">1582년</div>
+          <div class="tl-event">라임즈 듀아이 카톨릭판</div>
+          <div class="tl-desc">로마 카톨릭교회 독자 번역본. 1970년에 New American Bible로 대체</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot td-purple">1887</div>
+        <div class="tl-content">
+          <div class="tl-year">1887년</div>
+          <div class="tl-event">로스 번역 — 최초 한글 신약성경</div>
+          <div class="tl-desc">스코틀랜드 선교사 J. 로스가 만주에서 한국인들과 협력, 1882년 누가복음을 시작으로 "예수셩교전셔"라는 이름으로 신약 완역 간행</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot td-green">1956</div>
+        <div class="tl-content">
+          <div class="tl-year">1956년</div>
+          <div class="tl-event">성경전서 개역한글판</div>
+          <div class="tl-desc">대한성서공회가 여러번 편집 및 번역을 고쳐 펴낸 국내 가장 많이 애독되는 번역본</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 가로 스크롤 카드 — 추가 번역본들 -->
+    <div class="gcard rev" style="margin-top:8px;">
+      <p>처음으로 성경이 영어로 번역된 것은 죤 위클리프가 22년 동 안의 힘든 노력으로 1382년에 완성한 것입니다. 1456년에는 요한 구텐베르그에 의해 인쇄술이 발명됨으로써 성경의 출판 을 훨씬 빠르게 할 수 있게 되었으며 인쇄상의 문제도 거의 없어지게 되었습니다. 사실, 구텐베르그가 처음으로 인쇄한 책은 라틴어 성경이었습니다. 윌리암 틴데일이라는 사람은 천주교회의 반대를 무릅쓰고 신약을 번역하여 1525년에 인쇄를 하였습니다. 그러나 그가 인쇄한 사본이 대부분 런던에서 많은 사람들 앞에 불태워져 버렸고, 그 자신도 백성에게 성경을 나누어주었다는 이유로 사형대에 올라 화형을 당했습니다. 그는 최후에 "주님이시여, 영국 왕의 눈을 뜨게 하옵소서"라는 말을 남겼습니다.</p>
+      <p>처음으로 성경전서를 영어로 인쇄하는 일은 역시 영국의 마일스 커버데일이라는 사람이 수행했습니다. 다른 번역서도 뒤따라 나오게 되었고, 1604년에는 영국 왕의 눈도 띄어져 드디어 당시의 저명한 학자들에게 킹 제임스판(King James Version) 성경전서의 번역을 하게 하였습니다. 그리하여 54명의 학자들이 이 일을 1611년에 완성시켰습니다. 그것이 수 백년 전에 번역되었지만 아직도 가장 많이 애독되는 영어 번역본 중의 하나입니다. 1982년에는 뉴 킹제임스판 (New King James Version)이 출판되었습니다.</p>
+    </div>
+
+    <div class="gcard rev">
+      <p>킹 제임스판(KJV)이 나온 후에 다른 몇 가지 역본들이 나왔습니다. 1885년에는 84명의 영국 과 미국의 학자들이 킹 제임스판을 발간할 당시 발견되지 않았던 사본들을 참조하여 영어개정 판(English Revised Version)을 만들었습니다. 미국의 번역판은 1901년에 출판되었습니다. 이를 미국 표준판(American Standard Version)이라고 부릅니다. 이것을 개정한 개정 표준판(Revised Standard Version)이 1952년에, 그리고 New American Standard는 1970년에 출판되었습니다. 이와 같은 번역본들은 고어체를 이해하기 쉬운 현대어로 고치고 최근에 발견된 사본들을 통해 원문의 정확성을 높이려는 의도를 갖고 번역된 것들입니다. 또, 1978년에는 NIV(New International Version) 등 그 후에도 여러 번역본들이 출판되었습니다. 로마 카톨릭교회도 독자적인 번역본들을 갖고 있습니다. 라임즈 듀아이 카톨릭판(Rheims Douai Catholic Version)의 역본은 1582년에 출판되었는데 그것은 1970년에 New American Bible로 대체되었습니다. 카톨릭에서 사용하는 성경은 다른 번역판 신약의 책과 똑같고 구약도 같으나 구약에 14권의 책들이 더 포함되어 있습니다. 이 여분의 책을 가리켜 외경(Apocrypha)이라고 하는데 이 말의 뜻은 "근원이 의심스럽다"는 뜻입니다. 이 의심스러운 책들은 희랍어로 쓰여졌는데 구약 히브리어 정경에서 나온 것이 아닙니다. 카톨릭판 이외의 성경에서는 제외 되고 있습니다.</p>
+    </div>
+
+    <div class="gcard rev">
+      <p>성경의 한글 번역은 스코틀랜드부터 만주에 와서 선교하던 J. 로스가당시 만주에서 몇 명의 한국인과 협력하여 1882년 누가복음을 시작으로 일부분씩 번역하다가 1887년에 이르러 "예수셩교전셔"라는 이름으로 신약이 완역되어 간행했는데 이것을 "로스 번역(Ross Version)"이라고도 합니다. 국내에서의 성경 번역은 1893년 에 공선 성서번역위원회가 조직되어 1900년에 신약이 완역되었으나, 미흡한 점이 많아 1904년에 개역이 완료되었고, 1906년에 재수정하여 공인역으로 출판하였습니다. 그 후 1910년에 구약까지 완역되었고, 1911년에 신약을 포함하여 "셩경젼셔"로 합본, 간행되었습니다. 국내에서 가장 많이 애독되는 "성경전서 개역한글판"은 공선 성서번역위원회가 펴낸 위의 번역본을 대한성서공회가 여러번 편집 및 번역을 고쳐 1956년에 펴낸 것입니다.</p>
+      <p>&lt;회복역 성경&gt;은 원어에서 직접 번역한 것으로, 이는 지난 5세기 동안의 주요 영어 번역본이 확고히 견지해 온 번역 원칙들과 표준들에 입각한 것입니다.</p>
+      <p>영어 &lt;회복역 성경&gt;은 1974년부터 2003년까지 리빙스트림 미니스트리(Living Stream Ministry) 편집부에서 번역하고 개정한 것입니다. &lt;회복역 성경&gt;은 성경 연구에 도움이 되는 수많은 내용들을 담고 있는데, 여기에는 각 성경의 주제와 배경, 구체적이고도 핵심적인 개요들, 빛 비춤이 가득한 각주들, 심도 있는 추구에 도움을 주는 값진 관주들, 다양하고도 유익한 도표와 지도들이 포함되어 있습니다.</p>
+      <p>성경 연구에 도움이 되는 이러한 모든 것들은 위트니스 리가 쓴 것입니다. 그는 그의 동역자인 워치만 니를 비롯하여 교회사를 통틀어 저명한 성경 주석가들의 저술에서 많은 도움을 받았습니다.</p>
+      <p>&lt;회복역 성경&gt;은 1991년에 발간된 영어 회복역 외에도 중국어, 스페인어, 러시아어, 일본어, 그리고 몇몇 다른 언어로도 발간되어 통용되고 있습니다. 한국어로는 2007년에 신약이 출간되었고, 2020년에 구약을 포함한 성경전서가 완전히 번역되어 출간되었습니다.</p>
+    </div>
+  </section>
+
+  <!-- ─── 성경은 하나님의 말씀 ─── -->
+  <section>
+    <div class="sec-head rev">
+      <div class="sec-icon-wrap si-purple">🙏</div>
+      <div class="sec-title-wrap">
+        <span class="sec-label sl-purple">Authority of Scripture</span>
+        <h2 class="sec-title">성경은 하나님의 말씀</h2>
+        <div class="sec-rule sr-purple"></div>
+      </div>
+    </div>
+
+    <div class="big-verse rev">
+      <div class="bv-quote-mark">"</div>
+      <p class="bv-text">오직 성령의 감동하심을 입은 사람들이 하나님께 받아 말한 것임이니라</p>
+      <span class="bv-ref">베드로후서 1:21</span>
+    </div>
+
+    <div class="big-verse rev">
+      <div class="bv-quote-mark">"</div>
+      <p class="bv-text">우리가 이것을 말하거니와 사람의 지혜의 가르친 말로 아니하고 오직 성령이 가르친 것으로 하니...</p>
+      <span class="bv-ref">고린도전서 2:13</span>
+    </div>
+
+    <div class="gcard rev">
+      <p>성경은 성령의 감화로 된 것입니다. 베드로는 <span class="bible-ref">"오직 성령의 감동하심을 입은 사람들이 하나님께 받아 말한 것임이니라(벧후 1:21)"</span> 하였습니다. 성령이 성경을 쓴 사람들을 인도하신 것입니다. <span class="bible-ref">"우리가 이것을 말하거니와 사람의 지혜의 가르친 말로 아니하고 오직 성령이 가르친 것으로 하니...(고전 2:13)"</span> 이 때문에 성경에는 모순이 없습니다. 모순이 있는 것처럼 보 이는 구절도 자세히 살피고 연구해 보면 곧 사라져 버립니다.</p>
+    </div>
+
+    <div class="feat-grid rev">
+      <div class="feat-card">
+        <span class="feat-icon">🔬</span>
+        <div class="feat-title">과학적 정확성</div>
+        <div class="feat-body">비록 과학서적은 아니지만 과학적으로 정확한 책입니다</div>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon">📚</span>
+        <div class="feat-title">역사적 정확성</div>
+        <div class="feat-body">역사적으로도 정확하며 역사적으로 잘못되었다는 것을 증명하려는 모든 시도가 실패했습니다</div>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon">🔮</span>
+        <div class="feat-title">예언적 정확성</div>
+        <div class="feat-body">의심할 여지없이 성취된 그 많은 예언들에 의하여 증명할 수가 있습니다</div>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon">⚖️</span>
+        <div class="feat-title">공평한 도덕 기준</div>
+        <div class="feat-body">세상에서 우리에게 가장 높은 도덕의 표준을 보여 줍니다</div>
+      </div>
+    </div>
+
+    <div class="gcard rev">
+      <p>성경이 진리라는 것은 그것이 갖고 있는 몇 가지의 특색으로 밝힐 수 있습니다. 비록 그것이 과학서적은 아니지만 과학적으로 정확한 책입니다. 역사적으로도 정확하며 역사적으로 잘못되었다는 것을 증명하려는 모든 시도가 실패했습니다. 성경이 예언적으로도 정확한 것은 의심할 여지없이 성취된 그 많은 예언들에 의하여 증명할 수가 있습니다. 성경은 공평하며, 모든 사람의 선과 악을 가려주며, 하나님 자신 의 "마음에 합한 자"라도 그의 죄를 묵과하지 않았습니다. 그것은 세상에서 우리에게 가장 높은 도덕의 표준을 보여 줍니다. 그리스도의 적들은 이것을 없애 버리려고 수없이 많은 시도를 했지만 결국 불멸의 책으로 남아 있습니다.</p>
+    </div>
+
+    <!-- 최종 선언 -->
+    <div class="final-block rev">
+      <div class="fb-glow"></div>
+      <span class="fb-icon">✨</span>
+      <h3 class="fb-title">오직 <span class="g">하나님으로부터</span><br>올 수 있었을 것이라는<br>결론에 도달하게 됩니다</h3>
+      <p class="fb-body">
+        40여 명의 저자 · 1600여 년 · 66권 · 완전한 조화<br><br>
+        이 성경을 더욱 깊이 연구해 가면 그것이 오직 하나님으로부터만 올 수 있었을 것이라는 결론에 도달하게 됩니다.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="sf-dot"></div>
+  <p class="sf-name">📍 부산교회 2구역</p>
+</footer>
+
+<!-- ═══ CANVAS 파티클 스크립트 ═══ -->
+<script>
+/* ── 우주 캔버스 ── */
+const canvas = document.getElementById('universe');
+const ctx    = canvas.getContext('2d');
+let W, H, stars=[], shootings=[], nebulas=[];
+
+function resize(){
+  W = canvas.width  = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+  initNebulas();
+}
+
+/* 성운(부드러운 원형 그라데이션) */
+function initNebulas(){
+  nebulas = [
+    {x:W*0.15, y:H*0.2,  r:350, c:'rgba(201,168,76,'},
+    {x:W*0.85, y:H*0.5,  r:280, c:'rgba(99,100,200,'},
+    {x:W*0.4,  y:H*0.85, r:320, c:'rgba(60,120,80,'},
+  ];
+}
+
+/* 별 생성 */
+function initStars(){
+  stars = [];
+  for(let i=0;i<220;i++){
+    stars.push({
+      x:Math.random()*W, y:Math.random()*H,
+      r:Math.random()*1.5+0.3,
+      a:Math.random(),
+      da:( Math.random()-0.5)*0.008,
+      speed:0
+    });
+  }
+}
+
+/* 별똥별 생성 */
+function spawnShooting(){
+  if(shootings.length>3) return;
+  const angle = Math.PI/6 + Math.random()*Math.PI/6;
+  shootings.push({
+    x: Math.random()*W*0.6,
+    y: Math.random()*H*0.3,
+    vx: Math.cos(angle)*12,
+    vy: Math.sin(angle)*6,
+    len:100+Math.random()*80,
+    life:1, decay:0.018+Math.random()*0.012
+  });
+}
+
+function drawFrame(){
+  ctx.clearRect(0,0,W,H);
+
+  /* 배경 */
+  ctx.fillStyle='#06070e';
+  ctx.fillRect(0,0,W,H);
+
+  /* 성운 */
+  nebulas.forEach(n=>{
+    const g=ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,n.r);
+    g.addColorStop(0, n.c+'0.045)');
+    g.addColorStop(1, n.c+'0)');
+    ctx.fillStyle=g;
+    ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fill();
+  });
+
+  /* 별 */
+  stars.forEach(s=>{
+    s.a += s.da;
+    if(s.a>1||s.a<0.05) s.da*=-1;
+    ctx.save();
+    ctx.globalAlpha = Math.max(0.05,Math.min(1,s.a));
+    ctx.fillStyle='#fff';
+    ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fill();
+    ctx.restore();
+  });
+
+  /* 별똥별 */
+  shootings = shootings.filter(s=>s.life>0);
+  shootings.forEach(s=>{
+    ctx.save();
+    ctx.globalAlpha = s.life * 0.85;
+    const g=ctx.createLinearGradient(s.x,s.y,s.x-s.vx/s.len*s.len,s.y-s.vy/s.len*s.len);
+    g.addColorStop(0,'rgba(255,240,180,0.9)');
+    g.addColorStop(1,'rgba(255,240,180,0)');
+    ctx.strokeStyle=g;
+    ctx.lineWidth=1.5;
+    ctx.beginPath();
+    ctx.moveTo(s.x,s.y);
+    ctx.lineTo(s.x - s.vx/Math.hypot(s.vx,s.vy)*s.len,
+               s.y - s.vy/Math.hypot(s.vx,s.vy)*s.len);
+    ctx.stroke();
+    ctx.restore();
+    s.x+=s.vx; s.y+=s.vy; s.life-=s.decay;
+  });
+
+  requestAnimationFrame(drawFrame);
+}
+
+resize();
+initStars();
+window.addEventListener('resize',()=>{resize();initStars();});
+setInterval(spawnShooting, 3200);
+spawnShooting();
+drawFrame();
+
+/* ── 스크롤 리빌 ── */
+const ioRev = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting) e.target.classList.add('in');});
+},{threshold:0.08});
+document.querySelectorAll('.rev').forEach(el=>ioRev.observe(el));
+
+/* ── 타임라인 ── */
+const ioTl = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const items = document.querySelectorAll('.tl-item');
+      items.forEach((item,i)=>{
+        setTimeout(()=>item.classList.add('visible'),i*120);
+      });
+    }
+  });
+},{threshold:0.1});
+const tlWrap = document.querySelector('.timeline-wrap');
+if(tlWrap) ioTl.observe(tlWrap);
+
+/* ── 숫자 카운트업 애니메이션 ── */
+function countUp(el, target, suffix='', duration=1800){
+  let start=0;
+  const isFloat = String(target).includes('.');
+  const step = target/(duration/16);
+  const timer = setInterval(()=>{
+    start+=step;
+    if(start>=target){start=target;clearInterval(timer);}
+    el.textContent = isFloat ? start.toFixed(1) : Math.floor(start) + suffix;
+  },16);
+}
+
+const ioCount = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      document.querySelectorAll('.stat-num').forEach(el=>{
+        const raw = el.textContent.replace(/[^0-9.]/g,'');
+        const suf = el.textContent.replace(/[0-9.]/g,'');
+        countUp(el, parseFloat(raw), suf);
+      });
+      ioCount.disconnect();
+    }
+  });
+},{threshold:0.5});
+const heroStats = document.querySelector('.hero-stats');
+if(heroStats) ioCount.observe(heroStats);
+
+/* ── 마우스 패럴랙스 (링 반응) ── */
+document.addEventListener('mousemove',e=>{
+  const mx = (e.clientX/window.innerWidth - 0.5)*18;
+  const my = (e.clientY/window.innerHeight - 0.5)*12;
+  const rings = document.querySelectorAll('.hero-ring');
+  rings.forEach((r,i)=>{
+    const f=(i+1)*0.35;
+    r.style.transform = `rotate(${i*120+(Date.now()/((i+1)*400))}deg) translate(${mx*f}px,${my*f}px)`;
+  });
+});
+</script>
+
+</body>
+</html>

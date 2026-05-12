@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>놋 조각 — 껍질과 본질</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600&family=Cormorant+Garamond:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+/* ── 색상 규칙: 밝은 배경엔 진한 글자, 어두운 배경엔 흰 글자 ── */
+:root {
+  --cream:      #f5efe2;
+  --cream2:     #ede4cf;
+  --dark:       #18202a;
+  --dark2:      #1f2a36;
+  --gold:       #b8831a;
+  --gold-bright:#d4a030;
+
+  /* 글자색 — 무조건 선명하게 */
+  --on-cream:   #18140c;   /* 크림 배경 위 → 거의 검정 */
+  --on-cream2:  #3a3020;   /* 크림 배경 위 보조 텍스트 */
+  --on-dark:    #eee8d8;   /* 어두운 배경 위 → 거의 흰색 */
+  --on-dark2:   #c8bea0;   /* 어두운 배경 위 보조 텍스트 */
+  --gold-on-dark: #d4a030; /* 어두운 배경 위 금색 강조 */
+  --gold-on-cream:#8a5a08; /* 크림 배경 위 금색 강조 */
+}
+
+html { scroll-behavior: smooth; }
+body { font-family: 'Noto Serif KR', serif; overflow-x: hidden; background: var(--dark); }
+
+/* ════════════════════════════
+   좌우 분할 레이아웃
+════════════════════════════ */
+.split {
+  display: grid;
+  grid-template-columns: 1fr 4px 1fr;
+  min-height: 100vh;
+}
+
+.L { background: var(--cream);  padding: 80px 52px 80px 60px; display:flex; flex-direction:column; justify-content:center; position:relative; overflow:hidden; }
+.R { background: var(--dark);   padding: 80px 60px 80px 52px; display:flex; flex-direction:column; justify-content:center; position:relative; overflow:hidden; }
+.L2{ background: var(--cream2); padding: 80px 52px 80px 60px; display:flex; flex-direction:column; justify-content:center; position:relative; overflow:hidden; }
+.R2{ background: var(--dark2);  padding: 80px 60px 80px 52px; display:flex; flex-direction:column; justify-content:center; position:relative; overflow:hidden; }
+
+/* 중심 황금 세로선 */
+.axis {
+  background: var(--gold);
+  position: relative;
+}
+.axis::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--gold-bright);
+}
+
+/* ── 레이블 ── */
+.lbl {
+  font-size: 10px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  font-weight: 400;
+  margin-bottom: 18px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid;
+}
+.L .lbl, .L2 .lbl { color: var(--gold-on-cream); border-color: rgba(120,80,10,0.2); }
+.R .lbl, .R2 .lbl { color: var(--gold-on-dark);  border-color: rgba(212,160,48,0.25); }
+
+/* ── 대제목 ── */
+.big {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 54px;
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 28px;
+}
+.L .big, .L2 .big { color: var(--on-cream); }
+.R .big, .R2 .big { color: var(--on-dark); }
+
+.big .eyebrow {
+  display: block;
+  font-size: 11px;
+  font-weight: 300;
+  letter-spacing: 4px;
+  margin-bottom: 6px;
+  font-family: 'Noto Serif KR', serif;
+}
+.L .big .eyebrow, .L2 .big .eyebrow { color: var(--on-cream2); }
+.R .big .eyebrow, .R2 .big .eyebrow { color: var(--on-dark2); }
+
+/* ── 본문 ── */
+.body {
+  font-size: 16px;
+  line-height: 2.2;
+  font-weight: 300;
+  word-break: keep-all;
+  margin-bottom: 20px;
+}
+.L .body, .L2 .body { color: var(--on-cream); }
+.R .body, .R2 .body { color: var(--on-dark); }
+
+.body b { font-weight: 600; }
+.L .body b, .L2 .body b { color: var(--on-cream); }
+.R .body b, .R2 .body b { color: #fff; }
+
+/* ── 대화 블록 ── */
+.dialogue {
+  margin: 24px 0;
+  padding: 18px 18px 18px 22px;
+  border-left: 3px solid;
+}
+.L .dialogue, .L2 .dialogue { border-color: var(--gold-on-cream); background: rgba(0,0,0,0.05); }
+.R .dialogue, .R2 .dialogue { border-color: var(--gold-on-dark);  background: rgba(255,255,255,0.05); }
+
+.who {
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-weight: 400;
+  margin-bottom: 8px;
+}
+.L .who, .L2 .who { color: var(--gold-on-cream); }
+.R .who, .R2 .who { color: var(--gold-on-dark); }
+
+.said {
+  font-size: 16px;
+  line-height: 2;
+  font-weight: 400;
+  word-break: keep-all;
+}
+.L .said, .L2 .said { color: var(--on-cream); }
+.R .said, .R2 .said { color: var(--on-dark); }
+
+/* ════════════════════════════
+   구분 띠
+════════════════════════════ */
+.divider-band {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 52px;
+  background: linear-gradient(90deg, var(--cream2) 50%, var(--dark2) 50%);
+  position: relative;
+}
+.divider-badge {
+  background: var(--gold);
+  color: #0e0a04;
+  font-size: 10px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  padding: 7px 24px;
+  font-weight: 600;
+  position: relative;
+  z-index: 2;
+  font-family: 'Cormorant Garamond', serif;
+}
+
+/* ════════════════════════════
+   클로징 (어두운 전폭)
+════════════════════════════ */
+.closing {
+  background: #0e1218;
+  padding: 100px 0 120px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 클로징 중심 세로선 */
+.closing::before {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 50%;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, var(--gold) 20%, var(--gold) 80%, transparent);
+  opacity: 0.4;
+}
+
+.closing-wrap {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 0 48px;
+  position: relative;
+  z-index: 1;
+}
+
+/* 최종 대비 그리드 */
+.verdict {
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr;
+  gap: 0 48px;
+  margin: 48px 0 64px;
+  align-items: start;
+}
+
+.v-sep {
+  background: linear-gradient(180deg, transparent, var(--gold) 20%, var(--gold) 80%, transparent);
+  opacity: 0.4;
+}
+
+.v-left { text-align: right; }
+.v-right { text-align: left; }
+
+.v-label {
+  font-size: 10px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  font-weight: 400;
+  margin-bottom: 14px;
+  display: block;
+}
+.v-left .v-label  { color: var(--on-dark2); }
+.v-right .v-label { color: var(--gold-on-dark); }
+
+.v-head {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 40px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  line-height: 1;
+}
+.v-left  .v-head { color: var(--on-dark2); }
+.v-right .v-head { color: var(--on-dark); }
+
+.v-items {
+  font-size: 15px;
+  line-height: 2.4;
+  font-weight: 300;
+}
+.v-left  .v-items { color: var(--on-dark2); }
+.v-right .v-items { color: var(--on-dark); }
+
+.v-items .crossed {
+  text-decoration: line-through;
+  text-decoration-color: #e05030;
+  color: #a09080;
+}
+
+/* 말씀 박스 */
+.scripture-box {
+  border: 1px solid var(--gold);
+  padding: 48px 44px;
+  max-width: 580px;
+  margin: 0 auto 48px;
+  position: relative;
+}
+
+.s-ref {
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--gold-on-dark);
+  margin-bottom: 20px;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 400;
+}
+
+.s-text {
+  font-size: 18px;
+  line-height: 2.2;
+  color: var(--on-dark);
+  font-weight: 300;
+  word-break: keep-all;
+}
+
+.s-text b {
+  color: #fff;
+  font-weight: 600;
+}
+
+/* 마지막 문장 */
+.final-words {
+  font-size: 16px;
+  line-height: 2.4;
+  color: var(--on-dark);
+  font-weight: 300;
+  max-width: 480px;
+  margin: 0 auto 40px;
+  word-break: keep-all;
+}
+.final-words b {
+  color: #fff;
+  font-weight: 600;
+}
+
+.end-line {
+  width: 1px; height: 56px;
+  background: linear-gradient(180deg, var(--gold), transparent);
+  margin: 0 auto;
+}
+
+/* ── SVG 시각화 ── */
+.fig { display: block; margin: 20px auto 28px; }
+
+/* ── 느후스단 ── */
+.nehushtan {
+  text-align: center;
+  margin: 28px 0;
+  padding: 24px;
+  border: 1px solid var(--gold-on-dark);
+}
+.neh-sub  { font-size: 11px; letter-spacing: 4px; color: var(--gold-on-dark); margin-bottom: 8px; }
+.neh-big  { font-family:'Cormorant Garamond',serif; font-size:48px; font-weight:700; color: var(--on-dark); line-height:1; margin-bottom:8px; }
+.neh-desc { font-size: 12px; letter-spacing: 3px; color: var(--on-dark2); }
+
+/* ── 페이드인 ── */
+.fi { opacity:0; transform:translateY(20px); transition:opacity .8s ease, transform .8s ease; }
+.fi.in { opacity:1; transform:translateY(0); }
+
+/* ── 반응형 ── */
+@media (max-width:680px) {
+  .split { grid-template-columns:1fr; }
+  .axis  { display:none; }
+  .L,.R,.L2,.R2 { padding:56px 28px; min-height:auto; }
+  .R,.R2 { border-top:3px solid var(--gold); }
+  .big { font-size:40px; }
+  .verdict { grid-template-columns:1fr; gap:32px 0; }
+  .v-sep { display:none; }
+  .v-left,.v-right { text-align:left; }
+  .closing-wrap { padding:0 24px; }
+  .s-text { font-size:16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════ HERO ════ -->
+<div class="split fi in">
+  <div class="L">
+    <div class="lbl">물건 · 보이는 것</div>
+    <div class="big">
+      <span class="eyebrow">어머니의 마음</span>
+      성경책을<br>베개처럼
+    </div>
+    <p class="body">어린 아이가 밤새 열이 펄펄 끓었습니다. 어머니는 걱정이 되어 밤새 아이 곁을 지키다가, 서랍에서 성경책을 꺼내 <b>아이 머리맡에 살며시 두었습니다.</b></p>
+    <div class="dialogue">
+      <div class="who">어머니</div>
+      <div class="said">"성경이 있으니까 괜찮을 거야…"</div>
+    </div>
+    <p class="body">또 군대에 입대하는 아들에게 작은 주머니 성경을 건네며 말했습니다.</p>
+    <div class="dialogue">
+      <div class="who">어머니</div>
+      <div class="said">"이거 꼭 주머니에 넣고 다녀라. 그러면 총알도 피한다더라."</div>
+    </div>
+  </div>
+
+  <div class="axis"></div>
+
+  <div class="R">
+    <div class="lbl">믿음 · 보이지 않는 것</div>
+    <div class="big">
+      <span class="eyebrow">진짜 질문</span>
+      가지고<br>있는가?
+    </div>
+    <p class="body">어떤 부모들에게는 자녀가 예수를 믿느냐보다<br><b>"성경책을 몸에 가지고 있느냐"</b><br>이것이 더 중요해지기도 합니다.</p>
+    <p class="body">마치 성경책 자체가 부적처럼 사람을 지켜주는 힘이 있다고 생각하는 것입니다.</p>
+    <p class="body" style="color:var(--gold-on-dark); font-size:15px; letter-spacing:1px;">그런데 정말 그럴까요?</p>
+  </div>
+</div>
+
+<div class="divider-band"><div class="divider-badge">광야에서 있었던 한 사건</div></div>
+
+<!-- ════ 광야 ════ -->
+<div class="split">
+  <div class="L2 fi">
+    <div class="lbl">물건 · 놋뱀</div>
+
+    <!-- 장대와 뱀 -->
+    <svg class="fig" width="80" height="160" viewBox="0 0 80 160" xmlns="http://www.w3.org/2000/svg">
+      <rect x="37" y="8" width="6" height="148" rx="2" fill="#6a4415"/>
+      <path d="M40 28 C65 38 18 62 40 72 C62 82 18 108 40 118 C58 126 52 140 40 145"
+        fill="none" stroke="#7a5418" stroke-width="8" stroke-linecap="round"/>
+      <path d="M40 28 C65 38 18 62 40 72 C62 82 18 108 40 118 C58 126 52 140 40 145"
+        fill="none" stroke="#a07828" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
+      <ellipse cx="40" cy="24" rx="9" ry="7" fill="#8a6020"/>
+      <circle cx="36" cy="22" r="2.5" fill="#1a0e04"/>
+      <circle cx="44" cy="22" r="2.5" fill="#1a0e04"/>
+    </svg>
+
+    <p class="body">광야에 불뱀들이 나타나 많은 사람이 물려 죽어가기 시작했습니다. 하나님은 모세에게 명령하셨습니다.</p>
+    <div class="dialogue">
+      <div class="who">하나님의 명령</div>
+      <div class="said">"놋으로 뱀을 만들어 장대 위에 달아라. 그리고 뱀에 물린 사람이 그것을 바라보면 살 것이다."</div>
+    </div>
+    <p class="body">모세는 그대로 했습니다. 뱀에 물린 사람이 놋뱀을 바라볼 때마다 살아났습니다.</p>
+  </div>
+
+  <div class="axis"></div>
+
+  <div class="R2 fi">
+    <div class="lbl">믿음 · 바라봄</div>
+    <div class="big" style="font-size:40px;">
+      <span class="eyebrow">사람을 살린 것</span>
+      놋뱀이<br>아니었다
+    </div>
+    <p class="body">사람을 살린 것은 놋뱀의 힘이 아니었습니다.</p>
+    <p class="body"><b>하나님의 말씀을 믿고 바라본 믿음</b>이었습니다.</p>
+    <p class="body">물건은 도구였습니다. 능력의 근원은 언제나 하나님께 있었습니다.</p>
+  </div>
+</div>
+
+<div class="divider-band"><div class="divider-badge">시간이 흐르자 생긴 이상한 일</div></div>
+
+<!-- ════ 히스기야 ════ -->
+<div class="split">
+  <div class="L fi">
+    <div class="lbl">물건 · 숭배</div>
+    <p class="body">그런데 시간이 많이 흐르자 이스라엘 사람들은 하나님을 기억하기보다 <b>그때 사용된 놋뱀 자체를 특별한 물건으로 여기기 시작했습니다.</b></p>
+    <p class="body">심지어 그 앞에서 향을 피우며 절하기까지 했습니다.</p>
+
+    <!-- 파편 -->
+    <svg class="fig" width="100%" height="70" viewBox="0 0 360 70" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="40,8  75,4  70,32  36,30"  fill="#7a5418" opacity="0.75"/>
+      <polygon points="95,4  130,8  124,36 90,32"  fill="#8a6020" opacity="0.7"/>
+      <polygon points="145,6 180,2 175,32 140,30"  fill="#7a5418" opacity="0.8"/>
+      <polygon points="195,5 228,10 222,36 190,32" fill="#8a6020" opacity="0.7"/>
+      <polygon points="240,8 272,4 268,34 236,32"  fill="#7a5418" opacity="0.75"/>
+      <polygon points="42,38 76,34 70,60 38,58"   fill="#6a4415" opacity="0.6"/>
+      <polygon points="105,36 140,32 135,58 100,56" fill="#7a5418" opacity="0.55"/>
+      <polygon points="168,34 202,30 198,58 162,56" fill="#8a6020" opacity="0.6"/>
+      <polygon points="228,36 260,32 256,58 222,56" fill="#7a5418" opacity="0.55"/>
+    </svg>
+
+    <p class="body">히스기야 왕은 백성들이 놋뱀 앞에서 향을 피우는 모습을 보고 <b>그 놋뱀을 산산이 부숴 버렸습니다.</b></p>
+  </div>
+
+  <div class="axis"></div>
+
+  <div class="R fi">
+    <div class="lbl">믿음 · 결단</div>
+
+    <div class="nehushtan fi">
+      <div class="neh-sub">히스기야의 선언</div>
+      <div class="neh-big">느후스단</div>
+      <div class="neh-desc">Nehushtan · 놋 덩어리</div>
+    </div>
+
+    <div class="dialogue">
+      <div class="who">히스기야 왕</div>
+      <div class="said">"이것은 단지 놋 조각일 뿐이다."</div>
+    </div>
+
+    <p class="body">사람들이 신성하게 여기던 물건을 히스기야는 그저 금속 조각일 뿐이라고 말했습니다.</p>
+    <p class="body">왜냐하면 <b>사람을 살리는 능력은 놋뱀에 있는 것이 아니라 하나님을 믿는 믿음에 있기 때문</b>이었습니다.</p>
+  </div>
+</div>
+
+<div class="divider-band"><div class="divider-badge">성경책의 진짜 의미</div></div>
+
+<!-- ════ 클로징 ════ -->
+<div class="closing">
+  <div class="closing-wrap">
+
+    <div class="verdict fi">
+      <div class="v-left">
+        <span class="v-label">껍질</span>
+        <div class="v-head">물건</div>
+        <div class="v-items">
+          <span class="crossed">성경책을 집에 두는 것</span><br>
+          <span class="crossed">성경책을 가방에 넣는 것</span><br>
+          <span class="crossed">성경책을 머리맡에 두는 것</span><br>
+          <span class="crossed">놋뱀 앞에 향을 피우는 것</span><br><br>
+          이것이 우리를<br>지켜주지 않습니다.
+        </div>
+      </div>
+
+      <div class="v-sep"></div>
+
+      <div class="v-right">
+        <span class="v-label">본질</span>
+        <div class="v-head">믿음</div>
+        <div class="v-items">
+          성경 말씀을 믿고 사는 것<br>
+          하나님의 말씀을 듣는 것<br>
+          하나님을 향하여 바라보는 것<br>
+          말씀 안에서 지혜를 얻는 것<br><br>
+          이것이 우리를<br>살립니다.
+        </div>
+      </div>
+    </div>
+
+    <div class="scripture-box fi">
+      <div class="s-ref">디모데후서 3:16</div>
+      <p class="s-text">
+        "모든 성경은 <b>하나님께서 숨을 내쉬신 것</b>이며<br>
+        가르치고 가책받게 하고 바로잡고<br>
+        의로 교육하는 데에 유익합니다."
+      </p>
+    </div>
+
+    <p class="final-words fi">
+      놋뱀이 사람을 살린 것이 아니라<br>
+      <b>하나님의 말씀을 믿는 믿음</b>이 사람을 살린 것처럼,<br>
+      오늘도 하나님의 능력은<br>
+      <b>말씀을 믿는 믿음 안에서</b> 나타납니다.
+    </p>
+
+    <div class="end-line fi"></div>
+
+  </div>
+</div>
+
+<script>
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('in');
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.fi').forEach(el => io.observe(el));
+</script>
+</body>
+</html>

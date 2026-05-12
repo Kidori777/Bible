@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>벤허가 탄생하게 된 이야기</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;900&family=Playfair+Display:wght@400;700;900&family=Libre+Baskerville:wght@400;700&family=IM+Fell+English&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+
+body{
+  background:#0d0b08;
+  color:#e8dcc8;
+  font-family:'Noto Serif KR',serif;
+  overflow-x:hidden;
+  cursor:default;
+}
+
+/* ══════════════════════════════
+   고정 기차 창문 프레임
+══════════════════════════════ */
+#train-frame{
+  position:fixed;
+  top:0;left:0;right:0;bottom:0;
+  z-index:0;
+  pointer-events:none;
+}
+
+/* 창문 마스크 — 상하 두꺼운 철제 프레임 */
+.frame-top{
+  position:absolute;
+  top:0;left:0;right:0;
+  height:14vh;
+  background:#0d0b08;
+  border-bottom:3px solid #3a2e1e;
+  display:flex;align-items:flex-end;padding-bottom:8px;
+  justify-content:center;
+  z-index:10;
+}
+.frame-bottom{
+  position:absolute;
+  bottom:0;left:0;right:0;
+  height:14vh;
+  background:#0d0b08;
+  border-top:3px solid #3a2e1e;
+  z-index:10;
+}
+
+/* 창문 양 사이드 */
+.frame-left,.frame-right{
+  position:absolute;
+  top:14vh;bottom:14vh;
+  width:clamp(40px,6vw,90px);
+  background:#0d0b08;
+  z-index:10;
+}
+.frame-left{left:0;border-right:3px solid #3a2e1e;}
+.frame-right{right:0;border-left:3px solid #3a2e1e;}
+
+/* 창문 코너 리벳 */
+.rivet{
+  position:absolute;
+  width:12px;height:12px;
+  border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#6a5a3a,#2a2010);
+  border:1px solid #4a3a1e;
+  z-index:11;
+}
+.rivet.tl{top:calc(14vh - 6px);left:calc(clamp(40px,6vw,90px) - 6px)}
+.rivet.tr{top:calc(14vh - 6px);right:calc(clamp(40px,6vw,90px) - 6px)}
+.rivet.bl{bottom:calc(14vh - 6px);left:calc(clamp(40px,6vw,90px) - 6px)}
+.rivet.br{bottom:calc(14vh - 6px);right:calc(clamp(40px,6vw,90px) - 6px)}
+
+/* 창문 상단 텍스트 */
+.train-header{
+  font-family:'IM Fell English',serif;
+  font-size:11px;
+  letter-spacing:0.4em;
+  color:#4a3a1e;
+  text-transform:uppercase;
+}
+
+/* ══════════════════════════════
+   배경 풍경 캔버스
+══════════════════════════════ */
+#bg-canvas{
+  position:fixed;
+  top:14vh;
+  left:clamp(40px,6vw,90px);
+  right:clamp(40px,6vw,90px);
+  bottom:14vh;
+  z-index:1;
+}
+
+/* 창문 유리 반사 효과 */
+#glass-overlay{
+  position:fixed;
+  top:14vh;
+  left:clamp(40px,6vw,90px);
+  right:clamp(40px,6vw,90px);
+  bottom:14vh;
+  z-index:8;
+  pointer-events:none;
+  background:linear-gradient(
+    135deg,
+    rgba(255,255,255,0.03) 0%,
+    transparent 40%,
+    rgba(255,255,255,0.015) 100%
+  );
+}
+
+/* 기차 진동 애니메이션 */
+@keyframes trainShake{
+  0%,100%{transform:translate(0,0)}
+  25%{transform:translate(0.4px,0.3px)}
+  50%{transform:translate(-0.3px,0.2px)}
+  75%{transform:translate(0.2px,-0.3px)}
+}
+
+/* ══════════════════════════════
+   스크롤 콘텐츠
+══════════════════════════════ */
+main{
+  position:relative;
+  z-index:5;
+  padding-top:14vh;
+  padding-bottom:14vh;
+}
+
+/* 각 장면 섹션 */
+.scene{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:8vh clamp(80px,12vw,160px);
+  position:relative;
+}
+
+/* 콘텐츠 카드 — 신문지 스타일 */
+.card{
+  background:rgba(18,14,8,0.82);
+  border:1px solid rgba(160,130,70,0.25);
+  padding:clamp(28px,4vw,52px) clamp(28px,4vw,52px);
+  max-width:620px;
+  width:100%;
+  position:relative;
+  backdrop-filter:blur(2px);
+  animation:trainShake 0.18s infinite linear;
+  opacity:0;
+  transform:translateY(20px);
+  transition:opacity 0.9s ease,transform 0.9s ease;
+}
+.card.visible{opacity:1;transform:translateY(0)}
+
+/* 카드 모서리 장식 */
+.card::before,.card::after{
+  content:'';
+  position:absolute;
+  width:18px;height:18px;
+  border-color:rgba(160,130,70,0.5);
+  border-style:solid;
+}
+.card::before{top:-1px;left:-1px;border-width:2px 0 0 2px;}
+.card::after{bottom:-1px;right:-1px;border-width:0 2px 2px 0;}
+
+/* 카드 장 번호 */
+.card-num{
+  font-family:'IM Fell English',serif;
+  font-size:10px;
+  letter-spacing:0.5em;
+  color:rgba(160,130,70,0.6);
+  text-transform:uppercase;
+  margin-bottom:16px;
+  display:block;
+}
+
+/* ══════════════════════════════
+   타이포그래피
+══════════════════════════════ */
+h1.headline{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(32px,6vw,68px);
+  font-weight:900;
+  line-height:1.05;
+  color:#f0e4c8;
+  letter-spacing:-0.01em;
+  margin-bottom:20px;
+}
+h1.headline .accent{color:#c8a050;}
+
+h2.subhead{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(18px,3vw,28px);
+  font-weight:700;
+  color:#d4b870;
+  line-height:1.4;
+  margin-bottom:16px;
+  letter-spacing:0.01em;
+}
+
+p.body{
+  font-family:'Noto Serif KR',serif;
+  font-size:15px;
+  line-height:2.15;
+  color:#c8baa0;
+  word-break:keep-all;
+  margin-bottom:1em;
+}
+p.body strong{color:#e8dcc8;font-weight:600;}
+
+p.body-en{
+  font-family:'Libre Baskerville',serif;
+  font-size:13px;
+  line-height:1.9;
+  color:#9a8a6a;
+  margin-bottom:0.8em;
+}
+
+/* 신문 구분선 */
+.rule-double{
+  height:4px;
+  background:linear-gradient(to right,transparent,#c8a050,transparent);
+  position:relative;
+  margin:20px 0;
+}
+.rule-double::after{
+  content:'';
+  position:absolute;
+  top:6px;left:0;right:0;
+  height:1px;
+  background:linear-gradient(to right,transparent,rgba(200,160,80,0.4),transparent);
+}
+
+.rule-single{
+  height:1px;
+  background:linear-gradient(to right,transparent,rgba(200,160,80,0.35),transparent);
+  margin:20px 0;
+}
+
+/* 인용 블록 */
+.quote-box{
+  border-left:3px solid #c8a050;
+  padding:16px 0 16px 24px;
+  margin:24px 0;
+}
+.quote-box p{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(16px,2.5vw,21px);
+  font-weight:400;
+  color:#e0cc98;
+  line-height:1.75;
+  word-break:keep-all;
+}
+.quote-box .attr{
+  font-family:'IM Fell English',serif;
+  font-size:11px;
+  letter-spacing:0.25em;
+  color:#8a7a50;
+  margin-top:10px;
+  display:block;
+  text-transform:uppercase;
+}
+
+/* 핵심 질문 — 대형 */
+.big-question{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(22px,4vw,40px);
+  font-weight:700;
+  color:#f0e4c8;
+  line-height:1.55;
+  text-align:center;
+  padding:24px 0;
+  letter-spacing:0.01em;
+  word-break:keep-all;
+}
+.big-question .mark{
+  display:block;
+  font-size:clamp(40px,8vw,80px);
+  color:#c8a050;
+  line-height:0.9;
+  margin-bottom:8px;
+  font-weight:900;
+}
+
+/* 책 제목 강조 */
+.book-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(26px,5vw,52px);
+  font-weight:900;
+  color:#f0e4c8;
+  text-align:center;
+  line-height:1.25;
+  margin:20px 0;
+  letter-spacing:0.02em;
+}
+.book-title .sub{
+  display:block;
+  font-size:clamp(11px,1.8vw,16px);
+  font-weight:400;
+  color:#9a8a6a;
+  letter-spacing:0.35em;
+  text-transform:uppercase;
+  margin-top:8px;
+  font-family:'IM Fell English',serif;
+}
+
+/* 성경 구절 */
+.scripture{
+  background:rgba(200,160,80,0.06);
+  border:1px solid rgba(200,160,80,0.2);
+  border-top:2px solid #c8a050;
+  padding:28px 28px 24px;
+  margin:24px 0;
+  position:relative;
+}
+.scripture-ref{
+  font-family:'IM Fell English',serif;
+  font-size:10px;
+  letter-spacing:0.4em;
+  color:#c8a050;
+  text-transform:uppercase;
+  margin-bottom:14px;
+  display:block;
+}
+.scripture p{
+  font-family:'Noto Serif KR',serif;
+  font-size:14.5px;
+  line-height:2.2;
+  color:#d4c898;
+  word-break:keep-all;
+  margin-bottom:0.7em;
+}
+
+/* 닫는 선언 */
+.closing{
+  text-align:center;
+  padding:20px 0;
+}
+.closing p{
+  font-family:'Noto Serif KR',serif;
+  font-size:15px;
+  line-height:2.2;
+  color:#c8baa0;
+  word-break:keep-all;
+  margin-bottom:0.8em;
+}
+
+/* 스크롤 힌트 */
+.scroll-hint{
+  position:fixed;
+  bottom:calc(14vh + 24px);
+  left:50%;
+  transform:translateX(-50%);
+  z-index:20;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  animation:hintFade 2s 2s forwards;
+  opacity:1;
+}
+@keyframes hintFade{to{opacity:0;pointer-events:none}}
+.scroll-hint span{
+  font-family:'IM Fell English',serif;
+  font-size:10px;
+  letter-spacing:0.4em;
+  color:rgba(200,160,80,0.5);
+  text-transform:uppercase;
+}
+.scroll-hint svg{animation:bounce 1.4s infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+
+/* 진행바 */
+#progress{
+  position:fixed;bottom:calc(14vh - 3px);
+  left:clamp(40px,6vw,90px);right:clamp(40px,6vw,90px);
+  height:2px;z-index:20;
+  background:rgba(58,46,30,0.4);
+}
+#progress-bar{
+  height:100%;width:0%;
+  background:linear-gradient(to right,#6a4a10,#c8a050,#e8d080);
+  transition:width 0.1s;
+}
+
+::-webkit-scrollbar{width:0}
+</style>
+</head>
+<body>
+
+<!-- 기차 창문 프레임 -->
+<div id="train-frame">
+  <div class="frame-top">
+    <span class="train-header">Ben-Hur · A Tale of the Christ · 1880</span>
+  </div>
+  <div class="frame-bottom"></div>
+  <div class="frame-left"></div>
+  <div class="frame-right"></div>
+  <div class="rivet tl"></div>
+  <div class="rivet tr"></div>
+  <div class="rivet bl"></div>
+  <div class="rivet br"></div>
+</div>
+
+<!-- 배경 풍경 캔버스 -->
+<canvas id="bg-canvas"></canvas>
+<div id="glass-overlay"></div>
+
+<!-- 진행바 -->
+<div id="progress"><div id="progress-bar"></div></div>
+
+<!-- 스크롤 힌트 -->
+<div class="scroll-hint">
+  <span>Scroll</span>
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+    <path d="M8 3 L8 13 M4 9 L8 13 L12 9" stroke="rgba(200,160,80,0.6)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</div>
+
+<main>
+
+  <!-- 장면 0: 오프닝 -->
+  <div class="scene" id="scene-0">
+    <div class="card visible">
+      <span class="card-num">Prologue · 1876</span>
+      <div class="rule-double"></div>
+      <h1 class="headline">
+        《<span class="accent">벤허</span>》가<br>탄생하게 된<br>이야기
+      </h1>
+      <div class="rule-double"></div>
+      <p class="body-en">How Ben-Hur Was Born</p>
+      <p class="body">미국 남북전쟁 때 장군으로 복무했던 루 월리스(Lew Wallace)는 전쟁이 끝난 후 정치와 외교, 그리고 글을 쓰는 일을 하며 살아가고 있었습니다. 그는 특별히 독실한 신앙인이었다기보다는, 기독교와 예수에 대해 깊이 생각해 본 적이 없는 사람이었습니다.</p>
+    </div>
+  </div>
+
+  <!-- 장면 1: 기차 안 만남 -->
+  <div class="scene" id="scene-1">
+    <div class="card">
+      <span class="card-num">I — The Train · 기차 안에서</span>
+      <div class="rule-single"></div>
+      <p class="body">1876년 어느 날, 그는 기차를 타고 여행을 하다가 당시 미국에서 매우 유명한 연설가 로버트 잉거솔(Robert G. Ingersoll)을 만나게 되었습니다. 잉거솔은 종교에 대해 비판적인 견해로 널리 알려진 사람이었습니다.</p>
+      <p class="body">기차 안에서 두 사람은 자연스럽게 종교와 예수에 관한 이야기를 나누게 되었습니다. 잉거솔은 성경과 기독교에 대해 여러 가지 비판적인 이야기를 했습니다. 월리스는 그 이야기를 들으며 대화를 이어갔지만, 마음 한편에서는 한 가지 생각이 떠올랐습니다.</p>
+      <div class="rule-single"></div>
+      <div class="big-question">
+        <span class="mark">"</span>
+        나는 예수라는 인물에 대해<br>실제로 얼마나 알고 있는가?
+      </div>
+    </div>
+  </div>
+
+  <!-- 장면 2: 연구 -->
+  <div class="scene" id="scene-2">
+    <div class="card">
+      <span class="card-num">II — The Research · 연구</span>
+      <div class="rule-single"></div>
+      <p class="body">그날의 대화는 월리스의 마음속에 작은 질문을 남겼습니다. 그리고 그 질문은 결국 그를 성경과 예수 시대의 역사에 대한 연구로 이끌었습니다.</p>
+      <p class="body">그는 성경을 읽고, 로마 제국과 유대 사회의 역사 자료를 찾아보며 예수가 살았던 시대의 배경을 공부하기 시작했습니다. <strong>처음에는 단순한 호기심에서 시작된 일이었지만, 자료를 읽고 연구할수록 예수라는 인물과 그 시대의 이야기는 점점 더 깊은 관심의 대상이 되었습니다.</strong></p>
+      <p class="body">마침 그는 이미 동방박사 이야기를 소재로 한 소설의 구상을 가지고 있었습니다. 연구가 계속되면서 그 이야기는 점점 더 확장되었고, 결국 예수 시대를 배경으로 한 장편 역사소설로 발전하게 되었습니다.</p>
+    </div>
+  </div>
+
+  <!-- 장면 3: 책 탄생 -->
+  <div class="scene" id="scene-3">
+    <div class="card">
+      <span class="card-num">III — The Book · 탄생</span>
+      <div class="rule-double"></div>
+      <p class="body" style="text-align:center;">오랜 시간의 연구와 집필 끝에 마침내 한 편의 소설이 완성되었습니다.<br>그 작품의 제목은 바로</p>
+      <div class="book-title">
+        Ben-Hur
+        <span class="sub">A Tale of the Christ · 그리스도의 이야기</span>
+      </div>
+      <div class="rule-double"></div>
+      <p class="body">이 소설은 유대 귀족 청년 유다 벤허의 삶을 중심으로 전개됩니다. 로마 제국의 억압 속에서 억울하게 모든 것을 잃어버린 한 사람이 고난과 갈등을 겪으며 살아가는 이야기입니다.</p>
+      <p class="body"><strong>그러나 이 이야기의 배경 속에는 언제나 예수 그리스도의 존재가 놓여 있습니다.</strong> 월리스는 예수를 이야기의 중심 인물로 직접 등장시키기보다는, 예수를 만난 사람들의 삶이 변화되는 모습을 통해 그 의미를 보여 주었습니다.</p>
+      <p class="body">특히 이야기의 마지막 장면에서는 예수의 십자가 사건 이후, 오랫동안 병과 고통 속에 살던 사람들이 치유와 회복을 경험하는 장면이 등장합니다. 그 장면은 많은 독자들에게 깊은 감동을 주었습니다. 그것은 단순한 소설의 결말이 아니라, 그리스도를 만날 때 인간의 삶이 새롭게 변화될 수 있다는 희망을 상징적으로 보여 주는 장면이기 때문입니다.</p>
+    </div>
+  </div>
+
+  <!-- 장면 4: 영향 & 고백 -->
+  <div class="scene" id="scene-4">
+    <div class="card">
+      <span class="card-num">IV — The Impact · 반향</span>
+      <div class="rule-single"></div>
+      <p class="body">이 책은 출간되자마자 큰 반향을 일으켰고, 오랫동안 19세기 미국에서 가장 많이 읽힌 소설 가운데 하나가 되었습니다. 이후 연극과 영화로도 제작되어 전 세계적으로 널리 알려지게 되었습니다.</p>
+      <div class="rule-single"></div>
+      <p class="body">루 월리스는 훗날 자신의 집필 경험을 돌아보며 이렇게 말했습니다.</p>
+      <div class="quote-box">
+        <p>"나는 예수님에 관한 이야기를 발견했을 뿐 아니라,<br>예수님이 내 책의 중심이 되었고 내 마음의 중심이 되었습니다."</p>
+        <span class="attr">Lew Wallace · 루 월리스</span>
+      </div>
+      <p class="body">한 사람의 질문에서 시작된 연구가 한 권의 책을 만들었고, 그 책은 수많은 사람들에게 예수 그리스도의 이야기를 전하는 통로가 되었습니다.</p>
+    </div>
+  </div>
+
+  <!-- 장면 5: 성경 & 마무리 -->
+  <div class="scene" id="scene-5">
+    <div class="card">
+      <span class="card-num">V — The Word · 말씀</span>
+      <div class="rule-single"></div>
+      <div class="scripture">
+        <span class="scripture-ref">디모데후서 3장 15–17절 · 2 Timothy 3:15–17</span>
+        <p>"이 성경은 그대가 그리스도 예수님 안에 있는 믿음을 통하여 구원에 이르는 지혜를 얻게 할 수 있습니다.</p>
+        <p>모든 성경은 하나님께서 숨을 내쉬신 것이며, 가르치고 책망하고 바로잡고 의로 교육하는 데에 유익합니다.</p>
+        <p>성경은 하나님의 사람을 온전하게 하며 온갖 선한 일을 위하여 충분히 준비되게 합니다."</p>
+      </div>
+      <div class="rule-double"></div>
+      <div class="closing">
+        <p>성경을 통해 예수 그리스도를 알게 될 때,<br>사람의 생각과 삶은 새로운 방향을 찾게 됩니다.</p>
+        <p>그리고 그 변화는 한 사람의 마음에서 시작되어<br>더 많은 사람들에게 흘러가게 됩니다.</p>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+// ══════════════════════════════════════════════
+//  배경 풍경 캔버스 — 스크롤에 따라 장면 전환
+// ══════════════════════════════════════════════
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+let W, H;
+
+function resizeCanvas() {
+  const frame = canvas;
+  const sideW = Math.min(90, window.innerWidth * 0.06);
+  const frameH14 = window.innerHeight * 0.14;
+  W = canvas.width = window.innerWidth - sideW * 2;
+  H = canvas.height = window.innerHeight - frameH14 * 2;
+  canvas.style.left = sideW + 'px';
+  canvas.style.top = frameH14 + 'px';
+  canvas.style.right = sideW + 'px';
+  canvas.style.bottom = frameH14 + 'px';
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+}
+
+// 기차 속도 오프셋
+let trainX = 0;
+let scrollRatio = 0;
+
+// 별 데이터
+const stars = Array.from({length:80}, () => ({
+  x: Math.random(),
+  y: Math.random() * 0.6,
+  r: Math.random() * 1.5 + 0.3,
+  brightness: Math.random() * 0.7 + 0.3,
+  twinkle: Math.random() * Math.PI * 2
+}));
+
+// 전봇대 데이터
+const poles = Array.from({length:12}, (_, i) => ({
+  baseX: i / 12,
+  phase: i
+}));
+
+// 나무 데이터
+const trees = Array.from({length:18}, (_, i) => ({
+  baseX: i / 18 + Math.random() * 0.04,
+  h: Math.random() * 0.12 + 0.08,
+  w: Math.random() * 0.015 + 0.008,
+  style: Math.random() > 0.5 ? 'conifer' : 'bare'
+}));
+
+let t = 0;
+
+// 팔레트 — 스크롤에 따라 변환
+// 0: 밤기차, 0.25: 새벽, 0.5: 사막(로마), 0.75: 빛, 1: 황금
+const palettes = [
+  { sky: ['#050810', '#0a1028', '#1a2048'], horizon: '#1a2848', ground: '#0d1020', accent: '#c8a050' },    // 밤
+  { sky: ['#0d0820', '#2a1040', '#6a3060'], horizon: '#402040', ground: '#150d20', accent: '#e890a0' },    // 새벽
+  { sky: ['#1a0c04', '#4a2408', '#8a5020'], horizon: '#6a3808', ground: '#2a1408', accent: '#e8a040' },    // 사막
+  { sky: ['#040810', '#102030', '#204858'], horizon: '#304860', ground: '#080c18', accent: '#80c8e8' },    // 갈릴리 밤
+  { sky: ['#180c04', '#402010', '#804020'], horizon: '#c06030', ground: '#1a0a04', accent: '#f0c060' },    // 골고다
+];
+
+function lerp(a, b, t) { return a + (b - a) * t; }
+function lerpColor(c1, c2, t) {
+  const r1 = parseInt(c1.slice(1,3),16), g1 = parseInt(c1.slice(3,5),16), b1 = parseInt(c1.slice(5,7),16);
+  const r2 = parseInt(c2.slice(1,3),16), g2 = parseInt(c2.slice(3,5),16), b2 = parseInt(c2.slice(5,7),16);
+  const r = Math.round(lerp(r1,r2,t)), g = Math.round(lerp(g1,g2,t)), b = Math.round(lerp(b1,b2,t));
+  return `rgb(${r},${g},${b})`;
+}
+
+function getPalette(ratio) {
+  const total = palettes.length - 1;
+  const idx = Math.min(ratio * total, total - 0.001);
+  const i = Math.floor(idx);
+  const f = idx - i;
+  const p1 = palettes[i], p2 = palettes[i+1] || palettes[i];
+  return {
+    sky0: lerpColor(p1.sky[0], p2.sky[0], f),
+    sky1: lerpColor(p1.sky[1], p2.sky[1], f),
+    sky2: lerpColor(p1.sky[2], p2.sky[2], f),
+    horizon: lerpColor(p1.horizon, p2.horizon, f),
+    ground: lerpColor(p1.ground, p2.ground, f),
+    accent: lerpColor(p1.accent, p2.accent, f),
+  };
+}
+
+function drawScene(pal, tx) {
+  // 하늘 그라디언트
+  const sky = ctx.createLinearGradient(0, 0, 0, H * 0.65);
+  sky.addColorStop(0, pal.sky0);
+  sky.addColorStop(0.5, pal.sky1);
+  sky.addColorStop(1, pal.sky2);
+  ctx.fillStyle = sky;
+  ctx.fillRect(0, 0, W, H * 0.65);
+
+  // 지평선 글로우
+  const hg = ctx.createLinearGradient(0, H * 0.55, 0, H * 0.75);
+  hg.addColorStop(0, pal.horizon.replace('rgb(', 'rgba(').replace(')', ',0)'));
+  hg.addColorStop(0.5, pal.horizon.replace('rgb(', 'rgba(').replace(')', ',0.67)'));
+  hg.addColorStop(1, pal.horizon.replace('rgb(', 'rgba(').replace(')', ',0)'));
+  ctx.fillStyle = hg;
+  ctx.fillRect(0, H * 0.55, W, H * 0.2);
+
+  // 지면
+  ctx.fillStyle = pal.ground;
+  ctx.fillRect(0, H * 0.65, W, H * 0.35);
+
+  // 별 (밤에만)
+  const starAlpha = Math.max(0, 1 - scrollRatio * 3);
+  if(starAlpha > 0) {
+    stars.forEach(s => {
+      const tw = Math.sin(t * 1.5 + s.twinkle) * 0.3 + 0.7;
+      ctx.globalAlpha = s.brightness * tw * starAlpha * 0.9;
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(s.x * W + Math.sin(t * 0.05) * 0.5, s.y * H * 0.6, s.r, 0, Math.PI * 2);
+      ctx.fill();
+    });
+  }
+  ctx.globalAlpha = 1;
+
+  // 달 (초반)
+  if(scrollRatio < 0.35) {
+    const moonA = Math.max(0, 1 - scrollRatio * 3);
+    const moonX = W * 0.75 + tx * 0.2;
+    const moonY = H * 0.15;
+    ctx.globalAlpha = moonA * 0.9;
+    const mg = ctx.createRadialGradient(moonX, moonY, 0, moonX, moonY, 28);
+    mg.addColorStop(0, '#f5edc8');
+    mg.addColorStop(0.6, '#e0c878');
+    mg.addColorStop(1, 'transparent');
+    ctx.fillStyle = mg;
+    ctx.beginPath();
+    ctx.arc(moonX, moonY, 28, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  }
+
+  // 산 실루엣 (원경)
+  ctx.fillStyle = 'rgba(0,0,0,0.35)';
+  ctx.beginPath();
+  ctx.moveTo(0, H * 0.65);
+  const mPoints = [
+    [0, 0.65],[0.1, 0.42],[0.18, 0.55],[0.28, 0.38],[0.38, 0.5],
+    [0.5, 0.35],[0.6, 0.48],[0.7, 0.4],[0.82, 0.52],[0.92, 0.38],[1, 0.5],[1, 0.65]
+  ];
+  const mOff = (tx * 0.15) % W;
+  mPoints.forEach(([mx, my], i) => {
+    const px = ((mx * W - mOff + W * 2) % W);
+    if(i === 0) ctx.moveTo(px, my * H);
+    else ctx.lineTo(px, my * H);
+  });
+  ctx.lineTo(W, H * 0.65);
+  ctx.closePath();
+  ctx.fill();
+
+  // 전봇대 (빠르게 흐름)
+  poles.forEach(p => {
+    const px = ((p.baseX * W - tx * 3 + W * 5) % W);
+    ctx.strokeStyle = 'rgba(80,60,30,0.7)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(px, H * 0.40);
+    ctx.lineTo(px, H * 0.68);
+    ctx.stroke();
+    // 가로 막대
+    ctx.beginPath();
+    ctx.moveTo(px - 14, H * 0.43);
+    ctx.lineTo(px + 14, H * 0.43);
+    ctx.stroke();
+    // 전선 (다음 기둥까지 추정)
+    ctx.strokeStyle = 'rgba(60,50,30,0.3)';
+    ctx.lineWidth = 0.8;
+    ctx.beginPath();
+    ctx.moveTo(px, H * 0.44);
+    ctx.quadraticCurveTo(px + W/12*0.5, H * 0.46, px + W/12, H * 0.44);
+    ctx.stroke();
+  });
+
+  // 나무 (중경, 중간 속도)
+  trees.forEach(tr => {
+    const px = ((tr.baseX * W - tx * 1.5 + W * 5) % W);
+    const baseY = H * 0.65;
+    const treeH = tr.h * H;
+    if(tr.style === 'conifer') {
+      ctx.fillStyle = 'rgba(20,35,20,0.85)';
+      ctx.beginPath();
+      ctx.moveTo(px, baseY - treeH);
+      ctx.lineTo(px - tr.w * W, baseY);
+      ctx.lineTo(px + tr.w * W, baseY);
+      ctx.closePath();
+      ctx.fill();
+    } else {
+      ctx.strokeStyle = 'rgba(40,30,15,0.7)';
+      ctx.lineWidth = tr.w * W * 0.8;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(px, baseY);
+      ctx.lineTo(px, baseY - treeH * 0.6);
+      ctx.stroke();
+      // 가지
+      [[-0.6,0.65],[-0.3,0.4],[0.5,0.5],[0.3,0.3],[-0.4,0.2]].forEach(([bx, by]) => {
+        ctx.lineWidth = tr.w * W * 0.3;
+        ctx.beginPath();
+        ctx.moveTo(px, baseY - treeH * by);
+        ctx.lineTo(px + bx * treeH * 0.45, baseY - treeH * (by + 0.15));
+        ctx.stroke();
+      });
+    }
+  });
+
+  // 철로 (전경)
+  const railY = H * 0.72;
+  const vanishX = W * 0.5;
+  const vanishY = H * 0.63;
+
+  // 왼쪽 레일
+  ctx.strokeStyle = 'rgba(100,80,40,0.6)';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(vanishX, vanishY);
+  ctx.lineTo(W * 0.1, H);
+  ctx.stroke();
+  // 오른쪽 레일
+  ctx.beginPath();
+  ctx.moveTo(vanishX, vanishY);
+  ctx.lineTo(W * 0.9, H);
+  ctx.stroke();
+
+  // 침목
+  const sleeperCount = 12;
+  for(let i=0;i<sleeperCount;i++) {
+    const prog = (i / sleeperCount + (t * 0.4 % 1)) % 1;
+    const sy = lerp(vanishY, H, prog);
+    const sw = lerp(0, W * 0.8, prog);
+    const sx = vanishX - sw / 2;
+    ctx.fillStyle = `rgba(60,45,20,${prog * 0.5})`;
+    ctx.fillRect(sx, sy - 2, sw, 4);
+  }
+
+  // 빛 날기 (후반)
+  if(scrollRatio > 0.7) {
+    const lightA = (scrollRatio - 0.7) / 0.3;
+    const lg = ctx.createRadialGradient(W*0.5, H*0.3, 0, W*0.5, H*0.3, W*0.8);
+    lg.addColorStop(0, `rgba(255,220,120,${lightA * 0.4})`);
+    lg.addColorStop(0.5, `rgba(255,180,60,${lightA * 0.15})`);
+    lg.addColorStop(1, 'transparent');
+    ctx.fillStyle = lg;
+    ctx.fillRect(0, 0, W, H);
+  }
+}
+
+function animate() {
+  resizeCanvas();
+  const docH = document.documentElement.scrollHeight - window.innerHeight;
+  const sy = window.scrollY;
+  scrollRatio = Math.min(sy / Math.max(docH, 1), 1);
+  trainX += 1.8;
+
+  ctx.clearRect(0, 0, W, H);
+  const pal = getPalette(scrollRatio);
+  drawScene(pal, trainX);
+
+  t += 0.016;
+  requestAnimationFrame(animate);
+}
+animate();
+
+// 진행바
+window.addEventListener('scroll', () => {
+  const d = document.documentElement;
+  const pct = d.scrollTop / (d.scrollHeight - d.clientHeight) * 100;
+  document.getElementById('progress-bar').style.width = pct + '%';
+});
+
+// IntersectionObserver
+const cards = document.querySelectorAll('.card');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+cards.forEach(c => obs.observe(c));
+</script>
+</body>
+</html>

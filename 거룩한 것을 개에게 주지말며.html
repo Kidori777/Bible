@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>거룩한 것과 진주의 가치</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&family=Noto+Serif+KR:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --surface-color: #161b22;
+            --gold: #d4a017;
+            --text-main: #e6edf3;
+            --text-muted: #8b949e;
+            --accent-blue: #58a6ff;
+            --accent-green: #3fb950;
+            --border-color: #30363d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(circle at 2px 2px, rgba(212, 160, 23, 0.05) 1px, transparent 0);
+            background-size: 40px 40px;
+            color: var(--text-main);
+            font-family: 'Noto Sans KR', sans-serif;
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 80px 0 60px;
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 4px 16px;
+            background: rgba(212, 160, 23, 0.1);
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .hero h1 {
+            font-family: 'Noto Serif KR', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            color: var(--gold);
+            margin-bottom: 20px;
+            font-weight: 900;
+        }
+
+        .hero-divider {
+            width: 60px;
+            height: 4px;
+            background: var(--gold);
+            margin: 0 auto 30px;
+        }
+
+        /* Typography & Layout */
+        h2 {
+            font-family: 'Noto Serif KR', serif;
+            font-size: 1.8rem;
+            color: var(--gold);
+            margin: 60px 0 30px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+        }
+
+        p {
+            margin-bottom: 16px;
+            word-break: keep-all;
+        }
+
+        /* Bible Verse Card */
+        .verse-card {
+            background: var(--surface-color);
+            border-left: 5px solid var(--gold);
+            padding: 30px;
+            margin: 30px 0;
+            position: relative;
+            border-radius: 0 12px 12px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .verse-card::before {
+            content: '"';
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 5rem;
+            color: rgba(212, 160, 23, 0.05);
+            font-family: 'Noto Serif KR', serif;
+        }
+
+        .bible-text {
+            font-weight: 700;
+            color: #ffffff;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            display: block;
+            white-space: normal;
+            word-wrap: break-word;
+        }
+
+        /* Information Blocks */
+        .front-card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .front-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold);
+        }
+
+        .person-card {
+            background: linear-gradient(145deg, #1c2128, #161b22);
+            border: 1px solid var(--accent-blue);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 4px solid var(--accent-blue);
+        }
+
+        .dialogue {
+            background: rgba(88, 166, 255, 0.05);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 3px solid var(--accent-blue);
+            font-style: italic;
+        }
+
+        /* Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .highlight {
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        .footer-text {
+            text-align: center;
+            margin-top: 80px;
+            padding: 40px 0;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 20px; }
+            .hero { padding: 40px 0; }
+            .verse-card { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header class="hero">
+        <span class="hero-badge">SPIRITUAL WISDOM</span>
+        <h1>거룩한 것을 개에게 주지 말라</h1>
+        <div class="hero-divider"></div>
+        <p class="highlight">진정한 가치를 알아보는 하늘의 지혜</p>
+    </header>
+
+    <section class="reveal">
+        <div class="verse-card">
+            <span class="bible-text">**거룩한 것을 개에게 주지 말며, 여러분의 진주를 돼지 앞에 던지지 마십시오. 그것들이 진주를 발로 짓밟고, 돌아서서 여러분을 물어뜯을지도 모릅니다. - 마태복음 7장 6절 -**</span>
+        </div>
+
+        <div class="front-card">
+            <p>한국에 선교사들이 들어와 여러 동네에 복음을 전할 때 있었던 일이라고 합니다. 가난하던 그 시절 갑자기 몹쓸 전염병이 동네마다 퍼져 많은 사람이 속절없이 죽게 되었습니다. 그때 마침 미국에서는 '페니실린'이라는 항생제가 상품화되어 큰 효과를 보고 있었습니다. 한 가난한 농부가 선교사를 찾아와 가족들이 전염병에 걸렸으니 좋은 약이 있으면 좀 팔라고 했습니다.</p>
+            
+            <p>선교사는 페니실린을 주면서 <span class="highlight">"이 약을 복용해 보시지요. 이 약은 최근에 발명된 아주 좋은 항생제입니다. 곧 병이 낫게 될 것입니다."</span>라고 말했습니다. 선교사의 설명을 들은 농부는 그렇게 좋은 약이라면 값이 아주 비쌀 것이라고 생각하며 값을 물었습니다. 그러나 선교사는 그 농부의 생각과는 다르게 그 약을 그냥 무료로 주는 것이었습니다.</p>
+        </div>
+
+        <div class="dialogue">
+            의아하게 생각한 농부는 일단 고맙다고 인사를 하고는 약을 받아 선교사의 집을 떠났습니다. 그리고 집으로 향하던 농부는 '그처럼 좋은 약이라면 무척 비싸야 할 것인데 그냥 주는 것을 보면 아무 효력 없는 약이 틀림없어!'라고 생각했습니다.
+        </div>
+
+        <div class="person-card">
+            <p>마침 선교사가 가만히 창문을 통해 밖을 보니, 농부가 약을 들고 그 집을 나가면서 별안간 그 귀한 약을 땅에 던지더니 발로 문질러 밟아 버리는 것이었습니다. 자기 온 가족이 그 무서운 전염병에서 고침 받을 수 있는 좋은 기회를 이 미련한 농부의 생각으로 놓치고 만 것입니다.</p>
+        </div>
+    </section>
+
+    <section class="reveal">
+        <h2>💎 진주를 알아보는 눈</h2>
+        <div class="front-card">
+            <p>우리에게도 하나님의 복과 저주는 그리 멀리 있지 않는 것 같습니다. 우리의 삶에 주어지는 진주를 찾는 것이 어찌 쉽겠습니까? 진주는 그 시절 돈 주고도 사기 힘든 것었습니다. 또한 세상에는 가짜 진주도 아주 많이 있습니다.</p>
+            <p>그러나 진주를 공짜로 주어도 진주를 알아보지 못한다면 그 사람은 어떤 사람이 될까요? 진주를 공짜로 주어도 발로 밟아 버리는 사람은 무엇이라 불러야 할까요?</p>
+        </div>
+
+        <div class="verse-card">
+            <span class="bible-text">**하나님은 모든 사람이 구원을 받으며 진리를 온전히 아는 데 이르기를 원하십니다. - 디모데전서 2장 4절 -**</span>
+        </div>
+
+        <p>하나님은 진주를 진주로 정확하게 볼 줄 아는 사람을 찾으십니다. 어떻게 보면 여러분들은 원하기만 한다면 언제든지 여러분들에게 진주를 공짜로 줄 하나님이 여러분 곁에 계십니다.</p>
+        
+        <div class="dialogue">
+            그러나 그 진주를 세상의 쾌락과 즐거움, 세상의 염려와 근심 속에 밟아 버린다면 하나님은 더 이상 그런 사람들에게 진주를 주지 말라고 하십니다. 그들은 오히려 그 진주를 준 사람에게 불평하고 판단하며 물어뜯으려 하기 때문입니다.
+        </div>
+    </section>
+
+    <section class="reveal">
+        <h2>🙏 구하고, 찾고, 두드리십시오</h2>
+        <p>나 자신을 한번 돌아보세요. 과연 나는 어떠한 사람인지... 때론 나 자신도 개 돼지와 같이 그들의 무리 속에 얼마나 많이 거하고 지냈는지 모릅니다.</p>
+        <p>나에게 진주를 받아가라고 하는 음성과 그 진주를 알아볼 수 있는 지혜를 값없이 주시는 하나님께 나아가서 구해보세요. 하나님은 끊임없이 우리가 돌이키기를 원하십니다.</p>
+
+        <div class="verse-card">
+            <span class="bible-text">**구하십시오, 그러면 여러분에게 주실 것입니다. 찾으십시오. 그러면 여러분이 찾아낼 것입니다. 문을 두드리십시오. 그러면 여러분에게 열어 주실 것입니다. 왜냐하면 구하는 사람마다 얻을 것이고, 찾는 사람이 찾아낼 것이고 두드리는 사람에게 열어 주실 것이기 때문입니다. - 마태복음 7장 7-8절 -**</span>
+        </div>
+
+        <p>나의 하나님께 진주를 알아볼 수 있도록 구하고 찾고 주님께 두드리시기 바랍니다. 왜냐하면 주님께 구하고 찾고 두드린 사람만이 진주를 알아 볼 수 있는 지혜를 얻기 때문입니다.</p>
+    </section>
+
+    <section class="reveal">
+        <div class="verse-card">
+            <span class="bible-text">**지혜를 얻은 자와 명철을 얻은 자는 복이 있나니 이는 지혜를 얻는 것이 은을 얻는 것보다 낫고 그 이익이 정금보다 나음이니라 지혜는 진주보다 귀하니 네가 사모하는 모든 것으로도 이에 비교할 수 없도다 - 잠언 3장 13절~15절 -**</span>
+        </div>
+
+        <p style="text-align: center; font-weight: bold; margin-top: 30px;">
+            하나님께서 우리에게 주시는 진정한 <span class="highlight">'진주'</span>를 헛되이 짓밟지 않고, <br>그 가치를 알아볼 수 있는 지혜를 구하는 사람이 되기를 바랍니다.
+        </p>
+
+        <div class="person-card" style="margin-top: 50px; border-color: var(--accent-green);">
+            <p class="highlight" style="color: var(--accent-green);">💊 페니실린(Penicillin)이란?</p>
+            <p style="font-size: 0.95rem;">페니실린은 세계 최초의 항생제로, 박테리아 감염을 치료하는 데 사용되는 약물입니다. 1928년, 영국의 과학자 알렉산더 플레밍(Alexander Fleming)이 우연히 발견했으며, 이후 수많은 생명을 구한 혁신적인 의약품으로 평가받고 있습니다.</p>
+        </div>
+    </section>
+
+    <div class="footer-text">
+        부산교회 2구역
+    </div>
+</div>
+
+<script>
+    const observerOptions = {
+        threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal').forEach(el => {
+        observer.observe(el);
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>시련이 가져온 변화 – 앨라배마의 목화바구미 이야기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700&family=Playfair+Display:wght@400;700;900&family=Cormorant+Garamond:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --dust: #c4a882;
+    --earth: #8b6b4a;
+    --rust: #a0522d;
+    --ash: #d4c4b0;
+    --ivory: #f5f0e8;
+    --deep: #1a1209;
+    --midnight: #0d0a06;
+    --gold: #d4a843;
+    --leaf: #6b8c5a;
+    --bloom: #c8a86b;
+    --split: 50%;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--midnight);
+    font-family: 'Noto Serif KR', serif;
+    color: var(--ash);
+    overflow-x: hidden;
+    cursor: crosshair;
+  }
+
+  /* ─── HERO: SPLIT WORLD ─── */
+  #hero {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .world-left {
+    position: absolute;
+    inset: 0;
+    width: var(--split);
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(101,67,33,0.6) 0%, transparent 60%),
+      linear-gradient(160deg, #2a1a0a 0%, #1a0d00 40%, #0d0a06 100%);
+    transition: width 1.2s cubic-bezier(0.77,0,0.18,1);
+  }
+
+  .world-right {
+    position: absolute;
+    inset: 0;
+    left: var(--split);
+    right: 0;
+    background:
+      radial-gradient(ellipse at 80% 50%, rgba(107,140,90,0.4) 0%, transparent 60%),
+      linear-gradient(20deg, #0a1a0d 0%, #0d1a08 40%, #060d04 100%);
+    transition: left 1.2s cubic-bezier(0.77,0,0.18,1);
+  }
+
+  /* Crack / divider */
+  .crack {
+    position: absolute;
+    left: calc(var(--split) - 1px);
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg,
+      transparent 0%,
+      var(--gold) 15%,
+      var(--dust) 50%,
+      var(--gold) 85%,
+      transparent 100%);
+    z-index: 10;
+    transition: left 1.2s cubic-bezier(0.77,0,0.18,1);
+    box-shadow: 0 0 20px rgba(212,168,67,0.5), 0 0 60px rgba(212,168,67,0.2);
+  }
+
+  .crack::before {
+    content: '';
+    position: absolute;
+    left: -3px;
+    top: 0;
+    bottom: 0;
+    width: 8px;
+    background: linear-gradient(180deg,
+      transparent,
+      rgba(212,168,67,0.15) 30%,
+      rgba(212,168,67,0.3) 50%,
+      rgba(212,168,67,0.15) 70%,
+      transparent);
+  }
+
+  /* Left world texture – dead cotton fields */
+  .field-dead {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40%;
+    background:
+      repeating-linear-gradient(
+        90deg,
+        transparent 0px,
+        transparent 18px,
+        rgba(139,107,74,0.15) 18px,
+        rgba(139,107,74,0.15) 20px
+      );
+    opacity: 0.6;
+  }
+
+  /* Right world texture – new growth */
+  .field-alive {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 45%;
+    background:
+      repeating-linear-gradient(
+        90deg,
+        transparent 0px,
+        transparent 14px,
+        rgba(107,140,90,0.12) 14px,
+        rgba(107,140,90,0.12) 16px
+      );
+    opacity: 0.5;
+  }
+
+  /* Floating dust particles (left) */
+  .dust-particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: var(--dust);
+    border-radius: 50%;
+    opacity: 0;
+    animation: floatDust linear infinite;
+  }
+
+  @keyframes floatDust {
+    0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+    10% { opacity: 0.4; }
+    90% { opacity: 0.2; }
+    100% { transform: translateY(-10vh) translateX(30px); opacity: 0; }
+  }
+
+  /* Floating pollen/seeds (right) */
+  .seed-particle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: var(--leaf);
+    border-radius: 50%;
+    opacity: 0;
+    animation: floatSeed ease-in-out infinite;
+    box-shadow: 0 0 4px rgba(107,140,90,0.8);
+  }
+
+  @keyframes floatSeed {
+    0% { transform: translateY(50px) scale(0); opacity: 0; }
+    20% { opacity: 0.6; transform: scale(1); }
+    80% { opacity: 0.3; }
+    100% { transform: translateY(-200px) translateX(-20px) scale(0.5); opacity: 0; }
+  }
+
+  /* Hero text */
+  .hero-content {
+    position: relative;
+    z-index: 20;
+    text-align: center;
+    pointer-events: none;
+    padding: 0 20px;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(11px, 1.5vw, 14px);
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    text-transform: uppercase;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 1s ease 0.5s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 7vw, 88px);
+    font-weight: 900;
+    line-height: 1;
+    color: var(--ivory);
+    margin: 16px 0;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeUp 1.2s ease 0.8s forwards;
+  }
+
+  .hero-title .accent {
+    color: var(--gold);
+    display: block;
+  }
+
+  .hero-sub {
+    font-family: 'Noto Serif KR', serif;
+    font-size: clamp(13px, 2vw, 18px);
+    color: var(--dust);
+    letter-spacing: 0.05em;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 1s ease 1.2s forwards;
+  }
+
+  .hero-labels {
+    position: absolute;
+    bottom: 15%;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 8%;
+    z-index: 20;
+    pointer-events: none;
+  }
+
+  .label-left, .label-right {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(10px, 1.3vw, 13px);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fadeIn 1s ease 1.8s forwards;
+  }
+
+  .label-left { color: var(--rust); }
+  .label-right { color: var(--leaf); }
+
+  .scroll-indicator {
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    animation: fadeIn 1s ease 2.2s forwards;
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 50px;
+    background: linear-gradient(180deg, var(--gold), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+
+  .scroll-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 1; transform: scaleY(1); }
+    50% { opacity: 0.4; transform: scaleY(0.6); }
+  }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+
+  /* ─── MAIN CONTENT ─── */
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ─── CHAPTER SECTIONS ─── */
+  .chapter {
+    position: relative;
+    padding: 80px 0;
+    overflow: hidden;
+  }
+
+  /* Alternating side accent line */
+  .chapter::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(180deg, transparent, var(--earth) 30%, var(--earth) 70%, transparent);
+    opacity: 0.3;
+  }
+
+  .chapter:nth-child(odd)::before { left: -20px; }
+  .chapter:nth-child(even)::before { right: -20px; }
+
+  /* Section badge */
+  .badge {
+    display: inline-block;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 11px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border: 1px solid;
+    margin-bottom: 28px;
+  }
+
+  .badge-dust { color: var(--dust); border-color: rgba(196,168,130,0.3); }
+  .badge-gold { color: var(--gold); border-color: rgba(212,168,67,0.3); }
+  .badge-leaf { color: var(--leaf); border-color: rgba(107,140,90,0.3); }
+
+  .chapter-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(26px, 4vw, 42px);
+    font-weight: 700;
+    color: var(--ivory);
+    line-height: 1.2;
+    margin-bottom: 32px;
+  }
+
+  .body-text {
+    font-size: clamp(15px, 2vw, 17px);
+    line-height: 2;
+    color: var(--ash);
+    letter-spacing: 0.03em;
+  }
+
+  .body-text + .body-text {
+    margin-top: 20px;
+  }
+
+  /* ─── TIMELINE / STORY NODES ─── */
+  .story-nodes {
+    position: relative;
+    padding: 60px 0;
+  }
+
+  .story-spine {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(180deg,
+      transparent,
+      var(--earth) 10%,
+      var(--gold) 50%,
+      var(--leaf) 90%,
+      transparent);
+    transform: translateX(-50%);
+  }
+
+  .node {
+    display: flex;
+    align-items: flex-start;
+    gap: 32px;
+    margin-bottom: 60px;
+    position: relative;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.7s cubic-bezier(0.25,0.46,0.45,0.94);
+  }
+
+  .node.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .node:nth-child(odd) {
+    flex-direction: row;
+    padding-right: calc(50% + 40px);
+  }
+
+  .node:nth-child(even) {
+    flex-direction: row-reverse;
+    padding-left: calc(50% + 40px);
+  }
+
+  .node-dot {
+    position: absolute;
+    left: 50%;
+    top: 8px;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid;
+    background: var(--midnight);
+    z-index: 2;
+    flex-shrink: 0;
+  }
+
+  .node-dot-rust { border-color: var(--rust); box-shadow: 0 0 12px rgba(160,82,45,0.4); }
+  .node-dot-gold { border-color: var(--gold); box-shadow: 0 0 12px rgba(212,168,67,0.4); }
+  .node-dot-leaf { border-color: var(--leaf); box-shadow: 0 0 12px rgba(107,140,90,0.4); }
+
+  .node-year {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(30px, 5vw, 52px);
+    font-weight: 900;
+    color: rgba(212,168,67,0.15);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .node-content {
+    flex: 1;
+  }
+
+  .node-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(16px, 2.5vw, 20px);
+    font-weight: 700;
+    color: var(--ivory);
+    margin-bottom: 12px;
+  }
+
+  .node-text {
+    font-size: clamp(13px, 1.8vw, 15px);
+    line-height: 1.9;
+    color: var(--dust);
+  }
+
+  /* ─── MONUMENT FEATURE ─── */
+  .monument-section {
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(212,168,67,0.08) 0%, transparent 60%),
+      rgba(26,18,9,0.6);
+    border: 1px solid rgba(212,168,67,0.1);
+    border-radius: 2px;
+    padding: 60px 40px;
+    margin: 60px 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .monument-section::before {
+    content: '1919';
+    position: absolute;
+    top: -20px;
+    right: 30px;
+    font-family: 'Playfair Display', serif;
+    font-size: 120px;
+    font-weight: 900;
+    color: rgba(212,168,67,0.04);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .monument-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 24px;
+    position: relative;
+  }
+
+  .monument-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .monument-quote {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(18px, 3vw, 26px);
+    font-weight: 400;
+    color: var(--ivory);
+    text-align: center;
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+
+  .monument-caption {
+    text-align: center;
+    font-size: 13px;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    font-family: 'Cormorant Garamond', serif;
+  }
+
+  /* ─── SCRIPTURE BLOCK ─── */
+  .scripture-section {
+    padding: 100px 0;
+    position: relative;
+  }
+
+  .scripture-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 30% 50%, rgba(107,140,90,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 50%, rgba(212,168,67,0.05) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .scripture-number {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(80px, 15vw, 160px);
+    font-weight: 900;
+    color: rgba(212,168,67,0.05);
+    text-align: center;
+    line-height: 0.8;
+    margin-bottom: -40px;
+    position: relative;
+    z-index: 0;
+  }
+
+  .scripture-card {
+    position: relative;
+    z-index: 1;
+    border-left: 3px solid var(--gold);
+    padding: 32px 40px;
+    background: rgba(26,18,9,0.5);
+    margin-bottom: 60px;
+  }
+
+  .scripture-verse {
+    font-family: 'Noto Serif KR', serif;
+    font-size: clamp(15px, 2.2vw, 19px);
+    line-height: 1.9;
+    color: var(--ivory);
+    margin-bottom: 16px;
+  }
+
+  .scripture-ref {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+
+  /* ─── MEDITATION CARDS ─── */
+  .meditation-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin: 40px 0;
+  }
+
+  @media (max-width: 600px) {
+    .meditation-grid { grid-template-columns: 1fr; }
+  }
+
+  .meditation-card {
+    background: rgba(26,18,9,0.4);
+    border: 1px solid rgba(196,168,130,0.1);
+    padding: 28px 24px;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease;
+  }
+
+  .meditation-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .meditation-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0.4;
+  }
+
+  .card-icon {
+    font-size: 28px;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .card-text {
+    font-size: clamp(13px, 1.8vw, 15px);
+    line-height: 1.9;
+    color: var(--ash);
+  }
+
+  .meditation-card:nth-child(2) { transition-delay: 0.1s; }
+  .meditation-card:nth-child(3) { transition-delay: 0.2s; }
+  .meditation-card:nth-child(4) { transition-delay: 0.3s; }
+
+  /* ─── FINAL VERSE ─── */
+  .final-section {
+    padding: 100px 0;
+    text-align: center;
+    position: relative;
+  }
+
+  .final-glow {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(107,140,90,0.08) 0%, transparent 70%);
+    pointer-events: none;
+    border-radius: 50%;
+  }
+
+  .final-crown {
+    font-size: 48px;
+    margin-bottom: 24px;
+    display: block;
+    animation: crownFloat 4s ease-in-out infinite;
+  }
+
+  @keyframes crownFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .final-verse {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(18px, 3vw, 28px);
+    font-weight: 400;
+    color: var(--ivory);
+    line-height: 1.7;
+    max-width: 600px;
+    margin: 0 auto 20px;
+  }
+
+  .final-ref {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+
+  /* ─── DIVIDERS ─── */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin: 60px 0;
+    opacity: 0.3;
+  }
+
+  .divider-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--dust), transparent);
+  }
+
+  .divider-glyph {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    color: var(--gold);
+  }
+
+  /* ─── WEEVIL ILLUSTRATION ─── */
+  .weevil-wrap {
+    display: flex;
+    justify-content: center;
+    margin: 48px 0;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.8s cubic-bezier(0.34,1.56,0.64,1);
+  }
+
+  .weevil-wrap.visible {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* ─── BG TEXTURE ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.025;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Horizontal scroll hint for mobile hero labels */
+  @media (max-width: 480px) {
+    .hero-labels { display: none; }
+    .hero-title { font-size: 32px; }
+    .node:nth-child(odd) { padding-right: 0; flex-direction: column; text-align: left; padding-left: 28px; }
+    .node:nth-child(even) { padding-left: 0; flex-direction: column; text-align: left; padding-left: 28px; }
+    .story-spine { left: 12px; }
+    .node-dot { left: 12px; }
+    .node-year { font-size: 36px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ─── HERO ─── -->
+<section id="hero">
+  <!-- Left: desolation -->
+  <div class="world-left">
+    <div class="field-dead"></div>
+    <!-- dust particles -->
+    <div class="dust-particle" style="left:10%;animation-duration:8s;animation-delay:0s"></div>
+    <div class="dust-particle" style="left:22%;animation-duration:11s;animation-delay:2s"></div>
+    <div class="dust-particle" style="left:35%;animation-duration:9s;animation-delay:4s"></div>
+    <div class="dust-particle" style="left:45%;animation-duration:13s;animation-delay:1s"></div>
+    <div class="dust-particle" style="left:8%;animation-duration:15s;animation-delay:6s"></div>
+    <div class="dust-particle" style="left:30%;animation-duration:10s;animation-delay:3s"></div>
+  </div>
+
+  <!-- Right: new life -->
+  <div class="world-right">
+    <div class="field-alive"></div>
+    <!-- seed particles -->
+    <div class="seed-particle" style="left:10%;animation-duration:6s;animation-delay:1s"></div>
+    <div class="seed-particle" style="left:25%;animation-duration:8s;animation-delay:3s"></div>
+    <div class="seed-particle" style="left:40%;animation-duration:7s;animation-delay:0.5s"></div>
+    <div class="seed-particle" style="left:60%;animation-duration:9s;animation-delay:2s"></div>
+    <div class="seed-particle" style="left:75%;animation-duration:5s;animation-delay:4s"></div>
+    <div class="seed-particle" style="left:15%;animation-duration:11s;animation-delay:5s"></div>
+  </div>
+
+  <!-- Crack / split line -->
+  <div class="crack" id="crack"></div>
+
+  <!-- Center content -->
+  <div class="hero-content">
+    <div class="hero-eyebrow">Alabama · 1915 – 1919 · Enterprise</div>
+    <h1 class="hero-title">
+      시련이 가져온
+      <span class="accent">변화</span>
+    </h1>
+    <p class="hero-sub">앨라배마의 목화바구미 이야기</p>
+  </div>
+
+  <div class="hero-labels">
+    <span class="label-left">목화의 황폐 ← 재앙</span>
+    <span class="label-right">새 생명 → 땅콩·콩·옥수수</span>
+  </div>
+
+  <div class="scroll-indicator">
+    <div class="scroll-line"></div>
+    <span class="scroll-text">Scroll</span>
+  </div>
+</section>
+
+<!-- ─── MAIN STORY ─── -->
+<main style="position:relative;z-index:1;">
+  <div class="container">
+
+    <!-- Part 1: The dependence -->
+    <section class="chapter">
+      <span class="badge badge-dust">1890년대 · 의존</span>
+      <h2 class="chapter-heading">목화 하나에 걸린 남부</h2>
+      <p class="body-text">1890년대 미국 남부의 많은 지역은 목화 농사에 의존하고 있었습니다. 특히 앨라배마 주의 농부들에게 목화는 거의 유일한 생계 수단이었습니다.</p>
+    </section>
+
+    <div class="divider">
+      <div class="divider-line"></div>
+      <span class="divider-glyph">✦</span>
+      <div class="divider-line"></div>
+    </div>
+
+    <!-- Part 2: The arrival -->
+    <section class="chapter">
+      <span class="badge badge-dust">1890년대 · 침입</span>
+      <h2 class="chapter-heading">멕시코에서 온 작은 곤충</h2>
+      <p class="body-text">그런데 어느 날 예상하지 못한 일이 일어났습니다. 멕시코에서 넘어온 작은 곤충 하나가 미국 남부 전역으로 퍼지기 시작했습니다. 그 곤충의 이름은 목화바구미(Boll Weevil)였습니다.</p>
+    </section>
+
+    <!-- Weevil illustration -->
+    <div class="weevil-wrap scroll-reveal" id="weevilArt">
+      <svg viewBox="0 0 280 180" width="280" height="180" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="wg" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#8b6b4a"/>
+            <stop offset="100%" stop-color="#4a2c10"/>
+          </radialGradient>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="3" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <!-- Glow background -->
+        <ellipse cx="140" cy="90" rx="100" ry="70" fill="rgba(139,107,74,0.06)"/>
+        <!-- Cotton boll (dead) - left -->
+        <circle cx="60" cy="80" r="22" fill="none" stroke="rgba(160,82,45,0.4)" stroke-width="1"/>
+        <circle cx="60" cy="80" r="14" fill="rgba(101,67,33,0.3)"/>
+        <line x1="60" y1="58" x2="60" y2="50" stroke="rgba(139,107,74,0.5)" stroke-width="1.5"/>
+        <text x="52" y="86" font-family="serif" font-size="10" fill="rgba(196,168,130,0.6)">枯</text>
+        <!-- Weevil body -->
+        <ellipse cx="140" cy="90" rx="28" ry="18" fill="url(#wg)" filter="url(#glow)"/>
+        <!-- Wing pattern -->
+        <ellipse cx="133" cy="88" rx="12" ry="9" fill="rgba(74,44,16,0.5)" stroke="rgba(212,168,67,0.2)" stroke-width="0.5"/>
+        <ellipse cx="147" cy="88" rx="12" ry="9" fill="rgba(74,44,16,0.5)" stroke="rgba(212,168,67,0.2)" stroke-width="0.5"/>
+        <!-- Head/snout -->
+        <ellipse cx="140" cy="76" rx="9" ry="7" fill="#6b4c28"/>
+        <line x1="140" y1="69" x2="140" y2="58" stroke="#8b6b4a" stroke-width="2" stroke-linecap="round"/>
+        <!-- Legs -->
+        <line x1="120" y1="88" x2="105" y2="78" stroke="#8b6b4a" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="118" y1="93" x2="102" y2="93" stroke="#8b6b4a" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="120" y1="98" x2="105" y2="108" stroke="#8b6b4a" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="160" y1="88" x2="175" y2="78" stroke="#8b6b4a" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="162" y1="93" x2="178" y2="93" stroke="#8b6b4a" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="160" y1="98" x2="175" y2="108" stroke="#8b6b4a" stroke-width="1.5" stroke-linecap="round"/>
+        <!-- Eyes -->
+        <circle cx="136" cy="74" r="2" fill="rgba(212,168,67,0.8)"/>
+        <circle cx="144" cy="74" r="2" fill="rgba(212,168,67,0.8)"/>
+        <!-- Latin label -->
+        <text x="140" y="155" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="11" fill="rgba(196,168,130,0.5)" letter-spacing="2">Anthonomus grandis</text>
+        <text x="140" y="170" text-anchor="middle" font-family="Cormorant Garamond, serif" font-size="10" fill="rgba(212,168,67,0.4)" letter-spacing="1.5">목화바구미</text>
+        <!-- Arrow pointing right toward new growth -->
+        <line x1="178" y1="90" x2="210" y2="90" stroke="rgba(212,168,67,0.3)" stroke-width="1" stroke-dasharray="3,3"/>
+        <polygon points="210,86 218,90 210,94" fill="rgba(212,168,67,0.3)"/>
+        <!-- Peanut plant (new hope) - right -->
+        <circle cx="232" cy="72" r="16" fill="none" stroke="rgba(107,140,90,0.4)" stroke-width="1"/>
+        <line x1="232" y1="88" x2="232" y2="102" stroke="rgba(107,140,90,0.5)" stroke-width="1.5"/>
+        <ellipse cx="224" cy="78" rx="8" ry="5" fill="rgba(107,140,90,0.3)" transform="rotate(-20,224,78)"/>
+        <ellipse cx="240" cy="78" rx="8" ry="5" fill="rgba(107,140,90,0.3)" transform="rotate(20,240,78)"/>
+        <ellipse cx="232" cy="68" rx="7" ry="5" fill="rgba(107,140,90,0.35)"/>
+        <text x="232" y="75" text-anchor="middle" font-family="serif" font-size="9" fill="rgba(107,140,90,0.7)">芽</text>
+      </svg>
+    </div>
+
+    <!-- Timeline nodes -->
+    <section class="story-nodes">
+      <div class="story-spine"></div>
+
+      <div class="node scroll-reveal">
+        <div class="node-dot node-dot-rust"></div>
+        <div class="node-content">
+          <div class="node-year">1890</div>
+          <div class="node-title">목화 단일경작의 전성기</div>
+          <p class="node-text">앨라배마의 땅은 온통 목화밭이었습니다. 농부들은 단 하나의 작물에 생계 전부를 맡겼습니다. 그 안정처럼 보이던 의존이 사실은 가장 큰 위험이었습니다.</p>
+        </div>
+      </div>
+
+      <div class="node scroll-reveal">
+        <div class="node-dot node-dot-rust"></div>
+        <div class="node-content">
+          <div class="node-year">1910</div>
+          <div class="node-title">바구미의 침략, 수확의 붕괴</div>
+          <p class="node-text">이 작은 곤충은 목화 열매 속에 알을 낳고 작물을 망가뜨렸습니다. 1910년대에 이르러 앨라배마 지역까지 퍼지자 목화 수확량은 급격히 줄어들었습니다. 농부들의 삶은 순식간에 흔들렸습니다.</p>
+        </div>
+      </div>
+
+      <div class="node scroll-reveal">
+        <div class="node-dot node-dot-gold"></div>
+        <div class="node-content">
+          <div class="node-year">1915</div>
+          <div class="node-title">절망 속에서 찾은 다른 길</div>
+          <p class="node-text">그러나 절망 속에서 사람들은 다른 길을 찾기 시작했습니다. 농부들은 더 이상 목화 한 가지만 재배할 수 없다는 것을 깨달았습니다. 그래서 땅콩과 콩, 옥수수 같은 다양한 작물을 재배하기 시작했습니다. 가축을 키우는 방법도 배우기 시작했습니다.</p>
+        </div>
+      </div>
+
+      <div class="node scroll-reveal">
+        <div class="node-dot node-dot-leaf"></div>
+        <div class="node-content">
+          <div class="node-year">1918</div>
+          <div class="node-title">예상 밖의 번영</div>
+          <p class="node-text">이 변화는 예상 밖의 결과를 가져왔습니다. 목화 한 작물에 의존하던 때보다 여러 작물을 함께 재배하면서 농가 경제가 더 안정되고 좋아지기 시작한 것입니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Monument section -->
+    <div class="monument-section scroll-reveal" id="monument">
+      <div class="monument-icon">
+        <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="mg" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#d4a843"/>
+              <stop offset="100%" stop-color="#c87941"/>
+            </linearGradient>
+          </defs>
+          <!-- Monument pillar -->
+          <rect x="22" y="12" width="16" height="36" rx="1" fill="none" stroke="url(#mg)" stroke-width="1.5"/>
+          <rect x="18" y="44" width="24" height="5" rx="1" fill="none" stroke="url(#mg)" stroke-width="1.5"/>
+          <rect x="14" y="49" width="32" height="4" rx="1" fill="none" stroke="rgba(212,168,67,0.5)" stroke-width="1"/>
+          <!-- Small weevil atop monument -->
+          <ellipse cx="30" cy="9" rx="6" ry="4" fill="rgba(212,168,67,0.3)"/>
+          <circle cx="30" cy="7" r="2.5" fill="rgba(212,168,67,0.4)"/>
+          <line x1="30" y1="4.5" x2="30" y2="2" stroke="rgba(212,168,67,0.5)" stroke-width="1"/>
+        </svg>
+      </div>
+      <p class="monument-quote">특히 앨라배마의 엔터프라이즈(Enterprise)라는 마을은<br>이 변화의 상징적인 장소가 되었습니다.</p>
+      <p class="body-text" style="text-align:center;margin:20px 0;">1919년, 그 마을 사람들은 놀라운 결정을 내렸습니다. 그들은 자신들의 삶을 힘들게 했던 바로 그 곤충을 기억하기 위해 목화바구미 기념비(Boll Weevil Monument)를 세웠습니다.</p>
+      <div class="divider" style="opacity:0.2;margin:24px 0;">
+        <div class="divider-line"></div>
+        <span class="divider-glyph" style="color:var(--gold)">✦</span>
+        <div class="divider-line"></div>
+      </div>
+      <p class="body-text" style="text-align:center;">목화바구미는 큰 피해를 가져왔지만, 그 사건이 사람들에게 농업을 바꾸고 새로운 길을 찾게 만든 계기가 되었기 때문입니다. 작은 곤충 하나가 사람들의 삶을 흔들었지만 동시에 변화와 새로운 가능성의 시작이 되었습니다.</p>
+      <div class="monument-caption" style="margin-top:28px;">Enterprise, Alabama · Boll Weevil Monument · 1919</div>
+    </div>
+
+    <div class="divider">
+      <div class="divider-line"></div>
+      <span class="divider-glyph">✦</span>
+      <div class="divider-line"></div>
+    </div>
+
+    <!-- Scripture section -->
+    <section class="scripture-section">
+      <div class="scripture-bg"></div>
+      <span class="badge badge-gold" style="display:block;text-align:center;margin-bottom:0;">말씀 묵상</span>
+      <div class="scripture-number">1:12</div>
+
+      <div class="scripture-card">
+        <p class="scripture-verse">"시련을 견디는 사람은 복이 있습니다. 그가 시험을 거쳐 인정받게 되었을 때 주님께서 그분을 사랑하는 사람들에게 약속하신 생명의 면류관을 받을 것이기 때문입니다."</p>
+        <span class="scripture-ref">야고보서 1장 12절</span>
+      </div>
+
+      <p class="body-text">우리의 삶에도 예상하지 못한 시련이 찾아옵니다. 그 순간에는 그것이 단지 어려움처럼 보일 뿐입니다.</p>
+      <p class="body-text" style="margin-top:20px;">그러나 하나님은 때로 그 시련을 통해 새로운 길을 열어 주십니다.</p>
+    </section>
+
+    <!-- Meditation cards -->
+    <div class="meditation-grid">
+      <div class="meditation-card scroll-reveal">
+        <span class="card-icon">🌾</span>
+        <p class="card-text">야고보서는 말합니다. "여러 가지 시련을 당할 때 그것을 큰 기쁨으로 여기십시오." (야고보서 1장 2절)</p>
+      </div>
+      <div class="meditation-card scroll-reveal">
+        <span class="card-icon">🌱</span>
+        <p class="card-text">시련은 우리 믿음을 시험하지만 동시에 인내를 만들어 내고 우리를 더 성숙하게 합니다.</p>
+      </div>
+      <div class="meditation-card scroll-reveal">
+        <span class="card-icon">🙏</span>
+        <p class="card-text">새로운 학기, 새로운 환경, 새로운 도전 앞에 설 때 우리는 하나님께 지혜를 구할 수 있습니다.</p>
+      </div>
+      <div class="meditation-card scroll-reveal">
+        <span class="card-icon">👑</span>
+        <p class="card-text">"너희 가운데 누구든지 지혜가 부족하거든 모든 사람에게 후히 주시고 꾸짖지 아니하시는 하나님께 구하라." (야고보서 1장 5절)</p>
+      </div>
+    </div>
+
+    <!-- Final section -->
+    <section class="final-section">
+      <div class="final-glow"></div>
+      <span class="final-crown">👑</span>
+      <p class="final-verse">어쩌면 오늘 우리의 어려움도 훗날 돌아보면 하나님이 주신 새로운 길의 시작일지 모릅니다.</p>
+      <div class="divider" style="margin:32px auto;max-width:300px;opacity:0.4;">
+        <div class="divider-line"></div>
+        <span class="divider-glyph">✦</span>
+        <div class="divider-line"></div>
+      </div>
+      <span class="final-ref">James 1:2–5, 12 · 야고보서</span>
+    </section>
+
+  </div>
+</main>
+
+<script>
+  // ─── Hero split animation on load ───
+  setTimeout(() => {
+    document.documentElement.style.setProperty('--split', '50%');
+  }, 100);
+
+  // Interactive crack follows mouse in hero
+  const hero = document.getElementById('hero');
+  const crack = document.getElementById('crack');
+
+  hero.addEventListener('mousemove', (e) => {
+    const pct = (e.clientX / window.innerWidth) * 100;
+    const clamped = Math.max(20, Math.min(80, pct));
+    document.documentElement.style.setProperty('--split', clamped + '%');
+    crack.style.left = 'calc(' + clamped + '% - 1px)';
+    document.querySelector('.world-left').style.width = clamped + '%';
+    document.querySelector('.world-right').style.left = clamped + '%';
+  });
+
+  hero.addEventListener('mouseleave', () => {
+    document.documentElement.style.setProperty('--split', '50%');
+    crack.style.left = 'calc(50% - 1px)';
+    document.querySelector('.world-left').style.width = '50%';
+    document.querySelector('.world-right').style.left = '50%';
+  });
+
+  // ─── Touch support for mobile ───
+  hero.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    const touch = e.touches[0];
+    const pct = (touch.clientX / window.innerWidth) * 100;
+    const clamped = Math.max(15, Math.min(85, pct));
+    document.documentElement.style.setProperty('--split', clamped + '%');
+    crack.style.left = 'calc(' + clamped + '% - 1px)';
+    document.querySelector('.world-left').style.width = clamped + '%';
+    document.querySelector('.world-right').style.left = clamped + '%';
+  }, { passive: false });
+
+  // ─── Smooth transitions on world elements ───
+  document.querySelector('.world-left').style.transition = 'width 0.08s ease';
+  document.querySelector('.world-right').style.transition = 'left 0.08s ease';
+  crack.style.transition = 'left 0.08s ease';
+
+  // ─── Scroll reveal ───
+  const reveals = document.querySelectorAll('.scroll-reveal');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+
+  reveals.forEach(el => observer.observe(el));
+
+  // Also observe meditation cards
+  document.querySelectorAll('.meditation-card').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

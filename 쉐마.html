@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>교회 집회 말씀 개요 - 쉐마</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&family=Noto+Serif+KR:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --surface-color: #161b22;
+            --gold: #d4a017;
+            --blue-accent: #58a6ff;
+            --green-accent: #238636;
+            --text-main: #c9d1d9;
+            --text-bright: #ffffff;
+            --font-serif: 'Noto Serif KR', serif;
+            --font-sans: 'Noto Sans KR', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(circle at 50% 50%, rgba(212, 160, 23, 0.05) 0%, transparent 80%);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            line-height: 1.8;
+            word-break: keep-all;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 100px 20px;
+            background: linear-gradient(to bottom, rgba(22, 27, 34, 0), var(--surface-color));
+            border-radius: 20px;
+            margin-bottom: 60px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            background: rgba(212, 160, 23, 0.1);
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-family: var(--font-serif);
+            font-size: clamp(1.8rem, 5vw, 3rem);
+            color: var(--text-bright);
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .hero p {
+            font-family: var(--font-serif);
+            font-size: 1.2rem;
+            color: var(--gold);
+            opacity: 0.9;
+        }
+
+        /* Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Verses - 핵심 지침 반영 */
+        .verse-card {
+            background: var(--surface-color);
+            border-left: 5px solid var(--gold);
+            padding: 30px;
+            margin: 40px 0;
+            position: relative;
+            border-radius: 0 15px 15px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow-wrap: break-word; /* 틀 안에서 줄바꿈 보장 */
+        }
+
+        .verse-card::before {
+            content: '“';
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            font-size: 4rem;
+            color: rgba(212, 160, 23, 0.1);
+            font-family: var(--font-serif);
+        }
+
+        /* 성경 말씀 강조 및 연결 지침 */
+        b {
+            color: var(--gold);
+            font-weight: 700;
+            font-style: normal; /* 이탤릭 절대 금지 */
+        }
+
+        /* 성경 구절 뒤 설명이 붙어 나오도록 처리 */
+        .no-wrap {
+            display: inline-block;
+            white-space: nowrap;
+        }
+
+        /* Info Cards */
+        .front-card {
+            background: var(--surface-color);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            transition: transform 0.3s ease;
+        }
+
+        .front-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold);
+        }
+
+        .person-card {
+            background: rgba(31, 111, 235, 0.05);
+            border: 1px dashed var(--blue-accent);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+
+        .person-card h3 {
+            color: var(--blue-accent);
+            margin-bottom: 15px;
+            font-family: var(--font-serif);
+        }
+
+        /* Dialogue */
+        .dialogue {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            font-style: normal; /* 이탤릭 강조였으나 지침에 따라 일반체 */
+            border-left: 3px solid var(--green-accent);
+        }
+
+        /* Mission List */
+        .mission-list {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .mission-list li {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 12px;
+        }
+
+        .mission-list li::before {
+            content: '✦';
+            position: absolute;
+            left: 0;
+            color: var(--gold);
+        }
+
+        /* Table */
+        .table-container {
+            overflow-x: auto;
+            margin: 30px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--surface-color);
+            border-radius: 10px;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        th {
+            background: var(--gold);
+            color: var(--bg-color);
+        }
+
+        h2 {
+            font-family: var(--font-serif);
+            font-size: 1.8rem;
+            color: var(--gold);
+            margin: 60px 0 30px;
+            border-bottom: 2px solid rgba(212, 160, 23, 0.3);
+            padding-bottom: 10px;
+        }
+
+        .footer-text {
+            text-align: center;
+            margin-top: 80px;
+            padding: 40px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            font-weight: 700;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 1.8rem; }
+            .container { padding: 20px 15px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header class="hero reveal">
+        <div class="hero-badge">성경 말씀 개요</div>
+        <h1>📖 “쉐마가 사라질 때, 기억이 끊긴다”</h1>
+        <p>— 신명기 6장과 사사기 2장이 말하는 신앙 계승의 비밀</p>
+    </header>
+
+    <section class="reveal">
+        <h2>여기서 잠깐!</h2>
+        
+        <div class="front-card">
+            <h3>1️⃣ 쉐마(Shema)의 뜻부터</h3>
+            <p>쉐마(שְׁמַע)는 히브리어 동사로 단순히 <b>“듣다”</b>가 아닙니다.</p>
+            <p>👉 쉐마 = <b>듣고, 이해하고, 마음에 새겨, 삶으로 순종하다</b> 라는 의미가 있습니다.<br>
+            히브리 사고에서 “듣는다”는 말은 행동까지 포함한 전인적 반응을 뜻합니다.<br>
+            l 전인적 반응이란 특정 상황에서 지적 이해, 감정적 공감, 행동적 실천이 함께 드러나는 반응<br>
+            그래서 성경에서 <b>“듣지 아니하였다” = “알았지만 순종하지 않았다”</b> 라는 의미로 사용됩니다.</p>
+        </div>
+
+        <div class="verse-card">
+            <h3>2️⃣ 쉐마는 성경 어디에 있나?</h3>
+            <p>쉐마는 <span class="no-wrap"><b>신명기 6장 4–9절</b>을</span> 가리키는 말입니다.<br>
+            <b>“이스라엘이여! 들으십시오. (쉐마) 여호와는 우리 하나님이시며, 여호와는 오직 한 분이십니다. 그대는 온 마음과 온 혼과 온 힘으로 여호와 그대의 하나님을 사랑해야 합니다.” (신 6:4–5)</b><br>
+            유대인에게 이 말씀은<br>
+            ✔ 가장 중요한 신앙 고백이자 ✔ 하루의 시작과 끝에 드리는 기도이며 ✔ 평생 반복하는 핵심 말씀입니다.</p>
+        </div>
+
+        <div class="front-card">
+            <h3>3️⃣ 왜 하나님은 “믿어라”가 아니라 “들으라”고 하셨을까?</h3>
+            <p>하나님은 이렇게 말씀하지 않셨습니다.<br>
+            ❌ “이스라엘아, 이해하라” / ❌ “이스라엘아, 증명하라” / ❌ “이스라엘아, 외워라”<br>
+            ✅ <b>“들으십시오 (쉐마)”</b><br>
+            왜냐하면 관계는 귀로 시작되기 때문입니다. 아이는 설명보다 목소리를 먼저 압니다. 사랑은 논리보다 부름으로 시작됩니다.<br>
+            ➡️ 쉐마는 하나님과의 관계로 들어오는 문입니다.</p>
+        </div>
+
+        <div class="front-card">
+            <h3>4️⃣ 쉐마의 핵심 구조 (아주 쉽게)</h3>
+            <p>쉐마는 3단 구조입니다.</p>
+            <ul class="mission-list">
+                <li><b>① 하나님은 누구신가?</b>: “여호와는 오직 하나” ➡️ 삶의 중심은 여러 개가 아니라 하나 ➡️ 하나님은 옵션이 아니라 기준</li>
+                <li><b>② 우리는 어떻게 반응해야 하는가?</b>: “마음 · 뜻 · 힘을 다해 사랑하라” ➡️ 감정만이 아니라 생각, 의지, 삶의 에너지 전체로</li>
+                <li><b>③ 이 사랑은 어떻게 전해지는가?</b>: “그대는 자녀에게 이 말씀을 부지런히 가르치고…” ➡️ 일상 속에서 자연스럽게 흘러가게</li>
+            </ul>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr><th>구분</th><th>쉐마</th><th>종교 교육</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>중심</td><td>관계 중심</td><td>규칙 중심</td></tr>
+                    <tr><td>범위</td><td>삶 전체</td><td>특정 시간</td></tr>
+                    <tr><td>방식</td><td>이야기와 해석</td><td>지식 전달</td></tr>
+                    <tr><td>태도</td><td>본보기</td><td>명령</td></tr>
+                    <tr><td>동기</td><td>사랑에서 시작</td><td>의무에서 시작</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <p>➡️ 쉐마가 사라지면 신앙은 규범으로 남고, 다음 세대는 떠나게 됩니다.</p>
+    </section>
+
+    <section class="reveal">
+        <h2>1️⃣ 신명기 6장: 하나님이 설계하신 전승 방식</h2>
+        <div class="verse-card">
+            <b>“이스라엘이여! 들으십시오. 여호와는 우리 하나님이시며, 여호와는 오직 한 분이십니다. 그대는 온 마음과 온 혼과 온 힘으로 여호와 그대의 하나님을 사랑해야 합니다. 오늘 내가 그대에게 명령하는 이 말씀을 그대의 마음에 간직해야 합니다.” (신 6:4–6)</b>
+        </div>
+        <p>🔎 핵심: 신앙은 ‘정보’가 아니라 ‘사랑의 관계’로 시작합니다. 자녀는 하나님에 대한 설명보다 하나님을 향한 부모의 사랑을 먼저 봅니다.</p>
+
+        <h2>2️⃣ 쉐마의 방식: ‘가르치라’가 아니라 ‘살아내라’</h2>
+        <div class="verse-card">
+            <b>“그대는 자녀에게 이 말씀을 부지런히 가르치고, 그대가 집에 앉아 있을 때나 길을 갈 때나 누울 때나 일어날 때나 이 말씀을 그들에게 말해 주어야 합니다.” (신 6:7)</b>
+        </div>
+        <ul class="mission-list">
+            <li>집에 앉을 때 ➡️ 일상 대화</li>
+            <li>길을 갈 때 ➡️ 삶의 해석</li>
+            <li>누울 때 ➡️ 하루의 의미 정리</li>
+            <li>일어날 때 ➡️ 삶의 방향 설정</li>
+        </ul>
+    </section>
+
+    <section class="reveal">
+        <h2>3️⃣ 풍요의 위험: “여호와를 잊지 않도록 주의하라”</h2>
+        <div class="verse-card">
+            <b>“그대가 건축하지 않은 크고 좋은 성들을 주시고... 먹고 만족하게 될 것입니다. 그때에 그대는 이집트 땅 곧 노예살이하던 집에서 그대를 이끌어 내신 여호와를 잊지 않도록 주의하십시오.” (신명기 6:10–12 요약)</b>
+        </div>
+        <p>🔎 핵심: 신앙이 끊어지는 가장 큰 이유는 ‘고난’이 아니라 ‘안정된 풍요’입니다.</p>
+
+        <h2>4️⃣ 사사기 2장: 붕괴 현장 보고서</h2>
+        <div class="verse-card">
+            <b>“그리고 그 세대도 모두 그들의 조상에게로 돌아갔다. 그러고 나서 또 다른 세대가 그들 뒤에 일어났는데, 그들은 여호와를 알지 못하였고 그분께서 이스라엘을 위하여 하신 일도 알지 못하였다.” (사사기 2:10)</b>
+        </div>
+        <p>🔥 문제는 무신론이 아닙니다. 하나님이 ‘이야기’가 아니라 ‘기억’이 되지 못했다는 것입니다.</p>
+    </section>
+
+    <section class="reveal">
+        <h2>부모의 하나님을 자신의 하나님으로 받아들인 사례</h2>
+
+        <div class="person-card">
+            <h3>1. 아브라함의 하나님 → 이삭</h3>
+            <p><span class="no-wrap"><b>창세기 22장 6절</b>에는</span> “그리고 두 사람은 함께 걸어갔다”고 기록됩니다. 이삭은 아브라함의 믿음 뒤에 숨지 않고 스스로 제물의 자리에 올라갔습니다. 그는 <span class="no-wrap"><b>창세기 26장 24절</b>에서</span> 말씀하시는 “나는 네 아버지 아브라함의 하나님이다”라는 선언을 통해 하나님을 자기 삶의 실제적인 분으로 경험하게 됩니다.</p>
+        </div>
+
+        <div class="person-card">
+            <h3>2. 이삭의 하나님 → 야곱 (정체성의 해체)</h3>
+            <p>야곱에게 하나님은 처음엔 수단이었습니다. <span class="no-wrap"><b>창세기 28장 20–22절</b>에서</span> 야곱이 한 서원은 거래 조건과 같았습니다. 하지만 얍복강에서 하나님은 물으십니다. <b>“네 이름이 무엇이냐?” (창 32:27)</b></p>
+            <div class="dialogue">
+                “나는 야곱(속이는 자)입니다.” ➡️ 이 고백은 자기 확신의 붕괴이며 신앙의 진정한 시작입니다.
+            </div>
+            <p>야곱은 축복을 얻었으나 다리를 절게 되었습니다. 이제 그는 매 걸음마다 하나님을 의식해야 하는 사람이 되었습니다. <span class="no-wrap"><b>창세기 32장 30절</b>에</span> 이르러서야 야곱은 그곳을 ‘브니엘’이라 부르며 하나님과 직접적인 관계를 맺습니다.</p>
+        </div>
+
+        <div class="person-card">
+            <h3>3. 모세의 하나님 → 여호수아 (임재의 계승)</h3>
+            <p><span class="no-wrap"><b>출애굽기 33장 11절</b>에</span> 따르면 여호수아는 모세가 떠난 후에도 천막(임재의 장소)을 떠나지 않았습니다. 하나님은 <span class="no-wrap"><b>여호수아기 1장 5절</b>에서</span> “내가 모세와 함께하였던 것처럼 너와 함께하겠다”고 약속하셨습니다. 여호수아의 신앙은 모세를 흉내 내는 것이 아니라, 모세가 붙들었던 하나님을 동일하게 붙드는 것이었습니다. <span class="no-wrap"><b>여호수아기 23장 8절</b>의</span> 고백처럼 그는 하나님을 굳게 붙잡았습니다.</p>
+        </div>
+
+        <div class="person-card">
+            <h3>4. 바울의 하나님 → 디모데</h3>
+            <p><span class="no-wrap"><b>디모데후서 1장 5절</b>에서</span> 바울은 외조모 로이스와 어머니 유니게의 믿음이 디모데에게 이어진 것을 축복합니다. 이는 가정에서 시작된 신앙이 한 개인의 인격적인 확신으로 꽃핀 최고의 사례입니다.</p>
+        </div>
+    </section>
+
+    <footer class="reveal">
+        <div class="verse-card" style="text-align: center; border-right: 5px solid var(--gold);">
+            <h3>🔑 결론</h3>
+            <p><b>하나님은 ‘부모의 신앙’을 계승하지 않으시고,<br> ‘자녀의 만남’을 새롭게 시작하신다.</b></p>
+        </div>
+        <div class="footer-text">
+            부산교회 2구역
+        </div>
+    </footer>
+</div>
+
+<script>
+    const observerOptions = { threshold: 0.1 };
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

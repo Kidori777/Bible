@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>아폴로 13호: 가장 성공적인 실패</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&family=Noto+Serif+KR:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --surface-color: #161b22;
+            --gold: #d4a017;
+            --text-main: #e6edf3;
+            --text-muted: #8b949e;
+            --accent-blue: #58a6ff;
+            --accent-green: #3fb950;
+            --border-color: #30363d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(circle at 2px 2px, rgba(212, 160, 23, 0.05) 1px, transparent 0);
+            background-size: 40px 40px;
+            color: var(--text-main);
+            font-family: 'Noto Sans KR', sans-serif;
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 80px 0 60px;
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 4px 16px;
+            background: rgba(212, 160, 23, 0.1);
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .hero h1 {
+            font-family: 'Noto Serif KR', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            color: var(--gold);
+            margin-bottom: 20px;
+            font-weight: 900;
+        }
+
+        .hero-divider {
+            width: 60px;
+            height: 4px;
+            background: var(--gold);
+            margin: 0 auto 30px;
+        }
+
+        /* Typography & Layout */
+        h2 {
+            font-family: 'Noto Serif KR', serif;
+            font-size: 1.8rem;
+            color: var(--gold);
+            margin: 60px 0 30px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            color: var(--accent-blue);
+            margin: 40px 0 20px;
+        }
+
+        p {
+            margin-bottom: 16px;
+            word-break: keep-all;
+        }
+
+        /* Bible Verse Card */
+        .verse-card {
+            background: var(--surface-color);
+            border-left: 5px solid var(--gold);
+            padding: 30px;
+            margin: 30px 0;
+            position: relative;
+            border-radius: 0 12px 12px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .verse-card::before {
+            content: '"';
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 5rem;
+            color: rgba(212, 160, 23, 0.05);
+            font-family: 'Noto Serif KR', serif;
+        }
+
+        .bible-text {
+            font-weight: 700;
+            color: #ffffff;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            display: block;
+            white-space: normal;
+            word-wrap: break-word;
+        }
+
+        /* Cards */
+        .front-card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .front-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold);
+        }
+
+        .person-card {
+            background: linear-gradient(145deg, #1c2128, #161b22);
+            border: 1px solid var(--accent-blue);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 4px solid var(--accent-blue);
+        }
+
+        /* Dialogue & Lists */
+        .dialogue {
+            background: rgba(88, 166, 255, 0.05);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 3px solid var(--accent-blue);
+            font-style: italic;
+        }
+
+        .mission-list {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .mission-list li {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 12px;
+        }
+
+        .mission-list li::before {
+            content: '◈';
+            position: absolute;
+            left: 0;
+            color: var(--gold);
+        }
+
+        /* Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .highlight {
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        .footer-text {
+            text-align: center;
+            margin-top: 80px;
+            padding: 40px 0;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 20px; }
+            .hero { padding: 40px 0; }
+            .verse-card { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header class="hero">
+        <span class="hero-badge">FAITH & SCIENCE</span>
+        <h1>아폴로 13호, “가장 성공적인 실패”</h1>
+        <div class="hero-divider"></div>
+        <p class="highlight">인간의 한계 끝에서 만난 하나님의 손길</p>
+    </header>
+
+    <section class="reveal">
+        <h2>🛰️ 1. 아폴로 13호의 위기</h2>
+        <div class="front-card">
+            <p>1970년 4월 11일, 미국의 아폴로 13호가 달을 향해 발사되었습니다. 과학자들은 모든 것이 완벽하다고 확신했습니다. 그러나 출발 사흘째, 지구에서 약 20만 마일 떨어진 우주 공간에서 갑작스러운 사고가 터졌습니다.</p>
+            
+            <div class="dialogue">
+                “휴스턴, 문제가 발생했습니다.”
+            </div>
+            
+            <p>우주 비행사 <span class="highlight">잭 스위거트</span>의 다급한 목소리가 지구로 전송되었습니다. 산소탱크가 폭발하면서 전기 공급이 끊어지고, 산소와 물까지 부족해진 것입니다. 이제 달 착륙은 꿈도 꾸지 못하고, 오직 살아 돌아오는 것만이 목표가 되었습니다.</p>
+        </div>
+    </section>
+
+    <section class="reveal">
+        <h2>✨ 2. 인간의 한계와 하나님의 손길</h2>
+        <div class="person-card">
+            <p>NASA 본부는 급히 대책을 마련했습니다. 고장난 우주선에서 어떻게든 지구로 방향을 돌려야 했습니다. 그때 지휘 본부는 지구와 달 사이의 공허한 우주에서 <span class="highlight">북극성</span>을 기준으로 자세를 맞추라고 지시했습니다. 최첨단 장비가 다 멈춘 상황에서, 우주인들은 별빛을 따라 귀환의 방향을 잡아야 했습니다.</p>
+        </div>
+        
+        <p>하지만 그것만으로 충분하지 않았습니다. 좁은 달 착륙선에 몸을 의지한 채, 차갑게 식어가는 선실 안에서 그들은 언제 산소가 다 떨어질지, 언제 다시 폭발이 일어날지 알 수 없는 상황이었습니다.</p>
+
+        <div class="front-card">
+            <p>그때, 놀라운 일이 벌어졌습니다. **미국 전역의 교회들이 자발적으로 모여 기도하기 시작한 것입니다.** 백악관은 오전 9시를 국가 기도의 시간으로 선포했고, 수많은 미국 국민이 일제히 하늘을 향해 손을 모았습니다. 과학의 한계 앞에서, 온 나라가 하나님을 찾은 순간이었습니다. 우주 비행사들도 캡슐 안에서 서로 손을 잡고 기도했습니다.</p>
+        </div>
+    </section>
+
+    <section class="reveal">
+        <h2>🌊 3. 극적인 귀환</h2>
+        <p>수많은 위기를 넘기고, 마침내 아폴로 13호는 궤도를 수정하여 지구 대기권으로 진입했습니다. 통신이 끊긴 몇 분 동안, 전 세계는 숨을 죽이며 귀환을 기다렸습니다. 그리고 드디어 교신이 회복되었을 때, NASA 관제실은 환호와 눈물로 가득 찼습니다.</p>
+        
+        <div class="verse-card">
+            <span class="bible-text">아폴로 13호는 무사히 태평양에 착수했고, 대기하던 미 해군 군함이 그들을 구조했습니다. 그들이 배 위에 올라 가장 먼저 한 행동은 무엇이었을까요? 바로 **해군 군목의 손을 붙잡고 함께 기도하는 것이었습니다.**</span>
+        </div>
+
+        <div class="dialogue" style="text-align: center; font-size: 1.2rem;">
+            “Thank God! Praise the Lord! (하나님 감사합니다! 주님을 찬양합니다!)”
+        </div>
+        
+        <p>그들의 눈에는 눈물이 고여 있었고, 그 기도하는 모습은 그 주간 타임지 표지에 실렸습니다.</p>
+    </section>
+
+    <section class="reveal">
+        <h2>🙏 4. 신앙의 교훈</h2>
+        <div class="front-card">
+            <p>아폴로 13호의 귀환은 <span class="highlight">“인류의 가장 성공적인 실패”</span>로 불립니다. 달에는 가지 못했지만, 우주인들은 살아 돌아왔고, 세계는 다시 한 번 인간의 한계와 하나님의 위대하심을 깨달았습니다.</p>
+            <p>인간의 최고의 과학이 무너지는 순간, 우리는 하나님께 도움을 구할 수밖에 없습니다. 이것이 바로 **믿음의 첫걸음**입니다. 생존을 위해서, 안전을 위해서, 그리고 참된 만족을 얻기 위해서 우리는 하나님을 붙잡아야 합니다.</p>
+        </div>
+
+        <div class="verse-card">
+            <span class="bible-text">**나 눈을 들어 산들을 보리라. 나의 도움 어디서 오리오? 나의 도움은 여호와에게서, 하늘과 땅을 만드신 분에게서 온다네. - 시편 121편 1-2절 -**</span>
+        </div>
+        
+        <p style="text-align: center; font-weight: bold; margin-top: 30px;">
+            🌟 우리의 도움은 오직 천지(天地)를 지으신 여호와에게서 옵니다.
+        </p>
+    </section>
+
+    <div class="footer-text">
+        부산교회 2구역
+    </div>
+</div>
+
+<script>
+    const observerOptions = {
+        threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal').forEach(el => {
+        observer.observe(el);
+    });
+</script>
+
+</body>
+</html>

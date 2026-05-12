@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>성도가 죽으면 어디로 가는가</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --parchment: #f5f0e4;
+  --parchment2: #ede6d0;
+  --parchment3: #e0d8c0;
+  --ink:    #1a1410;
+  --ink2:   #3a3028;
+  --ink3:   #6a5e4a;
+  --gold:   #b8861a;
+  --gold2:  #d4a020;
+  --gold3:  #f0c040;
+  --olive:  #5a6e30;
+  --olive2: #7a9048;
+  --sky:    #3a6890;
+  --sky2:   #5a90c0;
+  --crimson:#8a2010;
+  --crimson2:#c03020;
+  --purple: #5a2870;
+  --purple2:#8a4aa0;
+  --warm:   rgba(26,20,16,0.07);
+  --line:   rgba(26,20,16,0.12);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+body {
+  background: #2a1e10;
+  color: var(--ink);
+  font-family:'Noto Serif KR', serif;
+  overflow-x:hidden;
+}
+
+/* ══ 가죽 표지 배경 ══ */
+body::before {
+  content:'';
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px, transparent 80px,
+      rgba(0,0,0,0.03) 80px, rgba(0,0,0,0.03) 81px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0px, transparent 80px,
+      rgba(0,0,0,0.03) 80px, rgba(0,0,0,0.03) 81px
+    ),
+    radial-gradient(ellipse 120% 80% at 50% 0%, #3a2510 0%, #1a0e06 100%);
+}
+
+/* ══════════════════ COVER — 두루마리 ══════════════════ */
+.scroll-cover {
+  position:relative; z-index:1;
+  min-height:100vh;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:60px 24px 80px;
+  overflow:hidden;
+}
+
+/* 두루마리 상단 롤 */
+.scroll-rod {
+  position:absolute; top:0; left:0; right:0; height:52px; z-index:3;
+  background:linear-gradient(180deg, #8b5e2a 0%, #c4882a 40%, #e8b448 55%, #c4882a 70%, #8b5e2a 100%);
+  box-shadow:0 4px 20px rgba(0,0,0,0.6), inset 0 2px 4px rgba(255,220,100,0.3);
+}
+.scroll-rod::before {
+  content:'';
+  position:absolute; left:-16px; top:4px; bottom:4px; width:32px; border-radius:50%;
+  background:radial-gradient(ellipse 60% 100%, #d4a030, #8b5e2a);
+  box-shadow:-2px 0 8px rgba(0,0,0,0.5);
+}
+.scroll-rod::after {
+  content:'';
+  position:absolute; right:-16px; top:4px; bottom:4px; width:32px; border-radius:50%;
+  background:radial-gradient(ellipse 60% 100%, #d4a030, #8b5e2a);
+  box-shadow:2px 0 8px rgba(0,0,0,0.5);
+}
+
+/* 두루마리 하단 롤 */
+.scroll-rod-bottom {
+  position:absolute; bottom:0; left:0; right:0; height:52px; z-index:3;
+  background:linear-gradient(0deg, #8b5e2a 0%, #c4882a 40%, #e8b448 55%, #c4882a 70%, #8b5e2a 100%);
+  box-shadow:0 -4px 20px rgba(0,0,0,0.6), inset 0 -2px 4px rgba(255,220,100,0.3);
+}
+.scroll-rod-bottom::before {
+  content:'';
+  position:absolute; left:-16px; top:4px; bottom:4px; width:32px; border-radius:50%;
+  background:radial-gradient(ellipse 60% 100%, #d4a030, #8b5e2a);
+  box-shadow:-2px 0 8px rgba(0,0,0,0.5);
+}
+.scroll-rod-bottom::after {
+  content:'';
+  position:absolute; right:-16px; top:4px; bottom:4px; width:32px; border-radius:50%;
+  background:radial-gradient(ellipse 60% 100%, #d4a030, #8b5e2a);
+  box-shadow:2px 0 8px rgba(0,0,0,0.5);
+}
+
+/* 두루마리 본체 */
+.scroll-paper {
+  position:relative; z-index:2;
+  max-width:700px; width:100%;
+  margin:0 auto;
+  padding:60px 48px 60px;
+  background:
+    linear-gradient(
+      105deg,
+      var(--parchment) 0%,
+      var(--parchment2) 30%,
+      #f8f2e0 50%,
+      var(--parchment2) 70%,
+      var(--parchment) 100%
+    );
+  box-shadow:
+    -8px 0 30px rgba(0,0,0,0.3),
+    8px 0 30px rgba(0,0,0,0.3),
+    0 0 60px rgba(0,0,0,0.2);
+  border-left:3px solid var(--parchment3);
+  border-right:3px solid var(--parchment3);
+}
+
+/* 종이 노이즈 텍스처 */
+.scroll-paper::before {
+  content:'';
+  position:absolute; inset:0; pointer-events:none; z-index:0; border-radius:2px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity:0.6;
+}
+
+.scroll-inner { position:relative; z-index:1; }
+
+/* 커버 장식 테두리 */
+.cover-frame {
+  border:2px solid rgba(184,134,26,.35);
+  padding:40px 32px;
+  position:relative;
+}
+.cover-frame::before {
+  content:'✦';
+  position:absolute; top:-12px; left:50%; transform:translateX(-50%);
+  background:var(--parchment2); padding:0 12px;
+  color:var(--gold); font-size:1.2rem;
+}
+.cover-frame::after {
+  content:'✦';
+  position:absolute; bottom:-12px; left:50%; transform:translateX(-50%);
+  background:var(--parchment2); padding:0 12px;
+  color:var(--gold); font-size:1.2rem;
+}
+
+/* 모서리 장식 */
+.corner { position:absolute; width:20px; height:20px; }
+.corner::before, .corner::after { content:''; position:absolute; background:var(--gold); }
+.corner::before { width:100%; height:2px; top:0; left:0; }
+.corner::after  { width:2px; height:100%; top:0; left:0; }
+.corner-tl { top:8px; left:8px; }
+.corner-tr { top:8px; right:8px; transform:scaleX(-1); }
+.corner-bl { bottom:8px; left:8px; transform:scaleY(-1); }
+.corner-br { bottom:8px; right:8px; transform:scale(-1); }
+
+.cover-eyebrow {
+  font-family:'Noto Sans KR',sans-serif;
+  font-size:.62rem; letter-spacing:.35em; text-transform:uppercase;
+  color:var(--gold); text-align:center; margin-bottom:28px; opacity:.75;
+}
+.cover-title-main {
+  font-size:clamp(1.6rem,5vw,2.8rem); font-weight:900;
+  color:var(--ink); text-align:center; line-height:1.25;
+  letter-spacing:-.02em; margin-bottom:12px;
+}
+.cover-title-sub {
+  font-size:clamp(.85rem,2.3vw,1rem); font-weight:300;
+  color:var(--ink3); text-align:center; line-height:1.8; margin-bottom:28px;
+}
+.cover-rule {
+  width:80px; height:1px; background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  margin:0 auto 24px;
+}
+.cover-verse {
+  font-size:clamp(.88rem,2.3vw,.97rem); font-weight:500;
+  color:var(--sky); text-align:center; line-height:1.95;
+  font-style:italic;
+}
+
+/* ══════════════════ 본문 래퍼 ══════════════════ */
+.main-content {
+  position:relative; z-index:1;
+  max-width:760px; margin:0 auto;
+  padding:0 16px;
+}
+
+/* ══════════════════ 챕터 구조 — 타임라인 ══════════════════ */
+.timeline {
+  position:relative;
+  padding:48px 0;
+}
+
+/* 세로 타임라인 선 */
+.timeline::before {
+  content:'';
+  position:absolute; left:50px; top:0; bottom:0; width:2px;
+  background:linear-gradient(180deg,
+    transparent 0%,
+    var(--gold) 5%,
+    var(--gold2) 50%,
+    var(--gold) 95%,
+    transparent 100%
+  );
+}
+@media(max-width:600px){ .timeline::before{ left:28px; } }
+
+/* 챕터 */
+.chapter {
+  position:relative;
+  margin-bottom:0;
+  padding:0 0 0 88px;
+  opacity:0; transform:translateX(-20px);
+  transition:opacity .7s ease, transform .7s ease;
+}
+.chapter.vis { opacity:1; transform:translateX(0); }
+@media(max-width:600px){ .chapter{ padding-left:56px; } }
+
+/* 타임라인 노드 */
+.chapter-node {
+  position:absolute; left:26px; top:32px;
+  width:48px; height:48px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Noto Sans KR',sans-serif;
+  font-size:.72rem; font-weight:700; letter-spacing:.05em;
+  border:2px solid;
+  box-shadow:0 2px 12px rgba(0,0,0,0.15);
+  z-index:2;
+}
+@media(max-width:600px){ .chapter-node{ left:4px; width:40px; height:40px; font-size:.62rem; } }
+
+.cn-blue   { background:#e8f2fc; border-color:var(--sky2);    color:var(--sky); }
+.cn-gold   { background:#fdf4d8; border-color:var(--gold2);   color:var(--gold); }
+.cn-olive  { background:#eef2e4; border-color:var(--olive2);  color:var(--olive); }
+.cn-purple { background:#f4ecf8; border-color:var(--purple2); color:var(--purple); }
+.cn-crimson{ background:#fcecea; border-color:var(--crimson2);color:var(--crimson); }
+
+/* 챕터 카드 — 양피지 */
+.chapter-card {
+  background:var(--parchment);
+  border:1px solid rgba(184,134,26,.22);
+  border-radius:4px;
+  padding:28px 28px 24px;
+  margin-bottom:6px;
+  position:relative;
+  box-shadow:0 2px 12px rgba(0,0,0,0.08), inset 0 0 40px rgba(184,134,26,0.03);
+}
+
+/* 상단 색 띠 */
+.chapter-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px; border-radius:4px 4px 0 0;
+}
+.ch-blue   .chapter-card::before { background:linear-gradient(90deg,var(--sky),var(--sky2),var(--sky)); }
+.ch-gold   .chapter-card::before { background:linear-gradient(90deg,var(--gold),var(--gold3),var(--gold)); }
+.ch-olive  .chapter-card::before { background:linear-gradient(90deg,var(--olive),var(--olive2),var(--olive)); }
+.ch-purple .chapter-card::before { background:linear-gradient(90deg,var(--purple),var(--purple2),var(--purple)); }
+.ch-crimson.chapter-card::before { background:linear-gradient(90deg,var(--crimson),var(--crimson2),var(--crimson)); }
+
+/* 타임라인 연결선 */
+.chapter-card::after {
+  content:'';
+  position:absolute; left:-40px; top:50px;
+  width:40px; height:1px;
+  opacity:.4;
+}
+.ch-blue   .chapter-card::after { background:var(--sky2); }
+.ch-gold   .chapter-card::after { background:var(--gold2); }
+.ch-olive  .chapter-card::after { background:var(--olive2); }
+.ch-purple .chapter-card::after { background:var(--purple2); }
+.ch-crimson .chapter-card::after { background:var(--crimson2); }
+
+/* 챕터 헤더 */
+.ch-eyebrow {
+  font-family:'Noto Sans KR',sans-serif;
+  font-size:.58rem; font-weight:500; letter-spacing:.25em; text-transform:uppercase;
+  margin-bottom:10px; display:block;
+}
+.ch-blue   .ch-eyebrow { color:var(--sky); }
+.ch-gold   .ch-eyebrow { color:var(--gold); }
+.ch-olive  .ch-eyebrow { color:var(--olive); }
+.ch-purple .ch-eyebrow { color:var(--purple); }
+.ch-crimson .ch-eyebrow { color:var(--crimson); }
+
+.ch-title {
+  font-size:clamp(1rem,2.8vw,1.25rem); font-weight:700;
+  color:var(--ink); line-height:1.4; margin-bottom:16px;
+  border-bottom:1px solid rgba(184,134,26,.15); padding-bottom:12px;
+}
+
+/* 본문 */
+.ch-body {
+  font-size:clamp(.9rem,2.3vw,.98rem); font-weight:400;
+  color:var(--ink2); line-height:2.15; word-break:keep-all;
+}
+.ch-body p { margin-bottom:14px; }
+.ch-body p:last-child { margin-bottom:0; }
+
+/* 성경 구절 */
+.bv {
+  display:block; margin:16px 0;
+  padding:14px 16px 12px 20px;
+  background:linear-gradient(135deg, rgba(58,104,144,.07), rgba(58,104,144,.03));
+  border-left:3px solid var(--sky2);
+  border-radius:0 6px 6px 0;
+  font-weight:600; color:var(--sky);
+  font-size:clamp(.88rem,2.2vw,.95rem); line-height:2;
+}
+
+/* 강조 */
+.hl { font-weight:700; color:var(--ink); }
+.hl-gold    { font-weight:700; color:var(--gold); }
+.hl-olive   { font-weight:700; color:var(--olive); }
+.hl-crimson { font-weight:700; color:var(--crimson); }
+.hl-purple  { font-weight:700; color:var(--purple); }
+
+/* 소제목 */
+.sub-h {
+  font-size:clamp(.92rem,2.4vw,1.05rem); font-weight:700;
+  color:var(--ink); margin:20px 0 10px;
+  display:flex; align-items:center; gap:10px;
+}
+.sub-h::after { content:''; flex:1; height:1px; background:rgba(184,134,26,.2); }
+
+/* 포인트 리스트 */
+.pt-list { list-style:none; margin:12px 0; display:flex; flex-direction:column; gap:8px; }
+.pt-list li {
+  padding:10px 14px; border-radius:4px;
+  font-family:'Noto Sans KR',sans-serif; font-size:.85rem; font-weight:300;
+  color:var(--ink2); line-height:1.85;
+  background:rgba(184,134,26,.05); border:1px solid rgba(184,134,26,.12);
+  position:relative; padding-left:28px;
+}
+.pt-list li::before { content:'✔'; position:absolute; left:10px; top:10px; font-size:.72rem; color:var(--gold); }
+.pt-list li strong { color:var(--ink); font-weight:600; }
+
+/* 테이블 */
+.tbl-wrap { margin:16px 0; overflow-x:auto; }
+.ctbl { width:100%; border-collapse:collapse; font-size:clamp(.78rem,2vw,.88rem); }
+.ctbl th { padding:10px 12px; font-weight:600; text-align:center; background:var(--parchment3); color:var(--ink); border:1px solid rgba(184,134,26,.25); }
+.ctbl td { padding:10px 12px; text-align:center; border:1px solid rgba(184,134,26,.18); color:var(--ink2); background:rgba(255,255,255,.5); }
+.ctbl tr:nth-child(even) td { background:rgba(184,134,26,.05); }
+
+/* 인용 블록 */
+.quote-box {
+  margin:16px 0; padding:18px 20px;
+  background:rgba(90,110,48,.06); border:1px solid rgba(90,110,48,.2);
+  border-radius:4px; font-size:clamp(.88rem,2.2vw,.95rem);
+  color:var(--ink2); line-height:2.1;
+}
+
+/* 챕터 사이 연결 */
+.ch-connector {
+  height:32px; margin-left:50px; display:flex; align-items:center;
+}
+.ch-connector::before {
+  content:'↓'; color:var(--gold); font-size:1.2rem; opacity:.4;
+  margin-left:-3px;
+}
+@media(max-width:600px){ .ch-connector{ margin-left:28px; } }
+
+/* ══════════════════ 최종 선언 카드 ══════════════════ */
+.final-scroll {
+  position:relative; z-index:1;
+  max-width:700px; margin:48px auto 0;
+  padding:0 16px 60px;
+}
+
+.final-card {
+  background:
+    linear-gradient(135deg, #fdf8ee 0%, #f5edda 100%);
+  border:2px solid rgba(184,134,26,.4);
+  border-radius:4px; padding:40px 36px;
+  text-align:center; position:relative;
+  box-shadow:0 8px 32px rgba(0,0,0,0.15), inset 0 0 60px rgba(184,134,26,.04);
+}
+.final-card::before {
+  content:'';
+  position:absolute; inset:8px;
+  border:1px solid rgba(184,134,26,.2); pointer-events:none;
+}
+
+.fc-ornament {
+  font-size:2rem; color:var(--gold); margin-bottom:20px; display:block;
+  filter:drop-shadow(0 2px 4px rgba(184,134,26,.3));
+}
+.fc-title {
+  font-size:clamp(1.1rem,3vw,1.5rem); font-weight:900;
+  color:var(--ink); margin-bottom:28px; letter-spacing:-.02em; line-height:1.4;
+}
+.fc-lines { display:flex; flex-direction:column; gap:14px; margin-bottom:28px; }
+.fc-line {
+  padding:12px 20px; border-radius:4px;
+  font-size:clamp(.88rem,2.3vw,.98rem); font-weight:700;
+  color:var(--ink); line-height:1.75;
+  background:rgba(184,134,26,.07); border:1px solid rgba(184,134,26,.18);
+}
+.fc-line:nth-child(1) { border-left:3px solid var(--sky2); }
+.fc-line:nth-child(2) { border-left:3px solid var(--olive2); }
+.fc-line:nth-child(3) { border-left:3px solid var(--gold2); }
+.fc-line:nth-child(4) { border-left:3px solid var(--purple2); }
+
+.fc-rule { width:60px; height:1px; background:linear-gradient(90deg,transparent,var(--gold),transparent); margin:0 auto 20px; }
+.fc-footer { font-family:'Noto Sans KR',sans-serif; font-size:.85rem; font-weight:400; color:var(--ink3); letter-spacing:.15em; }
+
+/* ══════════════════ 사이트 푸터 ══════════════════ */
+.site-footer {
+  text-align:center; padding:28px 24px 36px;
+  background:rgba(0,0,0,.3); position:relative; z-index:1;
+}
+.sf-rule { width:32px; height:1px; background:var(--gold); margin:0 auto 12px; opacity:.3; }
+.sf-name { font-size:.85rem; font-weight:600; color:rgba(245,240,228,.45); letter-spacing:.2em; }
+
+/* 스크롤 */
+.fu { opacity:0; transform:translateX(-20px); transition:opacity .7s ease, transform .7s ease; }
+.fu.vis { opacity:1; transform:translateX(0); }
+
+@media(max-width:480px){
+  .scroll-paper { padding:50px 24px 50px; }
+  .cover-frame { padding:24px 18px; }
+  .chapter-card { padding:20px 18px 18px; }
+  .final-card { padding:28px 22px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ COVER 두루마리 ══ -->
+<section class="scroll-cover">
+  <div class="scroll-rod"></div>
+  <div class="scroll-paper">
+    <div class="scroll-inner">
+      <div class="cover-frame">
+        <div class="corner corner-tl"></div>
+        <div class="corner corner-tr"></div>
+        <div class="corner corner-bl"></div>
+        <div class="corner corner-br"></div>
+        <p class="cover-eyebrow">부산교회 2구역 · 고후 5:8 · 살전 4:16 · 히 12:23</p>
+        <div class="cover-rule"></div>
+        <h1 class="cover-title-main">성도가 죽으면<br>어디로 가는가?</h1>
+        <div class="cover-rule"></div>
+        <p class="cover-title-sub">
+          십자가 이전 · 십자가 이후 · 부활 소망<br>
+          성경이 말하는 사후 세계의 완전한 그림
+        </p>
+        <div class="cover-rule"></div>
+        <p class="cover-verse">
+          "우리가 원하는 것은 차라리 몸을 떠나서<br>
+          주님과 함께 사는 것입니다." — 고후 5:8
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-rod-bottom"></div>
+</section>
+
+<!-- ══ 본문 타임라인 ══ -->
+<div class="main-content">
+<div class="timeline">
+
+  <!-- I -->
+  <div class="chapter ch-blue fu">
+    <div class="chapter-node cn-blue">Ⅰ</div>
+    <div class="chapter-card">
+      <span class="ch-eyebrow">Chapter Ⅰ · Introduction · 서론</span>
+      <h2 class="ch-title">"하나님을 믿고 죽은 그리스도인들은 지금 어디에 있는가?"</h2>
+      <div class="ch-body">
+        <p>이에 대한 성경의 답은 단순합니다.<br>
+        십자가 이전에는 '낙원(아브라함의 품)'에 있었고,<br>
+        십자가 이후에는 '주님과 함께' 있으며,<br>
+        아직 육체는 부활하지 않았고, 예수님의 재림 때에 영광스러운 몸으로 부활한다는 것입니다.</p>
+        <p>이제 이 문장을 성경으로 하나씩 짚어 보도록 하겠습니다.</p>
+      </div>
+    </div>
+  </div>
+  <div class="ch-connector"></div>
+
+  <!-- II -->
+  <div class="chapter ch-gold fu">
+    <div class="chapter-node cn-gold">Ⅱ</div>
+    <div class="chapter-card">
+      <span class="ch-eyebrow">Chapter Ⅱ · Before the Cross · 십자가 이전</span>
+      <h2 class="ch-title">예수님의 십자가의 죽음 이전: 구약의 믿는 이들은 어디에 있었는가?</h2>
+      <div class="ch-body">
+
+        <div class="sub-h">① 구약시대 성도의 사후 상태</div>
+        <p>구약에는 "하늘에 즉시 올라갔다"는 표현이 일반적으로 없습니다.</p>
+        <span class="bv">📖 시 115:17 "죽은 이들은 여호와를 찬양하지 못하며 침묵에 떨어진 이들도 그러하다네."</span>
+        <p>죽은 이들은 단순히 "육체적으로 죽은 모든 인간"을 가리키기보다는 하나님과의 관계 안에서 '응답과 교제의 영역을 벗어난 상태'를 가리키는 표현입니다.</p>
+        <span class="bv">📖 전 9:10 "네가 가게 될 스올에는 일도 계획도 지식도 지혜도 없기 때문이다."</span>
+        <p>👉 <span class="hl">스올(Sheol)</span>은 히브리어로 죽은 자들의 영역이며 헬라어로는 <span class="hl">하데스(Hades)</span>라고 합니다.<br>
+        그러나 스올/하데스는 하나의 공간이 아니라 '구분된 영역'입니다.</p>
+
+        <div class="sub-h">② 누가복음 16장이 결정적 증거</div>
+        <span class="bv">📖 눅 16:22–23 "그러다가 그 거지가 죽자, 천사들이 그를 아브라함의 품으로 데려갔으며, 부자도 죽어 장사되었습니다. 부자가 음부에서 고통받는 중에 눈을 들어 보니, 멀리 아브라함이 보이고, 그의 품에는 나사로가 있었습니다."</span>
+        <p>👉 십자가 이전, 예수님이 살아 계실 때의 사후 세계 구조를 잘 보여주고 있습니다.</p>
+        <p>누가복음 16장에서 '아브라함의 품'이라고 한 이유는 그때는 아직 사람들이 '주님의 품'에 갈 수 있는 시대가 아니었기 때문입니다.<br>
+        이것은 표현상의 우연도 아니고 단순한 비유적 장식도 아닙니다.<br>
+        이것은 구속의 흐름의 상태를 정확하게 반영한 표현입니다.</p>
+
+        <div class="sub-h">"주님의 품"이 아닌 이유 — 십자가 이전의 한계</div>
+        <span class="bv">📖 누가복음 16장은 예수님의 십자가 이전 이야기입니다.</span>
+        <p>이 시점의 중요한 현실은 이것입니다:<br>
+        예수님은 아직 십자가에서 돌아가시지 않았기 때문에 죄는 완전히 해결되지 않았습니다.<br>
+        휘장은 아직 찢어지지 않았고 하나님 임재에 대한 직접 접근 불가한 상태였던 것입니다.</p>
+        <span class="bv">📖 히브리서 9:8 "이것은 첫째 성막이 여전히 서 있는 동안에는 지성소로 들어가는 길이 아직도 나타나지 않았다는 것을 성령께서 보여 주시는 것입니다."</span>
+        <p>👉 즉, 의인이라 할지라도 하나님의 직접 임재(주님의 품) 안으로는 들어갈 수 없었습니다.</p>
+        <p>그렇다면 음부의 낙원에 '아브라함'이 있었던 것은 무엇인가?<br>
+        여기서 아브라함이 등장하는 이유는 바로 언약입니다.</p>
+        <span class="bv">📖 창세기 15:6 "아브람이 여호와를 믿으니, 여호와께서 그것을 그의 의로 여기셨다."</span>
+        <ul class="pt-list">
+          <li><strong>아브라함은 율법 이전의 믿음의 대표였습니다.</strong></li>
+          <li><strong>구약 성도들의 영적 조상이기도 했으며</strong></li>
+          <li><strong>하나님과 언약 관계의 표상입니다.</strong></li>
+        </ul>
+        <p>👉 그래서 의인들이 죽은 후 머무는 안전한 곳을 "아브라함의 품"이라고 부른 것입니다.<br>
+        쉽게 말하면 "하나님을 아직 직접 뵐 수는 없지만 하나님께 약속받은 언약의 품 안에서 기다리고 있다는 것일것입니다."</p>
+
+        <div class="sub-h">'품'이라는 표현의 의미</div>
+        <p>'품'은 단순한 장소가 아니라 관계를 말합니다.<br>
+        보호와 친밀함이 있고 소속감과 안식이 있는 곳입니다.</p>
+        <span class="bv">📖 요한복음 1:18 "일찍이 하나님을 본 사람이 없었으나, 아버지의 품속에 계시는 독생자이신 그분께서 하나님을 나타내 보이셨다."</span>
+        <p>'품'은 완전한 임재는 아니지만, 떨어져 있지도 않은 상태입니다.<br>
+        왜 '모세의 품'이나 '다윗의 품'이 아닐까요?<br>
+        모세는 율법의 대표하였고 다윗은 왕이었지만 죄와 실패의 상징도 있었습니다.<br>
+        아브라함은 믿음으로 의롭다 함을 받은 믿음의 조상이라는 것입니다.</p>
+        <span class="bv">📖 로마서 4:11 "이것은 그를 할례 받지 않고 믿는 모든 사람의 조상이 되게 하여 그들도 의롭게 될 수 있도록 하려는 것이며"</span>
+
+        <div class="sub-h">그렇다면 '주님의 품'은 언제부터 가능한가요?</div>
+        <p>전환점은 딱 하나입니다.<br>
+        십자가의 죽음과 부활입니다.</p>
+        <span class="bv">📖 마태복음 27:51 "보아라, 성전의 휘장이 위에서부터 아래까지 둘로 찢어지고, "</span>
+        <span class="bv">📖 고린도후서 5:8 "우리는 확신에 차 있습니다. 우리가 원하는 것은 차라리 몸을 떠나서 주님과 함께 사는 것입니다."</span>
+        <p>이때부터 비로소 의인의 영은 '주님의 품'으로 들어가게 됩니다.<br>
+        그래서 신약 성경 어디에서도 십자가 이후에는 '아브라함의 품'이라는 표현이 다시 나오지 않습니다.<br>
+        한 문장으로 다시 요약한다면 아브라함의 품은 '약속 안에 있는 쉼'이고, 주님의 품은 '성취 안에 있는 임재'인 것입니다.<br>
+        우리는 지금 아브라함이 바라보던 것을 이미 누리는 시대에 살고 있습니다.</p>
+        <span class="bv">📖 히브리서 11:39–40 "이 사람들은 모두 믿음을 통하여 좋은 증거를 지녔지만, 약속된 것은 얻지 못하였습니다. 왜냐하면 하나님께서 우리를 위하여 더 좋은 것을 예비하셨으며, 우리가 없이는 그들이 완전한 것에 이르지 못하도록 하셨기 때문입니다."</span>
+        <p>낙원은 천국이 아니라 낙원은 음부 안의 의인의 안식처를 가리키고 있습니다.</p>
+      </div>
+    </div>
+  </div>
+  <div class="ch-connector"></div>
+
+  <!-- III -->
+  <div class="chapter ch-olive fu">
+    <div class="chapter-node cn-olive">Ⅲ</div>
+    <div class="chapter-card">
+      <span class="ch-eyebrow">Chapter Ⅲ · Paradise · 낙원</span>
+      <h2 class="ch-title">예수님이 강도에게 말한 "오늘 그대가 나와 함께 낙원에 있을 것입니다."</h2>
+      <div class="ch-body">
+        <span class="bv">📖 눅 23:43 "오늘 그대가 나와 함께 낙원에 있을 것입니다."</span>
+        <p>여기서 중요한 사실은 예수님은 아직 죽지 않으셨고 아직 부활하지 않으셨으며 아직 하늘로 승천하지 않으셨습니다.</p>
+        <span class="bv">📖 요 20:17 예수님은 부활 하신 후 마리아에게 나타나 보이시며 "내가 아직 아버지께로 올라가지 않았기 때문입니다." 라고 말씀하고 계시는데</span>
+        <p>그러므로 이 낙원은 천국(하늘) 아닙니다.<br>
+        낙원은 아브라함의 품, 곧 의인의 음부 영역이며 예수님도 육체는 무덤에 계셨고 영은 낙원(의인의 영역)에 내려가셨습니다.</p>
+      </div>
+    </div>
+  </div>
+  <div class="ch-connector"></div>
+
+  <!-- IV -->
+  <div class="chapter ch-purple fu">
+    <div class="chapter-node cn-purple">Ⅳ</div>
+    <div class="chapter-card">
+      <span class="ch-eyebrow">Chapter Ⅳ · After the Cross · 십자가 이후</span>
+      <h2 class="ch-title">십자가 이후: 결정적인 전환점</h2>
+      <div class="ch-body">
+
+        <div class="sub-h">1. 예수님의 승리 선포</div>
+        <span class="bv">📖 벧전 3:18–19 "그것은 여러분을 하나님께 이끌기 위한 것이었습니다. 그분은 육체 안에서는 죽으셨으나, 영 안에서는 살아나셨습니다. 영 안에서 그분은 또한 감옥에 있는 영들에게 가시어 선포하셨습니다."</span>
+        <span class="bv">📖 엡 4:8–10 "성경은 말합니다. "그분은 높은 곳으로 올라가실 때에 사로잡힌 이들을 포로로 이끌어 가셨다가, 사람들에게 은사들로 주셨습니다." (그런데 그분께서 올라가셨다는 것은 땅 아래 낮은 곳으로 내려오셨다는 것이 아니고 무엇이겠습니까? 내려오셨던 그분은 모든 것을 충만하게 하시려고 모든 하늘들 위로 올라가신 바로 그분이십니다.)</span>
+        <p>예수님은 음부으로 내려가셨고 의인들에게 구속의 완성을 선포하시고 그들을 이끌고 올라가셨습니다. 이것이 바로 의인에 관한 낙원의 종결입니다.</p>
+
+        <div class="sub-h">2. 왜 예수님은 십자가의 죽음과 부활 이후 '낙원'이라는 표현?</div>
+        <div class="quote-box">
+          <span class="hl-purple">고린도 후서 12장 2-4절</span><br>
+          "내가 그리스도 안에 있는 한 사람을 아는데, 그는 십사 년 전에 셋째 하늘로 이끌려 갔습니다...그가 낙원으로 이끌려 가서 말로 표현하지 못하는 말, 곧 사람으로서는 말하는 것이 허락되지 않는 말을 들었습니다."
+        </div>
+        <p>여기서 나오는 셋째 하늘 낙원에 대하여 이야기하고 있습니다. 이는 음부 가운데 있는 낙원이 아니라 셋째 하늘 하나님의 임재가 있는 낙원을 말하고 있습니다.<br>
+        그리고 <span class="hl-purple">요한계시록 2장 7절</span><br>
+        이기는 이에게는 내가 하나님의 낙원에 있는 생명나무를 주어서 먹게 할 것이다.<br>
+        여기서 낙원은 십자가 이전에 의인들이 대기하는 그런 음부가 아니라 의인들 중에서도 이기는 이에게 주어지는 낙원을 말씀하고 있으며 에덴동산에서 먹고 누릴 수 있었던 생명나무가 아담의 범죄로 인하여 단절되어 있다가 하나님의 낙원에서 회복되어 생명나무를 먹고 누릴 수 있게 되었습니다.</p>
+        <span class="bv">📖 고후 5:8 "우리는 확신에 차 있습니다. 우리가 원하는 것은 차라리 몸을 떠나서 주님과 함께 사는 것입니다."</span>
+        <span class="bv">📖 빌 1:23 "내가 원하는 것은 몸을 떠나서 그리스도와 함께 있는 것입니다."</span>
+        <p>이제 의인의 영은 음부의 낙원에 있는 것이 아니라 직접 주님과 함께 있음을 나타내고 있습니다.</p>
+      </div>
+    </div>
+  </div>
+  <div class="ch-connector"></div>
+
+  <!-- V -->
+  <div class="chapter ch-blue fu">
+    <div class="chapter-node cn-blue">Ⅴ</div>
+    <div class="chapter-card">
+      <span class="ch-eyebrow">Chapter Ⅴ · Now · 지금 어디에</span>
+      <h2 class="ch-title">지금 죽은 그리스도인들은 어디에 있는가?</h2>
+      <div class="ch-body">
+        <p><span class="hl">📌 성경의 일관된 증언</span></p>
+        <div class="tbl-wrap">
+          <table class="ctbl">
+            <tr><th>구분</th><th>위치</th></tr>
+            <tr><td>육체</td><td>땅에 잠들어 있음</td></tr>
+            <tr><td>영</td><td>주님과 함께 있음</td></tr>
+            <tr><td>상태</td><td>의식 있음, 안식</td></tr>
+            <tr><td>완성</td><td>아직 아님 (부활 대기)</td></tr>
+          </table>
+        </div>
+        <span class="bv">📖 히 12:23 "온전하게 된 의인들의 영들과"</span>
+        <span class="bv">📖 계 6:9–11 "나는 하나님의 말씀과 자기들이 지닌 증거 때문에 죽음을 당한 사람들의 혼들이 제단 아래 있는 것을 보았습니다.... 들의 동료 노예들과 형제들 중 그들처럼 죽음을 당할 사람들의 수가 차기까지는 아직 잠시 더 쉬어야 한다고 말씀하셨습니다."</span>
+      </div>
+    </div>
+  </div>
+  <div class="ch-connector"></div>
+
+  <!-- VI -->
+  <div class="chapter ch-gold fu">
+    <div class="chapter-node cn-gold">Ⅵ</div>
+    <div class="chapter-card">
+      <span class="ch-eyebrow">Chapter Ⅵ · Resurrection · 부활</span>
+      <h2 class="ch-title">"먼저 죽은 자들이 부활한다"는 말의 정확한 의미는 무엇인가요?</h2>
+      <div class="ch-body">
+        <span class="bv">📖 살전 4:16 "그리스도 안에서 죽은 사람들이 먼저 일어나게 될 것이기 때문입니다."</span>
+        <p>이 부활은 무엇을 의미할까요?<br>
+        이것은 영의 부활(이미 주님과 함께 있음)이 아니라 육체의 부활을 말하고 있습니다.</p>
+        <span class="bv">📖 고전 15:52–53 "순식간에, 눈 깜짝할 사이에, 마지막 나팔 소리에 그렇게 될 것입니다. 나팔 소리가 울리면, 죽은 사람들이 썩지 않을 것으로 살아나고, 우리도 변모될 것입니다. 이 썩을 것이 썩지 않을 것을 입어야 하고, 이 죽을 것이 죽지 않을 것을 입어야 할 것입니다."</span>
+        <p>부활은 영광스러운 몸과 영의 재결합을 의미하고 있습니다. 이것이 진정한 부활인 것입니다.</p>
+      </div>
+    </div>
+  </div>
+  <div class="ch-connector"></div>
+
+  <!-- VII -->
+  <div class="chapter ch-olive fu">
+    <div class="chapter-node cn-olive">Ⅶ</div>
+    <div class="chapter-card">
+      <span class="ch-eyebrow">Chapter Ⅶ · Clarity · 개념 정리</span>
+      <h2 class="ch-title">"죽으면 낙원에 간다" 라는 말의 개념 정리</h2>
+      <div class="ch-body">
+        <p>성경적의 흐름으로 보면 십자가 이전에는 그 말이 사실이었지만<br>
+        십자가 이후에는 더 이상 구원받은 의인들에게 있어서 낙원은 목적지가 아닌 것입니다.<br>
+        오늘의 그리스도인은 낙원에 가는 것이 아니라 그리스도와 함께 하늘의 임재 가운데 함께 있는 것입니다.</p>
+      </div>
+    </div>
+  </div>
+  <div class="ch-connector"></div>
+
+  <!-- VIII -->
+  <div class="chapter ch-crimson fu">
+    <div class="chapter-node cn-crimson">Ⅷ</div>
+    <div class="chapter-card">
+      <span class="ch-eyebrow">Chapter Ⅷ · Exception · 결정적 예외</span>
+      <h2 class="ch-title">에녹과 엘리야가 보여주는 결정적 예외</h2>
+      <div class="ch-body">
+        <span class="bv">📖 창 5:24 "에녹이 하나님과 동행하더니 하나님께서 그를 데려가시므로 그가 있지 않았다."</span>
+        <span class="bv">📖 왕하 2:11 "그들이 계속 길을 가며 대화하고 있는데, 갑자기 불 병거와 불 말들이 나타나더니 두 사람을 갈라놓았다. 그리고 엘리야는 회오리바람에 실려 하늘로 올라갔다."</span>
+        <p>이들은 죽음을 통과하지 않았고 음부도, 낙원도 거치지 않았으며 제 3의 장소에 있었던 것이 아니라 그들이 셋째 하늘에 있었던지 넷째 하늘에 있었던지 그들은 직접적인 하나님의 임재 안으로 들어갔다는 것입니다.</p>
+        <p>이것이 보여주는 영적 이상은 이렇습니다.<br>
+        구원의 최종 목적은 '어디에 가느냐'가 아니라 '누구와 함께 있느냐'입니다.<br>
+        우리는 주님의 임재를 놓치는 순간 이것이 맞다 저것이 맞다라는 변론 가운데 빠지게 되며 주님의 임재를 놓치게 됩니다.</p>
+      </div>
+    </div>
+  </div>
+  <div class="ch-connector"></div>
+
+  <!-- IX -->
+  <div class="chapter ch-purple fu">
+    <div class="chapter-node cn-purple">Ⅸ</div>
+    <div class="chapter-card">
+      <span class="ch-eyebrow">Chapter Ⅸ · Union · 연합</span>
+      <h2 class="ch-title">고린도전서 6장 17절의 본문적 무게</h2>
+      <div class="ch-body">
+        <span class="bv">📖 고전 6:17 "그러나 주님과 합하는 사람은 주님과 한 영입니다."</span>
+
+        <div class="sub-h">1. 원문이 말하는 연합의 강도</div>
+        <p>헬라어 핵심 단어: <span class="hl-purple">κολλώμενος (kollōmenos)</span><br>
+        → 접착하다, 붙어 떨어지지 않다, 분리 불가한 결합을 말하고 있습니다.<br>
+        <span class="hl-purple">ἓν πνεῦμά (hen pneuma)</span><br>
+        → 하나의 영, 동일한 영적 실재 안에 있음을 말하고 있는데 이 단어는 가볍지 않습니다.<br>
+        바로 앞 구절에서 바울은 이렇게 말합니다.</p>
+        <span class="bv">📖 고전 6:16 "창녀와 합하는 사람은 창녀와 한 몸이라는 것을 알지 못합니까?"</span>
+        <p>성경은 육체적 결합을 실재적 연합으로 설명한 뒤, 그보다 더 깊은 차원의 연합으로 "주님과 한 영"을 말하고 있는 것합니다.<br>
+        즉, 이것은 윤리적 친밀감을 나타내는 것이 아니고 비유적 표현이 아니라 실제적·존재적 연합을 말하고 있는 것입니다.</p>
+
+        <div class="sub-h">Ⅱ. 이 말씀은 우리가 "살아 있을 때만" 적용되는가요?</div>
+        <p>아닙니다. 오히려 죽음 이후를 더 강하게 규정하고 있습니다.<br>
+        왜냐하면 육체는 죽음으로 분리되지만 영은 분리되지 않는 연합에 들어가 있기 때문입니다.</p>
+        <span class="bv">📖 롬 8:38–39 "나는 확신합니다. 죽음이나 생명이나 천사들이나 권세자들이나 현재 일이나 장래 일이나 능력들이나 높음이나 깊음이나 다른 어떤 피조물이라도, 우리를 우리 주 그리스도 예수님 안에 있는 하나님의 사랑에서 끊을 수 없을 것입니다."</span>
+        <p>사망도 끊을 수 없는 연합! 그 연합의 핵심 실체가 바로 한 영입니다.<br>
+        그러므로 성경은 분명히 우리에게 명확히 제시합니다.<br>
+        주님과 합하는 사람은 한 영으로서 연합된 영은 더 이상 주님과 떨어진 상태로 존재할 수 없다는 것입니다.</p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end timeline -->
+</div><!-- end main-content -->
+
+<!-- ══ 최종 선언 ══ -->
+<div class="final-scroll">
+  <div class="final-card fu">
+    <span class="fc-ornament">✦</span>
+    <h2 class="fc-title">X. 최종 한 문장 정리</h2>
+    <div class="fc-rule"></div>
+    <div class="fc-lines">
+      <div class="fc-line">십자가 이전의 의인은 낙원에 있었고,</div>
+      <div class="fc-line">십자가 이후의 의인은 주님과 함께 있으며,</div>
+      <div class="fc-line">부활은 영광스러운 몸이 영과 다시 하나 되는 사건이고,</div>
+      <div class="fc-line">우리의 소망은 장소가 아니라 주님과의 임재입니다.</div>
+    </div>
+    <div class="fc-rule"></div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="sf-rule"></div>
+  <p class="sf-name">부산교회 2구역</p>
+</footer>
+
+<script>
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fu').forEach((el, i) => {
+    el.style.transitionDelay = '0s';
+    io.observe(el);
+  });
+</script>
+</body>
+</html>

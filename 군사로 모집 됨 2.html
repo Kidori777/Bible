@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>모든 믿는 자는 군사다</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #1a1410;
+      --parchment: #f7f2ea;
+      --gold: #c8922a;
+      --gold-light: #e8b84b;
+      --rust: #8b3a2a;
+      --deep: #2c1810;
+      --muted: #7a6a5a;
+      --line: #d4c4a8;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background-color: var(--parchment);
+      color: var(--ink);
+      font-family: 'Noto Sans KR', sans-serif;
+      font-weight: 300;
+      line-height: 1.9;
+      min-height: 100vh;
+    }
+
+    /* 배경 텍스처 */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 28px,
+          rgba(180,160,120,0.07) 28px,
+          rgba(180,160,120,0.07) 29px
+        );
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 20px 80px;
+    }
+
+    /* 헤더 */
+    .hero {
+      text-align: center;
+      padding: 60px 0 50px;
+      position: relative;
+    }
+
+    .hero-icon {
+      font-size: 2.8rem;
+      display: block;
+      margin-bottom: 20px;
+      animation: floatIcon 3s ease-in-out infinite;
+    }
+
+    @keyframes floatIcon {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    .hero-title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: clamp(1.8rem, 6vw, 2.8rem);
+      font-weight: 900;
+      color: var(--deep);
+      letter-spacing: -0.02em;
+      line-height: 1.3;
+    }
+
+    .hero-sub {
+      margin-top: 16px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      letter-spacing: 0.15em;
+      font-weight: 400;
+    }
+
+    .hero-line {
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 24px auto 0;
+    }
+
+    /* 섹션 공통 */
+    .section {
+      margin-bottom: 56px;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* 챕터 레이블 */
+    .chapter-label {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .chapter-title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: clamp(1.2rem, 4vw, 1.6rem);
+      font-weight: 700;
+      color: var(--deep);
+      line-height: 1.4;
+      margin-bottom: 22px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    /* 본문 단락 */
+    .para {
+      font-size: clamp(0.95rem, 2.5vw, 1.05rem);
+      color: #3a2e24;
+      margin-bottom: 18px;
+      line-height: 2;
+    }
+
+    /* 성경 구절 카드 */
+    .verse-card {
+      background: var(--deep);
+      color: var(--parchment);
+      border-left: 4px solid var(--gold);
+      padding: 22px 24px;
+      margin: 28px 0;
+      border-radius: 0 6px 6px 0;
+      position: relative;
+    }
+
+    .verse-card::before {
+      content: '"';
+      font-family: 'Noto Serif KR', serif;
+      font-size: 5rem;
+      color: var(--gold-light);
+      opacity: 0.15;
+      position: absolute;
+      top: -10px;
+      left: 10px;
+      line-height: 1;
+    }
+
+    .verse-text {
+      font-family: 'Noto Serif KR', serif;
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
+      line-height: 2;
+      position: relative;
+      z-index: 1;
+    }
+
+    .verse-ref {
+      display: block;
+      margin-top: 12px;
+      font-size: 0.78rem;
+      color: var(--gold-light);
+      font-weight: 500;
+      letter-spacing: 0.08em;
+    }
+
+    /* 강조 항목 */
+    .point-list {
+      list-style: none;
+      margin: 20px 0;
+    }
+
+    .point-list li {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      margin-bottom: 18px;
+      padding: 16px 18px;
+      background: rgba(200,146,42,0.06);
+      border-radius: 6px;
+      border: 1px solid rgba(200,146,42,0.15);
+    }
+
+    .point-num {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      background: var(--gold);
+      color: #fff;
+      border-radius: 50%;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+    }
+
+    .point-text {
+      font-size: clamp(0.9rem, 2.4vw, 1rem);
+      line-height: 1.85;
+      color: #3a2e24;
+    }
+
+    .point-text strong {
+      display: block;
+      font-weight: 500;
+      color: var(--deep);
+      margin-bottom: 3px;
+    }
+
+    .point-ref {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    /* 인물 테이블 */
+    .hero-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0;
+      font-size: clamp(0.85rem, 2.3vw, 0.95rem);
+    }
+
+    .hero-table thead tr {
+      background: var(--deep);
+      color: var(--parchment);
+    }
+
+    .hero-table th {
+      padding: 12px 16px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+    }
+
+    .hero-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--line);
+      color: #3a2e24;
+    }
+
+    .hero-table tr:nth-child(even) td {
+      background: rgba(200,146,42,0.05);
+    }
+
+    .hero-table .age {
+      font-family: 'Noto Serif KR', serif;
+      font-weight: 700;
+      color: var(--rust);
+      font-size: 1.05em;
+    }
+
+    /* 구분선 */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 48px 0;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--line));
+    }
+
+    .divider::after {
+      background: linear-gradient(90deg, var(--line), transparent);
+    }
+
+    .divider-icon {
+      color: var(--gold);
+      font-size: 1rem;
+      opacity: 0.7;
+    }
+
+    /* 결론 섹션 */
+    .conclusion-box {
+      background: var(--deep);
+      color: var(--parchment);
+      border-radius: 10px;
+      padding: 36px 32px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .conclusion-box::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center top, rgba(200,146,42,0.2) 0%, transparent 70%);
+    }
+
+    .conclusion-box .c-icon {
+      font-size: 2rem;
+      display: block;
+      margin-bottom: 18px;
+      position: relative;
+    }
+
+    .conclusion-box .c-title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: clamp(1.1rem, 3.5vw, 1.4rem);
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: #f7f2ea;
+      position: relative;
+    }
+
+    .conclusion-box .c-body {
+      font-size: clamp(0.9rem, 2.4vw, 1rem);
+      line-height: 2.1;
+      color: rgba(247,242,234,0.85);
+      position: relative;
+    }
+
+    .truth-line {
+      display: block;
+      font-family: 'Noto Serif KR', serif;
+      font-size: clamp(1.1rem, 3.5vw, 1.35rem);
+      font-weight: 900;
+      color: var(--gold-light);
+      margin: 20px 0 10px;
+      letter-spacing: -0.01em;
+      position: relative;
+    }
+
+    .deny-list {
+      margin: 16px 0;
+      font-size: clamp(0.85rem, 2.3vw, 0.95rem);
+      color: rgba(247,242,234,0.7);
+      line-height: 2.2;
+      position: relative;
+    }
+
+    .final-call {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(200,146,42,0.3);
+      font-family: 'Noto Serif KR', serif;
+      font-size: clamp(0.9rem, 2.4vw, 1rem);
+      color: #f7f2ea;
+      line-height: 2.1;
+      position: relative;
+    }
+
+    /* 푸터 */
+    .footer {
+      text-align: center;
+      margin-top: 60px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line);
+      font-size: 0.8rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    /* 프롤로그 인용 */
+    .general-quote {
+      font-family: 'Noto Serif KR', serif;
+      font-size: clamp(1rem, 3vw, 1.15rem);
+      color: var(--rust);
+      text-align: center;
+      padding: 24px 20px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      margin: 24px 0;
+      line-height: 1.9;
+      font-style: italic;
+    }
+
+    /* 모바일 최적화 */
+    @media (max-width: 480px) {
+      .verse-card { padding: 18px 16px; }
+      .conclusion-box { padding: 28px 20px; }
+      .hero-table th, .hero-table td { padding: 10px 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="wrapper">
+
+  <!-- 헤더 -->
+  <header class="hero">
+    <span class="hero-icon">⚔️</span>
+    <h1 class="hero-title">모든 믿는 자는<br>군사다</h1>
+    <p class="hero-sub">부산교회 2구역 · 말씀 이야기</p>
+    <div class="hero-line"></div>
+  </header>
+
+  <!-- 프롤로그 -->
+  <section class="section">
+    <span class="chapter-label">Prologue</span>
+    <h2 class="chapter-title">프롤로그 — 빈 관람석은 없다</h2>
+    <p class="para">어느 날, 한 장군이 전쟁터에 나가기 전 군막 안에 앉아 있었습니다. 그는 병사들의 명단을 훑어보다가 조용히 중얼거렸습니다.</p>
+
+    <div class="general-quote">
+      "싸우겠다는 사람은 적고,<br>이유를 대는 사람은 많구나."
+    </div>
+
+    <p class="para">교회도 마찬가지입니다. 예배당 안에는 수많은 사람이 앉아 있지만, 어떤 이는 싸우고, 어떤 이는 구경합니다.</p>
+    <p class="para">하나님은 처음부터 분명히 말씀하셨습니다. <strong>그분의 백성은 관객이 아니라 군사입니다.</strong></p>
+  </section>
+
+  <div class="divider"><span class="divider-icon">✦</span></div>
+
+  <!-- 제1장 -->
+  <section class="section">
+    <span class="chapter-label">Chapter 1</span>
+    <h2 class="chapter-title">제1장 — 광야에서 이름이 불리던 날</h2>
+    <p class="para">수천 년 전, 뜨거운 광야 한가운데. 모세는 하나님의 명령을 받았습니다. "백성을 세어라. 싸울 수 있는 자들을."</p>
+    <p class="para">그런데 하나님이 정하신 기준이 있었습니다. 스무 살 이상, 훈련받고 책임질 수 있는 성숙한 사람. 무조건 보내지 않으셨습니다.</p>
+
+    <div class="verse-card">
+      <p class="verse-text">너와 아론은 이스라엘 가운데에서 군 복무를 할 수 있는 이십 세 이상 된 모든 남자를 부대별로 세어야 한다.</p>
+      <span class="verse-ref">— 민수기 1:3</span>
+    </div>
+
+    <p class="para">그리고 하나님은 몇몇 사람들은 돌려보내셨습니다. 집을 짓고 아직 살아보지 못한 사람, 포도원을 만들고 열매도 못 먹은 사람, 결혼도 못 한 사람.</p>
+    <p class="para">그리고 한 부류가 더 있었습니다. <strong>"마음이 두려운 자."</strong></p>
+    <p class="para">왜 그를 돌려보냈을까요? 두려움은 혼자만의 문제가 아니기 때문입니다. 한 사람의 두려움이 옆 사람에게 번지고, 결국 공동체 전체를 무너뜨립니다. <span style="color:var(--muted); font-size:0.9em;">(신명기 20:5-8)</span></p>
+    <p class="para">하나님은 억지로 싸우게 하지 않으십니다. 하지만 <strong>준비된 자, 마음이 하나인 자</strong>를 찾고 계십니다.</p>
+  </section>
+
+  <div class="divider"><span class="divider-icon">✦</span></div>
+
+  <!-- 제2장 -->
+  <section class="section">
+    <span class="chapter-label">Chapter 2</span>
+    <h2 class="chapter-title">제2장 — 바울이 감옥에서도 갑옷을 입은 이유</h2>
+    <p class="para">로마의 차가운 감옥 안. 사슬에 묶인 손으로 바울은 편지를 씁니다. 자유도 없고, 내일도 보이지 않는 곳에서 그가 쓴 말은 놀랍습니다.</p>
+    <p class="para"><strong>"갑옷을 입으라."</strong> 그는 싸우고 있었습니다. 눈에 보이지 않는 전쟁을.</p>
+
+    <div class="verse-card">
+      <p class="verse-text">우리의 싸움은 피와 살이 있는 사람들에게 대항하는 것이 아니라, 통치자들과 권세자들과 이 어둠의 세상 지배자들과 하늘들의 영역에 있는 악한 영적인 세력들에게 대항하는 것입니다.</p>
+      <span class="verse-ref">— 에베소서 6:12</span>
+    </div>
+
+    <p class="para">우리가 매일 맞서는 전쟁은 사람이 아닙니다. 죄의 유혹, 세상의 가치관, 복음을 막으려는 어둠의 세력. 그렇다면 이 싸움에 나설 수 있는 사람은 누구일까요?</p>
+
+    <ul class="point-list">
+      <li>
+        <div class="point-num">1</div>
+        <div class="point-text">
+          <strong>마음이 나뉘지 않은 사람입니다.</strong>
+          두 주인을 섬기는 사람은 어느 쪽 전쟁에도 온전히 설 수 없습니다.
+          <span class="point-ref">(마태복음 6:24)</span>
+        </div>
+      </li>
+      <li>
+        <div class="point-num">2</div>
+        <div class="point-text">
+          <strong>두려움보다 믿음이 큰 사람입니다.</strong>
+          하나님이 우리에게 주신 것은 겁내는 영이 아니라, 능력과 사랑과 맑은 생각의 영입니다.
+          <span class="point-ref">(디모데후서 1:7)</span>
+        </div>
+      </li>
+      <li>
+        <div class="point-num">3</div>
+        <div class="point-text">
+          <strong>훈련된 사람입니다.</strong>
+          좋은 군사는 저절로 만들어지지 않습니다. 말씀과 기도와 고난 속에서 빚어집니다.
+          <span class="point-ref">(디모데후서 2:3)</span>
+        </div>
+      </li>
+    </ul>
+
+    <p class="para">바울은 감옥 안에서도 포기하지 않았습니다. 환경이 싸움을 멈추게 할 수 없기 때문입니다.</p>
+  </section>
+
+  <div class="divider"><span class="divider-icon">✦</span></div>
+
+  <!-- 제3장 -->
+  <section class="section">
+    <span class="chapter-label">Chapter 3</span>
+    <h2 class="chapter-title">제3장 — 여든다섯 살의 전사</h2>
+    <p class="para">예루살렘을 정복하고 땅을 나누는 날, 한 노인이 여호수아 앞에 섰습니다. 백발이 성성하고, 얼굴엔 주름이 가득했지만 그의 눈빛은 달랐습니다.</p>
+    <p class="para">그의 이름은 <strong>갈렙</strong>. 여든다섯 살.</p>
+    <p class="para">사람들은 아마 생각했을 것입니다. '이제 편히 쉬실 나이인데…' 그러나 갈렙이 입을 열었습니다.</p>
+
+    <div class="verse-card">
+      <p class="verse-text">나는 오늘도 여전히 모세께서 나를 보내셨던 날처럼 강건합니다. 전투를 하는 데에든 출입하는 데에든, 나의 힘은 그때나 지금이나 동일합니다. 그러니 이제 여호와께서 그날 말씀하신 저 산지를 나에게 주십시오.</p>
+      <span class="verse-ref">— 여호수아기 14:11-12</span>
+    </div>
+
+    <p class="para">그 산지에는 거인족이 살고 있었습니다. 요새화된 성도 있었습니다. 누구도 탐내지 않는 땅이었습니다. 갈렙은 <strong>더 어려운 곳을 달라</strong>고 했습니다.</p> 
+
+    <table class="hero-table">
+      <thead>
+        <tr>
+          <th>이름</th>
+          <th>나이</th>
+          <th>그때 일어난 일</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>아브라함</td>
+          <td class="age">75세</td>
+          <td>부르심을 받다</td>
+        </tr>
+        <tr>
+          <td>모세</td>
+          <td class="age">80세</td>
+          <td>사명이 시작되다</td>
+        </tr>
+        <tr>
+          <td>갈렙</td>
+          <td class="age">85세</td>
+          <td>산지를 요청하다</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="para">"이제 나이가 많아서…" "젊은 사람들이 해야지…" 이 말은 성경 어디에도 없습니다.</p>
+    <p class="para">나이가 많다는 것은 오히려 더 깊은 믿음의 뿌리가 있다는 뜻입니다. 더 오래 기도해 온 무릎이 있다는 뜻입니다. 다음 세대에게 전해줄 이야기가 있다는 뜻입니다.</p>
+    <p class="para">하나님의 뜰에 심긴 나무는 시들지 않습니다. 늙어서도 열매를 맺습니다. <span style="color:var(--muted); font-size:0.9em;">(시편 92:13-14)</span></p>
+  </section>
+
+  <div class="divider"><span class="divider-icon">✦</span></div>
+
+  <!-- 결론 -->
+  <section class="section">
+    <span class="chapter-label">Epilogue</span>
+    <h2 class="chapter-title">에필로그 — 당신의 이름은 어느 명단에 있습니까</h2>
+
+    <div class="conclusion-box">
+      <span class="c-icon">📜</span>
+      <p class="c-title">오늘도 하나님은 명단을 보고 계십니다</p>
+      <p class="c-body">
+        두려움보다 믿음이 큰 사람.<br>
+        환경보다 사명을 선택한 사람.<br>
+        나이를 핑계 삼지 않는 사람.
+      </p>
+
+      <span class="truth-line">모든 믿는 자는 군사입니다.</span>
+
+      <div class="deny-list">
+        나이는 핑계가 아닙니다.<br>
+        두려움은 이유가 아닙니다.<br>
+        환경은 변명이 아닙니다.
+      </div>
+
+      <div class="final-call">
+        갈렙처럼 산지를 요청하십시오.<br>
+        바울처럼 감옥 안에서도 갑옷을 입으십시오.<br><br>
+        <strong style="color: var(--gold-light);">당신의 싸움은 아직 끝나지 않았습니다.</strong>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    부산교회 2구역
+  </footer>
+
+</div>
+
+<script>
+  // 스크롤 등장 애니메이션
+  const sections = document.querySelectorAll('.section');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>

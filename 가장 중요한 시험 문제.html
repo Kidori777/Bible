@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>가장 중요한 시험 문제</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700&family=Gowun+Batang:wght@400;700&family=Gaegu:wght@300;400;700&family=Single+Day&family=Cormorant+Garamond:wght@300;400&family=Nanum+Myeongjo:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+
+:root {
+  --paper:      #faf7f0;
+  --paper-warm: #f5f0e4;
+  --paper-edge: #ede5d0;
+  --ink-main:   #2c2318;
+  --ink-soft:   #4a3d2e;
+  --ink-faint:  #8a7a66;
+  --rose:       #c47a7a;
+  --rose-light: #e8b4b4;
+  --rose-pale:  #f5e0e0;
+  --teal:       #4a8a7a;
+  --teal-light: #7ab8a8;
+  --teal-pale:  #e0f0ec;
+  --gold-warm:  #c89040;
+  --gold-pale:  #f0e0b0;
+  --blue-soft:  #6a8aaa;
+  --lavender:   #a0889a;
+  --line-color: rgba(139,122,102,0.15);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+body {
+  background: #e8e0d4;
+  font-family: 'Noto Serif KR', serif;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* ══════════════════════════════
+   배경 — 빈티지 린넨 질감
+══════════════════════════════ */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      0deg, transparent, transparent 28px,
+      rgba(139,122,102,0.06) 28px, rgba(139,122,102,0.06) 29px
+    ),
+    repeating-linear-gradient(
+      90deg, transparent, transparent 28px,
+      rgba(139,122,102,0.03) 28px, rgba(139,122,102,0.03) 29px
+    ),
+    linear-gradient(160deg, #ede5d8 0%, #ddd3c4 40%, #e5ddd0 100%);
+  z-index: 0;
+}
+
+/* ══════════════════════════════
+   수채화 번짐 배경 장식
+══════════════════════════════ */
+.watercolor-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.wc-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  mix-blend-mode: multiply;
+}
+
+.wc-1 {
+  width: 500px; height: 400px;
+  top: -100px; left: -80px;
+  background: radial-gradient(ellipse, rgba(196,122,122,0.22) 0%, transparent 70%);
+  animation: blobDrift 20s ease-in-out infinite;
+}
+.wc-2 {
+  width: 600px; height: 500px;
+  top: 30%; right: -150px;
+  background: radial-gradient(ellipse, rgba(74,138,122,0.18) 0%, transparent 70%);
+  animation: blobDrift 26s ease-in-out infinite reverse;
+}
+.wc-3 {
+  width: 400px; height: 350px;
+  bottom: 10%; left: 10%;
+  background: radial-gradient(ellipse, rgba(200,144,64,0.15) 0%, transparent 70%);
+  animation: blobDrift 18s ease-in-out infinite 5s;
+}
+.wc-4 {
+  width: 350px; height: 300px;
+  top: 60%; right: 20%;
+  background: radial-gradient(ellipse, rgba(160,136,154,0.12) 0%, transparent 70%);
+  animation: blobDrift 22s ease-in-out infinite 10s;
+}
+
+@keyframes blobDrift {
+  0%,100% { transform: translate(0,0) scale(1); }
+  33%      { transform: translate(30px,-20px) scale(1.05); }
+  66%      { transform: translate(-20px,15px) scale(0.95); }
+}
+
+/* ══════════════════════════════
+   메인 종이 카드
+══════════════════════════════ */
+.paper-wrap {
+  position: relative;
+  z-index: 10;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+}
+
+.paper {
+  background: var(--paper);
+  box-shadow:
+    0 2px 4px rgba(0,0,0,0.06),
+    0 8px 24px rgba(0,0,0,0.10),
+    0 32px 80px rgba(0,0,0,0.12),
+    inset 0 0 0 1px rgba(255,255,255,0.6);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 종이 왼쪽 — 핑크 여백선 */
+.paper::before {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 72px;
+  width: 1px;
+  background: rgba(196,122,122,0.25);
+  z-index: 2;
+}
+
+/* 종이 줄 */
+.paper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    transparent,
+    transparent 39px,
+    rgba(139,122,102,0.1) 39px,
+    rgba(139,122,102,0.1) 40px
+  );
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* 종이 상단 — 구멍 */
+.paper-holes {
+  position: absolute;
+  top: 0; left: 0;
+  width: 72px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 60px;
+  gap: 80px;
+  z-index: 3;
+}
+.hole {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: #e8e0d4;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.2), 0 1px 0 rgba(255,255,255,0.4);
+  flex-shrink: 0;
+}
+
+/* 종이 모서리 접힘 */
+.paper-fold {
+  position: absolute;
+  bottom: 0; right: 0;
+  width: 0; height: 0;
+  border-style: solid;
+  border-width: 0 0 50px 50px;
+  border-color: transparent transparent #e8e0d4 transparent;
+  z-index: 4;
+}
+.paper-fold::after {
+  content: '';
+  position: absolute;
+  bottom: -50px; right: 0;
+  width: 50px; height: 50px;
+  background: linear-gradient(135deg, var(--paper-edge) 0%, var(--paper-warm) 100%);
+  clip-path: polygon(0 100%, 100% 0, 100% 100%);
+}
+
+/* ══════════════════════════════
+   콘텐츠 영역
+══════════════════════════════ */
+.content {
+  position: relative;
+  z-index: 5;
+  padding: 60px 56px 80px 100px;
+}
+
+/* ══════════════════════════════
+   제목 영역
+══════════════════════════════ */
+.title-section {
+  text-align: center;
+  margin-bottom: 60px;
+  opacity: 0;
+  animation: inkDrop 1s ease forwards 0.3s;
+}
+
+.title-label {
+  display: inline-block;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.75rem;
+  font-style: normal; /* italic 제거 */
+  letter-spacing: 0.4em;
+  color: var(--rose);
+  margin-bottom: 20px;
+  position: relative;
+}
+.title-label::before,
+.title-label::after {
+  content: '—';
+  margin: 0 10px;
+  opacity: 0.5;
+}
+
+.title-main {
+  font-family: 'Nanum Myeongjo', serif;
+  font-size: clamp(1.7rem, 5vw, 2.6rem);
+  font-weight: 800;
+  color: var(--ink-main);
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+/* 제목 아래 붓터치 밑줄 */
+.title-underline {
+  display: block;
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(to right, var(--rose), var(--rose-light));
+  margin: 16px auto 0;
+  border-radius: 2px;
+}
+
+/* 날짜 스탬프 느낌 */
+.date-stamp {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 5px 16px;
+  border: 1.5px solid var(--rose-light);
+  border-radius: 2px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.72rem;
+  font-style: normal; /* italic 제거 */
+  letter-spacing: 0.3em;
+  color: var(--rose);
+  transform: rotate(-1deg);
+}
+
+/* ══════════════════════════════
+   이야기 — 필기체 느낌 본문
+══════════════════════════════ */
+.story {
+  opacity: 0;
+}
+.story.revealed { animation: inkDrop 0.8s ease forwards; }
+
+.prose {
+  font-family: 'Gowun Batang', serif;
+  font-size: clamp(1rem, 2.2vw, 1.08rem);
+  line-height: 2.5;
+  color: var(--ink-soft);
+  word-break: keep-all;
+  letter-spacing: 0.03em;
+  margin-bottom: 24px;
+}
+
+/* ══════════════════════════════
+   시험지 디자인
+══════════════════════════════ */
+.exam-paper {
+  margin: 48px -10px;
+  background: #fffef8;
+  border: 1px solid rgba(139,122,102,0.2);
+  box-shadow:
+    0 2px 8px rgba(0,0,0,0.08),
+    inset 0 0 0 6px #fffef8,
+    inset 0 0 0 7px rgba(139,122,102,0.12);
+  padding: 36px 40px;
+  position: relative;
+  opacity: 0;
+}
+.exam-paper.revealed { animation: inkDrop 0.8s ease forwards; }
+
+.exam-paper::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 32px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--rose) 0px, var(--rose) 8px,
+    var(--teal) 8px, var(--teal) 16px,
+    var(--gold-warm) 16px, var(--gold-warm) 24px,
+    var(--blue-soft) 24px, var(--blue-soft) 32px
+  );
+  opacity: 0.15;
+}
+
+.exam-header {
+  text-align: center;
+  border-bottom: 2px solid rgba(139,122,102,0.2);
+  padding-bottom: 16px;
+  margin-bottom: 28px;
+  margin-top: 8px;
+}
+
+.exam-title {
+  font-family: 'Nanum Myeongjo', serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+  letter-spacing: 0.15em;
+}
+
+.exam-subtitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.72rem;
+  font-style: normal; /* italic 제거 */
+  color: var(--ink-faint);
+  letter-spacing: 0.2em;
+  margin-top: 4px;
+}
+
+.exam-questions {
+  list-style: none;
+}
+
+.exam-q {
+  display: flex;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px dashed rgba(139,122,102,0.15);
+  align-items: flex-start;
+}
+
+.q-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.88rem;
+  color: var(--ink-faint);
+  flex-shrink: 0;
+  padding-top: 2px;
+  min-width: 28px;
+}
+
+.q-text {
+  font-family: 'Gowun Batang', serif;
+  font-size: 0.95rem;
+  line-height: 1.8;
+  color: var(--ink-soft);
+}
+
+.q-highlight {
+  background: linear-gradient(to right, #ffe8b0, #ffd080);
+  padding: 14px 20px;
+  border-radius: 2px;
+  border-left: 3px solid var(--gold-warm);
+  position: relative;
+}
+
+.q-highlight .q-text {
+  font-weight: 600;
+  color: var(--ink-main);
+}
+
+.q-blank {
+  display: inline-block;
+  width: 120px;
+  height: 1.5px;
+  background: var(--ink-faint);
+  vertical-align: middle;
+  margin-left: 8px;
+  position: relative;
+}
+
+.q-blank::after {
+  content: '?';
+  position: absolute;
+  right: 0;
+  top: -12px;
+  font-size: 0.75rem;
+  color: var(--rose);
+}
+
+/* ══════════════════════════════
+   교수님 말씀 블록
+══════════════════════════════ */
+.professor-block {
+  margin: 44px 0;
+  position: relative;
+  opacity: 0;
+}
+.professor-block.revealed { animation: inkDrop 0.8s ease forwards; }
+
+/* 말풍선 모양 */
+.speech-bubble {
+  background: linear-gradient(135deg, var(--teal-pale) 0%, rgba(224,240,236,0.5) 100%);
+  border: 1px solid rgba(74,138,122,0.25);
+  border-radius: 4px 4px 4px 0;
+  padding: 32px 36px;
+  position: relative;
+}
+
+.speech-bubble::before {
+  content: '';
+  position: absolute;
+  bottom: -12px; left: 0;
+  width: 0; height: 0;
+  border-top: 12px solid rgba(74,138,122,0.25);
+  border-right: 16px solid transparent;
+}
+.speech-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -10px; left: 1px;
+  width: 0; height: 0;
+  border-top: 11px solid var(--teal-pale);
+  border-right: 15px solid transparent;
+}
+
+.speaker-tag {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.72rem;
+  font-style: normal; /* italic 제거 */
+  letter-spacing: 0.3em;
+  color: var(--teal);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.speaker-tag::before {
+  content: '';
+  display: inline-block;
+  width: 24px; height: 1px;
+  background: var(--teal-light);
+}
+
+.speech-text {
+  font-family: 'Gowun Batang', serif;
+  font-size: clamp(0.98rem, 2.2vw, 1.06rem);
+  line-height: 2.4;
+  color: var(--ink-soft);
+  word-break: keep-all;
+}
+
+.professor-name {
+  margin-top: 20px;
+  padding-left: 16px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.75rem;
+  font-style: normal; /* italic 제거 */
+  color: var(--teal);
+  letter-spacing: 0.2em;
+}
+
+/* ══════════════════════════════
+   도로시 — 핵심 이름 강조
+══════════════════════════════ */
+.dorothy-reveal {
+  margin: 48px 0;
+  text-align: center;
+  opacity: 0;
+}
+.dorothy-reveal.revealed { animation: inkDrop 0.8s ease forwards; }
+
+.dorothy-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.72rem;
+  font-style: normal; /* italic 제거 */
+  letter-spacing: 0.4em;
+  color: var(--ink-faint);
+  margin-bottom: 16px;
+}
+
+.dorothy-name {
+  font-family: 'Gowun Batang', serif;
+  font-size: clamp(2rem, 8vw, 3.5rem);
+  font-weight: 700;
+  color: var(--rose);
+  position: relative;
+  display: inline-block;
+  letter-spacing: 0.1em;
+}
+
+/* 수채화 언더라인 */
+.dorothy-name::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: -8px; right: -8px;
+  height: 12px;
+  background: rgba(196,122,122,0.2);
+  border-radius: 50%;
+  filter: blur(4px);
+}
+
+.dorothy-sub {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.88rem;
+  font-style: normal; /* italic 제거 */
+  color: var(--ink-faint);
+  margin-top: 16px;
+  letter-spacing: 0.15em;
+}
+
+/* ══════════════════════════════
+   구분선 — 꽃/별 모티프
+══════════════════════════════ */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 50px 0;
+  opacity: 0;
+}
+.divider.revealed { animation: inkDrop 0.8s ease forwards; }
+
+.div-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--paper-edge), transparent);
+}
+.div-sym {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.div-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--rose-light);
+}
+.div-dot.teal { background: var(--teal-light); }
+.div-dot.gold { background: var(--gold-warm); }
+
+/* ══════════════════════════════
+   성경 구절
+══════════════════════════════ */
+.scripture-wrap {
+  margin: 44px 0;
+  opacity: 0;
+}
+.scripture-wrap.revealed { animation: inkDrop 0.8s ease forwards; }
+
+/* 마태복음 */
+.scripture-matt {
+  padding: 36px 40px;
+  background: linear-gradient(135deg, var(--rose-pale) 0%, rgba(245,224,224,0.4) 100%);
+  border-top: 2px solid var(--rose-light);
+  border-bottom: 1px solid var(--rose-light);
+  position: relative;
+}
+
+.scripture-matt::before {
+  content: '"';
+  position: absolute;
+  top: 10px; left: 20px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 5rem;
+  color: rgba(196,122,122,0.15);
+  line-height: 1;
+}
+
+.scripture-eyebrow {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.7rem;
+  font-style: normal; /* italic 제거 */
+  letter-spacing: 0.35em;
+  color: var(--rose);
+  margin-bottom: 16px;
+  display: block;
+}
+
+.scripture-text {
+  font-family: 'Gowun Batang', serif;
+  font-size: clamp(0.98rem, 2.2vw, 1.06rem);
+  line-height: 2.3;
+  color: var(--ink-soft);
+  word-break: keep-all;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 16px;
+}
+
+.scripture-ref {
+  text-align: right;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.75rem;
+  font-style: normal; /* italic 제거 */
+  color: var(--rose);
+  letter-spacing: 0.2em;
+}
+
+/* 누가복음 */
+.scripture-luke {
+  padding: 36px 40px;
+  background: linear-gradient(135deg, var(--teal-pale) 0%, rgba(224,240,236,0.4) 100%);
+  border-top: 2px solid var(--teal-light);
+  border-bottom: 1px solid var(--teal-light);
+  margin-top: 24px;
+  position: relative;
+}
+.scripture-luke::before {
+  content: '"';
+  position: absolute;
+  top: 10px; left: 20px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 5rem;
+  color: rgba(74,138,122,0.15);
+  line-height: 1;
+}
+.scripture-luke .scripture-eyebrow { color: var(--teal); }
+.scripture-luke .scripture-ref { color: var(--teal); }
+
+/* ══════════════════════════════
+   성찰 본문
+══════════════════════════════ */
+.reflection {
+  margin: 44px 0;
+  padding: 32px 36px;
+  background: var(--gold-pale);
+  border-left: 3px solid var(--gold-warm);
+  position: relative;
+  opacity: 0;
+}
+.reflection.revealed { animation: inkDrop 0.8s ease forwards; }
+
+.reflection::before {
+  content: '✎';
+  position: absolute;
+  top: -14px; left: 20px;
+  font-size: 1.4rem;
+  color: var(--gold-warm);
+  background: var(--paper);
+  padding: 0 8px;
+}
+
+/* ══════════════════════════════
+   클로징
+══════════════════════════════ */
+.closing {
+  margin-top: 60px;
+  text-align: center;
+  opacity: 0;
+}
+.closing.revealed { animation: inkDrop 0.8s ease forwards; }
+
+.closing-flower {
+  font-size: 2rem;
+  margin-bottom: 28px;
+  display: block;
+  animation: gentleSway 4s ease-in-out infinite;
+}
+
+@keyframes gentleSway {
+  0%,100% { transform: rotate(-3deg); }
+  50%      { transform: rotate(3deg); }
+}
+
+.closing-main {
+  font-family: 'Gowun Batang', serif;
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  line-height: 2.2;
+  color: var(--ink-soft);
+  max-width: 480px;
+  margin: 0 auto 32px;
+  word-break: keep-all;
+}
+
+.closing-highlight {
+  color: var(--rose);
+  font-weight: 700;
+}
+
+.closing-teal {
+  color: var(--teal);
+  font-weight: 700;
+}
+
+/* 손글씨 서명 느낌 */
+.signature {
+  font-family: 'Gaegu', cursive;
+  font-size: 1.4rem;
+  color: var(--rose);
+  margin-top: 36px;
+  transform: rotate(-2deg);
+  display: inline-block;
+  letter-spacing: 0.05em;
+}
+
+.final-line {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 48px;
+}
+.fl-dash {
+  width: 50px; height: 1px;
+  background: linear-gradient(to right, transparent, var(--paper-edge));
+}
+.fl-dash.r {
+  background: linear-gradient(to left, transparent, var(--paper-edge));
+}
+.fl-word {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.68rem;
+  font-style: normal; /* italic 제거 */
+  letter-spacing: 0.4em;
+  color: var(--ink-faint);
+}
+
+/* ══════════════════════════════
+   포스트잇 — 여백 메모
+══════════════════════════════ */
+.sticky-note {
+  position: absolute;
+  right: -18px;
+  padding: 14px 16px;
+  background: #fff9c4;
+  box-shadow: 2px 2px 6px rgba(0,0,0,0.12);
+  transform: rotate(3deg);
+  z-index: 20;
+  max-width: 130px;
+}
+
+.sticky-text {
+  font-family: 'Gaegu', cursive;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: #5a4a2a;
+}
+
+/* ══════════════════════════════
+   애니메이션
+══════════════════════════════ */
+@keyframes inkDrop {
+  from { opacity:0; transform: translateY(20px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+
+/* ══════════════════════════════
+   반응형
+══════════════════════════════ */
+@media (max-width: 640px) {
+  .content { padding: 40px 28px 60px 60px; }
+  .paper::before { left: 48px; }
+  .paper-holes { width: 48px; padding-top: 50px; gap: 60px; }
+  .hole { width: 14px; height: 14px; }
+  .exam-paper { padding: 24px 20px; margin: 36px -4px; }
+  .speech-bubble { padding: 24px 22px; }
+  .scripture-matt, .scripture-luke { padding: 28px 24px; }
+  .reflection { padding: 24px 22px; }
+  .sticky-note { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="watercolor-bg">
+  <div class="wc-blob wc-1"></div>
+  <div class="wc-blob wc-2"></div>
+  <div class="wc-blob wc-3"></div>
+  <div class="wc-blob wc-4"></div>
+</div>
+
+<div class="paper-wrap">
+  <div class="paper">
+
+    <div class="paper-holes">
+      <div class="hole"></div>
+      <div class="hole"></div>
+      <div class="hole"></div>
+      <div class="hole"></div>
+      <div class="hole"></div>
+      <div class="hole"></div>
+      <div class="hole"></div>
+      <div class="hole"></div>
+    </div>
+
+    <div class="paper-fold"></div>
+
+    <div class="content">
+
+      <div class="title-section">
+        <p class="title-label">A True Story</p>
+        <h1 class="title-main">가장 중요한<br>시험 문제</h1>
+        <span class="title-underline"></span>
+        <div class="date-stamp">Nursing School · 간호학교</div>
+      </div>
+
+      <div class="story">
+        <p class="prose">간호학교에 입학한 지 두 달이 지난 어느 날이었다. 교수님은 수업시간에 강의 대신 간단한 문제가 수록된 시험지를 돌렸다. 수업을 착실하게 들었던 나로서는 별로 어렵지 않게 문제를 풀어나갈 수 있었다. 그러나 마지막 문항에서 막혔다.</p>
+      </div>
+
+      <div class="exam-paper">
+        <div class="sticky-note" style="top:20px;">
+          <p class="sticky-text">이름을<br>알고<br>있었나요? 🤔</p>
+        </div>
+
+        <div class="exam-header">
+          <p class="exam-title">간호학 소시험</p>
+          <p class="exam-subtitle">Nursing School Exam</p>
+        </div>
+        <ul class="exam-questions">
+          <li class="exam-q">
+            <span class="q-num">1.</span>
+            <span class="q-text">심폐소생술의 순서를 기술하시오.</span>
+          </li>
+          <li class="exam-q">
+            <span class="q-num">2.</span>
+            <span class="q-text">활력징후 측정 항목 네 가지를 쓰시오.</span>
+          </li>
+          <li class="exam-q">
+            <span class="q-num">3.</span>
+            <span class="q-text">무균술의 원칙을 설명하시오.</span>
+          </li>
+          <li class="exam-q" style="border-bottom:none; padding-bottom:0;">
+            <span class="q-num" style="color:var(--rose); font-weight:700;">4.</span>
+            <div class="q-highlight" style="flex:1;">
+              <p class="q-text" style="font-size:1rem;">우리 학교를 깨끗하게 청소해주는 아주머니의 이름은?<span class="q-blank"></span></p>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="story">
+        <p class="prose">이것이 시험문제라고 할 수 있는가! 난 이 아주머니를 여러 번 봤었다. 검정 머리에 키가 크고 나이는 오십대쯤 보였는데 이름은 뭐지? 난 마지막 문제의 답을 공란으로 두고 답안지를 제출했다. 모두 답안지를 제출하고 난 후 한 학생이 마지막 문항도 점수에 반영되는 것이냐고 물었다.</p>
+      </div>
+
+      <div class="professor-block story">
+        <div class="speech-bubble">
+          <p class="speaker-tag">교수님의 말씀</p>
+          <p class="speech-text">
+            "물론이지."<br><br>
+            "여러분은 간호사로서 앞으로 수많은 사람들을 대하게 될 것입니다. 한 사람 한 사람 모두가 중요한 사람들입니다.<br><br>
+            이들은 여러분의 각별한 주의와 배려를 받을 권리가 있습니다. 어떤 경우라도 여러분은 항상 이들에게 미소를 보내야 하고, 먼저 미소를 보내야 하고, 먼저 인사를 건네야 합니다."
+          </p>
+        </div>
+        <p class="professor-name">— 교수님</p>
+      </div>
+
+      <div class="dorothy-reveal story">
+        <p class="dorothy-label">잊을 수 없는 이름</p>
+        <p class="dorothy-name">Dorothy</p>
+        <p class="dorothy-sub">지금도 난 그 강의를 절대 잊지 않고 있다.</p>
+        <p class="prose" style="text-align:center; margin-top:16px; color:var(--ink-faint);">청소 아주머니의 이름이 '도로시'였다는 것도.</p>
+      </div>
+
+      <div class="divider story">
+        <div class="div-line"></div>
+        <div class="div-sym">
+          <div class="div-dot"></div>
+          <div class="div-dot teal"></div>
+          <div class="div-dot gold"></div>
+          <div class="div-dot teal"></div>
+          <div class="div-dot"></div>
+        </div>
+        <div class="div-line"></div>
+      </div>
+
+      <div class="scripture-wrap story">
+        <div class="scripture-matt">
+          <span class="scripture-eyebrow">말씀 · Matthew</span>
+          <p class="scripture-text">내가 진실로 여러분에게 말합니다. 누구든지 이 작은 사람들 중 한 사람에게, 제자라는 이름 때문에 냉수 한 그릇이라도 주어 마시게 하는 사람은 결코 보상을 잃지 않을 것입니다.</p>
+          <p class="scripture-ref">— 마태복음 11장 42절</p>
+        </div>
+
+        <div class="scripture-luke">
+          <span class="scripture-eyebrow">말씀 · Luke</span>
+          <p class="scripture-text">그대가 잔치를 베풀거든, 오히려 가난한 이들과 팔다리 못 쓰는 이들과 다리 저는 이들과 눈먼 이들을 초대하십시오. 그러면 그들이 그대에게 갚을 것이 없으므로, 그대가 복을 받을 것인데. 왜냐하면 의인들이 부활할 때에 그대가 그 보답을 받을 것이기 때문입니다.</p>
+          <p class="scripture-ref">— 누가복음 14장 13–14절</p>
+        </div>
+      </div>
+
+      <div class="reflection story">
+        <p class="prose" style="margin-bottom:0;">
+          사람들은 새해가 되고 또 명절이나 기념일 등에 선물을 주고받습니다. 그런데 그 선물의 대부분은 다시 어떤 모양으로든 나에게 돌아오길 바라는 댓가성이 많이 숨겨져 있습니다.<br><br>
+          내가 이런 선물을 주면 그 답례로 나에게 어떤 선물이라도 오지 않을까하는 그런 마음... 그런 답례가 오지 아니하면 선물을 주려고도 아니하는 그런 이기적인 마음이 있습니다.<br><br>
+          그러나 주님은 우리가 보상을 해줄 수 있는 사람들에게 잔치를 베풀기를 바라지 않을뿐더러 우리의 행한 모든 일의 보상을 사람들에게 받지 않기를 바랍니다.<br><br>
+          왜냐하면 그날에 주님께서 우리에게 그 일에 대한 보상을 주시기 때문입니다.
+        </p>
+      </div>
+
+      <div class="divider story">
+        <div class="div-line"></div>
+        <div class="div-sym">
+          <div class="div-dot teal"></div>
+          <div class="div-dot gold"></div>
+          <div class="div-dot teal"></div>
+        </div>
+        <div class="div-line"></div>
+      </div>
+
+      <div class="closing story">
+        <span class="closing-flower">🌸</span>
+        <p class="closing-main">
+          <span class="closing-highlight">도로시</span>라는 이름 하나가<br>
+          우리에게 가르쳐 주는 것이 있습니다.<br><br>
+          눈에 띄지 않는 곳에서<br>
+          묵묵히 섬기는 사람,<br>
+          아무도 기억하지 않는 <span class="closing-teal">작은 자</span>에게<br>
+          먼저 미소를 건네는 것—<br><br>
+          그것이 바로<br>
+          <span class="closing-highlight">가장 중요한 시험</span>의 답입니다.
+        </p>
+
+        <div class="signature">Dorothy ✿</div>
+
+        <div class="final-line">
+          <div class="fl-dash"></div>
+          <span class="fl-word">작은 자에게 한 것이 곧 나에게 한 것</span>
+          <div class="fl-dash r"></div>
+        </div>
+      </div>
+
+    </div></div></div><script>
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('revealed');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -20px 0px' });
+
+  document.querySelectorAll('.story, .exam-paper, .professor-block, .dorothy-reveal, .divider, .scripture-wrap, .reflection, .closing').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
