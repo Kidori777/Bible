@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>자신을 잃어 버린 사람, 그러나 잊히지 않은 이름</title>
+<title>잊혀진 사람, 그러나 잊히지 않은 이름</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;700&family=Nanum+Myeongjo:wght@400;700;800&family=Cormorant+Garamond:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -102,13 +102,12 @@ body{
 .sp{
   font-size:1.05rem;line-height:2.1;color:var(--txt);
   margin-bottom:1.6rem;
-  opacity:0;transform:translateY(28px) scale(.99);
-  transition:opacity .75s ease,transform .75s ease;
+  opacity:.2;transform:translateY(18px);
+  transition:opacity .8s ease,transform .8s ease,filter 1.6s ease;
 }
-.sp.vis{opacity:1;transform:translateY(0) scale(1);}
-.sp.forget{filter:blur(0);transition:opacity .75s,transform .75s,filter 0s;}
-.sp.forget.blurring{filter:blur(5px);opacity:.5;}
-.sp.forget.clearing{filter:blur(0);opacity:1;transition:opacity .75s,transform .75s,filter 1.8s ease;}
+.sp.vis{opacity:1;transform:translateY(0);}
+.sp.forget{filter:blur(3.5px);opacity:.25;}
+.sp.forget.vis{filter:blur(0);opacity:1;}
 
 /* dialogue */
 .dlg{
@@ -210,8 +209,8 @@ body{
 /* ——— SCRIPTURE ——— */
 .sc-block{
   max-width:700px;margin:3.5rem auto;padding:0 2rem;
-  opacity:0;transform:translateY(28px);
-  transition:opacity .8s,transform .8s;
+  opacity:.18;transform:translateY(20px);
+  transition:opacity .9s,transform .9s;
 }
 .sc-block.vis{opacity:1;transform:translateY(0);}
 .sc-inner{
@@ -257,8 +256,9 @@ body{
 }
 .pchar{
   display:inline-block;
-  opacity:0;transform:translateY(8px);
-  transition:opacity .12s,transform .25s,color .4s,text-shadow .4s;
+  opacity:.18;transform:translateY(6px);
+  transition:opacity .2s,transform .25s,color .4s,text-shadow .4s;
+  color:var(--cream);
 }
 .pchar.lit{
   opacity:1;transform:translateY(0);
@@ -266,6 +266,7 @@ body{
   text-shadow:0 0 20px rgba(232,185,106,.9),0 0 40px rgba(200,146,74,.5);
 }
 .pchar.set{
+  opacity:1;transform:translateY(0);
   color:var(--cream);text-shadow:none;
 }
 
@@ -359,7 +360,7 @@ body{
 <section class="hero">
   <div class="hero-eyebrow">묵상 &nbsp;·&nbsp; 말씀 &nbsp;·&nbsp; 은혜</div>
   <h1 class="hero-title">
-    자신을 잃어 버린 사람<br>
+    잊혀진 사람<br>
     그러나 <span class="glow">잊히지 않은</span> 이름
   </h1>
   <p class="hero-sub">하나님의 기억 속에 새겨진 우리</p>
@@ -758,24 +759,19 @@ addEventListener('scroll',()=>{
 const io=new IntersectionObserver(entries=>{
   entries.forEach(en=>{
     if(!en.isIntersecting) return;
-    const el=en.target;
-    el.classList.add('vis');
-    /* Blur-to-clear for forget elements */
-    if(el.classList.contains('forget')){
-      el.style.filter='blur(5px)';
-      el.style.opacity='.45';
-      el.style.transition='none';
-      requestAnimationFrame(()=>requestAnimationFrame(()=>{
-        el.style.transition='filter 1.9s ease, opacity 1.9s ease';
-        el.style.filter='blur(0)';
-        el.style.opacity='1';
-      }));
-    }
-    io.unobserve(el);
+    en.target.classList.add('vis');
+    io.unobserve(en.target);
   });
-},{threshold:.18,rootMargin:'0px 0px -40px 0px'});
+},{threshold:.05});
 
 document.querySelectorAll('.sp,.s-label,.s-head,.sc-block').forEach(el=>io.observe(el));
+
+/* 안전망: 4초 후 아직 안 보인 요소 전부 강제 표시 */
+setTimeout(()=>{
+  document.querySelectorAll('.sp,.s-label,.s-head,.sc-block').forEach(el=>{
+    if(!el.classList.contains('vis')) el.classList.add('vis');
+  });
+},4000);
 
 /* ══════════════════════════════════════════
    PEAK SECTION
@@ -822,14 +818,23 @@ pWrap.innerHTML=pText.split('').map(c=>
 const promObs=new IntersectionObserver(entries=>{
   if(!entries[0].isIntersecting) return;
   const chars=pWrap.querySelectorAll('.pchar');
+  const totalDur=chars.length*55+600;
   chars.forEach((ch,i)=>{
     setTimeout(()=>{
       ch.classList.add('lit');
       setTimeout(()=>ch.classList.replace('lit','set'),500);
     },i*55);
   });
+  /* 애니메이션 완료 후 미처 안 끝난 글자 전부 강제 표시 */
+  setTimeout(()=>{
+    chars.forEach(ch=>{
+      ch.style.opacity='1';
+      ch.style.transform='translateY(0)';
+      if(!ch.classList.contains('set')) ch.classList.add('set');
+    });
+  },totalDur);
   promObs.disconnect();
-},{threshold:.5});
+},{threshold:.3});
 promObs.observe(document.getElementById('godSec'));
 </script>
 </body>
