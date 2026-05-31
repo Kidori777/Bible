@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>압살롬, 아름다웠으나 무너진 사람</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700;900&family=Noto+Sans+KR:wght@300;400;500&family=Cormorant+Garamond:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --marble-white: #f7f4ef;
+    --marble-warm: #f0ebe2;
+    --crack-dark: #1a1410;
+    --crack-mid: #3d2e22;
+    --crack-light: #7a5c42;
+    --gold-deep: #8B6914;
+    --gold-mid: #C4951A;
+    --gold-light: #E8C96B;
+    --dust: #d4c9b8;
+    --ash: #a89880;
+    --text-main: #1a1410;
+    --text-sub: #4a3828;
+    --text-muted: #7a5c42;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+    background: var(--marble-white);
+    color: var(--text-main);
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Marble texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(108deg, transparent 0px, transparent 120px, rgba(180,160,130,0.04) 120px, rgba(180,160,130,0.04) 121px),
+      repeating-linear-gradient(72deg, transparent 0px, transparent 200px, rgba(160,140,110,0.03) 200px, rgba(160,140,110,0.03) 201px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Crack SVG overlay */
+  #crack-svg {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .crack-path {
+    fill: none;
+    stroke: #1a1410;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0;
+    transition: opacity 1s ease;
+  }
+  .crack-path.visible { opacity: 1; }
+
+  /* Progress bar */
+  #progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 2px;
+    background: var(--gold-mid);
+    z-index: 100;
+    width: 0%;
+    transition: width 0.15s linear;
+  }
+
+  /* Main layout */
+  .page-wrap {
+    position: relative;
+    z-index: 2;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 2.5rem 8rem;
+  }
+
+  /* ─── HERO ─── */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 5rem 0 3rem;
+    position: relative;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.4em;
+    color: var(--gold-mid);
+    text-transform: uppercase;
+    margin-bottom: 1.8rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: clamp(44px, 8vw, 80px);
+    font-weight: 900;
+    line-height: 1.05;
+    color: var(--crack-dark);
+    letter-spacing: -0.02em;
+    opacity: 0;
+    animation: fadeUp 1.2s cubic-bezier(0.16,1,0.3,1) 0.3s forwards;
+  }
+
+  .hero-title .sub-line {
+    font-weight: 300;
+    font-size: 0.62em;
+    display: block;
+    margin-top: 0.25em;
+    line-height: 1.3;
+  }
+
+  .hero-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 300;
+    color: var(--crack-mid);
+    line-height: 1.6;
+    max-width: 440px;
+    border-left: 2px solid var(--gold-mid);
+    padding-left: 1.2rem;
+    margin-top: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.9s forwards;
+  }
+
+  .hero-verse {
+    margin-top: 3rem;
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 1.2s forwards;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 11px;
+    color: var(--ash);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 1.8s forwards;
+  }
+
+  .scroll-hint-line {
+    width: 40px;
+    height: 1px;
+    background: var(--ash);
+    animation: extendLine 2.5s ease-in-out 2s infinite;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(22px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes extendLine {
+    0%,100% { transform: scaleX(0.3); transform-origin: left; }
+    50%      { transform: scaleX(1);   transform-origin: left; }
+  }
+
+  /* ─── DIVIDER ─── */
+  .marble-divider {
+    margin: 3.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .marble-divider-line { flex: 1; height: 0.5px; background: var(--dust); }
+  .marble-divider-dot  { width: 4px; height: 4px; border-radius: 50%; background: var(--gold-mid); flex-shrink: 0; }
+
+  /* ─── CHAPTERS ─── */
+  .chapter {
+    padding: 5rem 0 2rem;
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.9s ease, transform 0.9s ease;
+  }
+  .chapter.in-view { opacity: 1; transform: translateY(0); }
+
+  .chapter-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.45em;
+    color: var(--gold-mid);
+    text-transform: uppercase;
+    margin-bottom: 0.7rem;
+  }
+
+  .chapter-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: clamp(24px, 4vw, 38px);
+    font-weight: 700;
+    color: var(--crack-dark);
+    line-height: 1.2;
+    margin-bottom: 2rem;
+    letter-spacing: -0.01em;
+  }
+
+  .chapter-body {
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 2.1;
+    color: var(--text-sub);
+    word-break: keep-all;
+  }
+  .chapter-body p { margin-bottom: 1.4rem; }
+
+  /* ─── SCRIPTURE ─── */
+  .scripture {
+    margin: 2.5rem 0;
+    position: relative;
+    padding: 2rem 2rem 1.8rem 2.8rem;
+    background: var(--marble-warm);
+    border-left: 3px solid var(--gold-mid);
+  }
+  .scripture::before {
+    content: '\201C';
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 90px;
+    font-weight: 300;
+    color: var(--gold-light);
+    position: absolute;
+    top: -8px; left: 10px;
+    line-height: 1;
+    pointer-events: none;
+  }
+  .scripture-text {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 2;
+    color: var(--crack-mid);
+    margin-bottom: 1rem;
+  }
+  .scripture-ref {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--gold-deep);
+    letter-spacing: 0.08em;
+  }
+
+  /* ─── SILENCE TIMELINE ─── */
+  .silence-timeline { margin: 3rem 0; }
+
+  .timeline-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    padding: 1.1rem 0;
+    border-bottom: 0.5px solid rgba(180,160,130,0.3);
+    opacity: 0;
+    transform: translateX(-18px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .timeline-item:last-child { border-bottom: none; }
+  .timeline-item.in-view { opacity: 1; transform: translateX(0); }
+  .timeline-item:nth-child(1) { transition-delay: 0s; }
+  .timeline-item:nth-child(2) { transition-delay: 0.15s; }
+  .timeline-item:nth-child(3) { transition-delay: 0.3s; }
+  .timeline-item:nth-child(4) { transition-delay: 0.45s; }
+  .timeline-item:nth-child(5) { transition-delay: 0.6s; }
+
+  .timeline-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gold-mid);
+    letter-spacing: 0.08em;
+    min-width: 80px;
+    padding-top: 2px;
+    flex-shrink: 0;
+  }
+  .timeline-label.dark { color: var(--crack-dark); font-weight: 700; }
+
+  .timeline-bar { flex: 1; display: flex; flex-direction: column; gap: 0.35rem; }
+
+  .timeline-text {
+    font-size: 14px;
+    color: var(--text-sub);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+  .timeline-text.dark { color: var(--crack-dark); font-weight: 500; }
+
+  .timeline-fill {
+    height: 2px;
+    background: linear-gradient(to right, var(--gold-mid), var(--dust));
+    width: 0%;
+    border-radius: 1px;
+    transition: width 1.3s ease;
+  }
+  .timeline-fill.dark-fill { background: var(--crack-dark); }
+  .timeline-item.in-view .timeline-fill { width: 100%; }
+  .timeline-item:nth-child(2).in-view .timeline-fill { transition-delay: 0.15s; }
+  .timeline-item:nth-child(3).in-view .timeline-fill { transition-delay: 0.3s; }
+  .timeline-item:nth-child(4).in-view .timeline-fill { transition-delay: 0.45s; }
+  .timeline-item:nth-child(5).in-view .timeline-fill { transition-delay: 0.6s; }
+
+  /* ─── TRANSFORM CHAIN ─── */
+  .transform-chain { margin: 3rem 0; }
+
+  .transform-node {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    padding: 1.2rem 1.5rem;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .transform-node.in-view { opacity: 1; transform: translateY(0); }
+  .transform-node.dark-node { background: var(--crack-dark); border-radius: 4px; }
+  .transform-node:nth-child(1) { transition-delay: 0s; }
+  .transform-node:nth-child(2) { transition-delay: 0.1s; }  /* connector skipped */
+  .transform-node:nth-child(3) { transition-delay: 0.2s; }
+  .transform-node:nth-child(4) { transition-delay: 0.3s; }
+  .transform-node:nth-child(5) { transition-delay: 0.4s; }
+  .transform-node:nth-child(6) { transition-delay: 0.5s; }
+  .transform-node:nth-child(7) { transition-delay: 0.6s; }
+
+  .node-icon {
+    width: 50px; height: 50px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .icon-grief   { background: #e8f0e8; }
+  .icon-rage    { background: #f5e8e0; }
+  .icon-despair { background: #e8e0f0; }
+  .icon-pride   { background: rgba(255,255,255,0.1); }
+
+  .node-label {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--crack-dark);
+  }
+  .node-label.light-text { color: var(--marble-white); }
+
+  .node-sub {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+  .node-sub.light-text { color: rgba(247,244,239,0.65); }
+
+  .node-connector {
+    width: 2px;
+    height: 22px;
+    background: linear-gradient(to bottom, var(--dust), var(--crack-light));
+    margin-left: 24px;
+  }
+
+  /* ─── HAIR TRAP ─── */
+  .hair-trap {
+    margin: 2.5rem 0;
+    padding: 2.2rem 2rem;
+    background: var(--crack-dark);
+    position: relative;
+    overflow: hidden;
+  }
+  .hair-trap::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(196,149,26,0.05) 3px, rgba(196,149,26,0.05) 4px);
+    pointer-events: none;
+  }
+  .hair-trap-inner { position: relative; z-index: 1; }
+  .hair-trap-highlight {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--gold-light);
+    display: block;
+    margin-bottom: 0.7rem;
+  }
+  .hair-trap-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    font-weight: 300;
+    color: rgba(247,244,239,0.7);
+    line-height: 1.9;
+  }
+
+  /* ─── FINALE ─── */
+  #finale { padding: 5rem 0 3rem; text-align: center; }
+
+  .finale-cry {
+    font-family: 'Noto Serif KR', serif;
+    font-size: clamp(15px, 2.5vw, 19px);
+    font-weight: 700;
+    color: var(--crack-dark);
+    line-height: 2.2;
+    margin: 2rem 0;
+    letter-spacing: 0.03em;
+  }
+  .cry-name {
+    font-size: clamp(22px, 4vw, 32px);
+    color: var(--gold-deep);
+  }
+
+  /* ─── QUESTION CARDS ─── */
+  .question-section {
+    margin: 4rem 0 2rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .question-card {
+    border: 0.5px solid rgba(139,105,20,0.3);
+    padding: 1.8rem 2rem;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .question-card:nth-child(2) { transition-delay: 0.2s; }
+  .question-card.in-view { opacity: 1; transform: translateY(0); }
+
+  .question-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 0%;
+    background: var(--gold-mid);
+    transition: height 0.8s ease 0.4s;
+  }
+  .question-card.in-view::before { height: 100%; }
+
+  .question-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 52px;
+    font-weight: 300;
+    color: rgba(196,149,26,0.1);
+    position: absolute;
+    top: 0.3rem; right: 1rem;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .question-text {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 17px;
+    font-weight: 400;
+    color: var(--text-main);
+    line-height: 1.9;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ─── CLOSING ─── */
+  .closing {
+    padding: 4.5rem 0 2rem;
+    text-align: center;
+    border-top: 0.5px solid var(--dust);
+    margin-top: 2rem;
+  }
+  .closing-eyebrow {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 12px;
+    letter-spacing: 0.35em;
+    color: var(--gold-mid);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+  .closing-text {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--text-main);
+    line-height: 2.2;
+    max-width: 480px;
+    margin: 0 auto 1rem;
+  }
+  .closing-accent { color: var(--gold-deep); font-weight: 700; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 540px) {
+    .page-wrap { padding: 0 1.4rem 6rem; }
+    .hero-subtitle { font-size: 18px; }
+    .scripture { padding: 1.5rem 1.2rem 1.5rem 2rem; }
+    .scripture::before { font-size: 60px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<!-- Crack SVG -->
+<svg id="crack-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+  <path class="crack-path" id="c1" d="M 20 0 L 22 15 L 18 30 L 25 50 L 20 70 L 28 100" stroke-width="0.08"/>
+  <path class="crack-path" id="c2" d="M 75 0 L 73 20 L 78 40 L 71 65 L 76 100" stroke-width="0.06"/>
+  <path class="crack-path" id="c3" d="M 22 30 L 35 35 L 42 28 L 55 38 L 48 50" stroke-width="0.05"/>
+  <path class="crack-path" id="c4" d="M 55 60 L 68 55 L 80 65 L 72 80 L 85 90" stroke-width="0.05"/>
+  <path class="crack-path" id="c5" d="M 0 45 L 15 50 L 10 58 L 22 62 L 18 75 L 30 80" stroke-width="0.04"/>
+  <path class="crack-path" id="c6" d="M 40 0 L 38 25 L 45 40 L 38 60 L 50 75 L 45 100" stroke-width="0.04"/>
+  <path class="crack-path" id="c7" d="M 25 50 L 38 45 L 44 55 L 58 50 L 65 60" stroke-width="0.03"/>
+  <path class="crack-path" id="c8" d="M 60 20 L 72 30 L 65 45 L 78 55" stroke-width="0.03"/>
+</svg>
+
+<div class="page-wrap">
+
+  <!-- HERO -->
+  <section id="hero">
+    <p class="hero-eyebrow">사무엘하 13–18장</p>
+    <h1 class="hero-title">
+      압살롬,
+      <span class="sub-line">아름다웠으나<br>무너진 사람</span>
+    </h1>
+    <p class="hero-subtitle">
+      사람을 무너뜨리는 것은<br>
+      외적인 부족함이 아니라,<br>
+      마음속에서 다루어지지 않은<br>상처와 욕망이다.
+    </p>
+    <p class="hero-verse">삼하 14:25 &nbsp;·&nbsp; 삼하 13:20 &nbsp;·&nbsp; 삼하 18:33</p>
+    <div class="scroll-hint">
+      <div class="scroll-hint-line"></div>
+      아래로 내려가며 읽기
+    </div>
+  </section>
+
+  <!-- CH 1 -->
+  <section class="chapter" id="ch1">
+    <p class="chapter-num">I</p>
+    <h2 class="chapter-title">흠 없이 빼어난 사람</h2>
+    <div class="chapter-body">
+      <p>예루살렘 왕궁에는 많은 왕자들이 있었습니다. 그러나 그중에서도 사람들의 눈길을 가장 사로잡는 사람이 있었습니다. 바로 압살롬이었습니다.</p>
+      <p>그의 외모는 뛰어났고, 그의 말은 부드러웠으며, 그의 행동에는 품격이 있었습니다. 왕의 아들이었습니다. 왕궁에서 자랐고, 백성들의 사랑을 받았습니다. 누가 보아도 부족한 것이 없는 인생처럼 보였습니다.</p>
+    </div>
+    <div class="scripture">
+      <p class="scripture-text">온 이스라엘에서 압살롬보다 더 용모가 빼어나다고 칭송을 받는 사람이 없었다. 그는 발끝부터 정수리까지 흠이 없었다.</p>
+      <p class="scripture-ref">사무엘하 14:25</p>
+    </div>
+    <div class="chapter-body">
+      <p>하지만 성경은 우리에게 조용히 말합니다. 사람을 무너뜨리는 것은 외적인 부족함이 아니라, 마음속에서 다루어지지 않은 상처와 욕망이라고.</p>
+    </div>
+  </section>
+
+  <div class="marble-divider"><div class="marble-divider-line"></div><div class="marble-divider-dot"></div><div class="marble-divider-line"></div></div>
+
+  <!-- CH 2 -->
+  <section class="chapter" id="ch2">
+    <p class="chapter-num">II</p>
+    <h2 class="chapter-title">찢어진 옷, 흐트러진 머리</h2>
+    <div class="chapter-body">
+      <p>압살롬에게는 다말이라는 사랑하는 누이가 있었습니다. 그런데 어느 날 끔찍한 일이 일어났습니다. 이복형 암논이 다말을 욕보인 것입니다. 다말은 울면서 압살롬에게 돌아왔습니다.</p>
+      <p>찢어진 옷. 흐트러진 머리. 무너져 내린 영혼.</p>
+    </div>
+    <div class="scripture">
+      <p class="scripture-text">"네 오빠 암논이 너와 함께 있었느냐? 누이야, 지금은 잠잠하여라. 그는 너의 오빠가 아니냐. 이 일을 마음에 두지 마라." 그리하여 다말은 오빠 압살롬의 집에서 처량하게 지냈다.</p>
+      <p class="scripture-ref">사무엘하 13:20</p>
+    </div>
+    <div class="chapter-body">
+      <p>하지만 사실 가장 잠잠하지 못한 사람은 압살롬 자신이었습니다. 말하지 않았습니다. 그러나 잊은 것도 아니었습니다.</p>
+    </div>
+    <div class="scripture">
+      <p class="scripture-text">압살롬은 암논에게 전혀 시비를 따지지 않았다. 압살롬은 암논이 자기 누이 다말을 욕보였으므로 그를 증오하고 있었다.</p>
+      <p class="scripture-ref">사무엘하 13:22</p>
+    </div>
+    <div class="chapter-body">
+      <p>그 무렵 다윗도 모든 사실을 알게 되었습니다. 왕은 분개했습니다. 아버지로서, 왕으로서. 하지만 이상하게도 그 다음 이야기는 없습니다. 암논을 처벌했다는 기록도, 공의를 세웠다는 기록도.</p>
+    </div>
+  </section>
+
+  <div class="marble-divider"><div class="marble-divider-line"></div><div class="marble-divider-dot"></div><div class="marble-divider-line"></div></div>
+
+  <!-- CH 3 -->
+  <section class="chapter" id="ch3">
+    <p class="chapter-num">III</p>
+    <h2 class="chapter-title">아버지의 침묵, 만 이 년</h2>
+    <div class="chapter-body">
+      <p>압살롬은 기다렸습니다. 왕이 움직이기를. 아버지가 정의를 세우기를. 그러나 침묵은 계속되었습니다.</p>
+    </div>
+
+    <div class="silence-timeline">
+      <div class="timeline-item">
+        <span class="timeline-label">1개월</span>
+        <div class="timeline-bar">
+          <p class="timeline-text">"아버지가 곧 바로잡으시겠지."</p>
+          <div class="timeline-fill"></div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <span class="timeline-label">6개월</span>
+        <div class="timeline-bar">
+          <p class="timeline-text">침묵이 이어졌습니다.</p>
+          <div class="timeline-fill"></div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <span class="timeline-label">1년</span>
+        <div class="timeline-bar">
+          <p class="timeline-text">실망이 자리를 잡기 시작했습니다.</p>
+          <div class="timeline-fill"></div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <span class="timeline-label">만 이 년</span>
+        <div class="timeline-bar">
+          <p class="timeline-text">무언가가 압살롬의 마음속에서 바뀌었습니다.</p>
+          <div class="timeline-fill"></div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <span class="timeline-label dark">행동</span>
+        <div class="timeline-bar">
+          <p class="timeline-text dark">"내가 직접 해야 한다." — 암논을 죽이다</p>
+          <div class="timeline-fill dark-fill"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chapter-body">
+      <p>그날 죽은 것은 암논만이 아니었습니다. 압살롬의 마음속에 남아 있던 신뢰도 함께 죽었습니다. 아버지에 대한 신뢰. 하나님께 대한 기다림. 하나님의 때를 믿는 믿음.</p>
+    </div>
+  </section>
+
+  <div class="marble-divider"><div class="marble-divider-line"></div><div class="marble-divider-dot"></div><div class="marble-divider-line"></div></div>
+
+  <!-- CH 4 -->
+  <section class="chapter" id="ch4">
+    <p class="chapter-num">IV</p>
+    <h2 class="chapter-title">상처가 자라는 방식</h2>
+    <div class="chapter-body">
+      <p>상처는 하나님께 맡겨질 때 치유됩니다. 그러나 붙들고 있으면 불신과 증오의 뿌리를 내립니다. 압살롬의 상처도 그렇게 자랐습니다.</p>
+    </div>
+
+    <div class="transform-chain" id="transform-chain">
+      <div class="transform-node">
+        <div class="node-icon icon-grief">💔</div>
+        <div>
+          <p class="node-label">슬픔</p>
+          <p class="node-sub">누이를 위한 눈물</p>
+        </div>
+      </div>
+      <div class="node-connector"></div>
+      <div class="transform-node">
+        <div class="node-icon icon-rage">🔥</div>
+        <div>
+          <p class="node-label">분노</p>
+          <p class="node-sub">암논을 향한 증오</p>
+        </div>
+      </div>
+      <div class="node-connector"></div>
+      <div class="transform-node">
+        <div class="node-icon icon-despair">🌑</div>
+        <div>
+          <p class="node-label">실망</p>
+          <p class="node-sub">아버지에 대한 불신</p>
+        </div>
+      </div>
+      <div class="node-connector"></div>
+      <div class="transform-node dark-node">
+        <div class="node-icon icon-pride">👑</div>
+        <div>
+          <p class="node-label light-text">반역</p>
+          <p class="node-sub light-text">내가 왕이 되어야 한다</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="chapter-body">
+      <p>압살롬은 처음부터 왕좌를 탐한 사람이 아니었습니다. 처음에는 상처받은 아들이었습니다. 처음에는 누이를 사랑하는 오빠였습니다. 처음에는 정의를 갈망하는 사람이었습니다.</p>
+      <p>그러나 상처가 하나님께 맡겨지지 않자, 그 상처는 분노가 되었고, 분노는 교만이 되었고, 교만은 반역이 되었습니다.</p>
+    </div>
+
+    <div class="scripture">
+      <p class="scripture-text">그는 손을 내밀어 그 사람을 붙잡고 입을 맞추곤 하였다… 그리하여 압살롬은 이스라엘 사람들의 마음을 훔쳤다.</p>
+      <p class="scripture-ref">사무엘하 15:5–6</p>
+    </div>
+
+    <div class="chapter-body">
+      <p>상처받은 사람이 하나님께 치유받지 못하면, 상처받은 사람들을 위로하는 지도자가 아니라, 상처를 이용하는 지도자가 될 수 있기 때문입니다.</p>
+    </div>
+  </section>
+
+  <div class="marble-divider"><div class="marble-divider-line"></div><div class="marble-divider-dot"></div><div class="marble-divider-line"></div></div>
+
+  <!-- CH 5 -->
+  <section class="chapter" id="ch5">
+    <p class="chapter-num">V</p>
+    <h2 class="chapter-title">자랑거리가 올무가 되다</h2>
+
+    <div class="hair-trap">
+      <div class="hair-trap-inner">
+        <span class="hair-trap-highlight">그 노새가 커다란 테레빈나무의 울창한 가지들 아래로 지나갈 때</span>
+        <p class="hair-trap-text">압살롬의 머리가 테레빈나무에 걸려 하늘과 땅 사이에 매달리고 — 사무엘하 18:9</p>
+      </div>
+    </div>
+
+    <div class="chapter-body">
+      <p>사람들이 가장 칭찬하던 것, 이스라엘이 자랑스러워하던 그 아름다운 머리카락.</p>
+      <p>사람들이 가장 부러워했던 것이 결국 그의 올무가 되었습니다.</p>
+      <p>마침내 압살롬은 아버지 다윗을 몰아내고 왕이 되려 했습니다. 그러나 하나님께서 주시지 않은 왕좌는 사람을 살리지 못합니다. 그는 백성들의 마음은 얻었지만 하나님의 마음은 얻지 못했습니다.</p>
+    </div>
+  </section>
+
+  <div class="marble-divider"><div class="marble-divider-line"></div><div class="marble-divider-dot"></div><div class="marble-divider-line"></div></div>
+
+  <!-- FINALE -->
+  <section id="finale" class="chapter">
+    <p class="chapter-num">VI &nbsp;·&nbsp; 마지막</p>
+    <h2 class="chapter-title" style="text-align:center; margin-bottom:3rem;">아버지의 눈물</h2>
+
+    <div class="finale-cry">
+      <span class="cry-name">내 아들 압살롬아!</span><br>
+      내 아들, 내 아들 압살롬아!<br>
+      너 대신 차라리 내가 죽었더라면!<br>
+      <span class="cry-name">압살롬아, 내 아들아, 내 아들아!</span>
+    </div>
+    <p style="text-align:center; font-size:12px; color:var(--gold-deep); letter-spacing:0.12em; margin-bottom:3rem;">사무엘하 18:33</p>
+
+    <div class="chapter-body" style="text-align:center; max-width:480px; margin:0 auto 3rem;">
+      <p>반역자의 죽음이 아니라, 상처받은 아들과 후회하는 아버지의 눈물로 끝납니다. 압살롬은 처음부터 악한 사람이 아니었습니다.</p>
+      <p>그는 사랑하는 누이의 아픔을 보았습니다. 아버지의 침묵에 실망했습니다. 정의를 갈망했습니다. 그러나 그 상처를 하나님께 가져가지 않았습니다. 그리고 결국 상처가 그의 인생을 이끌기 시작했습니다.</p>
+    </div>
+
+    <div class="question-section">
+      <div class="question-card">
+        <span class="question-num">01</span>
+        <p class="question-text">지금 당신의 마음속에는 오랫동안 품고 있는 상처가 없는가?</p>
+      </div>
+      <div class="question-card">
+        <span class="question-num">02</span>
+        <p class="question-text">그 상처를 하나님께 맡기고 있는가, 아니면 압살롬처럼 붙들고 있는가?</p>
+      </div>
+    </div>
+
+    <div class="closing">
+      <p class="closing-eyebrow">묵상</p>
+      <p class="closing-text">
+        상처는 치유되지 않으면 사라지지 않습니다.<br>
+        그것은 <span class="closing-accent">자라납니다.</span><br>
+        그리고 어느 날, 우리의 판단과 선택까지<br>지배하게 될 수 있습니다.
+      </p>
+    </div>
+  </section>
+
+</div><!-- /.page-wrap -->
+
+<script>
+  const cracks = [
+    { id:'c1', threshold:0.08 },
+    { id:'c2', threshold:0.18 },
+    { id:'c3', threshold:0.32 },
+    { id:'c4', threshold:0.48 },
+    { id:'c5', threshold:0.58 },
+    { id:'c6', threshold:0.68 },
+    { id:'c7', threshold:0.80 },
+    { id:'c8', threshold:0.91 },
+  ];
+
+  const progressBar = document.getElementById('progress-bar');
+
+  // Intersection observer
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in-view');
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll(
+    '.chapter, .timeline-item, .transform-node, .question-card'
+  ).forEach(el => observer.observe(el));
+
+  function onScroll() {
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    const docH = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = docH > 0 ? scrollTop / docH : 0;
+
+    progressBar.style.width = Math.min(pct * 100, 100) + '%';
+
+    cracks.forEach(c => {
+      const el = document.getElementById(c.id);
+      if (el && pct >= c.threshold) el.classList.add('visible');
+    });
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+</script>
+</body>
+</html>
