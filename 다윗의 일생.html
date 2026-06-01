@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>다윗 — 하나님의 마음에 맞는 사람</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Serif+KR:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --gold:       #C9A84C;
+  --gold-light: #E8D5A3;
+  --gold-dark:  #8B6914;
+  --ink:        #1A1208;
+  --ink-mid:    #3D2B0F;
+  --stone:      #2C1F0E;
+  --parchment:  #F5EDD8;
+  --blood:      #8B1A1A;
+  --ff-serif: 'Noto Serif KR', 'Apple SD Gothic Neo', 'Malgun Gothic', serif;
+  --ff-sans:  'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --ff-disp:  'Playfair Display', 'Noto Serif KR', serif;
+}
+
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  background: var(--stone);
+  color: var(--parchment);
+  font-family: var(--ff-sans);
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--stone); }
+::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 3px; }
+
+/* PROGRESS BAR */
+.progress-bar {
+  position: fixed; top: 0; left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold-dark), var(--gold));
+  width: 0%; z-index: 1000;
+  box-shadow: 0 0 8px var(--gold);
+  transition: width 0.1s ease;
+}
+
+/* STARFIELD */
+#starfield {
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 0; overflow: hidden;
+}
+.star {
+  position: absolute; width: 2px; height: 2px;
+  border-radius: 50%; background: rgba(201,168,76,0.6);
+  animation: twinkle var(--d, 3s) ease-in-out infinite var(--delay, 0s);
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0.2; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.5); }
+}
+
+/* NAV DOTS */
+.nav-dots {
+  position: fixed; right: 20px; top: 50%;
+  transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 8px; z-index: 100;
+}
+.nav-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(201,168,76,0.3);
+  border: 1px solid rgba(201,168,76,0.5);
+  cursor: pointer; transition: all 0.3s;
+}
+.nav-dot.active {
+  background: var(--gold);
+  box-shadow: 0 0 8px var(--gold);
+  transform: scale(1.5);
+}
+
+/* ══════════════════════
+   HERO
+══════════════════════ */
+.hero {
+  position: relative; min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  z-index: 1; overflow: hidden;
+}
+.hero-moon {
+  position: absolute; top: 12%; right: 15%;
+  width: 80px; height: 80px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #FFF8E7, #E8D5A3, #C9A84C);
+  box-shadow: 0 0 30px rgba(201,168,76,0.5), 0 0 80px rgba(201,168,76,0.2);
+  animation: moonGlow 4s ease-in-out infinite;
+}
+@keyframes moonGlow {
+  0%,100%{box-shadow:0 0 30px rgba(201,168,76,0.5),0 0 80px rgba(201,168,76,0.2);}
+  50%{box-shadow:0 0 50px rgba(201,168,76,0.8),0 0 120px rgba(201,168,76,0.35);}
+}
+.sheep-flock {
+  position: absolute; bottom: 33%;
+  left: 0; right: 0; display: flex; gap: 20px;
+  justify-content: center; pointer-events: none;
+}
+.sheep {
+  opacity: 0.35;
+  animation: sheepWander var(--sw, 8s) ease-in-out infinite var(--sd, 0s);
+}
+@keyframes sheepWander {
+  0%,100%{transform:translateX(0);}
+  50%{transform:translateX(var(--sx,10px));}
+}
+.hero-hills {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 45%;
+  pointer-events: none;
+}
+.hero-hills svg { width: 100%; height: 100%; }
+.hero-content {
+  position: relative; z-index: 2;
+  text-align: center; padding: 0 24px; margin-top: -60px;
+}
+.hero-eyebrow {
+  font-family: var(--ff-sans); font-size: 0.75rem;
+  font-weight: 300; letter-spacing: 0.5em;
+  color: var(--gold); text-transform: uppercase;
+  opacity: 0; animation: fadeUp 1s ease forwards 0.5s;
+}
+.hero-title {
+  font-family: var(--ff-disp);
+  font-size: clamp(4rem, 12vw, 9rem);
+  font-weight: 400; line-height: 0.9;
+  color: var(--gold-light); margin: 16px 0 8px;
+  text-shadow: 0 4px 40px rgba(201,168,76,0.3);
+  opacity: 0; animation: fadeUp 1s ease forwards 0.8s;
+}
+.hero-title span {
+  display: block; font-size: 0.35em;
+  font-weight: 300; letter-spacing: 0.2em;
+  color: var(--gold); margin-bottom: 8px;
+}
+.hero-subtitle {
+  font-family: var(--ff-serif);
+  font-size: clamp(0.85rem, 2vw, 1.1rem);
+  font-weight: 300; color: var(--gold-light);
+  opacity: 0; animation: fadeUp 1s ease forwards 1.1s;
+  line-height: 1.8; max-width: 460px; margin: 0 auto 40px;
+}
+.hero-verse {
+  font-family: var(--ff-serif); font-size: 0.85rem;
+  color: var(--gold);
+  opacity: 0; animation: fadeUp 1s ease forwards 1.4s;
+  border-top: 1px solid rgba(201,168,76,0.3);
+  padding-top: 20px; max-width: 420px; margin: 0 auto; line-height: 1.7;
+}
+.scroll-hint {
+  position: absolute; bottom: 80px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column;
+  align-items: center; gap: 8px;
+  opacity: 0; animation: fadeIn 1s ease forwards 2s; z-index: 2;
+}
+.scroll-hint span {
+  font-size: 0.65rem; letter-spacing: 0.3em;
+  color: var(--gold); opacity: 0.6; text-transform: uppercase;
+}
+.scroll-arrow {
+  width: 1px; height: 40px;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+  animation: scrollPulse 1.5s ease-in-out infinite;
+}
+@keyframes scrollPulse {
+  0%,100%{transform:scaleY(1);opacity:0.6;}
+  50%{transform:scaleY(1.3);opacity:1;}
+}
+@keyframes fadeUp {
+  from{opacity:0;transform:translateY(30px);}
+  to{opacity:1;transform:translateY(0);}
+}
+@keyframes fadeIn {
+  from{opacity:0;} to{opacity:1;}
+}
+
+/* ══════════════════════
+   TIMELINE
+══════════════════════ */
+.timeline-wrapper {
+  position: relative; z-index: 1;
+  max-width: 920px; margin: 0 auto;
+  padding: 0 24px 40px;
+}
+.timeline-spine {
+  position: absolute; left: 50%; top: 0; bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom,
+    transparent 0%, var(--gold-dark) 5%, var(--gold) 50%, var(--gold-dark) 95%, transparent 100%
+  );
+  transform: translateX(-50%);
+}
+.timeline-spine::before, .timeline-spine::after {
+  content: ''; position: absolute; left: 50%;
+  transform: translateX(-50%);
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--gold); box-shadow: 0 0 12px var(--gold);
+}
+.timeline-spine::before{top:0;} .timeline-spine::after{bottom:0;}
+
+.chapter {
+  display: grid;
+  grid-template-columns: 1fr 60px 1fr;
+  align-items: start;
+  margin-bottom: 56px;
+  opacity: 0; transform: translateY(40px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.chapter.visible { opacity: 1; transform: translateY(0); }
+
+.chapter:nth-child(odd) .chapter-card  { grid-column:1; grid-row:1; }
+.chapter:nth-child(odd) .chapter-node  { grid-column:2; grid-row:1; }
+.chapter:nth-child(odd) .chapter-empty { grid-column:3; grid-row:1; }
+.chapter:nth-child(even) .chapter-empty{ grid-column:1; grid-row:1; }
+.chapter:nth-child(even) .chapter-node { grid-column:2; grid-row:1; }
+.chapter:nth-child(even) .chapter-card { grid-column:3; grid-row:1; }
+
+.chapter-node {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 6px;
+  padding-top: 20px; z-index: 2;
+}
+.node-icon {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--stone); border: 2px solid var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem;
+  box-shadow: 0 0 20px rgba(201,168,76,0.3);
+  transition: all 0.3s; flex-shrink: 0;
+}
+.chapter:hover .node-icon {
+  border-color: var(--gold-light);
+  box-shadow: 0 0 30px rgba(201,168,76,0.6);
+  transform: scale(1.1);
+}
+.node-chapter-num {
+  font-size: 0.6rem; font-weight: 700;
+  letter-spacing: 0.15em; color: var(--gold-dark);
+  text-transform: uppercase;
+  writing-mode: vertical-rl; opacity: 0.6;
+}
+.chapter-empty { min-height: 10px; }
+
+.chapter-card {
+  background: linear-gradient(135deg,
+    rgba(44,31,14,0.95) 0%, rgba(30,20,8,0.98) 100%
+  );
+  border: 1px solid rgba(201,168,76,0.2);
+  border-radius: 2px;
+  padding: 26px 26px 22px;
+  position: relative; overflow: hidden;
+  transition: border-color 0.3s, transform 0.3s;
+  margin: 0 4px;
+}
+.chapter-card::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0; transition: opacity 0.3s;
+}
+.chapter:hover .chapter-card {
+  border-color: rgba(201,168,76,0.45);
+  transform: translateY(-2px);
+}
+.chapter:hover .chapter-card::before { opacity: 1; }
+
+/* 테마 컬러 */
+.chapter[data-theme="calling"]    .chapter-card { border-left: 3px solid #C9A84C; }
+.chapter[data-theme="victory"]    .chapter-card { border-left: 3px solid #6B9E6B; }
+.chapter[data-theme="friendship"] .chapter-card { border-left: 3px solid #7B9FBE; }
+.chapter[data-theme="envy"]       .chapter-card { border-left: 3px solid #8B6914; }
+.chapter[data-theme="waiting"]    .chapter-card { border-left: 3px solid #9B7B5B; }
+.chapter[data-theme="mourning"]   .chapter-card { border-left: 3px solid #6B7B8B; }
+.chapter[data-theme="reign"]      .chapter-card { border-left: 3px solid #C9A84C; }
+.chapter[data-theme="sin"]        .chapter-card { border-left: 3px solid #8B1A1A; }
+.chapter[data-theme="repentance"] .chapter-card { border-left: 3px solid #C9A84C; }
+.chapter[data-theme="fracture"]   .chapter-card { border-left: 3px solid #7B5B4B; }
+.chapter[data-theme="tragedy"]    .chapter-card { border-left: 3px solid #6B3B3B; }
+.chapter[data-theme="census"]     .chapter-card { border-left: 3px solid #8B7B6B; }
+.chapter[data-theme="end"]        .chapter-card { border-left: 3px solid #8B9BB4; }
+
+.card-eyebrow {
+  font-size: 0.62rem; letter-spacing: 0.35em;
+  text-transform: uppercase; color: var(--gold-dark);
+  font-weight: 500; margin-bottom: 8px; font-family: var(--ff-sans);
+}
+.card-title {
+  font-family: var(--ff-serif);
+  font-size: clamp(1.1rem, 2.5vw, 1.45rem);
+  font-weight: 700; color: var(--gold-light);
+  line-height: 1.3; margin-bottom: 14px;
+}
+.card-body {
+  font-family: var(--ff-serif); font-size: 0.88rem;
+  line-height: 2; color: rgba(245,237,216,0.8); font-weight: 300;
+}
+.card-verse {
+  margin-top: 14px; padding: 13px 16px;
+  background: rgba(201,168,76,0.06);
+  border-left: 2px solid var(--gold-dark);
+  position: relative;
+}
+.card-verse::before {
+  content: '❝'; position: absolute;
+  top: -8px; left: 12px; font-size: 1.4rem;
+  color: var(--gold-dark); line-height: 1;
+}
+.card-verse p {
+  font-family: var(--ff-serif); font-size: 0.82rem;
+  line-height: 1.9; color: var(--gold-light); font-weight: 300;
+}
+.card-verse cite {
+  display: block; margin-top: 8px;
+  font-size: 0.68rem; letter-spacing: 0.2em;
+  color: var(--gold-dark); text-transform: uppercase;
+  font-style: normal; font-family: var(--ff-sans);
+}
+.card-note {
+  margin-top: 12px; font-family: var(--ff-serif);
+  font-size: 0.82rem; line-height: 1.9;
+  color: rgba(245,237,216,0.65); font-weight: 300;
+}
+
+/* ══════════════════════
+   SPECIAL SECTIONS
+══════════════════════ */
+.interlude {
+  position: relative; z-index: 1;
+  margin: 60px 0;
+}
+.interlude-inner {
+  max-width: 680px; margin: 0 auto;
+  text-align: center; padding: 60px 32px;
+  background: linear-gradient(180deg,
+    transparent 0%, rgba(139,105,20,0.08) 30%,
+    rgba(139,105,20,0.08) 70%, transparent 100%
+  );
+  opacity: 0; transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.interlude-inner.visible { opacity: 1; transform: translateY(0); }
+.interlude-label {
+  font-size: 0.65rem; letter-spacing: 0.5em;
+  color: var(--gold); text-transform: uppercase;
+  margin-bottom: 20px; font-family: var(--ff-sans);
+}
+.interlude-quote {
+  font-family: var(--ff-serif);
+  font-size: clamp(1.1rem, 3vw, 1.6rem);
+  color: var(--gold-light); line-height: 1.9;
+  font-weight: 300;
+}
+.interlude-ref {
+  margin-top: 20px; font-size: 0.7rem;
+  letter-spacing: 0.3em; color: var(--gold-dark);
+  text-transform: uppercase; font-family: var(--ff-sans);
+}
+.interlude-text {
+  margin-top: 20px; font-family: var(--ff-serif);
+  font-size: 0.9rem; line-height: 2;
+  color: rgba(245,237,216,0.65); font-weight: 300;
+}
+.interlude-hr {
+  width: 40px; height: 1px;
+  background: var(--gold); margin: 20px auto; opacity: 0.4;
+}
+
+/* FINALE */
+.finale {
+  position: relative; z-index: 1;
+  padding: 100px 24px 100px; text-align: center; overflow: hidden;
+}
+.finale-glow {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px; height: 600px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 70%);
+  pointer-events: none;
+  animation: pulseGlow 4s ease-in-out infinite;
+}
+@keyframes pulseGlow {
+  0%,100%{transform:translate(-50%,-50%) scale(1);opacity:0.6;}
+  50%{transform:translate(-50%,-50%) scale(1.2);opacity:1;}
+}
+.finale-star {
+  font-size: 2rem; margin-bottom: 20px; display: block;
+  color: var(--gold); animation: crownFloat 3s ease-in-out infinite;
+}
+@keyframes crownFloat {
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-8px);}
+}
+.finale-label {
+  font-size: 0.65rem; letter-spacing: 0.6em;
+  color: var(--gold); text-transform: uppercase;
+  margin-bottom: 20px; font-family: var(--ff-sans);
+}
+.finale-lead {
+  font-family: var(--ff-serif);
+  font-size: clamp(1rem, 2.5vw, 1.3rem);
+  color: rgba(245,237,216,0.75); line-height: 2;
+  max-width: 600px; margin: 0 auto 40px; font-weight: 300;
+}
+.finale-box {
+  max-width: 620px; margin: 0 auto 40px;
+  padding: 36px 40px;
+  border: 1px solid rgba(201,168,76,0.35);
+  background: rgba(201,168,76,0.05); position: relative;
+}
+.finale-box::before, .finale-box::after {
+  content: ''; position: absolute;
+  width: 20px; height: 20px;
+  border-color: var(--gold); border-style: solid; opacity: 0.6;
+}
+.finale-box::before { top:-1px;left:-1px; border-width:2px 0 0 2px; }
+.finale-box::after  { bottom:-1px;right:-1px; border-width:0 2px 2px 0; }
+.finale-verse {
+  font-family: var(--ff-serif);
+  font-size: clamp(1rem, 2.5vw, 1.3rem);
+  color: var(--gold-light); line-height: 1.9; font-weight: 300;
+}
+.finale-ref {
+  margin-top: 16px; font-size: 0.72rem;
+  letter-spacing: 0.3em; color: var(--gold-dark);
+  text-transform: uppercase; font-family: var(--ff-sans);
+}
+.finale-closing {
+  font-family: var(--ff-serif); font-size: 1rem;
+  line-height: 2.2; color: rgba(245,237,216,0.7);
+  max-width: 540px; margin: 0 auto; font-weight: 300;
+}
+.finale-closing strong { color: var(--gold); font-weight: 500; }
+
+/* MOBILE */
+@media(max-width:640px){
+  .timeline-wrapper{padding:0 14px 30px;}
+  .chapter{
+    grid-template-columns:36px 1fr;
+    margin-bottom:36px;
+  }
+  .chapter:nth-child(odd) .chapter-card,
+  .chapter:nth-child(even) .chapter-card{grid-column:2;grid-row:1;}
+  .chapter:nth-child(odd) .chapter-node,
+  .chapter:nth-child(even) .chapter-node{grid-column:1;grid-row:1;}
+  .chapter:nth-child(odd) .chapter-empty,
+  .chapter:nth-child(even) .chapter-empty{display:none;}
+  .timeline-spine{left:18px;}
+  .chapter-card{margin:0;}
+  .finale-box{padding:28px 20px;}
+  .nav-dots{display:none;}
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+<div id="starfield"></div>
+<div class="nav-dots" id="navDots"></div>
+
+<!-- ══════════ HERO ══════════ -->
+<section class="hero" id="sec-hero">
+  <div class="hero-moon"></div>
+
+  <div class="sheep-flock">
+    <div class="sheep" style="--sw:9s;--sd:0s;--sx:15px">
+      <svg width="38" height="23" viewBox="0 0 36 22" fill="rgba(245,237,216,0.9)"><ellipse cx="16" cy="12" rx="12" ry="8"/><ellipse cx="26" cy="10" rx="7" ry="6"/><circle cx="29" cy="6" r="3.5"/><rect x="8" y="18" width="3" height="5" rx="1"/><rect x="13" y="19" width="3" height="4" rx="1"/><rect x="18" y="19" width="3" height="4" rx="1"/><rect x="23" y="18" width="3" height="5" rx="1"/></svg>
+    </div>
+    <div class="sheep" style="--sw:12s;--sd:2s;--sx:-14px">
+      <svg width="30" height="18" viewBox="0 0 36 22" fill="rgba(245,237,216,0.65)"><ellipse cx="16" cy="12" rx="12" ry="8"/><ellipse cx="26" cy="10" rx="7" ry="6"/><circle cx="29" cy="6" r="3.5"/><rect x="8" y="18" width="3" height="5" rx="1"/><rect x="13" y="19" width="3" height="4" rx="1"/><rect x="18" y="19" width="3" height="4" rx="1"/><rect x="23" y="18" width="3" height="5" rx="1"/></svg>
+    </div>
+    <div class="sheep" style="--sw:7s;--sd:4s;--sx:20px">
+      <svg width="42" height="26" viewBox="0 0 36 22" fill="rgba(245,237,216,0.85)"><ellipse cx="16" cy="12" rx="12" ry="8"/><ellipse cx="26" cy="10" rx="7" ry="6"/><circle cx="29" cy="6" r="3.5"/><rect x="8" y="18" width="3" height="5" rx="1"/><rect x="13" y="19" width="3" height="4" rx="1"/><rect x="18" y="19" width="3" height="4" rx="1"/><rect x="23" y="18" width="3" height="5" rx="1"/></svg>
+    </div>
+  </div>
+
+  <div class="hero-hills">
+    <svg viewBox="0 0 1440 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="hg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#3D2B0F" stop-opacity="0.6"/>
+          <stop offset="100%" stop-color="#1A1208" stop-opacity="1"/>
+        </linearGradient>
+      </defs>
+      <path d="M0,200 C180,120 360,80 540,140 C720,200 900,100 1080,130 C1260,160 1350,110 1440,90 L1440,300 L0,300 Z" fill="url(#hg)"/>
+      <path d="M0,240 C200,180 400,160 600,200 C800,240 1000,160 1200,190 C1320,210 1380,180 1440,160 L1440,300 L0,300 Z" fill="rgba(26,18,8,0.9)"/>
+      <path d="M0,270 C300,240 600,220 900,250 C1100,270 1300,240 1440,250 L1440,300 L0,300 Z" fill="#1A1208"/>
+    </svg>
+  </div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">사무엘상 · 사무엘하 · 시편 · 열왕기상</p>
+    <h1 class="hero-title"><span>King</span>다윗</h1>
+    <p class="hero-subtitle">
+      들판에서 왕궁으로,<br>
+      도망자에서 왕으로,<br>
+      죄인에서 회개자로.
+    </p>
+    <div class="hero-verse">
+      "그는 내 마음에 맞는 사람이며,<br>나의 모든 뜻을 이룰 것이다."<br>
+      <small style="letter-spacing:0.2em;font-size:0.75em;color:var(--gold-dark)">— 사도행전 13:22</small>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>scroll</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- ══════════ TIMELINE 1 ══════════ -->
+<div class="timeline-wrapper">
+  <div class="timeline-spine"></div>
+
+  <!-- Ch.1 기름 부음 -->
+  <div class="chapter" data-theme="calling" id="ch1">
+    <div class="chapter-card">
+      <p class="card-eyebrow">Chapter I · 베들레헴 들판</p>
+      <h2 class="card-title">사람들의 눈에 띄지 않는 자리,<br>하나님이 오래 바라보시던 자리</h2>
+      <p class="card-body">
+        베들레헴의 들판은 늘 조용했습니다. 그곳에서 양을 치던 한 소년, 다윗은 집안의 중심이 아니었습니다. 아버지 이새에게는 여러 아들이 있었고, 형들은 전쟁터에 나가거나 집안의 중요한 자리를 차지하고 있었지만, 그는 들판에 있었습니다. 사람들의 눈에 띄지 않는 자리, 그러나 하나님이 오래 바라보시던 자리였습니다.
+      </p>
+      <p class="card-body" style="margin-top:10px">
+        어느 날, 선지자 사무엘이 그 집을 찾아옵니다. 하나님께서 왕을 세우시겠다고 하셨기 때문입니다. 형들이 하나씩 지나갈 때마다 사람의 눈에는 그들이 더 적합해 보였습니다. 그러나 하나님은 분명히 말씀하십니다.
+      </p>
+      <div class="card-verse">
+        <p>용모나 키의 크기로 평가하지 마라. 나는 이미 그를 거절하였다. 중요한 것은 사람이 어떻게 보는가가 아니다. 왜냐하면 사람은 겉모양을 보나 여호와는 마음을 보기 때문이다.</p>
+        <cite>사무엘상 16:7</cite>
+      </div>
+      <p class="card-body" style="margin-top:12px">마침내 들판에서 불려온 다윗, 그에게 기름이 부어집니다.</p>
+      <div class="card-verse" style="margin-top:10px">
+        <p>사무엘이 기름을 담은 뿔을 가져다가 형제들 중에서 다윗에게 기름을 붓자, 여호와의 영께서 그날부터 다윗 위에 세차게 내려오셨다.</p>
+        <cite>사무엘상 16:13</cite>
+      </div>
+      <p class="card-body" style="margin-top:12px">그날 이후, 아무도 모르게 한 시대의 방향이 바뀌기 시작합니다.</p>
+    </div>
+    <div class="chapter-node">
+      <div class="node-icon">🌾</div>
+      <span class="node-chapter-num">01</span>
+    </div>
+    <div class="chapter-empty"></div>
+  </div>
+
+  <!-- Ch.2 골리앗 -->
+  <div class="chapter" data-theme="victory" id="ch2">
+    <div class="chapter-empty"></div>
+    <div class="chapter-node">
+      <div class="node-icon">🪨</div>
+      <span class="node-chapter-num">02</span>
+    </div>
+    <div class="chapter-card">
+      <p class="card-eyebrow">Chapter II · 엘라 골짜기</p>
+      <h2 class="card-title">보이지 않는 하나님을<br>실제로 믿는 사람</h2>
+      <p class="card-body">
+        전쟁터에서 그 변화는 처음으로 드러납니다. 블레셋의 장수 골리앗이 이스라엘을 모욕하고 있을 때, 왕 사울과 군대는 두려움에 묶여 있었습니다. 그때 한 소년이 나섭니다.
+      </p>
+      <div class="card-verse">
+        <p>너는 칼과 창과 단창을 들고 나에게 오지만, 나는 네가 모욕한 이스라엘 군대의 하나님, 만군의 여호와의 이름으로 너에게 간다.</p>
+        <cite>사무엘상 17:45</cite>
+      </div>
+      <p class="card-body" style="margin-top:12px">
+        돌 하나가 날아가고, 거인이 쓰러집니다. 이 장면은 단순한 용기의 이야기가 아니라, 보이지 않는 하나님을 실제로 믿는 사람의 모습이었습니다.
+      </p>
+    </div>
+  </div>
+
+  <!-- Ch.3 요나단 -->
+  <div class="chapter" data-theme="friendship" id="ch3">
+    <div class="chapter-card">
+      <p class="card-eyebrow">Chapter III · 왕궁</p>
+      <h2 class="card-title">인간의 이해를 넘어서는<br>하나님의 질서</h2>
+      <p class="card-body">
+        그날 이후 다윗은 사울의 곁에 서게 됩니다. 수금을 타며 왕의 괴로운 마음을 달래고, 전쟁에서는 승리를 가져오는 장수가 됩니다. 그 사이에서 특별한 관계가 맺어집니다. 사울의 아들 요나단과의 우정입니다.
+      </p>
+      <div class="card-verse">
+        <p>요나단의 혼이 다윗의 혼과 결합되어 요나단은 다윗을 자신의 혼처럼 사랑하였다.</p>
+        <cite>사무엘상 18:1</cite>
+      </div>
+      <p class="card-body" style="margin-top:12px">
+        왕위를 이어야 할 사람이, 하나님이 택하신 사람을 사랑합니다. 이 우정은 인간의 이해를 넘어서는 하나님의 질서를 보여줍니다.
+      </p>
+    </div>
+    <div class="chapter-node">
+      <div class="node-icon">🤝</div>
+      <span class="node-chapter-num">03</span>
+    </div>
+    <div class="chapter-empty"></div>
+  </div>
+
+  <!-- Ch.4 질투 -->
+  <div class="chapter" data-theme="envy" id="ch4">
+    <div class="chapter-empty"></div>
+    <div class="chapter-node">
+      <div class="node-icon">🗡️</div>
+      <span class="node-chapter-num">04</span>
+    </div>
+    <div class="chapter-card">
+      <p class="card-eyebrow">Chapter IV · 왕궁의 그늘</p>
+      <h2 class="card-title">노래 하나가<br>모든 것을 바꾸다</h2>
+      <p class="card-body">그러나 사람들의 노래 하나가 모든 것을 바꿉니다.</p>
+      <div class="card-verse">
+        <p>여자들이 연주하면서 서로 이렇게 노래하였다. "사울은 수천을 쳐 죽였지만 다윗은 수만을 쳐 죽였다네."</p>
+        <cite>사무엘상 18:7</cite>
+      </div>
+      <p class="card-body" style="margin-top:12px">
+        그날 이후 사울의 눈에는 다윗이 달라 보이기 시작합니다. 사랑하던 신하가 아니라, 두려운 경쟁자가 됩니다. 창이 날아들고, 의심이 깊어지고, 결국 다윗은 도망자가 됩니다. 광야와 동굴, 낯선 땅을 떠돌며 그는 살아남아야 했습니다.
+      </p>
+      <p class="card-note">그러나 그 시간은 단순한 도피가 아니라, 하나님을 깊이 배우는 시간이었습니다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 시편 23편 인터루드 -->
+<div class="interlude" id="psalm-interlude">
+  <div class="interlude-inner" id="int1">
+    <p class="interlude-label">광야에서 쓴 노래 · 시편 23편</p>
+    <p class="interlude-quote">"여호와는 나의 목자시니<br>나 부족한 것 없으리."</p>
+    <p class="interlude-ref">시편 23:1</p>
+    <div class="interlude-hr"></div>
+    <p class="interlude-text">
+      그리고 그에게는 중요한 선택의 순간이 찾아옵니다.<br>
+      사울을 죽일 기회가 두 번이나 주어집니다.
+    </p>
+  </div>
+</div>
+
+<!-- ══════════ TIMELINE 2 ══════════ -->
+<div class="timeline-wrapper">
+  <div class="timeline-spine"></div>
+
+  <!-- Ch.5 기다림 -->
+  <div class="chapter" data-theme="waiting" id="ch5">
+    <div class="chapter-card">
+      <p class="card-eyebrow">Chapter V · 엔게디 동굴</p>
+      <h2 class="card-title">하나님이 주시는 때를<br>기다리는 사람</h2>
+      <p class="card-body">
+        사울을 죽일 기회가 두 번이나 주어집니다. 그러나 그는 말합니다.
+      </p>
+      <div class="card-verse">
+        <p>여호와의 기름부음 받은 나의 주께 손을 대는 그러한 일은 여호와께서 금지하시는 일이오. 그분은 여호와의 기름부음 받은 분이시오.</p>
+        <cite>사무엘상 24:6</cite>
+      </div>
+      <p class="card-body" style="margin-top:12px">
+        왕이 되는 가장 빠른 길을 그는 거절합니다. 그는 자리를 쟁취하는 사람이 아니라, 하나님이 주시는 때를 기다리는 사람이었습니다.
+      </p>
+    </div>
+    <div class="chapter-node">
+      <div class="node-icon">🕊️</div>
+      <span class="node-chapter-num">05</span>
+    </div>
+    <div class="chapter-empty"></div>
+  </div>
+
+  <!-- Ch.6 애도 -->
+  <div class="chapter" data-theme="mourning" id="ch6">
+    <div class="chapter-empty"></div>
+    <div class="chapter-node">
+      <div class="node-icon">🪶</div>
+      <span class="node-chapter-num">06</span>
+    </div>
+    <div class="chapter-card">
+      <p class="card-eyebrow">Chapter VI · 사울의 죽음</p>
+      <h2 class="card-title">원수를 애도하다</h2>
+      <p class="card-body">
+        결국 사울은 전쟁터에서 생을 마칩니다. 이제 길이 열렸지만, 다윗은 기뻐하지 않습니다.
+      </p>
+      <div class="card-verse">
+        <p>이스라엘의 아름다움이 네 높은 곳들에 죽어 누워 있구나.</p>
+        <cite>사무엘하 1:19</cite>
+      </div>
+      <p class="card-body" style="margin-top:12px">
+        그는 원수를 애도합니다. 이것은 정치적인 행동이 아니라, 하나님 앞에서 살아온 사람의 마음이었습니다.
+      </p>
+    </div>
+  </div>
+
+  <!-- Ch.7 왕 / 춤 -->
+  <div class="chapter" data-theme="reign" id="ch7">
+    <div class="chapter-card">
+      <p class="card-eyebrow">Chapter VII · 예루살렘</p>
+      <h2 class="card-title">왕의 체면을 버리고<br>하나님 앞에서 춤추다</h2>
+      <p class="card-body">
+        다윗은 유다의 왕이 되고, 마침내 온 이스라엘의 왕이 됩니다. 예루살렘을 수도로 세우고, 언약궤를 옮겨옵니다. 그는 왕의 체면을 내려놓고 하나님 앞에서 춤을 춥니다.
+      </p>
+      <div class="card-verse">
+        <p>다윗은 온 힘을 다하여 여호와 앞에서 춤을 추었다.</p>
+        <cite>사무엘하 6:14</cite>
+      </div>
+      <p class="card-body" style="margin-top:12px">그리고 하나님은 그에게 약속하십니다.</p>
+      <div class="card-verse" style="margin-top:10px">
+        <p>네 집과 네 왕국이 네 앞에서 영원토록 굳건해지며, 네 보좌가 영원토록 견고하게 될 것이다.</p>
+        <cite>사무엘하 7:16</cite>
+      </div>
+      <p class="card-body" style="margin-top:12px">모든 것이 완성된 듯 보이던 순간이었습니다.</p>
+    </div>
+    <div class="chapter-node">
+      <div class="node-icon">👑</div>
+      <span class="node-chapter-num">07</span>
+    </div>
+    <div class="chapter-empty"></div>
+  </div>
+
+  <!-- Ch.8 밧세바 -->
+  <div class="chapter" data-theme="sin" id="ch8">
+    <div class="chapter-empty"></div>
+    <div class="chapter-node">
+      <div class="node-icon">🩸</div>
+      <span class="node-chapter-num">08</span>
+    </div>
+    <div class="chapter-card">
+      <p class="card-eyebrow">Chapter VIII · 왕궁 옥상</p>
+      <h2 class="card-title">가장 안정된 순간,<br>가장 어두운 선택</h2>
+      <p class="card-body">
+        그러나 인생의 가장 어두운 장면은, 가장 안정된 순간에 찾아옵니다. 어느 저녁, 왕궁 옥상에서 밧세바를 보게 됩니다. 그리고 그는 왕의 권력을 자신의 욕망을 위해 사용합니다. 그녀를 취하고, 남편 우리야를 전쟁터에서 죽게 만듭니다.
+      </p>
+      <p class="card-body" style="margin-top:10px">
+        이 사건은 단순한 실수가 아니라, 하나님보다 자신을 더 앞세운 선택이었습니다. 선지자 나단이 찾아와 말합니다.
+      </p>
+      <p class="card-note" style="margin-top:10px">
+        하나님께서는 나단을 통해 비유를 사용하여 다윗이 자신의 죄를 스스로 보게 하시고, 그로 인해 진실한 회개에 이르게 하시길 원하셨습니다. 나단의 비유 속의 이야기를 들었을 때 다윗은 그 이야기 속의 부유한 사람을 죽어 마땅하다고 크게 분노하는 것을 나단이 보았을 때 나단이 다윗에게 한마디의 말을 던집니다.
+      </p>
+      <div class="card-verse">
+        <p>왕께서 바로 그 사람이십니다.</p>
+        <cite>사무엘하 12:7</cite>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 시편 51편 인터루드 -->
+<div class="interlude" id="psalm51-interlude">
+  <div class="interlude-inner" id="int2">
+    <p class="interlude-label">회개의 노래 · 시편 51편</p>
+    <p class="interlude-quote">
+      "오, 하나님! 주님의 자애에 따라 제게 은혜를 베푸시며<br>
+      주님의 크신 자비에 따라 저의 잘못을 지워 주십시오."
+    </p>
+    <p class="interlude-ref">시편 51:1</p>
+    <div class="interlude-hr"></div>
+    <p class="interlude-text">그 순간 다윗은 무너집니다.<br>그러나 그는 숨지 않고 하나님께 돌아옵니다.<br>죄의 결과는 삶 속에서 계속 이어집니다.</p>
+  </div>
+</div>
+
+<!-- ══════════ TIMELINE 3 ══════════ -->
+<div class="timeline-wrapper">
+  <div class="timeline-spine"></div>
+
+  <!-- Ch.9 집안 균열 -->
+  <div class="chapter" data-theme="fracture" id="ch9">
+    <div class="chapter-card">
+      <p class="card-eyebrow">Chapter IX · 왕궁 안의 비극</p>
+      <h2 class="card-title">집안에 균열이<br>시작되다</h2>
+      <p class="card-body">
+        그의 집안에 균열이 시작됩니다. 아들 암논과 다말의 비극, 그리고 그로 인해 깊어지는 상처. 그 상처는 결국 또 다른 아들, 압살롬의 반역으로 이어집니다.
+      </p>
+      <div class="card-verse">
+        <p>압살롬은 이스라엘 사람들의 마음을 훔쳤다.</p>
+        <cite>사무엘하 15:6</cite>
+      </div>
+      <p class="card-body" style="margin-top:12px">
+        다윗은 다시 도망자가 됩니다. 이번에는 왕이 아니라, 아버지로서 쫓깁니다.
+      </p>
+      <div class="card-verse" style="margin-top:10px">
+        <p>다윗은 올리브산 오르막길로 올라갈 때, 눈물을 흘리며 머리를 가리고 맨발로 올라갔다.</p>
+        <cite>사무엘하 15:30</cite>
+      </div>
+      <p class="card-body" style="margin-top:12px">그 길은 그의 인생에서 가장 깊은 고통의 길이었습니다.</p>
+    </div>
+    <div class="chapter-node">
+      <div class="node-icon">💔</div>
+      <span class="node-chapter-num">09</span>
+    </div>
+    <div class="chapter-empty"></div>
+  </div>
+
+  <!-- Ch.10 압살롬 죽음 -->
+  <div class="chapter" data-theme="tragedy" id="ch10">
+    <div class="chapter-empty"></div>
+    <div class="chapter-node">
+      <div class="node-icon">😭</div>
+      <span class="node-chapter-num">10</span>
+    </div>
+    <div class="chapter-card">
+      <p class="card-eyebrow">Chapter X · 압살롬의 최후</p>
+      <h2 class="card-title">왕으로 이겼으나<br>아버지로 모든 것을 잃다</h2>
+      <p class="card-body">결국 압살롬은 죽음을 맞이합니다. 전쟁은 끝났지만, 다윗의 마음은 무너집니다.</p>
+      <div class="card-verse">
+        <p>내 아들 압살롬아! 내 아들, 내 아들 압살롬아! 너 대신 차라리 내가 죽었더라면! 압살롬아, 내 아들아, 내 아들아!</p>
+        <cite>사무엘하 18:33</cite>
+      </div>
+      <p class="card-body" style="margin-top:12px">왕으로서는 승리했지만, 아버지로서는 모든 것을 잃은 순간이었습니다.</p>
+    </div>
+  </div>
+
+  <!-- Ch.11 인구조사 -->
+  <div class="chapter" data-theme="census" id="ch11">
+    <div class="chapter-card">
+      <p class="card-eyebrow">Chapter XI · 끝까지 낮아지다</p>
+      <h2 class="card-title">자신의 힘을 의지하다가<br>다시 하나님 앞에 서다</h2>
+      <p class="card-body">
+        시간이 흐르며 왕국은 다시 안정됩니다. 그러나 그의 삶은 여전히 완전하지 않습니다. 인구조사 사건으로 또다시 하나님의 징계가 임합니다.
+      </p>
+      <div class="card-verse">
+        <p>사탄이 이스라엘을 대적하여 일어나, 이스라엘의 인수를 세도록 다윗을 부추겼다.</p>
+        <cite>역대기상 21:1</cite>
+      </div>
+      <p class="card-note" style="margin-top:12px">
+        다윗은 이런 인수를 세므로 자신의 힘과 능력을 의지하고 그 세력의 안정됨을 보기 원하였던 것 같습니다. 다윗이 하나님을 의지하는 마음을 떠나 자신의 성을 쌓는 것을 발견하게 되었을 때 그는 회개하였습니다.
+      </p>
+      <div class="card-verse" style="margin-top:10px">
+        <p>제가 이 일을 하여 큰 죄를 지었습니다. 그러나 오, 여호와님! 이제 이 종의 죄악을 없애 주십시오. 제가 매우 어리석은 짓을 저질렀습니다.</p>
+        <cite>사무엘하 24:10</cite>
+      </div>
+      <p class="card-body" style="margin-top:12px">다윗은 끝까지 하나님 앞에서 자신을 낮추는 사람으로 남습니다.</p>
+    </div>
+    <div class="chapter-node">
+      <div class="node-icon">📊</div>
+      <span class="node-chapter-num">11</span>
+    </div>
+    <div class="chapter-empty"></div>
+  </div>
+
+  <!-- Ch.12 마지막 유언 -->
+  <div class="chapter" data-theme="end" id="ch12">
+    <div class="chapter-empty"></div>
+    <div class="chapter-node">
+      <div class="node-icon">📜</div>
+      <span class="node-chapter-num">12</span>
+    </div>
+    <div class="chapter-card">
+      <p class="card-eyebrow">Chapter XII · 왕의 마지막</p>
+      <h2 class="card-title">모든 사람이 가는 그 길로</h2>
+      <p class="card-body">
+        말년이 되어, 왕위 계승의 긴장이 흐르는 가운데 결국 그의 아들 솔로몬이 왕으로 세워집니다. 다윗은 마지막으로 이렇게 당부합니다.
+      </p>
+      <div class="card-verse">
+        <p>나는 땅의 모든 사람이 가는 길로 간다. 그러니 너는 강해지고 대장부가 되어라. 너는 여호와 너의 하나님의 길을 걷고, 모세의 율법에 기록된 대로 그분의 율례와 그분의 계명과 그분의 규례와 그분의 증거를 지킴으로써 그분의 명령을 지켜라. 그러면 네가 하는 모든 일이 잘될 것이고, 네가 어디로 향하든 잘될 것이며, 여호와께서 나에 관하여 '너의 자손이 그들의 길을 주의하여 그들의 온 마음과 온 혼으로 진실로 내 앞에서 행한다면, 너를 위하여 이스라엘의 보좌에 앉을 사람이 끊이지 않을 것이다.' 하신 말씀이 이루어질 것이다.</p>
+        <cite>열왕기상 2:2–4</cite>
+      </div>
+      <p class="card-body" style="margin-top:12px">그리고 그의 생은 조용히 저물어 갑니다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ FINALE ══════════ -->
+<section class="finale" id="sec-finale">
+  <div class="finale-glow"></div>
+  <span class="finale-star">✦</span>
+  <p class="finale-label">다윗의 이야기를 끝까지 따라오면</p>
+  <p class="finale-lead">
+    그는 완벽한 사람이 아니었습니다.<br>
+    오히려 누구보다 크게 무너진 사람이었습니다.<br>
+    그러나 그는 끝까지 하나님께 돌아오는 사람이었습니다.<br>
+    숨지 않았고, 포기하지 않았고, 다시 하나님 앞에 섰습니다.
+  </p>
+  <div class="finale-box">
+    <p class="finale-verse">
+      "내가 이새의 아들 다윗을 찾았다.<br>
+      그는 내 마음에 맞는 사람이며,<br>
+      나의 모든 뜻을 이룰 것이다."
+    </p>
+    <p class="finale-ref">사도행전 13:22</p>
+  </div>
+  <p class="finale-closing">
+    이 말은 그가 <strong>흠이 없다</strong>는 뜻이 아니라,<br>
+    그의 삶의 방향이 끝까지 <strong>하나님을 향하고 있었다</strong>는<br>
+    선언입니다.
+  </p>
+</section>
+
+<script>
+// 별밭 생성
+(function(){
+  const sf = document.getElementById('starfield');
+  for(let i=0;i<130;i++){
+    const s=document.createElement('div');
+    s.className='star';
+    s.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${2+Math.random()*4}s;--delay:${Math.random()*4}s;opacity:${0.2+Math.random()*0.6};${Math.random()>0.7?'width:3px;height:3px':''}`;
+    sf.appendChild(s);
+  }
+})();
+
+// 진행 바
+const pb=document.getElementById('progressBar');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement.scrollHeight-window.innerHeight;
+  pb.style.width=(window.scrollY/h*100)+'%';
+});
+
+// 네비 점
+(function(){
+  const nd=document.getElementById('navDots');
+  const sections=[
+    {el:document.getElementById('sec-hero'),label:'시작'},
+    {el:document.getElementById('ch1'),label:'기름 부음'},
+    {el:document.getElementById('ch2'),label:'골리앗'},
+    {el:document.getElementById('ch3'),label:'요나단'},
+    {el:document.getElementById('ch4'),label:'사울의 질투'},
+    {el:document.getElementById('ch5'),label:'기다림'},
+    {el:document.getElementById('ch6'),label:'애도'},
+    {el:document.getElementById('ch7'),label:'왕의 춤'},
+    {el:document.getElementById('ch8'),label:'밧세바'},
+    {el:document.getElementById('ch9'),label:'집안 균열'},
+    {el:document.getElementById('ch10'),label:'압살롬'},
+    {el:document.getElementById('ch11'),label:'인구조사'},
+    {el:document.getElementById('ch12'),label:'마지막 유언'},
+    {el:document.getElementById('sec-finale'),label:'마무리'},
+  ];
+  sections.forEach((s,i)=>{
+    if(!s.el) return;
+    const d=document.createElement('div');
+    d.className='nav-dot'; d.title=s.label;
+    d.addEventListener('click',()=>s.el.scrollIntoView({behavior:'smooth'}));
+    nd.appendChild(d);
+  });
+
+  const io=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        const idx=sections.findIndex(s=>s.el===e.target);
+        document.querySelectorAll('.nav-dot').forEach((d,i)=>d.classList.toggle('active',i===idx));
+      }
+    });
+  },{threshold:0.35});
+  sections.forEach(s=>{ if(s.el) io.observe(s.el); });
+})();
+
+// 등장 애니메이션
+const revIO=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+},{threshold:0.12});
+document.querySelectorAll('.chapter, .interlude-inner').forEach(el=>revIO.observe(el));
+</script>
+</body>
+</html>
