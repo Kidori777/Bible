@@ -98,9 +98,10 @@ body {
   50%{box-shadow:0 0 50px rgba(201,168,76,0.8),0 0 120px rgba(201,168,76,0.35);}
 }
 .sheep-flock {
-  position: absolute; bottom: 33%;
+  position: absolute; bottom: 22%;
   left: 0; right: 0; display: flex; gap: 20px;
   justify-content: center; pointer-events: none;
+  z-index: 3;
 }
 .sheep {
   opacity: 0.35;
@@ -151,6 +152,7 @@ body {
   opacity: 0; animation: fadeUp 1s ease forwards 1.4s;
   border-top: 1px solid rgba(201,168,76,0.3);
   padding-top: 20px; max-width: 420px; margin: 0 auto; line-height: 1.7;
+  position: relative; z-index: 2;
 }
 .scroll-hint {
   position: absolute; bottom: 80px; left: 50%;
