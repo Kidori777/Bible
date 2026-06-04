@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>다윗의 식탁에 초대된 사람</title>
+  <title>다윗의 식탁에 초대된 사람 — 므비보셋 이야기</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700;900&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -12,18 +12,19 @@
       --parch:   #faf6f0;
       --amber:   #b8742a;
       --amber2:  #d4924a;
-      --deep:    #1a1208;
+      --deep:    #100d08;
       --ink:     #2a1e0e;
       --ink2:    #3e2e1a;
       --crimson: #7a1a1a;
       --crimson2:#a02828;
-      --royal:   #1a2e5a;
-      --royal2:  #2a4278;
-      --sage:    #2e4228;
-      --sage2:   #3e5838;
+      --royal:   #0f1e40;
+      --royal2:  #1a2e5a;
+      --sage:    #1e3018;
+      --sage2:   #2e4228;
       --gold:    #c0881e;
       --muted:   #6a5238;
       --line:    #d8c8b0;
+      --sienna:  #5a2010;
     }
 
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
@@ -37,7 +38,7 @@
     }
 
     /* ══════════════════════════════════
-       CINEMATIC OPENING
+       OPENING — 풀스크린 인트로
     ══════════════════════════════════ */
     .opening {
       min-height: 100vh;
@@ -49,105 +50,96 @@
       padding: 60px 24px;
       position: relative;
       overflow: hidden;
-      background: var(--deep);
+      background: radial-gradient(ellipse 120% 80% at 50% 110%, #2a1408 0%, var(--deep) 60%);
     }
 
-    /* 별빛 배경 */
+    /* 별빛 레이어 */
     .opening::before {
       content: '';
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(1px 1px at 15% 20%, rgba(255,220,150,0.6) 0%, transparent 100%),
-        radial-gradient(1px 1px at 35% 60%, rgba(255,220,150,0.4) 0%, transparent 100%),
-        radial-gradient(1px 1px at 60% 15%, rgba(255,220,150,0.5) 0%, transparent 100%),
-        radial-gradient(1px 1px at 80% 45%, rgba(255,220,150,0.3) 0%, transparent 100%),
-        radial-gradient(1px 1px at 25% 85%, rgba(255,220,150,0.4) 0%, transparent 100%),
-        radial-gradient(1px 1px at 70% 75%, rgba(255,220,150,0.5) 0%, transparent 100%),
-        radial-gradient(1px 1px at 90% 30%, rgba(255,220,150,0.3) 0%, transparent 100%),
-        radial-gradient(1px 1px at 45% 40%, rgba(255,220,150,0.6) 0%, transparent 100%),
-        radial-gradient(ellipse 70% 50% at 50% 100%, rgba(184,116,42,0.25) 0%, transparent 60%);
+        radial-gradient(1.5px 1.5px at 8%  18%, rgba(255,220,150,0.7) 0%, transparent 100%),
+        radial-gradient(1px   1px   at 22% 65%, rgba(255,220,150,0.4) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 38% 12%, rgba(255,220,150,0.6) 0%, transparent 100%),
+        radial-gradient(1px   1px   at 55% 78%, rgba(255,220,150,0.35) 0%, transparent 100%),
+        radial-gradient(2px   2px   at 68% 22%, rgba(255,220,150,0.5) 0%, transparent 100%),
+        radial-gradient(1px   1px   at 82% 55%, rgba(255,220,150,0.4) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 91% 10%, rgba(255,220,150,0.55) 0%, transparent 100%),
+        radial-gradient(1px   1px   at 14% 90%, rgba(255,220,150,0.3) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 76% 88%, rgba(255,220,150,0.45) 0%, transparent 100%),
+        radial-gradient(1px   1px   at 48% 43%, rgba(255,220,150,0.3) 0%, transparent 100%);
     }
 
-    /* 황금 빛 원 */
+    /* 황금빛 글로우 */
     .opening::after {
       content: '';
       position: absolute;
-      bottom: -200px; left: 50%;
+      bottom: -180px; left: 50%;
       transform: translateX(-50%);
-      width: 500px; height: 500px;
+      width: 600px; height: 600px;
       border-radius: 50%;
-      background: radial-gradient(ellipse, rgba(192,136,30,0.2) 0%, transparent 70%);
-      animation: glow 4s ease-in-out infinite;
+      background: radial-gradient(ellipse, rgba(192,136,30,0.18) 0%, transparent 70%);
+      animation: glow 4.5s ease-in-out infinite;
     }
     @keyframes glow {
       0%,100% { opacity: 0.6; transform: translateX(-50%) scale(1); }
-      50%      { opacity: 1;   transform: translateX(-50%) scale(1.1); }
+      50%      { opacity: 1;   transform: translateX(-50%) scale(1.12); }
     }
 
-    .opening-pre {
+    .opening-eyebrow {
       font-family: 'Noto Sans KR', sans-serif;
-      font-size: 0.68rem;
+      font-size: 0.65rem;
       font-weight: 500;
-      letter-spacing: 0.35em;
+      letter-spacing: 0.38em;
       text-transform: uppercase;
-      color: rgba(192,136,30,0.8);
-      margin-bottom: 32px;
+      color: rgba(192,136,30,0.75);
+      margin-bottom: 28px;
       position: relative;
       z-index:1;
     }
 
     .opening-title {
-      font-size: clamp(2rem, 7vw, 4.2rem);
+      font-size: clamp(2.2rem, 7.5vw, 4.6rem);
       font-weight: 900;
-      line-height: 1.15;
-      letter-spacing: -0.03em;
+      line-height: 1.12;
+      letter-spacing: -0.04em;
       color: var(--sand);
       position: relative;
       z-index:1;
-      margin-bottom: 18px;
+      margin-bottom: 20px;
     }
-
-    .opening-title .highlight {
+    .opening-title .em {
       color: var(--amber2);
       display: block;
     }
 
     .opening-sub {
-      font-size: clamp(0.9rem, 2.5vw, 1.05rem);
+      font-size: clamp(0.88rem, 2.4vw, 1.02rem);
       font-weight: 300;
-      color: rgba(245,237,224,0.65);
-      position: relative;
-      z-index:1;
-      line-height: 1.9;
-      margin-bottom: 52px;
+      color: rgba(245,237,224,0.55);
+      position: relative; z-index:1;
+      line-height: 2;
+      margin-bottom: 56px;
     }
 
-    /* 수직선 장식 */
-    .v-ornament {
-      width: 1px;
-      height: 80px;
-      background: linear-gradient(180deg, transparent, rgba(192,136,30,0.6), transparent);
-      position: relative;
-      z-index:1;
+    .v-line {
+      width: 1px; height: 80px;
+      background: linear-gradient(180deg, transparent, rgba(192,136,30,0.55), transparent);
+      position: relative; z-index:1;
       margin: 0 auto;
-      animation: pulse-line 2s ease-in-out infinite;
+      animation: vline-pulse 2.2s ease-in-out infinite;
     }
-    @keyframes pulse-line {
-      0%,100%{ opacity: 0.5; }
-      50%    { opacity: 1; }
+    @keyframes vline-pulse {
+      0%,100%{ opacity:0.4; }
+      50%    { opacity:1; }
     }
 
     /* ══════════════════════════════════
-       CHAPTER SYSTEM
+       CHAPTER SCAFFOLD
     ══════════════════════════════════ */
-    .chapter {
-      position: relative;
-      padding: 0;
-      overflow: hidden;
-    }
+    .chapter { position:relative; overflow:hidden; }
 
-    /* 풀스크린 씬 헤더 */
     .scene-header {
       min-height: 55vh;
       display: flex;
@@ -159,33 +151,20 @@
       position: relative;
       overflow: hidden;
     }
+    .scene-header.night   { background: linear-gradient(180deg, #06091a 0%, #0e1532 55%, #100d08 100%); }
+    .scene-header.exile   { background: linear-gradient(180deg, #080f08 0%, #101a10 45%, #100d08 100%); }
+    .scene-header.throne  { background: linear-gradient(180deg, #06091a 0%, #101830 45%, #182448 80%, #100d08 100%); }
+    .scene-header.storm   { background: linear-gradient(180deg, #0a0808 0%, #200e08 40%, #3a1808 70%, #100d08 100%); }
+    .scene-header.siba    { background: linear-gradient(180deg, #0e0808 0%, #280a0a 45%, #4a1010 80%, #100d08 100%); }
+    .scene-header.return  { background: linear-gradient(180deg, #0a1008 0%, #142010 45%, #223818 80%, #100d08 100%); }
+    .scene-header.covenant{ background: linear-gradient(180deg, #080a08 0%, #101808 45%, #1e2a10 75%, #2e4018 100%); }
 
-    .scene-header.night {
-      background: linear-gradient(180deg, #0a0d1a 0%, #12183a 60%, #1a1208 100%);
-    }
-    .scene-header.dawn {
-      background: linear-gradient(180deg, #1a0e08 0%, #3a1e08 40%, #6a3010 70%, #c87830 100%);
-    }
-    .scene-header.exile {
-      background: linear-gradient(180deg, #0e1a0e 0%, #182818 50%, #1a1208 100%);
-    }
-    .scene-header.throne {
-      background: linear-gradient(180deg, #0a0e1a 0%, #141e3a 40%, #1e2e50 80%, #1a1208 100%);
-    }
-    .scene-header.table {
-      background: linear-gradient(180deg, #1a0a0a 0%, #3a1010 40%, #6a2020 70%, #c04030 100%);
-    }
-    .scene-header.covenant {
-      background: linear-gradient(180deg, #0e1208 0%, #1a2010 40%, #2e3818 70%, #4a5a28 100%);
-    }
-
-    /* 씬 배경 텍스트 장식 */
     .scene-bg-text {
       position: absolute;
       font-family: 'Noto Serif KR', serif;
-      font-size: clamp(8rem, 25vw, 18rem);
+      font-size: clamp(7rem, 24vw, 17rem);
       font-weight: 900;
-      color: rgba(255,255,255,0.025);
+      color: rgba(255,255,255,0.022);
       pointer-events: none;
       line-height: 0.85;
       top: 50%; left: 50%;
@@ -196,43 +175,39 @@
 
     .chapter-num {
       font-family: 'Noto Sans KR', sans-serif;
-      font-size: 0.65rem;
+      font-size: 0.62rem;
       font-weight: 500;
-      letter-spacing: 0.3em;
+      letter-spacing: 0.32em;
       text-transform: uppercase;
-      color: rgba(192,136,30,0.7);
-      margin-bottom: 16px;
-      position: relative;
-      z-index:1;
+      color: rgba(192,136,30,0.65);
+      margin-bottom: 14px;
+      position: relative; z-index:1;
     }
 
     .chapter-title {
-      font-size: clamp(1.5rem, 5.5vw, 3rem);
+      font-size: clamp(1.55rem, 5.5vw, 3rem);
       font-weight: 900;
       line-height: 1.2;
       letter-spacing: -0.025em;
-      position: relative;
-      z-index:1;
-      margin-bottom: 16px;
+      position: relative; z-index:1;
+      margin-bottom: 14px;
     }
 
     .chapter-verse-ref {
-      font-size: 0.75rem;
-      color: rgba(245,237,224,0.5);
-      letter-spacing: 0.12em;
-      position: relative;
-      z-index:1;
+      font-size: 0.72rem;
+      color: rgba(245,237,224,0.45);
+      letter-spacing: 0.14em;
+      position: relative; z-index:1;
     }
 
     /* ══════════════════════════════════
-       STORY CONTENT
+       STORY BODY
     ══════════════════════════════════ */
     .story-body {
       background: var(--parch);
       color: var(--ink);
       padding: 52px 24px 60px;
     }
-
     .story-inner {
       max-width: 660px;
       margin: 0 auto;
@@ -241,65 +216,61 @@
     .story-text {
       font-size: clamp(1rem, 2.7vw, 1.12rem);
       font-weight: 400;
-      line-height: 2.15;
+      line-height: 2.2;
       color: var(--ink2);
-      margin-bottom: 20px;
+      margin-bottom: 22px;
     }
 
-    /* 성경 구절 인용 */
+    /* 성경 인용 */
     .bible-quote {
-      margin: 30px 0;
-      padding: 24px 26px 24px 30px;
+      margin: 32px 0;
+      padding: 24px 26px 24px 32px;
       position: relative;
-      background: rgba(26,18,8,0.04);
-      border-radius: 0 10px 10px 0;
+      background: rgba(26,18,8,0.045);
+      border-radius: 0 12px 12px 0;
       border-left: 3px solid var(--amber);
     }
-
     .bible-quote::before {
-      content: '"';
+      content: '\201C';
       font-family: Georgia, serif;
       font-size: 5rem;
       color: var(--amber2);
-      opacity: 0.15;
+      opacity: 0.14;
       position: absolute;
-      top: -12px; left: 6px;
+      top: -10px; left: 8px;
       line-height: 1;
     }
-
     .bible-quote-text {
       font-family: 'Noto Serif KR', serif;
       font-size: clamp(0.92rem, 2.4vw, 1.02rem);
       font-weight: 600;
       color: var(--ink);
-      line-height: 2.05;
-      position: relative;
-      z-index: 1;
+      line-height: 2.1;
+      position: relative; z-index:1;
     }
-
     .bible-quote-ref {
       display: block;
       margin-top: 10px;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-family: 'Noto Sans KR', sans-serif;
       font-weight: 400;
       color: var(--amber);
-      letter-spacing: 0.08em;
+      letter-spacing: 0.09em;
     }
 
-    /* 핵심 문장 강조 */
+    /* 핵심 강조 문장 */
     .key-line {
       display: block;
       text-align: center;
       font-family: 'Noto Serif KR', serif;
-      font-size: clamp(1.05rem, 3vw, 1.25rem);
+      font-size: clamp(1.02rem, 2.9vw, 1.22rem);
       font-weight: 700;
       color: var(--crimson);
-      line-height: 1.8;
-      margin: 32px 0;
-      padding: 20px;
-      border-top: 1px solid rgba(122,26,26,0.2);
-      border-bottom: 1px solid rgba(122,26,26,0.2);
+      line-height: 1.9;
+      margin: 34px 0;
+      padding: 22px 16px;
+      border-top: 1px solid rgba(122,26,26,0.18);
+      border-bottom: 1px solid rgba(122,26,26,0.18);
     }
 
     /* 장면 구분 점선 */
@@ -307,48 +278,44 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      margin: 40px 0;
+      margin: 42px 0;
     }
-    .scene-break::before, .scene-break::after {
-      content: ''; flex: 1; height: 1px;
-      background: linear-gradient(90deg, transparent, var(--line));
+    .scene-break::before,.scene-break::after {
+      content:''; flex:1; height:1px;
     }
-    .scene-break::after { background: linear-gradient(90deg, var(--line), transparent); }
-    .scene-break i { color: var(--amber); font-style:normal; font-size: 0.85rem; opacity:0.6; }
+    .scene-break::before { background: linear-gradient(90deg, transparent, var(--line)); }
+    .scene-break::after  { background: linear-gradient(90deg, var(--line), transparent); }
+    .scene-break i { color:var(--amber); font-style:normal; font-size:0.85rem; opacity:0.55; }
 
     /* ══════════════════════════════════
-       SCRIPTURE SIDEBAR (성경 본문)
+       성경 본문 패널 (하단 어두운 영역)
     ══════════════════════════════════ */
     .scripture-panel {
       background: var(--deep);
-      border-top: 1px solid rgba(192,136,30,0.25);
-      padding: 40px 24px 48px;
+      border-top: 1px solid rgba(192,136,30,0.2);
+      padding: 42px 24px 50px;
     }
-
-    .scripture-inner {
-      max-width: 660px;
-      margin: 0 auto;
-    }
+    .scripture-inner { max-width: 660px; margin: 0 auto; }
 
     .scripture-label {
       font-family: 'Noto Sans KR', sans-serif;
-      font-size: 0.65rem;
+      font-size: 0.63rem;
       font-weight: 500;
-      letter-spacing: 0.28em;
+      letter-spacing: 0.3em;
       text-transform: uppercase;
-      color: rgba(192,136,30,0.65);
+      color: rgba(192,136,30,0.6);
       margin-bottom: 18px;
       display: flex;
       align-items: center;
       gap: 10px;
     }
     .scripture-label::after {
-      content: ''; flex:1; height:1px;
-      background: rgba(192,136,30,0.2);
+      content:''; flex:1; height:1px;
+      background: rgba(192,136,30,0.18);
     }
 
     .scripture-ref-title {
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       font-weight: 600;
       color: var(--amber2);
       letter-spacing: 0.06em;
@@ -356,35 +323,30 @@
     }
 
     .scripture-content {
-      font-size: clamp(0.82rem, 2.1vw, 0.9rem);
+      font-size: clamp(0.8rem, 2.1vw, 0.88rem);
       font-weight: 300;
-      color: rgba(245,237,224,0.72);
-      line-height: 2;
-      margin-bottom: 24px;
+      color: rgba(245,237,224,0.68);
+      line-height: 2.05;
       padding-left: 14px;
-      border-left: 1px solid rgba(192,136,30,0.25);
+      border-left: 1px solid rgba(192,136,30,0.22);
     }
 
     /* ══════════════════════════════════
-       INSIGHT CARDS
+       INSIGHT CARDS (챕터 3)
     ══════════════════════════════════ */
     .insight-strip {
       background: var(--royal);
-      padding: 48px 24px;
+      padding: 50px 24px;
     }
-
-    .insight-inner {
-      max-width: 660px;
-      margin: 0 auto;
-    }
+    .insight-inner { max-width: 660px; margin: 0 auto; }
 
     .insight-eyebrow {
       font-family: 'Noto Sans KR', sans-serif;
-      font-size: 0.65rem;
-      letter-spacing: 0.28em;
+      font-size: 0.63rem;
+      letter-spacing: 0.3em;
       text-transform: uppercase;
-      color: rgba(180,200,255,0.55);
-      margin-bottom: 28px;
+      color: rgba(160,190,255,0.5);
+      margin-bottom: 30px;
       text-align: center;
     }
 
@@ -393,41 +355,203 @@
       grid-template-columns: 1fr 1fr;
       gap: 14px;
     }
-    @media (max-width: 520px) {
-      .insight-cards { grid-template-columns: 1fr; }
-    }
+    @media(max-width:520px){ .insight-cards { grid-template-columns:1fr; } }
 
     .insight-card {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(180,200,255,0.12);
-      border-radius: 10px;
-      padding: 20px 18px;
+      background: rgba(255,255,255,0.045);
+      border: 1px solid rgba(160,190,255,0.1);
+      border-radius: 12px;
+      padding: 22px 18px;
     }
-
-    .insight-icon {
-      font-size: 1.4rem;
-      display: block;
-      margin-bottom: 10px;
-    }
-
+    .insight-icon { font-size:1.45rem; display:block; margin-bottom:10px; }
     .insight-title {
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: rgba(245,237,224,0.95);
-      margin-bottom: 8px;
-      line-height: 1.4;
+      font-size:0.9rem; font-weight:700;
+      color:rgba(245,237,224,0.95);
+      margin-bottom:8px; line-height:1.4;
     }
-
     .insight-body {
-      font-family: 'Noto Sans KR', sans-serif;
-      font-size: 0.8rem;
-      font-weight: 300;
-      color: rgba(245,237,224,0.6);
-      line-height: 1.85;
+      font-family:'Noto Sans KR',sans-serif;
+      font-size:0.78rem; font-weight:300;
+      color:rgba(245,237,224,0.58); line-height:1.9;
     }
 
     /* ══════════════════════════════════
-       FINALE — 은혜의 식탁
+       CONTRAST BLOCK — 시바 vs 므비보셋
+    ══════════════════════════════════ */
+    .contrast-strip {
+      background: #0d0808;
+      padding: 52px 24px 56px;
+      border-top: 1px solid rgba(192,136,30,0.15);
+      border-bottom: 1px solid rgba(192,136,30,0.15);
+    }
+    .contrast-inner { max-width: 660px; margin: 0 auto; }
+
+    .contrast-eyebrow {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 0.63rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(192,136,30,0.55);
+      margin-bottom: 34px;
+      text-align: center;
+    }
+
+    .contrast-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    @media(max-width:480px){ .contrast-grid { grid-template-columns:1fr; gap:8px; } }
+
+    .contrast-col {
+      padding: 32px 24px;
+    }
+    .contrast-col.left  { background: rgba(60,10,10,0.6);  border-radius: 14px 0 0 14px; }
+    .contrast-col.right { background: rgba(10,28,10,0.6);  border-radius: 0 14px 14px 0; }
+    @media(max-width:480px){
+      .contrast-col.left,.contrast-col.right { border-radius: 14px; }
+    }
+
+    .contrast-name {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 0.62rem;
+      font-weight: 500;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .contrast-col.left  .contrast-name { color: rgba(220,140,100,0.8); }
+    .contrast-col.right .contrast-name { color: rgba(120,200,130,0.8); }
+
+    .contrast-headline {
+      font-size: clamp(1.05rem, 3vw, 1.3rem);
+      font-weight: 700;
+      line-height: 1.45;
+      margin-bottom: 16px;
+    }
+    .contrast-col.left  .contrast-headline { color: rgba(245,200,170,0.95); }
+    .contrast-col.right .contrast-headline { color: rgba(190,240,190,0.95); }
+
+    .contrast-body {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 300;
+      line-height: 1.95;
+    }
+    .contrast-col.left  .contrast-body { color: rgba(245,220,200,0.6); }
+    .contrast-col.right .contrast-body { color: rgba(200,240,200,0.6); }
+
+    .contrast-verdict {
+      margin-top: 16px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 10px 14px;
+      border-radius: 8px;
+    }
+    .contrast-col.left  .contrast-verdict {
+      background: rgba(180,60,40,0.2);
+      color: rgba(255,180,140,0.85);
+    }
+    .contrast-col.right .contrast-verdict {
+      background: rgba(40,140,60,0.2);
+      color: rgba(160,240,160,0.85);
+    }
+
+    /* 구분선 장식 — 두 칼럼 사이 */
+    .contrast-divider {
+      text-align: center;
+      margin: 32px 0 24px;
+      position: relative;
+    }
+    .contrast-divider::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 0; right: 0;
+      height: 1px;
+      background: rgba(192,136,30,0.2);
+    }
+    .contrast-divider span {
+      position: relative;
+      background: #0d0808;
+      padding: 0 14px;
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: rgba(192,136,30,0.55);
+    }
+
+    /* ══════════════════════════════════
+       MEPHIBOSHETH FOCUS — 마음 중심
+    ══════════════════════════════════ */
+    .heart-strip {
+      background: var(--parch);
+      color: var(--ink);
+      padding: 52px 24px 60px;
+    }
+    .heart-inner { max-width: 660px; margin: 0 auto; }
+
+    .heart-callout {
+      background: rgba(26,18,8,0.06);
+      border-radius: 14px;
+      padding: 32px 28px;
+      margin: 32px 0;
+      text-align: center;
+      border: 1px solid rgba(184,116,42,0.15);
+    }
+    .heart-callout-q {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(90,32,16,0.7);
+      margin-bottom: 14px;
+    }
+    .heart-callout-text {
+      font-size: clamp(1.05rem, 3vw, 1.2rem);
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.85;
+    }
+    .heart-callout-text .accent { color: var(--crimson); }
+
+    /* 두 기준 나열 */
+    .two-ways {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 32px 0;
+    }
+    @media(max-width:480px){ .two-ways { grid-template-columns:1fr; } }
+
+    .two-ways-box {
+      border-radius: 12px;
+      padding: 22px 18px;
+      text-align: center;
+    }
+    .two-ways-box.a { background: rgba(90,32,16,0.07); border: 1px solid rgba(90,32,16,0.15); }
+    .two-ways-box.b { background: rgba(26,46,26,0.07); border: 1px solid rgba(46,66,40,0.2); }
+
+    .two-ways-label {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+    .two-ways-box.a .two-ways-label { color: rgba(150,60,40,0.75); }
+    .two-ways-box.b .two-ways-label { color: rgba(40,110,50,0.75); }
+
+    .two-ways-text {
+      font-size: 0.93rem;
+      font-weight: 600;
+      line-height: 1.7;
+      color: var(--ink2);
+    }
+
+    /* ══════════════════════════════════
+       FINALE
     ══════════════════════════════════ */
     .finale {
       min-height: 100vh;
@@ -436,117 +560,125 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 80px 28px;
+      padding: 90px 28px;
       background: var(--deep);
       position: relative;
       overflow: hidden;
     }
-
     .finale::before {
-      content: '';
-      position: absolute;
-      inset: 0;
+      content:'';
+      position:absolute; inset:0;
       background:
-        radial-gradient(ellipse 80% 60% at 50% 50%, rgba(192,136,30,0.12) 0%, transparent 70%),
-        radial-gradient(ellipse 40% 30% at 50% 50%, rgba(192,136,30,0.08) 0%, transparent 50%);
+        radial-gradient(ellipse 80% 60% at 50% 50%, rgba(192,136,30,0.1) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 30% at 50% 50%, rgba(192,136,30,0.07) 0%, transparent 50%);
     }
 
-    .finale-label {
-      font-family: 'Noto Sans KR', sans-serif;
-      font-size: 0.65rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: rgba(192,136,30,0.6);
-      margin-bottom: 36px;
-      position: relative; z-index:1;
+    .finale-eyebrow {
+      font-family:'Noto Sans KR',sans-serif;
+      font-size:0.63rem; letter-spacing:0.32em;
+      text-transform:uppercase;
+      color:rgba(192,136,30,0.55);
+      margin-bottom:38px;
+      position:relative; z-index:1;
     }
 
     .finale-title {
-      font-size: clamp(1.8rem, 6vw, 3.5rem);
+      font-size: clamp(1.9rem, 6.5vw, 3.8rem);
       font-weight: 900;
-      line-height: 1.25;
-      letter-spacing: -0.03em;
+      line-height: 1.2;
+      letter-spacing: -0.035em;
       color: var(--sand);
-      margin-bottom: 32px;
-      position: relative; z-index:1;
+      margin-bottom: 36px;
+      position:relative; z-index:1;
     }
-
-    .finale-title em {
-      font-style: normal;
+    .finale-title .em {
       color: var(--amber2);
       display: block;
     }
 
     .finale-verse {
-      background: rgba(192,136,30,0.1);
-      border: 1px solid rgba(192,136,30,0.3);
-      border-radius: 14px;
-      padding: 30px 28px;
+      background: rgba(192,136,30,0.09);
+      border: 1px solid rgba(192,136,30,0.28);
+      border-radius: 16px;
+      padding: 32px 30px;
       max-width: 540px;
-      margin: 0 auto 36px;
-      position: relative; z-index:1;
+      margin: 0 auto 38px;
+      position:relative; z-index:1;
     }
-
     .finale-verse-text {
       font-size: clamp(0.95rem, 2.5vw, 1.08rem);
       font-weight: 600;
       color: rgba(245,237,224,0.95);
-      line-height: 2.05;
+      line-height: 2.1;
       margin-bottom: 12px;
     }
-
     .finale-verse-ref {
-      font-family: 'Noto Sans KR', sans-serif;
-      font-size: 0.75rem;
-      color: var(--amber2);
-      letter-spacing: 0.1em;
+      font-family:'Noto Sans KR',sans-serif;
+      font-size:0.74rem; color:var(--amber2); letter-spacing:0.1em;
     }
 
     .finale-message {
       font-size: clamp(0.95rem, 2.5vw, 1.1rem);
       font-weight: 400;
-      color: rgba(245,237,224,0.7);
-      line-height: 2.1;
+      color: rgba(245,237,224,0.65);
+      line-height: 2.15;
       max-width: 540px;
-      margin: 0 auto;
-      position: relative; z-index:1;
+      margin: 0 auto 44px;
+      position:relative; z-index:1;
     }
+    .finale-message strong { color: var(--amber2); font-weight:600; }
 
-    .finale-message strong {
-      color: var(--amber2);
-      font-weight: 600;
+    /* 마지막 선언 박스 */
+    .finale-declaration {
+      background: rgba(192,136,30,0.12);
+      border: 1px solid rgba(192,136,30,0.35);
+      border-radius: 20px;
+      padding: 36px 30px;
+      max-width: 500px;
+      margin: 0 auto;
+      position:relative; z-index:1;
+    }
+    .finale-declaration-quote {
+      font-size: clamp(1rem, 3vw, 1.15rem);
+      font-weight: 700;
+      color: var(--sand);
+      line-height: 1.95;
+      margin-bottom: 20px;
+    }
+    .finale-declaration-answer {
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 400;
+      color: rgba(245,237,224,0.6);
+      line-height: 1.9;
+    }
+    .finale-declaration-answer strong {
+      color: var(--amber2); font-weight:600;
     }
 
     /* ══════════════════════════════════
        FOOTER
     ══════════════════════════════════ */
     .site-footer {
-      background: #0a0805;
-      padding: 36px 24px 44px;
+      background: #080604;
+      padding: 38px 24px 46px;
       text-align: center;
-      border-top: 1px solid rgba(192,136,30,0.15);
+      border-top: 1px solid rgba(192,136,30,0.12);
     }
-
     .footer-ornament {
-      width: 40px; height: 1px;
-      background: var(--gold);
-      margin: 0 auto 20px;
-      opacity: 0.4;
+      width:36px; height:1px;
+      background:var(--gold); opacity:0.35;
+      margin: 0 auto 22px;
     }
-
     .footer-name {
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: rgba(245,237,224,0.7);
-      letter-spacing: 0.18em;
+      font-size:0.92rem; font-weight:600;
+      color:rgba(245,237,224,0.65); letter-spacing:0.2em;
     }
-
     .footer-prayer {
-      margin-top: 8px;
-      font-family: 'Noto Sans KR', sans-serif;
-      font-size: 0.75rem;
-      color: rgba(245,237,224,0.3);
-      letter-spacing: 0.06em;
+      margin-top:8px;
+      font-family:'Noto Sans KR',sans-serif;
+      font-size:0.73rem;
+      color:rgba(245,237,224,0.28); letter-spacing:0.06em;
     }
 
     /* ══════════════════════════════════
@@ -554,19 +686,21 @@
     ══════════════════════════════════ */
     .fade-up {
       opacity: 0;
-      transform: translateY(28px);
-      transition: opacity 0.75s ease, transform 0.75s ease;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
     }
     .fade-up.vis {
       opacity: 1;
       transform: translateY(0);
     }
+    .fade-up:nth-child(2){ transition-delay:0.08s; }
+    .fade-up:nth-child(3){ transition-delay:0.16s; }
+    .fade-up:nth-child(4){ transition-delay:0.24s; }
 
-    @media (max-width: 480px) {
-      .scene-header { min-height: 42vh; padding: 36px 20px; }
-      .story-body   { padding: 36px 18px 44px; }
-      .finale       { padding: 60px 20px; }
-      .finale-verse { padding: 22px 18px; }
+    @media(max-width:480px){
+      .scene-header { min-height:40vh; padding:36px 20px; }
+      .story-body   { padding:36px 18px 44px; }
+      .finale       { padding:64px 20px; }
     }
   </style>
 </head>
@@ -574,13 +708,13 @@
 
 <!-- ══ OPENING ══ -->
 <section class="opening">
-  <p class="opening-pre">사무엘하 9장 · 부산교회 2구역</p>
+  <p class="opening-eyebrow">사무엘하 9장 · 부산교회 2구역</p>
   <h1 class="opening-title">
     다윗의 식탁에<br>
-    <em class="highlight">초대된 사람</em>
+    <span class="em">초대된 사람</span>
   </h1>
-  <p class="opening-sub">므비보셋 이야기<br>— 언약과 은혜, 그리고 식탁의 신학 —</p>
-  <div class="v-ornament"></div>
+  <p class="opening-sub">므비보셋 이야기<br>— 언약과 은혜, 그리고 관심의 이동 —</p>
+  <div class="v-line"></div>
 </section>
 
 
@@ -590,19 +724,21 @@
     <div class="scene-bg-text">언약</div>
     <p class="chapter-num">Chapter One</p>
     <h2 class="chapter-title">언약의 씨앗이<br>심겨지다</h2>
-    <p class="chapter-verse-ref">사무엘상 18:1-4</p>
+    <p class="chapter-verse-ref">사무엘상 18:1–4</p>
   </div>
 
   <div class="story-body">
     <div class="story-inner">
-      <p class="story-text fade-up">이 이야기는 한 약속에서 시작됩니다. 아직 왕이 되기 전, 젊은 다윗과 사울의 아들 요나단 사이에서 일어난 일이었습니다.</p>
+      <p class="story-text fade-up">이 이야기는 한 약속에서 시작됩니다. 아직 왕이 되기 전, 젊은 다윗과 사울의 아들 요나단 사이에서 맺어진 언약이었습니다.</p>
 
       <div class="bible-quote fade-up">
-        <p class="bible-quote-text">요나단의 혼이 다윗의 혼과 결합되어, 요나단은 다윗을 자신의 혼처럼 사랑하였다. 요나단은 다윗과 언약을 맺었다.</p>
+        <p class="bible-quote-text">요나단의 혼이 다윗의 혼과 결합되어, 요나단은 다윗을 자신의 혼처럼 사랑하였다. 요나단은 다윗을 자신의 혼처럼 사랑하여 다윗과 언약을 맺었다.</p>
         <span class="bible-quote-ref">— 사무엘상 18:1, 3</span>
       </div>
 
-      <p class="story-text fade-up">두 사람은 언약을 맺었습니다. 요나단은 자신의 겉옷과 갑옷, 칼과 활까지 다윗에게 건네주었습니다. "내가 죽어도 내 자손을 네 자손처럼 지켜달라." 그 약속은 보이지 않는 씨앗처럼 땅속에 심겨졌습니다.</p>
+      <p class="story-text fade-up">서로의 생명을 아끼며 맺은 그 언약은 눈에 보이지 않았습니다. 요나단은 자신의 겉옷과 갑옷, 칼과 활까지 다윗에게 건네주었습니다. 그 약속은 보이지 않는 씨앗처럼 땅속에 심겨졌습니다.</p>
+
+      <p class="story-text fade-up">그때는 아무도 몰랐습니다. 그 언약이 훗날 한 절름발이 인생을 왕의 식탁으로 이끌게 될 줄은.</p>
 
       <span class="key-line fade-up">하나님의 은혜는 언제나<br>누군가의 언약 위에 세워집니다.</span>
     </div>
@@ -618,7 +754,7 @@
 </section>
 
 
-<!-- ══ CHAPTER 2 — 다리를 저는 아이 ══ -->
+<!-- ══ CHAPTER 2 — 잊혀진 자 ══ -->
 <section class="chapter">
   <div class="scene-header exile">
     <div class="scene-bg-text">로드발</div>
@@ -634,11 +770,13 @@
       <p class="story-text fade-up">놀란 유모가 아이를 안고 도망치다 그만 아이를 떨어뜨렸습니다. 그날 이후, 므비보셋은 두 발을 절게 되었습니다.</p>
 
       <div class="bible-quote fade-up">
-        <p class="bible-quote-text">유모가 그를 데리고 도망하였는데, 서둘러 도망하는 바람에 그가 떨어져 불구가 되었던 것이다. 그의 이름은 므비보셋이었다.</p>
+        <p class="bible-quote-text">그는 다섯 살이었다. 유모가 그를 데리고 도망하였는데, 서둘러 도망하는 바람에 그가 떨어져 불구가 되었던 것이다. 그의 이름은 므비보셋이었다.</p>
         <span class="bible-quote-ref">— 사무엘하 4:4</span>
       </div>
 
       <p class="story-text fade-up">그는 왕의 손자였지만, 이제 '로드발(무목초지, 아무것도 없는 땅)'이라는 곳에 숨어 살았습니다. 원수의 후손이라 언제 죽임을 당할지 모른다는 공포 속에서, 잊혀진 자로 살아갔습니다.</p>
+
+      <p class="story-text fade-up">그의 삶은 스스로 무엇을 이루어내는 삶이 아니었습니다. 그저 살아남는 것에 가까웠습니다. 세상은 그를 잊었지만, 언약은 그를 잊지 않고 있었습니다.</p>
 
       <span class="key-line fade-up">인생의 가장 어두운 자리에서도<br>하나님은 그 이름을 기억하십니다.</span>
     </div>
@@ -660,7 +798,7 @@
     <div class="scene-bg-text">부름</div>
     <p class="chapter-num">Chapter Three</p>
     <h2 class="chapter-title">왕이 그를<br>찾아 나서다</h2>
-    <p class="chapter-verse-ref">사무엘하 9:1–7</p>
+    <p class="chapter-verse-ref">사무엘하 9:1–13</p>
   </div>
 
   <div class="story-body">
@@ -672,9 +810,9 @@
         <span class="bible-quote-ref">— 사무엘하 9:1</span>
       </div>
 
-      <p class="story-text fade-up">왕이 먼저 찾아 나섰습니다. 므비보셋이 부탁하거나 요청한 것이 없었습니다. 다윗이 먼저 찾아낸 것입니다. 이것이 은혜입니다. 자격 없는 자를 왕이 먼저 찾아내시는 것.</p>
+      <p class="story-text fade-up">왕이 먼저 찾아 나섰습니다. 므비보셋이 부탁하거나 요청한 것이 없었습니다. 아무런 자격도 내세울 수 없었습니다. 그런데도 그는 불려 나왔고, 두려움 속에 왕 앞에 섰습니다. 이것이 은혜입니다. 자격 없는 자를 왕이 먼저 찾아내시는 것.</p>
 
-      <p class="story-text fade-up">마침내 므비보셋이 왕 앞에 엎드렸습니다. 그는 두려워 떨었습니다. 원수의 후손인 자신이 불려왔으니까요. 그런데 다윗의 입에서 뜻밖의 말이 터져 나옵니다.</p>
+      <p class="story-text fade-up">마침내 므비보셋이 왕 앞에 엎드렸습니다. 그는 두려워 떨었습니다. 원수의 후손인 자신이 불려왔으니까요. 그런데 다윗의 입에서 예상과 전혀 다른 말이 터져 나옵니다.</p>
 
       <div class="bible-quote fade-up">
         <p class="bible-quote-text">두려워하지 마시오. 내가 분명히 그대의 아버지 요나단을 생각해 그대에게 친절을 베풀겠소. 내가 그대의 할아버지 사울의 온 땅을 그대에게 돌려줄 것이오. 그리고 그대는 항상 내 상에서 음식을 먹도록 하시오.</p>
@@ -687,7 +825,7 @@
 
   <div class="insight-strip">
     <div class="insight-inner">
-      <p class="insight-eyebrow">이 장면이 품은 신학</p>
+      <p class="insight-eyebrow">이 장면이 품은 교훈</p>
       <div class="insight-cards">
         <div class="insight-card fade-up">
           <span class="insight-icon">🤴</span>
@@ -716,38 +854,127 @@
   <div class="scripture-panel">
     <div class="scripture-inner">
       <p class="scripture-label">성경 본문</p>
-      <p class="scripture-ref-title">사무엘하 9:6–13 (발췌)</p>
-      <p class="scripture-content">므비보셋이 다윗에게 와서 얼굴을 땅에 대고 엎드리며 경의를 표하였다. … 다윗이 그에게 말하였다. "두려워하지 마시오. … 그대는 항상 내 상에서 음식을 먹도록 하시오." … 므비보셋은 항상 왕의 상에서 음식을 먹었기 때문에 예루살렘에 거주하였다. 그는 두 다리를 모두 절었다.</p>
+      <p class="scripture-ref-title">사무엘하 9:6–13</p>
+      <p class="scripture-content">사울의 손자이며 요나단의 아들인 므비보셋이 다윗에게 와서 얼굴을 땅에 대고 엎드리며 경의를 표하였다. 다윗이 말하였다. "므비보셋이여." 그러자 그가 말하였다. "왕의 종이 여기에 있습니다." 다윗이 그에게 말하였다. "두려워하지 마시오. 내가 분명히 그대의 아버지 요나단을 생각해 그대에게 친절을 베풀겠소. … 므비보셋은 항상 나의 상에서 음식을 먹을 걸세." … 다윗이 말하였다. "므비보셋은 왕자들 가운데 하나처럼 나의 상에서 음식을 먹도록 해야 하네." … 므비보셋은 항상 왕의 상에서 음식을 먹었기 때문에 예루살렘에 거주하였다. 그는 두 다리를 모두 절었다.</p>
     </div>
   </div>
 </section>
 
 
-<!-- ══ CHAPTER 4 — 오해와 충성 ══ -->
+<!-- ══ CHAPTER 4 — 폭풍 속의 시험 ══ -->
 <section class="chapter">
-  <div class="scene-header dawn">
-    <div class="scene-bg-text">충성</div>
+  <div class="scene-header storm">
+    <div class="scene-bg-text">반란</div>
     <p class="chapter-num">Chapter Four</p>
+    <h2 class="chapter-title">폭풍이 몰아치다 —<br>시바의 모략</h2>
+    <p class="chapter-verse-ref">사무엘하 16:1–4</p>
+  </div>
+
+  <div class="story-body">
+    <div class="story-inner">
+      <p class="story-text fade-up">세월이 흘러 다윗에게 위기가 찾아왔습니다. 아들 압살롬의 반란으로 다윗은 예루살렘을 버리고 도망쳐야 했습니다. 혼란과 두려움이 가득한 그때, 시바라는 종이 왕 앞에 접근합니다.</p>
+
+      <div class="bible-quote fade-up">
+        <p class="bible-quote-text">시바가 왕에게 말하였다. "지금 그는 '오늘 이스라엘 집이 나에게 나의 아버지의 왕국을 되돌려줄 것이다.'라고 말하며 예루살렘에 머물고 있습니다."</p>
+        <span class="bible-quote-ref">— 사무엘하 16:3</span>
+      </div>
+
+      <p class="story-text fade-up">므비보셋이 왕권을 노리고 예루살렘에 남았다는 이야기였습니다. 다윗은 그 말을 듣고 별다른 확인 없이 므비보셋의 모든 것을 시바에게 넘겨버립니다. 억울한 모함이었지만, 므비보셋은 아무것도 할 수 없었습니다.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ CONTRAST — 시바 vs 므비보셋 ══ -->
+<section class="chapter">
+  <div class="scene-header siba">
+    <div class="scene-bg-text">중심</div>
+    <p class="chapter-num">Chapter Five</p>
+    <h2 class="chapter-title">같은 상황,<br>전혀 다른 선택</h2>
+    <p class="chapter-verse-ref">사무엘하 16:1–4 · 19:24–30</p>
+  </div>
+
+  <div class="contrast-strip">
+    <div class="contrast-inner">
+      <p class="contrast-eyebrow">같은 상황 — 두 사람의 관심</p>
+
+      <div class="contrast-grid">
+        <div class="contrast-col left fade-up">
+          <p class="contrast-name">시바</p>
+          <p class="contrast-headline">결과를 붙드는 사람</p>
+          <p class="contrast-body">그의 눈에는 왕이 아니라 기회가 있었습니다. 왕이 흔들리는 순간을 계산했습니다. 관심은 소유에 있었고, 중심은 자기 자신이었습니다.</p>
+          <p class="contrast-verdict">상황을 보고 → 이익을 계산했다</p>
+        </div>
+        <div class="contrast-col right fade-up">
+          <p class="contrast-name">므비보셋</p>
+          <p class="contrast-headline">관계를 붙드는 사람</p>
+          <p class="contrast-body">왕이 없는 상태에서 자신의 삶을 꾸미는 것이 의미 없다고 여겼습니다. 발도 씻지 않고, 수염도 깎지 않고, 옷도 갈아입지 않았습니다.</p>
+          <p class="contrast-verdict">상황을 보고 → 왕을 바라보았다</p>
+        </div>
+      </div>
+
+      <div class="contrast-divider"><span>이 차이는 어디서 왔는가</span></div>
+
+      <p style="font-family:'Noto Sans KR',sans-serif; font-size:0.88rem; font-weight:300; color:rgba(245,237,224,0.65); line-height:2; text-align:center; max-width:500px; margin:0 auto;">
+        같은 상황 속에서도 사람의 관심이 어디에 있느냐에 따라<br>전혀 다른 선택을 하게 됩니다.<br>시바의 중심에는 <strong style="color:rgba(220,140,100,0.9);">소유</strong>가 있었고,<br>므비보셋의 중심에는 이미 <strong style="color:rgba(140,210,140,0.9);">왕</strong>이 있었습니다.
+      </p>
+    </div>
+  </div>
+
+  <!-- 므비보셋의 마음 상태 -->
+  <div class="heart-strip">
+    <div class="heart-inner">
+      <p class="story-text fade-up">므비보셋이 왕을 따라가지 못한 것은 사실입니다. 그러나 그가 발을 씻지 않고 수염을 깎지 않은 것은 단순한 방치가 아니었습니다. 이것은 마음의 표현이었습니다.</p>
+
+      <div class="heart-callout fade-up">
+        <p class="heart-callout-q">므비보셋의 기준</p>
+        <p class="heart-callout-text">
+          왕이 계시면 그것으로 충분하고,<br>
+          <span class="accent">왕이 없으면 다른 것은 의미가 없다.</span>
+        </p>
+      </div>
+
+      <p class="story-text fade-up">그는 억울함을 풀 수도 없었고, 변명할 기회도 없었습니다. 그러나 그는 상황을 뒤집으려 하지 않았습니다. 결과를 붙드는 사람이 아니라, 관계를 붙드는 사람이었기 때문입니다.</p>
+
+      <div class="bible-quote fade-up">
+        <p class="bible-quote-text">왕이 떠난 날부터 다시 평안하게 돌아오는 날까지, 발도 씻지 않고 턱수염도 깎지 않았으며 옷도 빨지 않았다.</p>
+        <span class="bible-quote-ref">— 사무엘하 19:24</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ CHAPTER 6 — 왕의 귀환 ══ -->
+<section class="chapter">
+  <div class="scene-header return">
+    <div class="scene-bg-text">돌아옴</div>
+    <p class="chapter-num">Chapter Six</p>
     <h2 class="chapter-title">오해 속에서도<br>변하지 않는 마음</h2>
     <p class="chapter-verse-ref">사무엘하 19:24–30</p>
   </div>
 
   <div class="story-body">
     <div class="story-inner">
-      <p class="story-text fade-up">세월이 흘러 다윗에게 위기가 찾아왔습니다. 아들 압살롬의 반란으로 다윗은 예루살렘을 버리고 도망쳐야 했습니다. 이때 므비보셋의 종 시바가 왕에게 접근합니다. "므비보셋이 왕권을 노리고 예루살렘에 남았습니다."</p>
-
-      <p class="story-text fade-up">그 말을 들은 다윗은 므비보셋의 땅 전부를 시바에게 줘버렸습니다. 억울한 모함이었지만, 므비보셋은 아무것도 할 수 없었습니다.</p>
-
-      <div class="scene-break"><i>· · ·</i></div>
-
-      <p class="story-text fade-up">마침내 다윗이 돌아왔습니다. 그때 므비보셋이 나타났습니다. 그의 모습은 충격적이었습니다.</p>
+      <p class="story-text fade-up">마침내 왕이 돌아왔습니다. 므비보셋이 나타났습니다. 그의 상태는 모든 것을 말해주고 있었습니다. 왕이 "왜 나와 함께 가지 않았느냐?"고 묻자, 므비보셋은 대답합니다.</p>
 
       <div class="bible-quote fade-up">
-        <p class="bible-quote-text">왕이 떠난 날부터 다시 평안하게 돌아오는 날까지, 발도 씻지 않고 턱수염도 깎지 않았으며 옷도 빨지 않았다.</p>
-        <span class="bible-quote-ref">— 사무엘하 19:24</span>
+        <p class="bible-quote-text">저의 주군이신 왕께서 평안하게 궁전에 도착하셨으니, 땅은 시바가 모두 차지하게 하셔도 좋습니다.</p>
+        <span class="bible-quote-ref">— 사무엘하 19:30</span>
       </div>
 
-      <p class="story-text fade-up">왕이 "왜 나와 함께 가지 않았느냐?"고 묻자, 므비보셋은 대답합니다. "저는 다리를 절기에 따라가지 못했고, 시바가 저를 속였습니다. 그러나 왕이여, 이제 평안히 돌아오셨으니 — 땅은 시바가 다 가져도 좋습니다."</p>
+      <p class="story-text fade-up">이 말은 포기나 체념이 아닙니다. 이미 그의 마음이 어디에 있는지 분명히 보여주는 고백입니다. 그는 잃은 것이 많았지만, 가장 중요한 것은 잃지 않았습니다.</p>
+
+      <div class="two-ways fade-up">
+        <div class="two-ways-box a">
+          <p class="two-ways-label">어떤 사람</p>
+          <p class="two-ways-text">상황 속에서<br>무엇을 얻을 수 있는지<br>바라봅니다</p>
+        </div>
+        <div class="two-ways-box b">
+          <p class="two-ways-label">므비보셋</p>
+          <p class="two-ways-text">그 상황 속에서도<br>누구와 함께 있는지<br>바라봅니다</p>
+        </div>
+      </div>
 
       <span class="key-line fade-up">진짜 충성은 받은 것에 있지 않습니다.<br>왕에게 속한 마음에 있습니다.</span>
     </div>
@@ -756,18 +983,18 @@
   <div class="scripture-panel">
     <div class="scripture-inner">
       <p class="scripture-label">성경 본문</p>
-      <p class="scripture-ref-title">사무엘하 19:24–30 (발췌)</p>
-      <p class="scripture-content">므비보셋이 왕에게 말하였다. "… 저의 주군이신 왕께서 평안하게 궁전에 도착하셨으니, 땅은 시바가 모두 차지하게 하셔도 좋습니다." — 사무엘하 19:30</p>
+      <p class="scripture-ref-title">사무엘하 19:24–30</p>
+      <p class="scripture-content">사울의 손자 므비보셋도 왕을 맞이하려고 내려왔다. 그는 왕이 떠난 날부터 다시 평안하게 돌아오는 날까지, 발도 씻지 않고 턱수염도 깎지 않았으며 옷도 빨지 않았다. 그가 왕을 맞이하려고 예루살렘에서 오자, 왕이 그에게 말하였다. "므비보셋이여, 그대는 왜 나와 함께 가지 않았소?" 그러자 므비보셋이 말하였다. "저의 주군이신 왕이시여, 저의 종이 저를 속였습니다. … 그런데 시바가 저의 주군이신 왕 앞에서 저를 모함한 것입니다. … 제 아버지의 집안 사람들은 모두 저의 주군이신 왕 앞에서 죽어 마땅한 사람들이었지만, 왕께서 이 종을 왕의 상에서 먹는 이들과 함께 앉히셨습니다. 그러니 제가 왕께 무슨 권리를 더 부르짖을 수 있겠습니까?" … 므비보셋이 왕에게 말하였다. "저의 주군이신 왕께서 평안하게 궁전에 도착하셨으니, 땅은 시바가 모두 차지하게 하셔도 좋습니다."</p>
     </div>
   </div>
 </section>
 
 
-<!-- ══ CHAPTER 5 — 언약의 완성 ══ -->
+<!-- ══ CHAPTER 7 — 언약의 완성 ══ -->
 <section class="chapter">
   <div class="scene-header covenant">
     <div class="scene-bg-text">생명</div>
-    <p class="chapter-num">Chapter Five</p>
+    <p class="chapter-num">Chapter Seven</p>
     <h2 class="chapter-title">언약이 그의<br>생명을 지키다</h2>
     <p class="chapter-verse-ref">사무엘하 21:7</p>
   </div>
@@ -783,7 +1010,7 @@
         <span class="bible-quote-ref">— 사무엘하 21:7</span>
       </div>
 
-      <p class="story-text fade-up">므비보셋은 그날 무엇을 기준으로 살아남았습니까? 자신의 능력? 자신의 공로? 아닙니다. 오직 하나 — 아버지 요나단과 다윗 사이에 맺어진 언약. 그 언약이 그의 생명을 지킨 것입니다.</p>
+      <p class="story-text fade-up">므비보셋이 그날 살아남은 것은 자신의 능력이나 공로 때문이 아니었습니다. 오직 하나 — 아버지 요나단과 다윗 사이에 맺어진 언약. 처음에 씨앗처럼 심겨진 그 언약이, 마지막 자리에서 그의 생명을 지킨 것입니다.</p>
 
       <span class="key-line fade-up">우리가 심판을 면하는 것도<br>우리의 자격 때문이 아닙니다.<br>예수 그리스도의 언약 때문입니다.</span>
     </div>
@@ -792,8 +1019,8 @@
   <div class="scripture-panel">
     <div class="scripture-inner">
       <p class="scripture-label">성경 본문</p>
-      <p class="scripture-ref-title">사무엘하 21:1–7 (발췌)</p>
-      <p class="scripture-content">다윗 시대에 연이어 삼 년 동안 기근이 들었다. … 그러나 왕이 사울의 아들인 요나단의 아들 므비보셋은 남겨 두었는데, 그것은 그들 곧 다윗과 사울의 아들 요나단 사이에 여호와 앞에서 한 맹세가 있었기 때문이다.</p>
+      <p class="scripture-ref-title">사무엘하 21:1–7</p>
+      <p class="scripture-content">다윗 시대에 연이어 삼 년 동안 기근이 들었다. 다윗이 여호와께 여쭈자 여호와께서 말씀하셨다. "이것은 사울 때문이며, 피를 흘리게 한 그의 집안 때문이다. 그가 기브온 사람들을 죽이지 않았느냐?" … 기브온 사람들이 왕에게 말하였다. "… 그의 자손 가운데 일곱 사람을 우리에게 넘기시면, 우리가 여호와께서 선택하신 사울의 고향 기브아에서 여호와 앞에서 그들을 나무에 달겠습니다." … 그러나 왕이 사울의 아들인 요나단의 아들 므비보셋은 남겨 두었는데, 그것은 그들 곧 다윗과 사울의 아들 요나단 사이에 여호와 앞에서 한 맹세가 있었기 때문이다.</p>
     </div>
   </div>
 </section>
@@ -801,15 +1028,15 @@
 
 <!-- ══ FINALE — 은혜의 식탁 ══ -->
 <section class="finale">
-  <p class="finale-label">Epilogue · 은혜의 신학</p>
+  <p class="finale-eyebrow">Epilogue · 은혜의 신학</p>
 
   <h2 class="finale-title">
     우리 모두는<br>
-    <em>므비보셋입니다</em>
+    <span class="em">므비보셋입니다</span>
   </h2>
 
   <div class="finale-verse fade-up">
-    <p class="finale-verse-text">내가 너를 구속하였으니 두려워하지 마라. 내가 너를 지명하여 불렀으니 너는 나의 것이라.</p>
+    <p class="finale-verse-text">그러나 이제 야곱아, 너를 창조하신 분, 이스라엘아, 너를 지으신 분 여호와께서 이렇게 말씀하신다. "내가 너를 구속하였으니 두려워하지 마라. 내가 너를 지명하여 불렀으니 너는 나의 것이라."</p>
     <p class="finale-verse-ref">— 이사야 43:1</p>
   </div>
 
@@ -821,6 +1048,20 @@
     식탁에 앉으면, 식탁보가 우리의 상처를 덮습니다.<br>
     그것이 <strong>은혜</strong>입니다.
   </p>
+
+  <div class="finale-declaration fade-up">
+    <p class="finale-declaration-quote">
+      므비보셋은 은혜를 받은 이후,<br>그의 관심이 완전히 바뀐 사람이었습니다.<br><br>
+      살아남는 것이 목적이던 사람이,<br>이제는 왕과 함께 있는 것이 목적이 된 사람.
+    </p>
+    <p class="finale-declaration-answer">
+      이 이야기는 결국 우리에게 묻습니다.<br><br>
+      <strong>우리는 하나님을 통해 무엇을 얻으려 하는가,</strong><br>
+      <strong>아니면 하나님 자신이 우리의 목적이 되었는가.</strong><br><br>
+      므비보셋은 모든 것을 잃어도 괜찮은 사람이었습니다.<br>
+      왕이 돌아오셨다면, 그것으로 충분했기 때문입니다.
+    </p>
+  </div>
 </section>
 
 
@@ -828,7 +1069,7 @@
 <footer class="site-footer">
   <div class="footer-ornament"></div>
   <p class="footer-name">부산교회 2구역</p>
-  <p class="footer-prayer">이 말씀이 당신의 마음에 평안을 가져다주기를 🙏</p>
+  <p class="footer-prayer">이 말씀이 당신의 마음에 평안을 가져다주기를 바랍니다.</p>
 </footer>
 
 
@@ -837,7 +1078,7 @@
     entries.forEach(e => {
       if (e.isIntersecting) e.target.classList.add('vis');
     });
-  }, { threshold: 0.12 });
+  }, { threshold: 0.1 });
 
   document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
 </script>
