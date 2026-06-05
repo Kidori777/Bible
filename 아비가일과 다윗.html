@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>아비가일 — 그 사이에 선 사람</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;700&family=Noto+Sans+KR:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ivory: #f9f4eb;
+  --cream: #f2ead8;
+  --sand: #e8d9bc;
+  --gold: #c9a84c;
+  --gold-light: #e8c87a;
+  --gold-dark: #a07830;
+  --deep-brown: #3b2412;
+  --mid-brown: #7a4b2a;
+  --warm-black: #1a1008;
+  --crimson: #8b1a1a;
+  --crimson-soft: #c0392b;
+  --crimson-pale: #f9eded;
+  --dust: #c4a882;
+  --slate: #4a3f35;
+  --sky-dawn: #d4e8f5;
+  --white-smoke: #fefcf8;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--warm-black);
+  color: var(--ivory);
+  font-family: 'Noto Serif KR', serif;
+  overflow-x: hidden;
+}
+
+/* ── NOISE OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.04;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ── HERO ── */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 30% 40%, #2c1a08 0%, var(--warm-black) 65%);
+}
+
+.hero-bg-circle {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+}
+.hero-bg-circle.c1 {
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(201,168,76,0.18) 0%, transparent 70%);
+  top: -100px; left: -200px;
+  animation: drift1 14s ease-in-out infinite alternate;
+}
+.hero-bg-circle.c2 {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(139,26,26,0.22) 0%, transparent 70%);
+  bottom: -50px; right: -100px;
+  animation: drift2 18s ease-in-out infinite alternate;
+}
+@keyframes drift1 { from { transform: translate(0,0); } to { transform: translate(40px,30px); } }
+@keyframes drift2 { from { transform: translate(0,0); } to { transform: translate(-30px,-40px); } }
+
+.hero-top-line {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(0.75rem, 1.5vw, 0.9rem);
+  letter-spacing: 0.35em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 2.5rem;
+  opacity: 0;
+  animation: fadeUp 1s 0.3s forwards;
+}
+
+.hero-ref {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(0.8rem, 1.4vw, 0.95rem);
+  letter-spacing: 0.2em;
+  color: var(--dust);
+  margin-bottom: 1.2rem;
+  opacity: 0;
+  animation: fadeUp 1s 0.6s forwards;
+}
+
+.hero-title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: clamp(2.8rem, 8vw, 6rem);
+  font-weight: 700;
+  line-height: 1.1;
+  text-align: center;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, var(--ivory) 0%, var(--gold-light) 50%, var(--dust) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  opacity: 0;
+  animation: fadeUp 1.2s 0.5s forwards;
+  margin-bottom: 0.4rem;
+}
+
+.hero-sub {
+  font-size: clamp(1rem, 2.5vw, 1.4rem);
+  font-weight: 300;
+  color: var(--dust);
+  letter-spacing: 0.08em;
+  text-align: center;
+  opacity: 0;
+  animation: fadeUp 1s 0.9s forwards;
+  margin-bottom: 3rem;
+}
+
+.hero-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  opacity: 0;
+  animation: fadeUp 1s 1.1s forwards;
+}
+.hero-divider span { width: 80px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+.hero-divider .diamond {
+  width: 8px; height: 8px;
+  background: var(--gold);
+  transform: rotate(45deg);
+}
+
+.scroll-hint {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0;
+  animation: fadeUp 1s 1.8s forwards;
+}
+.scroll-hint p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.3em;
+  color: var(--dust);
+  text-transform: uppercase;
+}
+.scroll-line {
+  width: 1px; height: 50px;
+  background: linear-gradient(180deg, var(--gold), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.4; transform: scaleY(1); }
+  50% { opacity: 1; transform: scaleY(1.1); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── SECTION BASE ── */
+section {
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── INTRO ── */
+.intro {
+  background: linear-gradient(180deg, var(--warm-black) 0%, #1f1208 100%);
+  padding: 7rem 2rem;
+}
+.intro-inner {
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+}
+.intro-inner p {
+  font-size: clamp(1.05rem, 2.2vw, 1.25rem);
+  line-height: 2.1;
+  color: #c8b89a;
+  font-weight: 300;
+}
+.intro-inner .highlight-name {
+  color: var(--gold-light);
+  font-weight: 500;
+}
+
+/* ── DUALITY SECTION ── */
+.duality {
+  background: #0f0a04;
+  padding: 6rem 2rem;
+}
+.duality-inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.duality-verse {
+  border-left: 3px solid var(--gold);
+  padding: 1.5rem 2rem;
+  margin: 3rem auto;
+  max-width: 650px;
+  background: rgba(201,168,76,0.04);
+}
+.duality-verse p {
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  line-height: 2;
+  color: #d4c4a8;
+}
+.duality-verse .ref {
+  display: block;
+  margin-top: 0.8rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  color: var(--gold);
+}
+
+.contrast-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  margin: 3rem 0;
+  border: 1px solid rgba(201,168,76,0.15);
+}
+.contrast-card {
+  padding: 3rem 2.5rem;
+  text-align: center;
+}
+.contrast-card.nabal {
+  background: linear-gradient(135deg, #1a0d05, #0f0704);
+}
+.contrast-card.abigail {
+  background: linear-gradient(135deg, #1a1208, #12100a);
+}
+.contrast-card .label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+.contrast-card.nabal .label { color: #a05050; }
+.contrast-card.abigail .label { color: var(--gold); }
+.contrast-card h3 {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+.contrast-card.nabal h3 { color: #c07070; }
+.contrast-card.abigail h3 {
+  background: linear-gradient(135deg, var(--ivory), var(--gold-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.contrast-card p {
+  font-size: 0.95rem;
+  line-height: 1.9;
+  font-weight: 300;
+}
+.contrast-card.nabal p { color: #907070; }
+.contrast-card.abigail p { color: #b8a888; }
+
+/* ── CRISIS ── */
+.crisis {
+  background: linear-gradient(180deg, #0f0704 0%, #1a0505 50%, #0f0704 100%);
+  padding: 7rem 2rem;
+  position: relative;
+}
+.crisis::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 50%, rgba(139,26,26,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.crisis-inner { max-width: 750px; margin: 0 auto; }
+
+.section-eyebrow {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.45em;
+  text-transform: uppercase;
+  color: var(--crimson-soft);
+  text-align: center;
+  margin-bottom: 1rem;
+}
+.section-title {
+  font-size: clamp(1.8rem, 4.5vw, 2.8rem);
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 3.5rem;
+  line-height: 1.25;
+}
+
+.speech-block {
+  background: rgba(139,26,26,0.08);
+  border: 1px solid rgba(192,57,43,0.25);
+  border-left: 4px solid var(--crimson-soft);
+  padding: 2rem 2.5rem;
+  margin: 2rem 0;
+  position: relative;
+}
+.speech-block::before {
+  content: '"';
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 5rem;
+  color: rgba(192,57,43,0.2);
+  position: absolute;
+  top: -1rem;
+  left: 1rem;
+  line-height: 1;
+}
+.speech-block p {
+  font-size: clamp(0.95rem, 1.8vw, 1.1rem);
+  line-height: 2;
+  color: #c8a8a8;
+}
+.speech-block .speaker {
+  display: block;
+  margin-top: 1rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.82rem;
+  letter-spacing: 0.2em;
+  color: #a07070;
+}
+
+.crisis-prose {
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  line-height: 2.1;
+  color: #c0a898;
+  font-weight: 300;
+  text-align: center;
+  margin: 2.5rem 0;
+}
+
+.sword-moment {
+  text-align: center;
+  padding: 3rem 0;
+  position: relative;
+}
+.sword-text {
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
+  font-weight: 700;
+  color: var(--crimson-soft);
+  letter-spacing: 0.05em;
+  animation: swordPulse 3s ease-in-out infinite;
+}
+@keyframes swordPulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; text-shadow: 0 0 30px rgba(192,57,43,0.4); }
+}
+.sword-sub {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.3em;
+  color: #805050;
+  margin-top: 0.5rem;
+  text-transform: uppercase;
+}
+
+/* ── TURNING POINT ── */
+.turning {
+  background: linear-gradient(180deg, #1a0505 0%, #0f0a04 40%, #121008 100%);
+  padding: 8rem 2rem;
+  position: relative;
+}
+.turning::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+.turn-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.45em;
+  text-transform: uppercase;
+  color: var(--gold);
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.abigail-portrait {
+  max-width: 800px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+.portrait-left {
+  text-align: center;
+}
+.portrait-circle {
+  width: 160px; height: 160px;
+  margin: 0 auto 1.5rem;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, var(--gold-light) 0%, var(--gold-dark) 60%, #6b4c1a 100%);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 60px rgba(201,168,76,0.25), 0 0 120px rgba(201,168,76,0.1);
+}
+.portrait-circle::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid rgba(201,168,76,0.4);
+}
+.portrait-circle svg {
+  width: 70px; height: 70px;
+  opacity: 0.85;
+}
+.portrait-name {
+  font-size: 1.4rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--ivory), var(--gold-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.3rem;
+}
+.portrait-desc {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  color: var(--dust);
+}
+
+.portrait-right {
+  padding-top: 0.5rem;
+}
+.portrait-right p {
+  font-size: clamp(1rem, 1.9vw, 1.1rem);
+  line-height: 2.2;
+  color: #c0b09a;
+  font-weight: 300;
+  margin-bottom: 1.5rem;
+}
+
+.offering-list {
+  background: rgba(201,168,76,0.05);
+  border: 1px solid rgba(201,168,76,0.15);
+  padding: 1.8rem 2rem;
+  margin: 1.5rem 0;
+}
+.offering-list .list-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1rem;
+}
+.offering-list ul {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+.offering-list ul li {
+  font-size: 0.88rem;
+  color: #a8987a;
+  padding-left: 1rem;
+  position: relative;
+}
+.offering-list ul li::before {
+  content: '◆';
+  position: absolute;
+  left: 0;
+  font-size: 0.4rem;
+  color: var(--gold);
+  top: 0.4em;
+}
+
+/* ── INTERCESSION ── */
+.intercession {
+  background: #0a0805;
+  padding: 8rem 2rem;
+  position: relative;
+}
+.intercession-inner { max-width: 750px; margin: 0 auto; }
+
+.standing-visual {
+  text-align: center;
+  margin: 4rem 0;
+  position: relative;
+}
+.standing-diagram {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  position: relative;
+}
+.stand-box {
+  padding: 1.5rem 2rem;
+  text-align: center;
+  min-width: 140px;
+}
+.stand-box.david {
+  background: linear-gradient(135deg, rgba(139,26,26,0.2), rgba(139,26,26,0.1));
+  border: 1px solid rgba(192,57,43,0.3);
+}
+.stand-box.abigail-mid {
+  background: linear-gradient(135deg, rgba(201,168,76,0.15), rgba(201,168,76,0.08));
+  border: 1px solid rgba(201,168,76,0.4);
+  border-left: 3px solid var(--gold);
+  border-right: 3px solid var(--gold);
+  z-index: 2;
+  position: relative;
+}
+.stand-box.nabal {
+  background: linear-gradient(135deg, rgba(80,40,20,0.3), rgba(60,30,10,0.2));
+  border: 1px solid rgba(120,80,40,0.3);
+}
+.stand-box .box-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+}
+.stand-box.david .box-label { color: var(--crimson-soft); }
+.stand-box.abigail-mid .box-label { color: var(--gold); }
+.stand-box.nabal .box-label { color: #907060; }
+.stand-box .box-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+.stand-box.david .box-name { color: #e08080; }
+.stand-box.abigail-mid .box-name {
+  background: linear-gradient(135deg, var(--ivory), var(--gold-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.stand-box.nabal .box-name { color: #b09070; }
+.arrow-connector {
+  width: 40px;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(192,57,43,0.5), var(--gold), rgba(120,80,40,0.5));
+  position: relative;
+  flex-shrink: 0;
+}
+
+.intercession-verse {
+  text-align: center;
+  margin: 3rem 0;
+  padding: 2.5rem;
+  background: radial-gradient(ellipse at center, rgba(201,168,76,0.05) 0%, transparent 70%);
+  border: 1px solid rgba(201,168,76,0.12);
+}
+.intercession-verse .verse-text {
+  font-size: clamp(1.05rem, 2.2vw, 1.25rem);
+  line-height: 2.2;
+  color: var(--ivory);
+  font-weight: 400;
+  margin-bottom: 0.8rem;
+}
+.intercession-verse .verse-ref {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.82rem;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+}
+
+.prose-block {
+  font-size: clamp(1rem, 2vw, 1.12rem);
+  line-height: 2.2;
+  color: #b8a890;
+  font-weight: 300;
+  margin: 2rem 0;
+}
+.prose-block .em {
+  color: var(--gold-light);
+  font-weight: 500;
+}
+
+/* ── DAVID STOPS ── */
+.david-stops {
+  background: linear-gradient(180deg, #0a0805 0%, #141008 100%);
+  padding: 7rem 2rem;
+  border-top: 1px solid rgba(201,168,76,0.1);
+  border-bottom: 1px solid rgba(201,168,76,0.1);
+}
+.david-stops-inner { max-width: 680px; margin: 0 auto; text-align: center; }
+
+.stop-moment {
+  font-size: clamp(1.8rem, 4.5vw, 2.8rem);
+  font-weight: 700;
+  line-height: 1.3;
+  background: linear-gradient(135deg, #e0d0b0 0%, var(--gold-light) 50%, var(--dust) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 2rem 0;
+}
+
+/* ── CHRIST CONNECTION ── */
+.christ {
+  background: linear-gradient(180deg, #141008 0%, #0d0c14 50%, #0a0a14 100%);
+  padding: 9rem 2rem;
+  position: relative;
+}
+.christ::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 30%, rgba(100,100,200,0.06) 0%, transparent 60%);
+  pointer-events: none;
+}
+.christ-inner { max-width: 800px; margin: 0 auto; }
+
+.christ-header {
+  text-align: center;
+  margin-bottom: 5rem;
+}
+.christ-eyebrow {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: #9090d0;
+  margin-bottom: 1rem;
+}
+.christ-title {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--ivory);
+}
+.christ-title span {
+  background: linear-gradient(135deg, #c8c8ff, #9090d0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.comparison-grid {
+  display: grid;
+  gap: 2px;
+  margin: 3rem 0;
+}
+.comp-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: stretch;
+  gap: 2px;
+}
+.comp-cell {
+  padding: 2rem 1.8rem;
+}
+.comp-cell.left {
+  background: rgba(201,168,76,0.05);
+  border: 1px solid rgba(201,168,76,0.1);
+  text-align: right;
+}
+.comp-cell.right {
+  background: rgba(100,100,200,0.06);
+  border: 1px solid rgba(100,100,200,0.12);
+}
+.comp-cell p {
+  font-size: clamp(0.88rem, 1.6vw, 0.98rem);
+  line-height: 1.9;
+  font-weight: 300;
+}
+.comp-cell.left p { color: #b8a880; }
+.comp-cell.right p { color: #a0a0d0; }
+.comp-mid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 0;
+  width: 40px;
+}
+.comp-arrow {
+  font-size: 0.9rem;
+  color: #606080;
+  line-height: 1;
+}
+.comp-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #504858;
+  writing-mode: vertical-rl;
+}
+
+.comp-header-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 2px;
+  margin-bottom: 2px;
+}
+.comp-header-cell {
+  padding: 0.8rem 1.8rem;
+  text-align: center;
+}
+.comp-header-cell.left-h {
+  background: rgba(201,168,76,0.1);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--gold);
+  text-align: right;
+}
+.comp-header-cell.right-h {
+  background: rgba(100,100,200,0.1);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: #9090d0;
+}
+.comp-header-cell.mid-h { width: 44px; }
+
+.christ-verse-block {
+  text-align: center;
+  padding: 3rem;
+  background: linear-gradient(135deg, rgba(100,100,200,0.06), rgba(80,80,180,0.03));
+  border: 1px solid rgba(100,100,200,0.15);
+  margin: 3rem 0;
+  position: relative;
+}
+.christ-verse-block::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 60px; height: 3px;
+  background: linear-gradient(90deg, transparent, #9090d0, transparent);
+}
+.christ-verse-text {
+  font-size: clamp(1rem, 2.2vw, 1.2rem);
+  line-height: 2.1;
+  color: #c8c8e8;
+  margin-bottom: 0.8rem;
+}
+.christ-verse-ref {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.82rem;
+  letter-spacing: 0.2em;
+  color: #8080c0;
+}
+
+/* ── SHADOW SECTION ── */
+.shadow-section {
+  background: #080810;
+  padding: 7rem 2rem;
+  text-align: center;
+}
+.shadow-inner { max-width: 680px; margin: 0 auto; }
+.shadow-title {
+  font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+  font-weight: 700;
+  color: var(--ivory);
+  margin-bottom: 2rem;
+  line-height: 1.4;
+}
+.shadow-prose {
+  font-size: clamp(1rem, 2vw, 1.12rem);
+  line-height: 2.3;
+  color: #8888b0;
+  font-weight: 300;
+}
+.shadow-prose .glow {
+  color: #b0b0e0;
+  font-weight: 500;
+}
+
+.cross-visual {
+  margin: 4rem auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+.cross-h { width: 3px; height: 80px; background: linear-gradient(180deg, transparent, #8080c0, #6060a0); }
+.cross-v { width: 60px; height: 3px; background: linear-gradient(90deg, transparent, #8080c0, transparent); margin: -1.5px 0; }
+.cross-b { width: 3px; height: 100px; background: linear-gradient(180deg, #6060a0, #3030608); }
+
+/* ── REFLECTION ── */
+.reflection {
+  background: linear-gradient(180deg, #080810 0%, #0c0a08 100%);
+  padding: 8rem 2rem;
+  position: relative;
+}
+.reflection::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 50%, rgba(201,168,76,0.04) 0%, transparent 60%);
+}
+.reflection-inner { max-width: 720px; margin: 0 auto; text-align: center; }
+
+.question-section {
+  margin: 4rem 0;
+}
+.question-intro {
+  font-size: clamp(0.95rem, 1.8vw, 1.05rem);
+  color: #806050;
+  font-family: 'Cormorant Garamond', serif;
+  letter-spacing: 0.25em;
+  margin-bottom: 3rem;
+  text-transform: uppercase;
+}
+
+.questions {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.q-item {
+  padding: 2rem 2.5rem;
+  border: 1px solid transparent;
+  position: relative;
+  transition: all 0.5s ease;
+  cursor: default;
+}
+.q-item.q1 {
+  background: rgba(139,26,26,0.08);
+  border-color: rgba(192,57,43,0.2);
+}
+.q-item.q2 {
+  background: rgba(80,40,20,0.1);
+  border-color: rgba(120,80,40,0.2);
+}
+.q-item.q3 {
+  background: rgba(201,168,76,0.05);
+  border-color: rgba(201,168,76,0.2);
+}
+.q-item p {
+  font-size: clamp(1.05rem, 2.2vw, 1.2rem);
+  line-height: 1.8;
+  font-weight: 400;
+}
+.q-item.q1 p { color: #c08080; }
+.q-item.q2 p { color: #a08060; }
+.q-item.q3 p { color: #c8b890; }
+.q-item:hover { transform: translateY(-3px); }
+.q-item.q3:hover { box-shadow: 0 10px 40px rgba(201,168,76,0.1); }
+
+/* ── CLOSING ── */
+.closing {
+  background: linear-gradient(180deg, #0c0a08 0%, #1a1408 50%, #0a0804 100%);
+  padding: 9rem 2rem 7rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.closing-glow {
+  position: absolute;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.closing-inner { max-width: 680px; margin: 0 auto; position: relative; }
+.closing-inner p {
+  font-size: clamp(1.05rem, 2.2vw, 1.25rem);
+  line-height: 2.4;
+  color: #c8b890;
+  font-weight: 300;
+  margin-bottom: 2rem;
+}
+.closing-inner .golden {
+  color: var(--gold-light);
+  font-weight: 500;
+}
+.final-line {
+  margin-top: 4rem;
+  padding-top: 3rem;
+  border-top: 1px solid rgba(201,168,76,0.2);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+  color: var(--ivory);
+  letter-spacing: 0.05em;
+  line-height: 1.8;
+}
+
+/* ── FOOTER ── */
+footer {
+  background: var(--warm-black);
+  padding: 2.5rem;
+  text-align: center;
+  border-top: 1px solid rgba(201,168,76,0.1);
+}
+footer p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.3em;
+  color: #4a3a28;
+  text-transform: uppercase;
+}
+
+/* ── SCROLL REVEAL ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-slow {
+  opacity: 0;
+  transform: translateY(25px);
+  transition: opacity 1.3s ease, transform 1.3s ease;
+}
+.reveal-slow.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 680px) {
+  .contrast-pair { grid-template-columns: 1fr; }
+  .abigail-portrait { grid-template-columns: 1fr; gap: 2rem; }
+  .portrait-left { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; justify-content: center; }
+  .comp-row { grid-template-columns: 1fr; }
+  .comp-mid { display: none; }
+  .comp-header-row { grid-template-columns: 1fr 1fr; }
+  .comp-header-cell.mid-h { display: none; }
+  .standing-diagram { flex-direction: column; gap: 0; }
+  .arrow-connector { width: 2px; height: 30px; background: linear-gradient(180deg, rgba(192,57,43,0.5), var(--gold), rgba(120,80,40,0.5)); }
+  .offering-list ul { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-circle c1"></div>
+  <div class="hero-bg-circle c2"></div>
+
+  <p class="hero-top-line">Samuel · 1 Samuel 25</p>
+  <p class="hero-ref">사무엘상 25장</p>
+  <h1 class="hero-title">아비가일</h1>
+  <p class="hero-sub">그 사이에 선 사람</p>
+  <div class="hero-divider">
+    <span></span>
+    <div class="diamond"></div>
+    <span></span>
+  </div>
+
+  <div class="scroll-hint">
+    <p>scroll</p>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- INTRO -->
+<section class="intro">
+  <div class="intro-inner reveal">
+    <p>
+      다윗의 삶을 따라가다 보면,<br>
+      전쟁의 함성과 눈물의 골짜기 사이에서<br>
+      잠시 숨을 고르게 하는 한 장면이 있습니다.<br><br>
+      그 장면 속에 조용히 등장하지만,<br>
+      결코 가볍지 않은 무게로<br>
+      이야기를 바꾸는 한 사람이 있습니다.<br><br>
+      바로 <span class="highlight-name">아비가일</span>입니다.
+    </p>
+  </div>
+</section>
+
+<!-- DUALITY -->
+<section class="duality">
+  <div class="duality-inner">
+    <div class="reveal">
+      <p style="text-align:center; font-family:'Cormorant Garamond',serif; font-size:0.82rem; letter-spacing:0.4em; text-transform:uppercase; color:var(--dust); margin-bottom:2rem;">광야 · 갈멜</p>
+      <p style="text-align:center; font-size:clamp(1rem,2vw,1.12rem); line-height:2.2; color:#b0a080; font-weight:300; max-width:600px; margin:0 auto 3rem;">
+        사울을 피해 도망 다니던 다윗, 그는 여전히 하나님의 기름 부음을 받은 자였지만 현실은 왕이 아닌 떠도는 자였습니다.
+        그 광야의 시간, 한 부유한 사람의 이름이 등장합니다.
+      </p>
+    </div>
+
+    <div class="duality-verse reveal">
+      <p>
+        그 사람의 이름은 나발이었고 아내의 이름은 아비가일이었다.<br>
+        그 여인은 뛰어난 분별력을 지녔을 뿐 아니라 외모도 아리따웠다.<br>
+        그러나 그 사람은 완고하고 행실이 악하였다.
+      </p>
+      <span class="ref">사무엘상 25:3</span>
+    </div>
+
+    <div class="contrast-pair reveal">
+      <div class="contrast-card nabal">
+        <div class="label">The Fool</div>
+        <h3>나발</h3>
+        <p>완고하고 행실이 악한 자<br>주어진 복을 당연히 여기며<br>은혜를 모욕으로 갚는 자<br>그의 이름은 "어리석음"이었다</p>
+      </div>
+      <div class="contrast-card abigail">
+        <div class="label">The Wise</div>
+        <h3>아비가일</h3>
+        <p>뛰어난 분별력을 지닌 자<br>같은 집 안에 전혀 다른 빛<br>어리석은 자 곁에서 살아야 하는<br>그 고난의 자리가 그녀의 현실</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CRISIS -->
+<section class="crisis">
+  <div class="crisis-inner">
+    <p class="section-eyebrow reveal">위기 · The Crisis</p>
+    <h2 class="section-title reveal">모욕이 돌아왔다</h2>
+
+    <p class="crisis-prose reveal">
+      다윗은 나발에게 선한 요청을 보냅니다.<br>
+      그러나 돌아온 것은 — 모욕이었습니다.
+    </p>
+
+    <div class="speech-block reveal">
+      <p>
+        "다윗은 누구고, 이새의 아들은 또 누구요?<br>
+        내 양털을 깎는 이들을 위한 음식과 물을<br>
+        어디서 온지도 모르는 사람들에게 준단 말이오?"
+      </p>
+      <span class="speaker">나발의 말 — 사무엘상 25:10-11</span>
+    </div>
+
+    <p class="crisis-prose reveal" style="margin-top:3rem;">
+      이 말 앞에서<br>
+      다윗의 마음이 흔들립니다.
+    </p>
+
+    <div class="sword-moment reveal">
+      <p class="sword-text">"각자 칼을 차시오"</p>
+      <p class="sword-sub">사무엘상 25:13 · 분노가 왕이 될 자를 집어삼키려 한다</p>
+    </div>
+
+    <p class="crisis-prose reveal" style="color:#907070;">
+      지금까지는 하나님의 때를 기다리던 사람이었지만,<br>
+      이 순간 그는 자신의 분노에 이끌려 움직이기 시작합니다.<br>
+      사백 명의 칼이 갈멜을 향해 움직입니다.
+    </p>
+  </div>
+</section>
+
+<!-- TURNING POINT -->
+<section class="turning">
+  <div class="turn-label reveal">전환점 · The Turning</div>
+
+  <div class="abigail-portrait">
+    <div class="portrait-left reveal">
+      <div class="portrait-circle">
+        <!-- 아비가일 실루엣 SVG -->
+        <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="40" cy="22" r="12" fill="rgba(255,240,200,0.7)"/>
+          <path d="M20 70 C20 48 60 48 60 70" fill="rgba(255,240,200,0.5)"/>
+          <path d="M28 34 C24 38 20 44 20 52 L60 52 C60 44 56 38 52 34" fill="rgba(255,230,180,0.4)"/>
+          <!-- 바구니/음식 암시 -->
+          <ellipse cx="40" cy="58" rx="10" ry="5" fill="rgba(180,140,60,0.5)"/>
+          <line x1="30" y1="55" x2="30" y2="50" stroke="rgba(180,140,60,0.6)" stroke-width="1.5"/>
+          <line x1="50" y1="55" x2="50" y2="50" stroke="rgba(180,140,60,0.6)" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <p class="portrait-name">아비가일</p>
+      <p class="portrait-desc">Abigail · 아버지의 기쁨</p>
+    </div>
+
+    <div class="portrait-right">
+      <p class="reveal">
+        그때, 이야기는 방향을 바꿉니다.<br>
+        <strong style="color:var(--gold-light);">아비가일이 움직입니다.</strong>
+      </p>
+
+      <p class="reveal">
+        그녀는 계산하지 않습니다. 따지지 않습니다.<br>
+        그저 지금 무엇이 생명을 살리는 길인지를 따라 움직입니다.
+      </p>
+
+      <div class="offering-list reveal">
+        <p class="list-label">그녀가 준비한 것들 — 사무엘상 25:18</p>
+        <ul>
+          <li>떡 이백 덩이</li>
+          <li>포도주 두 가죽 부대</li>
+          <li>요리한 양 다섯 마리</li>
+          <li>볶은 곡식 다섯 스아</li>
+          <li>건포도 백 덩이</li>
+          <li>무화과 덩어리 이백 개</li>
+        </ul>
+      </div>
+
+      <p class="reveal" style="font-size:clamp(0.95rem,1.8vw,1.05rem); line-height:2.2; color:#a09080; font-weight:300;">
+        자신의 죄가 아님에도 불구하고<br>
+        그녀는 다윗 앞에 서서 말합니다<br>
+        <span style="color:var(--ivory); font-size:1.05em;">"내 주여, 이 죄악을 오직 내 탓으로 돌리십시오."</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- INTERCESSION -->
+<section class="intercession">
+  <div class="intercession-inner">
+    <p class="section-eyebrow reveal">중재 · The Intercession</p>
+    <h2 class="section-title reveal" style="color:var(--ivory);">그녀는 그 사이에 섰습니다</h2>
+
+    <div class="standing-visual reveal">
+      <div class="standing-diagram">
+        <div class="stand-box david">
+          <p class="box-label">분노</p>
+          <p class="box-name">다윗</p>
+        </div>
+        <div class="arrow-connector"></div>
+        <div class="stand-box abigail-mid">
+          <p class="box-label">중재자</p>
+          <p class="box-name">아비가일</p>
+        </div>
+        <div class="arrow-connector"></div>
+        <div class="stand-box nabal">
+          <p class="box-label">어리석음</p>
+          <p class="box-name">나발</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="intercession-verse reveal">
+      <p class="verse-text">
+        "내 주께서 여호와의 전쟁을 치르시니<br>
+        여호와께서 틀림없이 내 주께 안전한 집을 주실 것입니다."
+      </p>
+      <p class="verse-ref">사무엘상 25:28</p>
+    </div>
+
+    <p class="prose-block reveal" style="text-align:center;">
+      그녀는 지금의 분노가 아니라<br>
+      <span class="em">하나님의 약속을 보게 합니다.</span><br><br>
+      그녀는 다윗의 현재가 아니라<br>
+      <span class="em">다윗의 미래를 지키고 있었습니다.</span>
+    </p>
+
+    <div class="intercession-verse reveal" style="margin-top:2rem;">
+      <p class="verse-text">
+        "내 주께서 이유없이 피를 흘리게 하시거나 직접 복수를 하신 것이<br>
+        내 주의 양심에 거리낌이 되거나 마음에 넘어지게 하는 돌이 되지 않기를 바랍니다.<br>
+        그리하여 여호와께서 내 주를 선하게 대하시는 때에<br>
+        이 여종을 기억하여 주십시오."
+      </p>
+      <p class="verse-ref">사무엘상 25:31</p>
+    </div>
+  </div>
+</section>
+
+<!-- DAVID STOPS -->
+<section class="david-stops">
+  <div class="david-stops-inner">
+    <p class="reveal" style="font-family:'Cormorant Garamond',serif; font-size:0.8rem; letter-spacing:0.45em; text-transform:uppercase; color:var(--gold); margin-bottom:2rem;">The Moment</p>
+
+    <p class="reveal" style="font-size:clamp(1rem,2vw,1.12rem); line-height:2; color:#a09070; font-weight:300; margin-bottom:2rem;">
+      그 순간, 다윗은 — 멈춥니다.
+    </p>
+
+    <div class="stop-moment reveal">
+      "오늘 그대를 보내시어 나를 만나게 하신<br>
+      여호와 이스라엘의 하나님께 찬양을 드리오."
+    </div>
+
+    <p class="reveal" style="font-family:'Cormorant Garamond',serif; font-size:0.82rem; letter-spacing:0.2em; color:var(--gold); margin:1rem 0 3rem;">사무엘상 25:32</p>
+
+    <p class="reveal-slow" style="font-size:clamp(1rem,2vw,1.15rem); line-height:2.2; color:#b0a080; font-weight:300;">
+      그는 깨닫습니다.<br>
+      지금 자신을 막은 것은 한 여인의 말이 아니라,<br>
+      <strong style="color:var(--gold-light);">하나님의 손길이었다는 것을.</strong>
+    </p>
+  </div>
+</section>
+
+<!-- CHRIST CONNECTION -->
+<section class="christ">
+  <div class="christ-inner">
+    <div class="christ-header">
+      <p class="christ-eyebrow reveal">그림자에서 실체로</p>
+      <h2 class="christ-title reveal">아비가일이 가리키는 분,<br><span>예수 그리스도</span></h2>
+    </div>
+
+    <div class="christ-verse-block reveal">
+      <p class="christ-verse-text">
+        "왜냐하면 하나님은 한 분이시며,<br>
+        하나님과 사람 사이의 중보자도 한 분,<br>
+        곧 사람이신 그리스도 예수님이시기 때문입니다."
+      </p>
+      <p class="christ-verse-ref">디모데전서 2:5</p>
+    </div>
+
+    <div class="comparison-grid reveal">
+      <div class="comp-header-row">
+        <div class="comp-header-cell left-h">아비가일 · 그림자</div>
+        <div class="comp-header-cell mid-h"></div>
+        <div class="comp-header-cell right-h">그리스도 · 실체</div>
+      </div>
+
+      <div class="comp-row">
+        <div class="comp-cell left"><p>누군가의 분노를 막은 사람</p></div>
+        <div class="comp-mid"><div class="comp-arrow">→</div></div>
+        <div class="comp-cell right"><p>하나님의 공의와 우리의 죄 사이에 서신 분</p></div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-cell left"><p>"이 죄악을 내 탓으로 돌리십시오"<br>책임을 짊어지겠다고 말했다</p></div>
+        <div class="comp-mid"><div class="comp-arrow">→</div></div>
+        <div class="comp-cell right"><p>실제로 그 죄를 짊어지고<br>십자가로 가셨다</p></div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-cell left"><p>한 날의 피를 막았다</p></div>
+        <div class="comp-mid"><div class="comp-arrow">→</div></div>
+        <div class="comp-cell right"><p>영원한 죽음을<br>생명으로 바꾸셨다</p></div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-cell left"><p>칼을 멈추게 했다</p></div>
+        <div class="comp-mid"><div class="comp-arrow">→</div></div>
+        <div class="comp-cell right"><p>심판을 멈추게 하셨다</p></div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-cell left"><p>다윗이 자신을 잃지 않도록 지켰다</p></div>
+        <div class="comp-mid"><div class="comp-arrow">→</div></div>
+        <div class="comp-cell right"><p>우리가 영원히 잃어버리지 않도록<br>붙드셨다</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SHADOW -->
+<section class="shadow-section">
+  <div class="shadow-inner">
+    <h2 class="shadow-title reveal">아비가일은<br>그림자입니다</h2>
+
+    <div class="cross-visual reveal">
+      <div class="cross-h"></div>
+      <div class="cross-v"></div>
+      <div class="cross-b"></div>
+    </div>
+
+    <p class="shadow-prose reveal">
+      아비가일은 "중보자"라기보다<br>
+      <span class="glow">중보자를 미리 비추는 그림자</span>와 같은 사람입니다.<br><br>
+      그녀의 모습 속에서 우리는<br>
+      누군가 대신 서는 모습,<br>
+      죄를 막기 위해 자신을 내어놓는 모습을 봅니다.<br><br>
+      그리고 그 그림자는 결국 한 분을 향합니다.<br>
+      <span class="glow">십자가 위에 서 계신 그리스도입니다.</span>
+    </p>
+  </div>
+</section>
+
+<!-- REFLECTION -->
+<section class="reflection">
+  <div class="reflection-inner">
+    <p class="reveal" style="font-family:'Cormorant Garamond',serif; font-size:0.8rem; letter-spacing:0.45em; text-transform:uppercase; color:#706050; margin-bottom:3rem;">Reflection · 묵상</p>
+
+    <p class="reveal" style="font-size:clamp(1rem,2vw,1.15rem); line-height:2.2; color:#a09070; font-weight:300; margin-bottom:3rem;">
+      이 이야기는 조용히 묻습니다.
+    </p>
+
+    <p class="question-intro reveal">나는 지금 어디에 서 있는가</p>
+
+    <div class="questions">
+      <div class="q-item q1 reveal">
+        <p>분노 속에 칼을 차고 움직이는<br>다윗인가</p>
+      </div>
+      <div class="q-item q2 reveal">
+        <p>하나님의 은혜를 알지 못하고<br>당연하게 여기는 나발인가</p>
+      </div>
+      <div class="q-item q3 reveal">
+        <p>아니면<br>누군가를 살리기 위해<br>그 사이에 서는 사람인가</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSING -->
+<section class="closing">
+  <div class="closing-glow"></div>
+  <div class="closing-inner">
+    <p class="reveal">
+      아비가일은 눈에 띄는 전쟁을 하지 않았지만<br>
+      <span class="golden">한 왕의 손에서 피를 막았고,<br>그의 미래를 지켜냈습니다.</span>
+    </p>
+
+    <p class="reveal" style="margin-top:2.5rem;">
+      그리고 그 모습은 우리에게<br>
+      한 분을 떠올리게 합니다.
+    </p>
+
+    <p class="reveal" style="margin-top:2.5rem;">
+      우리 대신 서 계신 분,<br>
+      지금도 우리를 위해 중보하시는 분.<br><br>
+      <span class="golden">그분을 바라볼 때<br>
+      아비가일의 이야기는 비로소 완성됩니다.</span>
+    </p>
+
+    <div class="final-line reveal">
+      그러므로 그는 하나님 아버지의 우편에 앉으사<br>
+      우리를 위하여 간구하시느니라
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>사무엘상 25장 · 아비가일과 다윗 · 중보의 그림자</p>
+</footer>
+
+<script>
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal, .reveal-slow').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
