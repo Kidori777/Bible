@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>미갈 — 사랑이 굳어지기까지</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --gold:#c9a84c;--gold2:#e8c97a;--rust:#9b3d2a;--sage:#3a6e4a;
+  --deep:#0a0704;--ink:#1a1208;--parch:#f0e8d8;--ash:#7a7068;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--deep);color:var(--parch);font-family:'Noto Sans KR',sans-serif;overflow-x:hidden;}
+#bgCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+#progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--rust),var(--gold),var(--sage));z-index:200;transition:width .1s;}
+#chapNav{position:fixed;right:1.5rem;top:50%;transform:translateY(-50%);z-index:150;display:flex;flex-direction:column;gap:10px;}
+.nav-dot{width:8px;height:8px;border-radius:50%;border:1px solid rgba(201,168,76,.4);background:transparent;cursor:pointer;transition:all .3s;}
+.nav-dot.active{background:var(--gold);border-color:var(--gold);transform:scale(1.4);}
+
+/* HERO */
+#hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:3rem 2rem;overflow:hidden;z-index:1;}
+.hero-veil{position:absolute;inset:0;background:radial-gradient(ellipse 60% 70% at 50% 45%,rgba(20,12,4,.2) 0%,rgba(5,3,1,.95) 100%);z-index:1;}
+#heroCanvas{position:absolute;inset:0;z-index:0;}
+.hero-inner{position:relative;z-index:2;}
+.hero-kicker{font-size:10px;letter-spacing:.45em;color:var(--gold);text-transform:uppercase;font-weight:300;margin-bottom:2rem;opacity:0;animation:aUp 1s .4s ease forwards;}
+.hero-name{font-family:'Noto Serif KR',serif;font-size:clamp(5rem,15vw,9rem);font-weight:300;color:var(--parch);line-height:.9;letter-spacing:-.03em;opacity:0;animation:aUp 1.2s .7s ease forwards;}
+.hero-name em{font-style:normal;display:block;font-size:.18em;color:var(--gold);letter-spacing:.3em;margin-top:.8em;font-family:'Noto Sans KR',sans-serif;font-weight:300;}
+.hero-tagline{margin-top:2.5rem;font-size:15px;color:rgba(240,232,216,.45);font-weight:300;line-height:2;opacity:0;animation:aUp 1s 1.1s ease forwards;}
+.scroll-cue{margin-top:4rem;display:flex;flex-direction:column;align-items:center;gap:6px;opacity:0;animation:aUp 1s 1.8s ease forwards;}
+.scroll-wire{width:1px;height:55px;background:linear-gradient(var(--gold),transparent);animation:wire 2s ease-in-out infinite;}
+@keyframes wire{0%,100%{opacity:.25;transform:scaleY(1);}50%{opacity:1;transform:scaleY(1.1);}}
+@keyframes aUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+
+/* EMOTION RIBBON */
+#ribbon{position:sticky;top:0;z-index:100;background:rgba(8,5,2,.9);backdrop-filter:blur(16px);padding:9px 1.5rem 11px;border-bottom:1px solid rgba(201,168,76,.15);}
+.rib-label{font-size:8px;letter-spacing:.3em;color:rgba(201,168,76,.5);text-transform:uppercase;margin-bottom:5px;font-weight:300;}
+.rib-track{height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:visible;position:relative;}
+.rib-fill{height:100%;border-radius:2px;transition:width 1.2s cubic-bezier(.4,0,.2,1),background 1.2s ease;position:relative;}
+.rib-fill::after{content:'';position:absolute;right:-4px;top:-4px;width:12px;height:12px;border-radius:50%;background:inherit;border:2px solid var(--deep);box-shadow:0 0 8px currentColor;transition:background 1.2s ease;}
+.rib-marks{display:flex;justify-content:space-between;margin-top:5px;}
+.rib-mark{font-size:8px;color:rgba(240,232,216,.25);letter-spacing:.05em;}
+
+/* SCENE */
+.scene{position:relative;z-index:1;max-width:800px;margin:0 auto;padding:7rem 2rem;}
+.scene+.scene{padding-top:4rem;}
+.ch-head{display:flex;align-items:flex-start;gap:1.5rem;margin-bottom:3.5rem;}
+.ch-n{font-family:'Noto Serif KR',serif;font-size:5rem;font-weight:300;color:var(--gold);opacity:.2;line-height:.9;min-width:1.2ch;flex-shrink:0;transition:opacity .6s;}
+.scene.active .ch-n{opacity:.5;}
+.ch-tag{font-size:8px;letter-spacing:.35em;color:var(--gold);text-transform:uppercase;font-weight:300;display:block;margin-bottom:6px;}
+.ch-title{font-family:'Noto Serif KR',serif;font-size:clamp(1.5rem,3.5vw,2.2rem);font-weight:300;color:var(--parch);line-height:1.25;}
+.prose{font-size:15.5px;line-height:2.15;color:rgba(240,232,216,.72);font-weight:300;}
+.prose+.prose{margin-top:1.4rem;}
+
+/* VERSE */
+.verse{margin:2.8rem 0;padding:2rem 2.2rem 2rem 2.8rem;border-left:2px solid var(--gold);background:linear-gradient(135deg,rgba(201,168,76,.06),rgba(201,168,76,.02));position:relative;overflow:hidden;}
+.verse::before{content:'\201C';font-family:'Noto Serif KR',serif;font-size:6rem;color:var(--gold);opacity:.08;position:absolute;top:-1.2rem;left:.5rem;line-height:1;pointer-events:none;}
+.verse-t{font-family:'Noto Serif KR',serif;font-size:14.5px;line-height:2;color:var(--parch);font-weight:300;position:relative;z-index:1;}
+.verse-r{display:block;margin-top:.9rem;font-size:9px;letter-spacing:.2em;color:var(--gold);font-weight:300;}
+
+/* INSIGHT */
+.insight{background:rgba(155,61,42,.1);border:1px solid rgba(155,61,42,.2);border-radius:2px;padding:1.6rem 2rem;margin:2.5rem 0;}
+.insight-lbl{font-size:8px;letter-spacing:.3em;color:var(--rust);text-transform:uppercase;font-weight:300;display:block;margin-bottom:.6rem;}
+.insight-t{font-size:14px;line-height:1.9;color:rgba(240,232,216,.68);font-weight:300;}
+
+/* BATTLE */
+#battleSection{position:relative;overflow:hidden;margin:3rem -2rem;padding:3rem 2rem;background:rgba(155,61,42,.06);border-top:1px solid rgba(155,61,42,.2);border-bottom:1px solid rgba(155,61,42,.2);}
+#battleCanvas{display:block;width:100%;height:260px;border-radius:2px;}
+.battle-label{text-align:center;font-size:9px;letter-spacing:.3em;color:rgba(155,61,42,.6);text-transform:uppercase;font-weight:300;margin-top:1rem;transition:color .5s;}
+.counter-display{text-align:center;margin:1.5rem 0 .5rem;font-family:'Noto Serif KR',serif;}
+.counter-num{font-size:4rem;font-weight:300;color:var(--rust);display:inline-block;min-width:3ch;text-align:center;transition:transform .1s,color .5s,text-shadow .5s;}
+.counter-unit{font-size:11px;color:rgba(155,61,42,.6);letter-spacing:.2em;display:block;margin-top:.3rem;transition:color .5s;}
+
+/* WINDOW */
+#windowScene{position:relative;margin:3rem -2rem;overflow:hidden;background:rgba(0,0,0,.4);border-top:1px solid rgba(201,168,76,.12);border-bottom:1px solid rgba(201,168,76,.12);}
+#windowCanvas{display:block;width:100%;height:320px;}
+.window-caption{text-align:center;padding:1.2rem;font-family:'Noto Serif KR',serif;font-size:13px;color:rgba(240,232,216,.45);font-weight:300;border-top:1px solid rgba(255,255,255,.05);}
+
+/* HEART */
+#heartSection{position:relative;margin:3rem auto;display:flex;flex-direction:column;align-items:center;padding:2rem 0;}
+#heartCanvas{display:block;}
+.heart-caption{margin-top:1.5rem;text-align:center;font-family:'Noto Serif KR',serif;font-size:14px;color:rgba(240,232,216,.4);font-weight:300;line-height:1.9;}
+
+/* INNER VOICE */
+.inner-voice{position:relative;margin:2.5rem 0;padding:2rem 2.5rem;border:1px solid rgba(201,168,76,.15);background:rgba(201,168,76,.03);}
+.iv-speaker{font-size:8px;letter-spacing:.35em;color:rgba(201,168,76,.5);text-transform:uppercase;font-weight:300;margin-bottom:1rem;display:block;}
+.iv-line{font-family:'Noto Serif KR',serif;font-size:14px;color:rgba(240,232,216,.6);font-weight:300;line-height:2;opacity:0;transform:translateX(-10px);transition:opacity .6s ease,transform .6s ease;}
+.iv-line.show{opacity:1;transform:translateX(0);}
+.iv-line+.iv-line{margin-top:.5rem;}
+
+/* DANCE */
+#danceSection{position:relative;margin:3rem -2rem;overflow:hidden;}
+#danceCanvas{display:block;width:100%;height:300px;}
+.dance-label{text-align:center;padding:1rem;font-size:9px;letter-spacing:.25em;color:rgba(201,168,76,.4);text-transform:uppercase;font-weight:300;border-top:1px solid rgba(255,255,255,.04);}
+
+/* SPLIT */
+.split-view{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:2.5rem 0;border:1px solid rgba(255,255,255,.07);}
+.split-panel{padding:1.8rem 1.6rem;}
+.split-panel:first-child{border-right:1px solid rgba(255,255,255,.07);}
+.split-tag{font-size:8px;letter-spacing:.25em;text-transform:uppercase;font-weight:300;margin-bottom:.8rem;display:block;}
+.split-body{font-size:13px;line-height:1.8;color:rgba(240,232,216,.5);font-weight:300;}
+
+/* FINAL */
+#finalSection{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:6rem 2rem;overflow:hidden;}
+#finalCanvas{position:absolute;inset:0;z-index:0;pointer-events:none;}
+.final-inner{position:relative;z-index:1;max-width:600px;margin:0 auto;}
+.final-q{font-family:'Noto Serif KR',serif;font-size:clamp(1.4rem,3.5vw,2rem);font-weight:300;color:var(--parch);line-height:1.85;margin-bottom:3rem;}
+.mirror-box{border:1px solid rgba(201,168,76,.25);padding:2rem 2.5rem;margin:0 auto 3rem;font-family:'Noto Serif KR',serif;font-size:15px;line-height:2;color:rgba(240,232,216,.6);font-weight:300;}
+.final-body{font-size:13px;line-height:2.1;color:rgba(240,232,216,.35);font-weight:300;}
+.sep{text-align:center;color:rgba(201,168,76,.25);font-size:1rem;letter-spacing:.8rem;margin:4rem 0 3rem;}
+.coda{font-size:12px;letter-spacing:.12em;color:rgba(201,168,76,.35);font-weight:300;}
+.end-mark{margin-top:5rem;display:flex;flex-direction:column;align-items:center;gap:.6rem;}
+.end-line{width:50px;height:1px;background:rgba(201,168,76,.2);}
+.end-lbl{font-size:8px;letter-spacing:.4em;color:rgba(201,168,76,.3);text-transform:uppercase;font-weight:300;}
+
+/* TIMELINE */
+.timeline{padding:1rem 0 1rem 2rem;position:relative;margin:2.5rem 0;}
+.tl-rail{position:absolute;left:.65rem;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,var(--gold) 15%,rgba(201,168,76,.2) 50%,var(--rust) 88%,transparent);}
+.tl-row{display:flex;gap:1.5rem;margin-bottom:2rem;align-items:flex-start;}
+.tl-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:5px;position:relative;z-index:1;border:1px solid;}
+.d1{background:var(--gold);border-color:var(--gold2);}
+.d2{background:#4a7a4a;border-color:#7aaa7a;}
+.d3{background:var(--ash);border-color:#9a9088;}
+.d4{background:var(--rust);border-color:#c05a48;}
+.d5{background:#2a2420;border-color:#4a4440;}
+.tl-mo{font-size:8px;letter-spacing:.2em;text-transform:uppercase;font-weight:300;margin-bottom:.25rem;}
+.m1{color:var(--gold);}
+.m2{color:#7aaa7a;}
+.m3{color:var(--ash);}
+.m4{color:#cc7766;}
+.m5{color:rgba(240,232,216,.2);}
+.tl-de{font-size:13px;line-height:1.7;color:rgba(240,232,216,.45);font-weight:300;}
+
+/* REVEAL */
+.rv{opacity:0;transform:translateY(35px);transition:opacity 1s ease,transform 1s ease;}
+.rv.in{opacity:1;transform:translateY(0);}
+.sdiv{height:1px;background:linear-gradient(to right,transparent,rgba(201,168,76,.1),transparent);margin:0;}
+
+@media(max-width:560px){
+  .split-view{grid-template-columns:1fr;}
+  .split-panel:first-child{border-right:none;border-bottom:1px solid rgba(255,255,255,.07);}
+  #chapNav{display:none;}
+  .scene{padding:5rem 1.4rem;}
+}
+</style>
+</head>
+<body>
+
+<canvas id="bgCanvas"></canvas>
+<div id="progress"></div>
+
+<nav id="chapNav" aria-label="챕터 이동">
+  <div class="nav-dot active" data-ch="hero" title="시작"></div>
+  <div class="nav-dot" data-ch="ch1" title="사랑이 싹트다"></div>
+  <div class="nav-dot" data-ch="ch2" title="사랑이 행동이 되다"></div>
+  <div class="nav-dot" data-ch="ch3" title="끊어진 시간"></div>
+  <div class="nav-dot" data-ch="ch4" title="냉소"></div>
+  <div class="nav-dot" data-ch="ch5" title="마지막 한 줄"></div>
+  <div class="nav-dot" data-ch="finalSection" title="묵상"></div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-veil" aria-hidden="true"></div>
+  <canvas id="heroCanvas" aria-hidden="true"></canvas>
+  <div class="hero-inner">
+    <p class="hero-kicker">사무엘상 · 사무엘하 · 성경 인물 묵상</p>
+    <h1 class="hero-name">미갈<em>사랑이 굳어지기까지</em></h1>
+    <p class="hero-tagline">사울의 딸, 다윗의 아내<br>사랑으로 시작해 냉소로 끝난 한 사람의 이야기</p>
+    <div class="scroll-cue" aria-hidden="true">
+      <div class="scroll-wire"></div>
+      <span style="font-size:8px;letter-spacing:.35em;color:rgba(201,168,76,.4);text-transform:uppercase;font-weight:300;">scroll</span>
+    </div>
+  </div>
+</section>
+
+<!-- EMOTION RIBBON -->
+<div id="ribbon" role="complementary" aria-label="감정 흐름">
+  <div class="rib-label">미갈의 감정 흐름</div>
+  <div class="rib-track">
+    <div class="rib-fill" id="eF" style="width:75%;background:linear-gradient(90deg,var(--gold),var(--gold2));"></div>
+  </div>
+  <div class="rib-marks">
+    <span class="rib-mark">사랑</span>
+    <span class="rib-mark">용기</span>
+    <span class="rib-mark">상실</span>
+    <span class="rib-mark">냉소</span>
+    <span class="rib-mark">단절</span>
+  </div>
+</div>
+
+<!-- CHAPTER 1 -->
+<section class="scene rv" id="ch1" data-emo="78" data-bg="linear-gradient(90deg,#b8860b,#d4a843)">
+  <div class="ch-head">
+    <div class="ch-n">1</div>
+    <div class="ch-info">
+      <span class="ch-tag">사무엘상 18장</span>
+      <h2 class="ch-title">사랑이 싹트다</h2>
+    </div>
+  </div>
+
+  <div class="rv">
+    <p class="prose">사울의 딸이자 다윗의 아내였던 미갈의 이야기는, 몇 장에 걸쳐 흩어져 있지만 하나의 흐름으로 이어 보면 한 사람의 마음이 어떻게 시작되고, 어떻게 변해가는지를 또렷하게 보여줍니다.</p>
+    <p class="prose">처음 장면은 사랑이 아니라 긴장 속에서 열립니다. 이스라엘의 왕 사울은 이미 다윗을 경계하고 있었습니다. 백성들이 다윗을 높이는 것을 보며, 그의 마음속에는 두려움과 시기가 자리 잡고 있었습니다.</p>
+    <p class="prose">그때 이런 기록이 등장합니다.</p>
+  </div>
+
+  <div class="verse rv">
+    <p class="verse-t">한편 사울의 딸 미갈은 다윗을 사랑하였다. 사울은 이것을 듣고 기뻐하였다. 사울이 속으로 말하였다. "내가 미갈을 다윗에게 주어서 그에게 올무가 되게 하여 블레셋 족속의 손으로 그를 치게 해야겠다." 그리하여 사울이 다윗에게 말하였다. "오늘 자네가 다시 나의 사위가 되어 주어야겠네."</p>
+    <span class="verse-r">사무엘상 18:20–21</span>
+  </div>
+
+  <div class="rv">
+    <p class="prose">사랑은 미갈의 쪽에서 시작되었지만, 사울에게 이 결혼은 계산이었습니다. 그래서 그는 조건을 내겁니다.</p>
+  </div>
+
+  <div class="verse rv">
+    <p class="verse-t">그러자 사울이 말하였다. "그러면 다윗에게 이렇게 말하시오. '왕께서 원하시는 것은 지참금이 아니라 블레셋 족속 백 명의 포피라오. 그것으로 왕의 원수들에게 복수하시려는 것이라오.'" 사울은 다윗이 블레셋 족속의 손에 쓰러지도록 계략을 세운 것이었다.</p>
+    <span class="verse-r">사무엘상 18:25</span>
+  </div>
+
+  <div class="rv">
+    <p class="prose">이 요구는 축복이 아니라 함정이었습니다. 다윗이 그 과정에서 죽기를 바라는 마음이었습니다. 그러나 다윗은 물러서지 않습니다.</p>
+  </div>
+
+  <!-- 전투 카운터 시각화 -->
+  <div id="battleSection" class="rv">
+    <div class="counter-display">
+      <span class="counter-num" id="battleCount">0</span>
+      <span class="counter-unit" id="battleUnit">블레셋 포피 — 다윗이 취하다</span>
+    </div>
+    <canvas id="battleCanvas"></canvas>
+    <p class="battle-label" id="battleLabel">▲ 사울이 요구한 100, 다윗이 취한 200 — 함정을 두 배로 돌파하다</p>
+  </div>
+
+  <div class="verse rv">
+    <p class="verse-t">다윗이 일어나 부하들과 함께 싸우러 나갔다. 다윗은 왕의 사위가 되기 위하여 블레셋 족속의 남자 이백 명을 쳐 죽이고서 그들의 포피를 가져다가 요구한 대로 왕에게 바쳤다. 그러자 사울이 딸 미갈을 아내로 주었다.</p>
+    <span class="verse-r">사무엘상 18:27</span>
+  </div>
+
+  <div class="rv">
+    <p class="prose">죽음을 기대했던 길에서, 다윗은 오히려 더 깊이 들어갑니다. 그는 계산으로 움직이지 않았고, 주어진 길을 피하지 않았습니다. 그렇게 두 사람의 관계는 시작됩니다.</p>
+  </div>
+
+  <div class="insight rv">
+    <span class="insight-lbl">핵심 통찰</span>
+    <p class="insight-t">미갈의 사랑은 순수했습니다. 그러나 그 사랑이 맺어진 관계의 기초는 처음부터 균열을 안고 있었습니다. 정치적 계산 위에 세워진 결혼 — 이것이 이후 모든 것의 출발점입니다.</p>
+  </div>
+</section>
+
+<div class="sdiv"></div>
+
+<!-- CHAPTER 2 -->
+<section class="scene rv" id="ch2" data-emo="96" data-bg="linear-gradient(90deg,#3a6a3a,#5aaa5a)">
+  <div class="ch-head">
+    <div class="ch-n">2</div>
+    <div class="ch-info">
+      <span class="ch-tag">사무엘상 19장</span>
+      <h2 class="ch-title">사랑이 행동이 되다</h2>
+    </div>
+  </div>
+
+  <div class="rv">
+    <p class="prose">그리고 그 사랑은 곧 행동으로 드러납니다. 사울이 다윗을 죽이려 할 때, 미갈은 침묵하지 않습니다. 아버지냐, 남편이냐. 왕의 딸이냐, 아내이냐 — 그녀는 선택해야 했습니다.</p>
+  </div>
+
+  <!-- 창문 시각화 -->
+  <div id="windowScene" class="rv">
+    <canvas id="windowCanvas"></canvas>
+    <p class="window-caption">미갈이 창문으로 다윗을 내려 주자, 그가 멀리 떠나 도망하여 피신하였다 — 사무엘상 19:12</p>
+  </div>
+
+  <div class="rv">
+    <p class="prose">그녀는 다윗의 생명을 위해 자신의 자리를 걸었습니다. 이 장면에서 미갈은 분명히 사랑하는 사람이었습니다. 창문으로 남편을 내려보내던 그 순간, 그녀의 사랑은 완전했습니다.</p>
+    <p class="prose">사랑이 가장 빛날 때는, 그것이 위험 앞에서도 멈추지 않을 때입니다.</p>
+  </div>
+
+  <div class="split-view rv">
+    <div class="split-panel">
+      <span class="split-tag" style="color:var(--gold);">미갈이 선택한 것</span>
+      <p class="split-body">남편의 목숨. 아내로서의 용기. 아버지의 권위를 거스르는 결단.</p>
+    </div>
+    <div class="split-panel">
+      <span class="split-tag" style="color:var(--rust);">미갈이 내려놓은 것</span>
+      <p class="split-body">왕녀의 안전. 아버지의 신뢰. 궁궐 안에서의 자리.</p>
+    </div>
+  </div>
+
+  <div class="rv">
+    <p class="prose">그러나 그 이후의 시간은 성경이 길게 설명하지 않지만, 매우 중요한 변화를 품고 있습니다.</p>
+  </div>
+</section>
+
+<div class="sdiv"></div>
+
+<!-- CHAPTER 3 -->
+<section class="scene rv" id="ch3" data-emo="28" data-bg="linear-gradient(90deg,#4a4845,#6a6560)">
+  <div class="ch-head">
+    <div class="ch-n">3</div>
+    <div class="ch-info">
+      <span class="ch-tag">사무엘상 25장</span>
+      <h2 class="ch-title">끊어진 시간 — 그리고 침묵하는 마음</h2>
+    </div>
+  </div>
+
+  <div class="rv">
+    <p class="prose">사울은 다윗을 쫓아내고, 그 사이에서 미갈은 다른 사람에게 주어집니다.</p>
+  </div>
+
+  <div class="verse rv" style="border-left-color:var(--ash);">
+    <p class="verse-t">사울은 다윗의 아내인 자신의 딸 미갈을 갈림에서 온 라이스의 아들 발디에게 주었다.</p>
+    <span class="verse-r" style="color:var(--ash);">사무엘상 25:44</span>
+  </div>
+
+  <div class="rv">
+    <p class="prose">그녀의 의사와는 상관없이 삶이 끊어지고 바뀝니다. 사랑했던 관계는 강제로 끝나고, 원하지 않는 시간 속으로 들어가게 됩니다.</p>
+    <p class="prose">성경은 여기서 단 한 문장으로 끝납니다. 그러나 그 한 문장 안에 미갈의 수년이 담겨 있습니다. 기다림인지, 분노인지, 체념인지 — 성경은 말하지 않습니다.</p>
+  </div>
+
+  <!-- 하트 파편 시각화 -->
+  <div id="heartSection" class="rv">
+    <canvas id="heartCanvas" width="320" height="200"></canvas>
+    <p class="heart-caption">
+      "거절하지 못했다" — 단순한 순종이 아닌,<br>
+      자신이 여전히 '공주'임을 포기하지 못한 마음
+    </p>
+  </div>
+
+  <!-- 미갈의 내면 독백 -->
+  <div class="inner-voice rv" id="ivBox">
+    <span class="iv-speaker">미갈의 내면 — 상상된 독백</span>
+    <p class="iv-line" id="iv1">"다윗은 도망쳤다. 아버지는 나를 다른 남자에게 준다."</p>
+    <p class="iv-line" id="iv2">"내가 거절할 수 있을까. 나는 공주다. 왕의 딸이다."</p>
+    <p class="iv-line" id="iv3">"공주라는 자리가 나를 지켜줄 것이다. 그것만은 내 것이다."</p>
+    <p class="iv-line" id="iv4">"사랑? 그것은 이미 창문 밖으로 내려보낸 것과 함께 사라졌다."</p>
+  </div>
+
+  <div class="rv">
+    <p class="prose">단호히 거절하지 못한 것은 단순한 무기력이 아니었습니다. 미갈은 다윗의 아내이기 이전에, 사울의 딸이었습니다. 공주라는 정체성이 아내라는 자리보다 더 깊이 그녀 안에 박혀 있었습니다.</p>
+    <p class="prose">그 자리를 포기하지 못하는 마음 — 그것이 더 안타깝습니다. 사랑했던 사람을 구하기 위해 창문을 열었던 손이, 이제는 아버지의 명령 앞에서 멈추어 섭니다.</p>
+  </div>
+
+  <div class="insight rv">
+    <span class="insight-lbl">더 깊은 슬픔</span>
+    <p class="insight-t">미갈이 거절하지 못한 것은 그녀가 약해서가 아닙니다. '공주'라는 정체성이 '아내'라는 사랑보다 더 안전하게 느껴졌기 때문입니다. 사랑은 위험을 감수하지만, 지위는 자신을 보호해줍니다. 그녀는 보호를 선택했습니다 — 그리고 그 선택이 그녀를 조금씩 굳게 만들었습니다.</p>
+  </div>
+</section>
+
+<div class="sdiv"></div>
+
+<!-- CHAPTER 4 -->
+<section class="scene rv" id="ch4" data-emo="15" data-bg="linear-gradient(90deg,#7a2a1a,#b04a30)">
+  <div class="ch-head">
+    <div class="ch-n">4</div>
+    <div class="ch-info">
+      <span class="ch-tag">사무엘하 3장 · 6장</span>
+      <h2 class="ch-title">돌아왔지만, 돌아오지 않은 마음</h2>
+    </div>
+  </div>
+
+  <div class="rv">
+    <p class="prose">시간이 흐른 뒤, 다윗은 왕이 되고 다시 미갈을 부릅니다.</p>
+  </div>
+
+  <div class="verse rv">
+    <p class="verse-t">그러자 다윗이 말하였다. "좋소. 내가 그대와 언약을 맺겠소. 그러나 그대에게 한 가지 요구가 있소. 다름 아니라 그대가 나를 보러 올 때, 먼저 사울의 딸 미갈을 데려오시오. 그러지 않으면 내 얼굴을 보지 못할 것이오." 그러고 나서 다윗이 사울의 아들 이스보셋에게 전달자들을 보내어 말하였다. "내가 블레셋 족속의 포피 백 개를 주고 맞아들인 나의 아내 미갈을 나에게 돌려주시오."</p>
+    <span class="verse-r">사무엘하 3:13–14</span>
+  </div>
+
+  <div class="rv">
+    <p class="prose">겉으로 보면 관계가 회복된 것처럼 보이지만, 그 사이에 흐른 시간과 감정은 회복되지 않은 채 남아 있었습니다.</p>
+    <p class="prose">그 모든 것이 드러나는 장면이 이어집니다. 언약궤가 예루살렘으로 들어오는 날, 다윗은 하나님 앞에서 기쁨을 억누르지 않습니다.</p>
+  </div>
+
+  <div class="verse rv">
+    <p class="verse-t">다윗은 온 힘을 다하여 여호와 앞에서 춤을 추었다.</p>
+    <span class="verse-r">사무엘하 6:14</span>
+  </div>
+
+  <div class="rv">
+    <p class="prose">왕이라는 위치도, 사람들의 시선도 내려놓은 채 그는 하나님 앞에서 기뻐합니다. 그 모습을 미갈이 바라봅니다.</p>
+  </div>
+
+  <!-- 춤 시각화 -->
+  <div id="danceSection" class="rv">
+    <canvas id="danceCanvas"></canvas>
+    <p class="dance-label">다윗 — 여호와 앞에서 춤추다 · 미갈 — 창문에서 바라보며 멸시하다</p>
+  </div>
+
+  <div class="verse rv">
+    <p class="verse-t">여호와의 궤가 다윗성에 이르렀을 때, 사울의 딸 미갈이 창문으로 내려다보다가 다윗왕이 여호와 앞에서 기뻐 뛰며 춤추는 것을 보고, 마음속으로 다윗을 멸시하였다.</p>
+    <span class="verse-r">사무엘하 6:16</span>
+  </div>
+
+  <div class="rv">
+    <p class="prose">같은 장면이지만, 전혀 다르게 받아들입니다. 다윗에게는 하나님이 중심이었고, 미갈에게는 체면과 시선이 중심이었습니다.</p>
+  </div>
+
+  <div class="split-view rv">
+    <div class="split-panel">
+      <span class="split-tag" style="color:var(--gold);">다윗의 눈에 보인 것</span>
+      <p class="split-body">하나님의 임재. 기쁨의 해방. 왕보다 예배자로 서는 자유.</p>
+    </div>
+    <div class="split-panel">
+      <span class="split-tag" style="color:var(--rust);">미갈의 눈에 보인 것</span>
+      <p class="split-body">망신. 체통 없는 왕. 여종들 앞에서 벌거벗은 남편.</p>
+    </div>
+  </div>
+
+  <div class="rv">
+    <p class="prose">그리고 그녀는 말로 그 마음을 드러냅니다.</p>
+  </div>
+
+  <div class="verse rv" style="border-left-color:var(--rust);">
+    <p class="verse-t">다윗이 자기 집안 식구를 축복하려고 돌아오자, 사울의 딸 미갈이 다윗을 맞으러 나오며 말하였다. "이스라엘의 왕께서 오늘 어찌나 존귀하게 되셨는지 모르겠습니다. 마치 불량배들이 부끄러운 줄도 모르고 벌거벗은 것처럼, 왕이 오늘 신하들의 여종들이 보는 앞에서 벌거벗으셨으니 말입니다."</p>
+    <span class="verse-r" style="color:var(--rust);">사무엘하 6:20</span>
+  </div>
+
+  <div class="rv">
+    <p class="prose">이 말 속에는 기쁨이 아니라 냉소가 담겨 있습니다. 한때는 다윗을 위해 위험을 감수했던 사람이 이제는 다윗을 이해하지 못하는 사람이 되어 있습니다.</p>
+    <p class="prose">그 변화는 하루아침에 일어난 것이 아닙니다. 끊어진 시간, 풀리지 않은 감정, 다뤄지지 않은 상처들이 그녀의 시선을 조금씩 바꾸어 놓았습니다. 결국 그 시선은 하나님을 향한 반응에서도 드러납니다.</p>
+  </div>
+
+  <div class="insight rv">
+    <span class="insight-lbl">마음의 역전</span>
+    <p class="insight-t">미갈은 여전히 '왕의 딸'의 눈으로 세상을 봅니다. 하나님 앞에서 자신을 낮추는 것이 존귀하다는 것을 이해하지 못합니다. 공주의 시선으로는 예배하는 왕이 보이지 않습니다. 체면을 잃은 남편만 보일 뿐입니다.</p>
+  </div>
+</section>
+
+<div class="sdiv"></div>
+
+<!-- CHAPTER 5 -->
+<section class="scene rv" id="ch5" data-emo="4" data-bg="linear-gradient(90deg,#282420,#484440)">
+  <div class="ch-head">
+    <div class="ch-n">5</div>
+    <div class="ch-info">
+      <span class="ch-tag">사무엘하 6:23</span>
+      <h2 class="ch-title">마지막 한 줄</h2>
+    </div>
+  </div>
+
+  <div class="rv">
+    <p class="prose">이야기의 끝은 길지 않습니다. 성경은 미갈의 이야기를 단 한 문장으로 닫습니다. 설명도, 평가도 없습니다. 다만 상태를 보여줄 뿐입니다.</p>
+  </div>
+
+  <div class="verse rv" style="border-left-color:rgba(139,58,42,.4);background:rgba(139,58,42,.05);">
+    <p class="verse-t" style="color:rgba(240,232,216,.7);">그리하여 사울의 딸 미갈은 죽는 날까지 자녀가 없었다.</p>
+    <span class="verse-r" style="color:rgba(139,58,42,.6);">사무엘하 6:23</span>
+  </div>
+
+  <div class="rv">
+    <p class="prose">처음에는 사랑으로 시작했던 사람이 시간 속에서 마음이 굳어지고, 결국 기쁨을 이해하지 못하는 자리까지 가게 되는 모습.</p>
+    <p class="prose">미갈의 이야기는 어떤 사람을 평가하기 위한 기록이 아니라, 사람의 마음이 어디까지 변할 수 있는지를 보여주는 거울처럼 놓여 있습니다.</p>
+  </div>
+
+  <!-- 전체 타임라인 -->
+  <div class="timeline rv">
+    <div class="tl-rail" aria-hidden="true"></div>
+    <div class="tl-row">
+      <div class="tl-dot d1"></div>
+      <div><p class="tl-mo m1">사랑의 시작</p><p class="tl-de">아무도 시키지 않은 감정. 미갈이 다윗을 사랑합니다. 사울은 이것을 계략으로 이용합니다.</p></div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-dot d2"></div>
+      <div><p class="tl-mo m2">위험을 감수한 구출</p><p class="tl-de">창문으로 다윗을 내려보냄. 사랑이 가장 빛나는 순간. 아버지의 명령을 거슬러 남편의 목숨을 택합니다.</p></div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-dot d3"></div>
+      <div><p class="tl-mo m3">공주의 자리를 택하다</p><p class="tl-de">사울에 의해 발디에게 보내집니다. 거절하지 못한 것이 아니라, '공주'라는 지위를 포기하지 못한 것.</p></div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-dot d4"></div>
+      <div><p class="tl-mo m4">냉소로 바뀐 시선</p><p class="tl-de">다윗의 춤을 창문에서 바라보며 마음속으로 멸시합니다. 같은 장면, 전혀 다른 반응.</p></div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-dot d5"></div>
+      <div><p class="tl-mo m5">단절로 끝난 이야기</p><p class="tl-de">"죽는 날까지 자녀가 없었다." 성경이 닫는 방식. 설명도 평가도 없이, 상태로만 남겨집니다.</p></div>
+    </div>
+  </div>
+</section>
+
+<div class="sdiv"></div>
+
+<!-- FINAL REFLECTION -->
+<section id="finalSection" data-emo="3" data-bg="linear-gradient(90deg,#1a1612,#2a2420)">
+  <canvas id="finalCanvas" aria-hidden="true"></canvas>
+  <div class="final-inner">
+    <div class="rv">
+      <h2 class="final-q">처음 어떤 마음으로 시작했는가보다,<br>그 마음을 어떻게 지나왔는가가<br>더 중요합니다.</h2>
+    </div>
+    <div class="rv" style="margin-top:3rem;">
+      <div class="mirror-box">
+        하나님 앞에서 풀어지지 않은 마음은<br>
+        결국 사람을 바라보는 시선까지 바꾸어 놓습니다.
+      </div>
+    </div>
+    <div class="rv">
+      <p class="final-body">미갈의 이야기는 어떤 사람을 평가하기 위한 기록이 아닙니다. 사람의 마음이 어디까지 변할 수 있는지를 보여주는 거울처럼 놓여 있습니다. 처음 어떤 마음으로 시작했는가보다, 그 마음을 어떻게 지나왔는가가 더 중요하다는 사실, 그리고 하나님 앞에서 풀어지지 않은 마음은 결국 사람을 바라보는 시선까지 바꾸어 놓는다는 것을 이 이야기는 조용하지만 분명하게 드러내고 있습니다.</p>
+    </div>
+    <div class="rv">
+      <div class="sep" aria-hidden="true">· · ·</div>
+      <p class="coda">당신의 마음은 지금 풀려 있습니까, 굳어 있습니까?</p>
+    </div>
+    <div class="end-mark rv">
+      <div class="end-line"></div>
+      <div class="end-lbl">Michal · 미갈</div>
+      <div class="end-line"></div>
+    </div>
+  </div>
+</section>
+
+<script>
+function $(id){return document.getElementById(id);}
+function raf(fn){requestAnimationFrame(fn);}
+
+/* PROGRESS */
+window.addEventListener('scroll',function(){
+  var h=document.documentElement;
+  $('progress').style.width=((h.scrollTop/(h.scrollHeight-h.clientHeight))*100)+'%';
+});
+
+/* EMOTION RIBBON */
+var eF=$('eF');
+var allSections=document.querySelectorAll('[data-emo]');
+var sectObs=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(e.isIntersecting){
+      eF.style.width=parseInt(e.target.dataset.emo||'75')+'%';
+      eF.style.background=e.target.dataset.bg||'linear-gradient(90deg,#b8860b,#d4a843)';
+    }
+  });
+},{threshold:0.3});
+allSections.forEach(function(el){sectObs.observe(el);});
+
+/* REVEAL */
+var reveals=document.querySelectorAll('.rv');
+var revObs=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('in');});
+},{threshold:0.1});
+reveals.forEach(function(el){revObs.observe(el);});
+
+/* NAV DOTS */
+var navDots=document.querySelectorAll('.nav-dot');
+navDots.forEach(function(d){
+  d.addEventListener('click',function(){
+    var el=$(this.dataset.ch);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+});
+var navObs=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(e.isIntersecting){
+      var id=e.target.id;
+      navDots.forEach(function(d){d.classList.toggle('active',d.dataset.ch===id);});
+    }
+  });
+},{threshold:0.4});
+['hero','ch1','ch2','ch3','ch4','ch5','finalSection'].forEach(function(id){
+  var el=$(id);if(el)navObs.observe(el);
+});
+
+/* BG CANVAS — 별빛 파티클 */
+(function(){
+  var c=$('bgCanvas'),ctx=c.getContext('2d');
+  var stars=[];var W,H;
+  function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight;}
+  resize();window.addEventListener('resize',resize);
+  for(var i=0;i<140;i++){
+    stars.push({x:Math.random()*3000,y:Math.random()*6000,r:Math.random()*.9+.2,a:Math.random(),da:(.002+Math.random()*.003)*(Math.random()<.5?1:-1)});
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    var sy=window.scrollY;
+    stars.forEach(function(s){
+      s.a+=s.da;
+      if(s.a>1){s.a=1;s.da*=-1;}
+      if(s.a<0.05){s.a=0.05;s.da*=-1;}
+      var sx=s.x%W,sy2=(s.y-window.scrollY*.08)%H;
+      if(sy2<0)sy2+=H;
+      ctx.beginPath();ctx.arc(sx,sy2,s.r,0,Math.PI*2);
+      ctx.fillStyle='rgba(201,168,76,'+s.a.toFixed(2)+')';ctx.fill();
+    });
+    raf(draw);
+  }
+  draw();
+})();
+
+/* HERO CANVAS — 불꽃 파티클 */
+(function(){
+  var c=$('heroCanvas'),ctx=c.getContext('2d');
+  var particles=[];
+  function resize(){c.width=c.offsetWidth;c.height=c.offsetHeight;}
+  resize();window.addEventListener('resize',resize);
+  function P(){
+    this.reset=function(){
+      this.x=c.width/2+(Math.random()-.5)*80;
+      this.y=c.height*.55+(Math.random()-.5)*20;
+      this.vx=(Math.random()-.5)*1.2;
+      this.vy=-(Math.random()*2+1);
+      this.life=1;this.decay=.008+Math.random()*.012;
+      this.r=Math.random()*2+.5;this.hue=30+Math.random()*20;
+    };
+    this.reset();this.life=Math.random();
+  }
+  for(var i=0;i<60;i++)particles.push(new P());
+  function draw(){
+    ctx.clearRect(0,0,c.width,c.height);
+    particles.forEach(function(p){
+      p.x+=p.vx;p.y+=p.vy;p.life-=p.decay;
+      if(p.life<=0)p.reset();
+      ctx.save();ctx.globalAlpha=p.life*.6;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle='hsl('+p.hue+',70%,60%)';ctx.fill();ctx.restore();
+    });
+    raf(draw);
+  }
+  draw();
+})();
+
+/* BATTLE CANVAS — 전투 카운터 */
+(function(){
+  var c=$('battleCanvas'),ctx=c.getContext('2d');
+  var W,H;
+  function resize(){W=c.width=c.offsetWidth;H=c.height=260;}
+  resize();window.addEventListener('resize',resize);
+  var soldiers=[];var count=0;
+  var countEl=$('battleCount'),unitEl=$('battleUnit'),labelEl=$('battleLabel');
+  var animating=false;
+  for(var i=0;i<200;i++){
+    soldiers.push({
+      x:Math.random()*W,y:Math.random()*H,
+      vx:(Math.random()-.5)*3,vy:(Math.random()-.5)*3,
+      fallen:false,fallT:0,r:3+Math.random()*2,hue:Math.random()*30
+    });
+  }
+  function startBattle(){
+    if(animating)return;animating=true;
+    var interval=setInterval(function(){
+      if(count>=200){clearInterval(interval);return;}
+      count+=Math.ceil(Math.random()*5+1);
+      if(count>200)count=200;
+      countEl.textContent=count;
+      countEl.style.transform='scale(1.15)';
+      setTimeout(function(){countEl.style.transform='scale(1)';},80);
+      // 100 돌파
+      if(count>=100&&count<106){
+        countEl.style.color='var(--gold)';
+        unitEl.textContent='사울의 요구량 충족 — 그러나 다윗은 멈추지 않는다';
+        unitEl.style.color='var(--gold)';
+        labelEl.textContent='▼ 함정의 조건을 넘어서다 — 계속 전진';
+      }
+      // 200 완료
+      if(count>=200){
+        countEl.style.color='#e8c97a';
+        countEl.style.textShadow='0 0 20px rgba(232,201,122,.6)';
+        unitEl.textContent='요구(100)의 두 배 — 함정을 두 배로 돌파하다';
+        unitEl.style.color='var(--gold2)';
+        labelEl.textContent='▲ 죽음을 기대했던 길에서, 다윗은 200을 가져왔다';
+        labelEl.style.color='rgba(201,168,76,.7)';
+      }
+      var n=Math.floor((count/200)*200);
+      for(var i=0;i<n;i++){
+        if(!soldiers[i].fallen){soldiers[i].fallen=true;soldiers[i].fallT=Date.now();}
+      }
+    },60);
+  }
+  var bObs=new IntersectionObserver(function(e){if(e[0].isIntersecting)startBattle();},{threshold:.3});
+  bObs.observe($('battleSection'));
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    ctx.strokeStyle='rgba(155,61,42,.08)';ctx.lineWidth=.5;
+    for(var x=0;x<W;x+=30){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+    for(var y=0;y<H;y+=30){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+    soldiers.forEach(function(s){
+      if(s.fallen){
+        var age=(Date.now()-s.fallT)/1000,alpha=Math.max(0,.8-age*.3);
+        ctx.save();ctx.globalAlpha=alpha;
+        ctx.beginPath();ctx.ellipse(s.x,s.y,s.r*2.5,s.r*.8,0,0,Math.PI*2);
+        ctx.fillStyle='hsl('+s.hue+',60%,35%)';ctx.fill();ctx.restore();
+      } else {
+        s.x+=s.vx;s.y+=s.vy;
+        if(s.x<0||s.x>W)s.vx*=-1;if(s.y<0||s.y>H)s.vy*=-1;
+        ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+        ctx.fillStyle='rgba(201,168,76,.7)';ctx.fill();
+        ctx.strokeStyle='rgba(201,168,76,.4)';ctx.lineWidth=1;
+        ctx.beginPath();ctx.moveTo(s.x,s.y);ctx.lineTo(s.x+s.vx*5,s.y+s.vy*5);ctx.stroke();
+      }
+    });
+    // 진행 바
+    var barH=5;
+    if(count>0){
+      ctx.fillStyle='rgba(255,255,255,.05)';ctx.fillRect(0,0,W,barH);
+      ctx.fillStyle=count>=100?'rgba(201,168,76,.7)':'rgba(155,61,42,.5)';
+      ctx.fillRect(0,0,W*(count/200),barH);
+      ctx.strokeStyle='rgba(240,232,216,.35)';ctx.lineWidth=1;ctx.setLineDash([3,4]);
+      ctx.beginPath();ctx.moveTo(W*.5,0);ctx.lineTo(W*.5,barH+14);ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle='rgba(240,232,216,.3)';ctx.font='300 8px "Noto Sans KR"';
+      ctx.textAlign='center';ctx.fillText('사울의 요구 100',W*.5,barH+24);
+      if(count>=200){ctx.fillStyle='rgba(201,168,76,.6)';ctx.fillRect(0,0,W,barH);}
+    }
+    raf(draw);
+  }
+  draw();
+})();
+
+/* WINDOW CANVAS — 밤 창문 탈출 장면 */
+(function(){
+  var c=$('windowCanvas'),ctx=c.getContext('2d');
+  var W,H;var t=0;
+  var ropeProgress=0,started=false;
+  var figFalling=false,figFY=0,figFVY=0,figGone=false;
+  function resize(){W=c.width=c.offsetWidth;H=c.height=320;}
+  resize();window.addEventListener('resize',resize);
+  function start(){
+    if(started)return;started=true;
+    setTimeout(function(){
+      var ri=setInterval(function(){
+        ropeProgress+=.025;
+        if(ropeProgress>=1){
+          clearInterval(ri);
+          figFalling=true;figFY=H*.18+120;figFVY=2;
+          setTimeout(function(){figGone=true;},1500);
+        }
+      },30);
+    },800);
+  }
+  var wObs=new IntersectionObserver(function(e){if(e[0].isIntersecting)start();},{threshold:.4});
+  wObs.observe($('windowScene'));
+  function draw(){
+    t+=.018;ctx.clearRect(0,0,W,H);
+    var sky=ctx.createLinearGradient(0,0,0,H);
+    sky.addColorStop(0,'#05030a');sky.addColorStop(1,'#0a0512');
+    ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
+    // 별
+    for(var i=0;i<40;i++){
+      var sx=(i*137.5)%W,sy=(i*89.3)%180,sa=.3+.5*Math.abs(Math.sin(t+i));
+      ctx.beginPath();ctx.arc(sx,sy,.5+Math.random()*.3,0,Math.PI*2);
+      ctx.fillStyle='rgba(255,255,220,'+sa.toFixed(2)+')';ctx.fill();
+    }
+    // 달
+    ctx.beginPath();ctx.arc(W*.8,60,22,0,Math.PI*2);ctx.fillStyle='rgba(240,220,160,.85)';ctx.fill();
+    ctx.beginPath();ctx.arc(W*.8+8,56,18,0,Math.PI*2);ctx.fillStyle='#05030a';ctx.fill();
+    // 건물 실루엣
+    ctx.fillStyle='#0e0a0a';
+    ctx.fillRect(0,H*.55,W*.35,H*.45);ctx.fillRect(W*.4,H*.45,W*.25,H*.55);ctx.fillRect(W*.72,H*.6,W*.28,H*.4);
+    // 창문 프레임
+    var wx=W*.5-70,wy=H*.06,ww=140,wh=180;
+    var glow=ctx.createRadialGradient(W*.5,wy+wh*.5,0,W*.5,wy+wh*.5,ww);
+    glow.addColorStop(0,'rgba(201,168,76,.18)');glow.addColorStop(1,'rgba(201,168,76,0)');
+    ctx.fillStyle=glow;ctx.fillRect(wx-30,wy-20,ww+60,wh+60);
+    ctx.fillStyle='rgba(201,168,76,.08)';ctx.fillRect(wx,wy,ww,wh);
+    ctx.strokeStyle='rgba(201,168,76,.5)';ctx.lineWidth=2;ctx.strokeRect(wx,wy,ww,wh);
+    ctx.strokeStyle='rgba(201,168,76,.25)';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(W*.5,wy);ctx.lineTo(W*.5,wy+wh);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(wx,wy+wh*.5);ctx.lineTo(wx+ww,wy+wh*.5);ctx.stroke();
+    // 미갈 실루엣
+    var mx=W*.5,my=wy+35;
+    ctx.fillStyle='rgba(201,168,76,.7)';
+    ctx.beginPath();ctx.arc(mx,my,9,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.moveTo(mx-8,my+9);ctx.bezierCurveTo(mx-12,my+35,mx+12,my+35,mx+8,my+9);ctx.fill();
+    // 밧줄과 다윗
+    if(ropeProgress>0&&!figGone){
+      var ropeTop=my+45,ropeLen=ropeProgress*120;
+      ctx.strokeStyle='rgba(201,168,76,.6)';ctx.lineWidth=1.5;
+      ctx.beginPath();ctx.moveTo(mx,ropeTop);
+      for(var rp=0;rp<=ropeLen;rp+=4){
+        ctx.lineTo(mx+Math.sin(t*3+rp*.1)*3*(1-rp/ropeLen*.7),ropeTop+rp);
+      }
+      ctx.stroke();
+      if(!figFalling){
+        var dfy=ropeTop+ropeLen-15,dfx=mx+Math.sin(t*3+ropeLen*.1)*3;
+        ctx.fillStyle='rgba(240,200,120,.8)';
+        ctx.beginPath();ctx.arc(dfx,dfy,7,0,Math.PI*2);ctx.fill();
+        ctx.beginPath();ctx.moveTo(dfx-5,dfy+7);ctx.bezierCurveTo(dfx-8,dfy+25,dfx+8,dfy+25,dfx+5,dfy+7);ctx.fill();
+        ctx.strokeStyle='rgba(240,200,120,.8)';ctx.lineWidth=2;
+        ctx.beginPath();ctx.moveTo(dfx-4,dfy+22);ctx.lineTo(dfx-10+Math.sin(t*4)*8,dfy+36);ctx.stroke();
+        ctx.beginPath();ctx.moveTo(dfx+4,dfy+22);ctx.lineTo(dfx+10+Math.sin(t*4+1)*8,dfy+36);ctx.stroke();
+      } else {
+        figFY+=figFVY;figFVY+=.15;
+        var alpha=Math.max(0,1-(figFY-(H*.18+120))/150);
+        ctx.save();ctx.globalAlpha=alpha;
+        ctx.fillStyle='rgba(240,200,120,.8)';
+        ctx.beginPath();ctx.arc(mx,figFY,7,0,Math.PI*2);ctx.fill();ctx.restore();
+      }
+    }
+    raf(draw);
+  }
+  draw();
+})();
+
+/* HEART CANVAS — 부서지는 하트 */
+(function(){
+  var c=$('heartCanvas'),ctx=c.getContext('2d');
+  c.width=320;c.height=200;
+  var shards=[],phase=0,hStarted=false;
+  function heartPath(cx,cy,size){
+    ctx.beginPath();var s=size/15;
+    ctx.moveTo(cx,cy+s*3);
+    ctx.bezierCurveTo(cx,cy,cx-s*7,cy,cx-s*7,cy-s*4);
+    ctx.bezierCurveTo(cx-s*7,cy-s*9,cx,cy-s*9,cx,cy-s*5);
+    ctx.bezierCurveTo(cx,cy-s*9,cx+s*7,cy-s*9,cx+s*7,cy-s*4);
+    ctx.bezierCurveTo(cx+s*7,cy,cx,cy,cx,cy+s*3);ctx.closePath();
+  }
+  function buildShards(){
+    shards=[];
+    for(var i=0;i<18;i++){
+      var angle=Math.random()*Math.PI*2,dist=Math.random()*30+10;
+      shards.push({x:160,y:110,vx:Math.cos(angle)*(2+Math.random()*3),vy:Math.sin(angle)*(2+Math.random()*3)-.5,r:Math.random()*8+4,a:1,rot:Math.random()*Math.PI,rotV:(Math.random()-.5)*.15});
+    }
+  }
+  buildShards();
+  var hObs=new IntersectionObserver(function(e){
+    if(e[0].isIntersecting&&!hStarted){
+      hStarted=true;phase=1;
+      setTimeout(function(){phase=2;buildShards();},800);
+    }
+  },{threshold:.5});
+  hObs.observe($('heartSection'));
+  function draw(){
+    ctx.clearRect(0,0,320,200);
+    if(phase===0){
+      heartPath(160,120,80);
+      var hg=ctx.createRadialGradient(160,100,0,160,120,50);
+      hg.addColorStop(0,'rgba(200,80,60,.9)');hg.addColorStop(1,'rgba(120,30,20,.6)');
+      ctx.fillStyle=hg;ctx.fill();
+    } else if(phase===1){
+      heartPath(160,120,80);ctx.fillStyle='rgba(140,40,30,.7)';ctx.fill();
+      ctx.strokeStyle='rgba(10,5,2,.8)';ctx.lineWidth=1.5;
+      ctx.beginPath();ctx.moveTo(160,80);ctx.lineTo(158,120);ctx.lineTo(163,150);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(145,95);ctx.lineTo(158,120);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(175,90);ctx.lineTo(163,115);ctx.stroke();
+      ctx.strokeStyle='rgba(201,168,76,.5)';ctx.lineWidth=.5;
+      ctx.beginPath();ctx.moveTo(160,80);ctx.lineTo(158,120);ctx.lineTo(163,150);ctx.stroke();
+    } else {
+      shards.forEach(function(s){
+        s.x+=s.vx;s.y+=s.vy;s.vy+=.05;s.vx*=.98;
+        s.a=Math.max(0,s.a-.012);s.rot+=s.rotV;
+        if(s.a<=0)return;
+        ctx.save();ctx.globalAlpha=s.a;ctx.translate(s.x,s.y);ctx.rotate(s.rot);
+        ctx.beginPath();ctx.moveTo(0,-s.r);ctx.lineTo(s.r*.6,s.r*.4);ctx.lineTo(-s.r*.6,s.r*.4);ctx.closePath();
+        ctx.fillStyle='hsl('+(350+Math.random()*20)+',55%,35%)';ctx.fill();ctx.restore();
+      });
+      ctx.save();ctx.globalAlpha=.15;
+      heartPath(160,120,80);ctx.fillStyle='rgba(139,58,42,1)';ctx.fill();ctx.restore();
+    }
+    raf(draw);
+  }
+  draw();
+})();
+
+/* INNER VOICE — 순차 등장 */
+(function(){
+  var ivObs=new IntersectionObserver(function(e){
+    if(e[0].isIntersecting){
+      ['iv1','iv2','iv3','iv4'].forEach(function(id,i){
+        setTimeout(function(){var el=$(id);if(el)el.classList.add('show');},i*600+300);
+      });
+      ivObs.disconnect();
+    }
+  },{threshold:.4});
+  var b=$('ivBox');if(b)ivObs.observe(b);
+})();
+
+/* DANCE CANVAS — 두 시선 */
+(function(){
+  var c=$('danceCanvas'),ctx=c.getContext('2d');
+  var W,H,t=0,danceAngle=0,started=false;
+  function resize(){W=c.width=c.offsetWidth;H=c.height=300;}
+  resize();window.addEventListener('resize',resize);
+  var dObs=new IntersectionObserver(function(e){if(e[0].isIntersecting)started=true;},{threshold:.3});
+  dObs.observe($('danceSection'));
+  function draw(){
+    t+=.02;ctx.clearRect(0,0,W,H);
+    var bg=ctx.createLinearGradient(0,0,0,H);
+    bg.addColorStop(0,'#0a0708');bg.addColorStop(1,'#151010');
+    ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle='rgba(255,255,255,.06)';ctx.lineWidth=1;ctx.setLineDash([4,8]);
+    ctx.beginPath();ctx.moveTo(W*.5,0);ctx.lineTo(W*.5,H);ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle='rgba(201,168,76,.3)';ctx.font='300 9px "Noto Sans KR"';ctx.textAlign='center';
+    ctx.fillText('다윗 — 하나님 앞에서',W*.25,20);
+    ctx.fillStyle='rgba(155,61,42,.4)';ctx.fillText('미갈 — 창문에서',W*.75,20);
+    if(started)danceAngle+=.05;
+    var dx=W*.25,dy=H*.55;
+    var gl=ctx.createRadialGradient(dx,dy,0,dx,dy,60);
+    gl.addColorStop(0,'rgba(201,168,76,'+(.08+.05*Math.sin(t*2)).toFixed(3)+')');
+    gl.addColorStop(1,'rgba(201,168,76,0)');
+    ctx.fillStyle=gl;ctx.beginPath();ctx.arc(dx,dy,60,0,Math.PI*2);ctx.fill();
+    ctx.save();ctx.translate(dx,dy);ctx.rotate(Math.sin(danceAngle)*.35);
+    ctx.strokeStyle='rgba(220,180,100,.9)';ctx.lineWidth=3;ctx.lineCap='round';
+    ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(-14+Math.sin(danceAngle)*12,30+Math.cos(danceAngle)*8);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(14+Math.sin(danceAngle+1)*12,30-Math.cos(danceAngle)*8);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(0,-30);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(0,-20);ctx.lineTo(-20+Math.cos(danceAngle)*15,-5+Math.sin(danceAngle)*10);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(0,-20);ctx.lineTo(20+Math.cos(danceAngle+1)*15,-5-Math.sin(danceAngle)*10);ctx.stroke();
+    ctx.beginPath();ctx.arc(0,-38,9,0,Math.PI*2);ctx.fillStyle='rgba(220,180,100,.9)';ctx.fill();
+    ctx.restore();
+    for(var pi=0;pi<3;pi++){
+      ctx.save();ctx.globalAlpha=.3+Math.random()*.3;
+      ctx.beginPath();ctx.arc(dx+Math.sin(t*3+pi)*20,dy+30,2,0,Math.PI*2);
+      ctx.fillStyle='rgba(201,168,76,1)';ctx.fill();ctx.restore();
+    }
+    var mx=W*.75,my=H*.2;
+    ctx.strokeStyle='rgba(201,168,76,.25)';ctx.lineWidth=1.5;ctx.strokeRect(mx-30,my,60,80);
+    ctx.beginPath();ctx.moveTo(mx,my);ctx.lineTo(mx,my+80);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(mx-30,my+40);ctx.lineTo(mx+30,my+40);ctx.stroke();
+    ctx.fillStyle='rgba(180,140,100,.6)';
+    ctx.beginPath();ctx.arc(mx,my+18,9,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.moveTo(mx-7,my+27);ctx.bezierCurveTo(mx-10,my+55,mx+10,my+55,mx+7,my+27);ctx.fill();
+    ctx.strokeStyle='rgba(155,61,42,.7)';ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.moveTo(mx-5,my+12);ctx.quadraticCurveTo(mx,my+10,mx+5,my+12);ctx.stroke();
+    for(var ni=0;ni<2;ni++){
+      var na=t*2+ni*3,nr=15+ni*8;
+      ctx.save();ctx.globalAlpha=.15+.1*Math.sin(t+ni);
+      ctx.beginPath();ctx.arc(mx+Math.cos(na)*nr,my+40+Math.sin(na)*nr*.5,2,0,Math.PI*2);
+      ctx.fillStyle='rgba(155,61,42,1)';ctx.fill();ctx.restore();
+    }
+    ctx.save();ctx.globalAlpha=.1+.05*Math.sin(t*.7);
+    ctx.fillStyle='rgba(155,61,42,1)';ctx.font='300 11px "Noto Serif KR"';ctx.textAlign='center';
+    ctx.fillText('멸시',mx,my+100);ctx.restore();
+    ctx.save();ctx.globalAlpha=.15+.08*Math.sin(t);
+    ctx.fillStyle='rgba(201,168,76,1)';ctx.font='300 11px "Noto Serif KR"';ctx.textAlign='center';
+    ctx.fillText('기쁨',dx,dy-60);ctx.restore();
+    raf(draw);
+  }
+  draw();
+})();
+
+/* FINAL CANVAS — 사라지는 불꽃 */
+(function(){
+  var c=$('finalCanvas'),ctx=c.getContext('2d');
+  var W,H;
+  function resize(){W=c.width=c.offsetWidth;H=c.height=c.offsetHeight||window.innerHeight;}
+  resize();window.addEventListener('resize',resize);
+  var embers=[];
+  for(var i=0;i<80;i++){
+    embers.push({xn:Math.random(),y:Math.random(),vy:-.003-.002*Math.random(),r:.8+Math.random()*1.5,a:Math.random(),hue:25+Math.random()*15,fade:.002+Math.random()*.004});
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    embers.forEach(function(e){
+      e.y+=e.vy;e.a-=e.fade;
+      if(e.a<=0){e.y=1+Math.random()*.1;e.a=.4+Math.random()*.4;e.xn=Math.random();}
+      var ex=e.xn*W,ey=e.y*H;
+      if(ey<0||ey>H)return;
+      ctx.save();ctx.globalAlpha=e.a*.6;
+      ctx.beginPath();ctx.arc(ex,ey,e.r,0,Math.PI*2);
+      ctx.fillStyle='hsl('+e.hue+',70%,55%)';ctx.fill();ctx.restore();
+    });
+    raf(draw);
+  }
+  draw();
+})();
+</script>
+</body>
+</html>
