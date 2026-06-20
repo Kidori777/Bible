@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>다윗 — 하나님의 마음에 합한 자</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; font-style: normal !important; }
+
+  :root {
+    --ink:     #1a1208;
+    --parch:   #f5efe2;
+    --cream:   #faf7f0;
+    --gold:    #c9a84c;
+    --gold-lt: #e8d08a;
+    --gold-dk: #8a6b1e;
+    --rust:    #8b2a1a;
+    --sand:    #e8dcc8;
+    --muted:   #6b5c42;
+    --rule:    rgba(201,168,76,0.3);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Noto Serif KR', serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 80px 24px 60px;
+    overflow: hidden;
+    background: var(--ink);
+  }
+
+  .hero-canvas {
+    position: absolute; inset: 0;
+    z-index: 0;
+  }
+
+  .hero-inner {
+    position: relative; z-index: 2;
+    display: flex; flex-direction: column; align-items: center; gap: 28px;
+  }
+
+  .hero-label {
+    font-size: 11px;
+    letter-spacing: 0.35em;
+    color: var(--gold);
+    text-transform: uppercase;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeUp 0.9s 0.3s forwards;
+  }
+
+  .hero-title {
+    font-size: clamp(52px, 10vw, 100px);
+    font-weight: 900;
+    color: #fff;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 1s 0.5s forwards;
+  }
+  .hero-title span {
+    color: var(--gold);
+    display: block;
+  }
+
+  .hero-verse {
+    max-width: 480px;
+    font-size: clamp(13px, 2.5vw, 16px);
+    line-height: 1.9;
+    color: rgba(255,255,255,0.6);
+    font-weight: 400;
+    opacity: 0;
+    animation: fadeUp 1s 0.8s forwards;
+  }
+  .hero-verse strong {
+    color: var(--gold-lt);
+    font-weight: 600;
+  }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 32px; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    opacity: 0; animation: fadeUp 1s 1.3s forwards;
+  }
+  .hero-scroll span { font-size: 10px; letter-spacing: 0.25em; color: var(--gold); text-transform: uppercase; }
+  .scroll-line {
+    width: 1px; height: 40px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scrollPulse 1.8s 2s infinite;
+  }
+
+  /* ── BOOK SECTION ── */
+  .book-section {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 80px 24px 120px;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 64px;
+  }
+  .section-eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    color: var(--gold-dk);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .section-heading {
+    font-size: clamp(24px, 4vw, 36px);
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.4;
+  }
+  .section-rule {
+    width: 48px; height: 2px;
+    background: var(--gold);
+    margin: 20px auto 0;
+  }
+
+  /* ── BOOK SPINE LIST ── */
+  .book-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border-left: 2px solid var(--rule);
+    padding-left: 0;
+  }
+
+  .book-item {
+    display: flex;
+    align-items: stretch;
+    opacity: 0;
+    transform: translateX(-16px);
+    transition: opacity 0.6s, transform 0.6s;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+  }
+  .book-item.visible { opacity: 1; transform: translateX(0); }
+
+  .book-item:hover .book-card { background: var(--parch); border-color: var(--gold); }
+  .book-item:hover .book-num { color: var(--gold); }
+  .book-item:hover .book-arrow { opacity: 1; transform: translateX(0); }
+  .book-item:hover .book-title { color: var(--ink); }
+
+  .book-dot-col {
+    width: 40px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 24px 0;
+  }
+  .book-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--sand);
+    border: 2px solid var(--gold);
+    transition: background 0.3s;
+    flex-shrink: 0;
+  }
+  .book-item:hover .book-dot { background: var(--gold); }
+
+  .book-card {
+    flex: 1;
+    margin: 12px 0 12px 16px;
+    padding: 24px 28px;
+    border: 1px solid var(--sand);
+    border-radius: 4px;
+    background: #fff;
+    transition: background 0.25s, border-color 0.25s;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .book-num {
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--sand);
+    line-height: 1;
+    flex-shrink: 0;
+    min-width: 36px;
+    transition: color 0.25s;
+  }
+
+  .book-text { flex: 1; }
+
+  .book-label {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .book-title {
+    font-size: clamp(16px, 2.5vw, 20px);
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.4;
+    margin-bottom: 6px;
+    transition: color 0.25s;
+  }
+
+  .book-subtitle {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 400;
+    line-height: 1.5;
+  }
+
+  .book-arrow {
+    font-size: 18px;
+    color: var(--gold);
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: opacity 0.25s, transform 0.25s;
+    flex-shrink: 0;
+  }
+
+  /* ── FOOTER ── */
+  .site-footer {
+    text-align: center;
+    padding: 48px 24px;
+    border-top: 1px solid var(--rule);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    background: var(--cream);
+  }
+  .site-footer a { color: var(--gold-dk); text-decoration: none; }
+  .site-footer a:hover { text-decoration: underline; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.3; transform: scaleY(0.7); }
+    50% { opacity: 1; transform: scaleY(1); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; opacity: 1 !important; transform: none !important; }
+  }
+
+  /* ── MOBILE ── */
+  @media (max-width: 600px) {
+    .book-card { padding: 18px 16px; gap: 14px; }
+    .book-num { font-size: 22px; min-width: 28px; }
+    .book-dot-col { width: 32px; }
+    .book-arrow { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <canvas class="hero-canvas" id="heroCanvas"></canvas>
+  <div class="hero-inner">
+    <p class="hero-label">부산교회 성경 인물 시리즈</p>
+    <h1 class="hero-title">다윗<span>David</span></h1>
+    <p class="hero-verse">
+      "내가 이새의 아들 다윗을 만나니<br>
+      <strong>그는 내 마음에 맞는 사람이라</strong><br>
+      내 뜻을 다 이루리라"<br>
+      — 사도행전 13:22
+    </p>
+  </div>
+  <div class="hero-scroll">
+    <span>아래로</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- BOOK LIST -->
+<section class="book-section">
+  <div class="section-header">
+    <p class="section-eyebrow">Character Studies</p>
+    <h2 class="section-heading">다윗과 그 주변 사람들</h2>
+    <div class="section-rule"></div>
+  </div>
+
+  <div class="book-list" id="bookList">
+
+    <a class="book-item" href="https://kidori777.github.io/Bible/다윗의 일생.html" target="_blank">
+      <div class="book-dot-col"><div class="book-dot"></div></div>
+      <div class="book-card">
+        <div class="book-num">01</div>
+        <div class="book-text">
+          <p class="book-label">Samuel 16 · Overview</p>
+          <p class="book-title">다윗 — 하나님의 마음에 합한 자</p>
+          <p class="book-subtitle">양을 치던 들판에서 이스라엘의 왕좌까지, 다윗의 일생 전체를 따라가다</p>
+        </div>
+        <span class="book-arrow">→</span>
+      </div>
+    </a>
+
+    <a class="book-item" href="https://kidori777.github.io/Bible/요나단.html" target="_blank">
+      <div class="book-dot-col"><div class="book-dot"></div></div>
+      <div class="book-card">
+        <div class="book-num">02</div>
+        <div class="book-text">
+          <p class="book-label">Samuel 18 · Friendship</p>
+          <p class="book-title">요나단 — 왕관보다 깊은 사랑</p>
+          <p class="book-subtitle">왕위를 내려놓고 다윗을 선택한 왕자, 언약으로 맺어진 우정</p>
+        </div>
+        <span class="book-arrow">→</span>
+      </div>
+    </a>
+
+    <a class="book-item" href="https://kidori777.github.io/Bible/미갈.html" target="_blank">
+      <div class="book-dot-col"><div class="book-dot"></div></div>
+      <div class="book-card">
+        <div class="book-num">03</div>
+        <div class="book-text">
+          <p class="book-label">Samuel 18–19 · Love & Loss</p>
+          <p class="book-title">미갈 — 사랑이 굳어지기까지</p>
+          <p class="book-subtitle">사울의 딸이자 다윗의 아내, 기쁨에서 냉담으로 굳어간 한 여인의 이야기</p>
+        </div>
+        <span class="book-arrow">→</span>
+      </div>
+    </a>
+
+    <a class="book-item" href="https://kidori777.github.io/Bible/아비가일과 다윗.html" target="_blank">
+      <div class="book-dot-col"><div class="book-dot"></div></div>
+      <div class="book-card">
+        <div class="book-num">04</div>
+        <div class="book-text">
+          <p class="book-label">Samuel 25 · Wisdom</p>
+          <p class="book-title">아비가일 — 그 사이에 선 사람</p>
+          <p class="book-subtitle">분노한 다윗과 어리석은 남편 사이에서 지혜로 평화를 이끌어낸 여인</p>
+        </div>
+        <span class="book-arrow">→</span>
+      </div>
+    </a>
+
+    <a class="book-item" href="https://kidori777.github.io/Bible/다윗과 우리야.html" target="_blank">
+      <div class="book-dot-col"><div class="book-dot"></div></div>
+      <div class="book-card">
+        <div class="book-num">05</div>
+        <div class="book-text">
+          <p class="book-label">Samuel 11 · Failure</p>
+          <p class="book-title">다윗과 우리야 — 어디에 서 있는가</p>
+          <p class="book-subtitle">왕이 있어야 할 자리를 떠났을 때, 충신은 끝까지 자기 자리를 지켰다</p>
+        </div>
+        <span class="book-arrow">→</span>
+      </div>
+    </a>
+
+    <a class="book-item" href="https://kidori777.github.io/Bible/요압.html" target="_blank">
+      <div class="book-dot-col"><div class="book-dot"></div></div>
+      <div class="book-card">
+        <div class="book-num">06</div>
+        <div class="book-text">
+          <p class="book-label">Samuel 2–3 · Power</p>
+          <p class="book-title">요압 — 칼을 쥔 손, 비어 있는 마음</p>
+          <p class="book-subtitle">가장 충성스러운 장군, 그러나 그 칼이 향한 곳은 결국 자신의 주인이었다</p>
+        </div>
+        <span class="book-arrow">→</span>
+      </div>
+    </a>
+
+    <a class="book-item" href="https://kidori777.github.io/Bible/압살롬.html" target="_blank">
+      <div class="book-dot-col"><div class="book-dot"></div></div>
+      <div class="book-card">
+        <div class="book-num">07</div>
+        <div class="book-text">
+          <p class="book-label">Samuel 13–18 · Pride</p>
+          <p class="book-title">압살롬 — 아름다웠으나 무너진 사람</p>
+          <p class="book-subtitle">흠 없는 외모와 타오르는 야망, 아버지의 왕좌를 빼앗으려 했던 아들의 비극</p>
+        </div>
+        <span class="book-arrow">→</span>
+      </div>
+    </a>
+
+    <a class="book-item" href="https://kidori777.github.io/Bible/다윗의 식탁에 초대된 사람, 므비보셋 이야기.html" target="_blank">
+      <div class="book-dot-col"><div class="book-dot"></div></div>
+      <div class="book-card">
+        <div class="book-num">08</div>
+        <div class="book-text">
+          <p class="book-label">Samuel 9 · Grace</p>
+          <p class="book-title">므비보셋 — 다윗의 식탁에 초대된 사람</p>
+          <p class="book-subtitle">두 발이 절었으나 왕의 식탁에 앉게 된 자, 언약이 이루어지는 자리</p>
+        </div>
+        <span class="book-arrow">→</span>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <p>부산교회 성경 인물 시리즈 · <a href="https://github.com/Kidori777/Bible" target="_blank">GitHub</a></p>
+</footer>
+
+<script>
+// ── Canvas starfield / atmosphere
+(function(){
+  const canvas = document.getElementById('heroCanvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, stars = [], rafId;
+
+  function resize(){
+    W = canvas.width  = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  // stars
+  for(let i = 0; i < 140; i++){
+    stars.push({
+      x: Math.random(), y: Math.random(),
+      r: Math.random() * 1.2 + 0.3,
+      a: Math.random(),
+      spd: Math.random() * 0.004 + 0.001,
+      phase: Math.random() * Math.PI * 2
+    });
+  }
+
+  // horizon glow gradient
+  function drawGlow(){
+    const g = ctx.createRadialGradient(W/2, H * 0.72, 0, W/2, H * 0.72, W * 0.7);
+    g.addColorStop(0,   'rgba(201,168,76,0.18)');
+    g.addColorStop(0.4, 'rgba(139,42,26,0.08)');
+    g.addColorStop(1,   'rgba(0,0,0,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, W, H);
+  }
+
+  let t = 0;
+  function frame(){
+    ctx.clearRect(0, 0, W, H);
+
+    // deep sky gradient
+    const bg = ctx.createLinearGradient(0, 0, 0, H);
+    bg.addColorStop(0, '#0a0804');
+    bg.addColorStop(1, '#1f1408');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, W, H);
+
+    drawGlow();
+
+    // stars
+    t += 0.016;
+    stars.forEach(s => {
+      const alpha = (Math.sin(t * s.spd * 60 + s.phase) * 0.4 + 0.6) * s.a;
+      ctx.beginPath();
+      ctx.arc(s.x * W, s.y * H, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,245,220,${alpha})`;
+      ctx.fill();
+    });
+
+    // horizontal golden horizon line
+    const hline = ctx.createLinearGradient(0, 0, W, 0);
+    hline.addColorStop(0,   'rgba(201,168,76,0)');
+    hline.addColorStop(0.3, 'rgba(201,168,76,0.45)');
+    hline.addColorStop(0.7, 'rgba(201,168,76,0.45)');
+    hline.addColorStop(1,   'rgba(201,168,76,0)');
+    ctx.strokeStyle = hline;
+    ctx.lineWidth = 0.7;
+    ctx.beginPath();
+    ctx.moveTo(0, H * 0.72);
+    ctx.lineTo(W, H * 0.72);
+    ctx.stroke();
+
+    rafId = requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+// ── Scroll reveal
+(function(){
+  const items = document.querySelectorAll('.book-item');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if(e.isIntersecting){
+        const idx = Array.from(items).indexOf(e.target);
+        setTimeout(() => e.target.classList.add('visible'), idx * 80);
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  items.forEach(el => io.observe(el));
+})();
+</script>
+</body>
+</html>
