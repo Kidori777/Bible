@@ -443,15 +443,53 @@
             color: var(--ash);
             margin-bottom: 16px;
         }
+        .footer-url {
+            font-size: 13px;
+            letter-spacing: 0.04em;
+            margin-bottom: 16px;
+        }
+        .footer-url a {
+            color: var(--ash);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(200,151,58,0.25);
+            padding-bottom: 1px;
+            transition: color 0.2s, border-color 0.2s;
+        }
+        .footer-url a:hover {
+            color: var(--gold);
+            border-color: var(--gold);
+        }
+        .footer-contact {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
         .footer-phone {
             font-size: 17px;
             color: var(--parchment);
             font-weight: 300;
             letter-spacing: 0.05em;
-        }
-        .footer-phone a {
-            color: var(--parchment);
             text-decoration: none;
+        }
+        .footer-copy {
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 12px;
+            letter-spacing: 0.05em;
+            color: var(--gold);
+            background: transparent;
+            border: 1px solid rgba(200,151,58,0.4);
+            padding: 6px 12px;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        .footer-copy:hover {
+            background: rgba(200,151,58,0.12);
+        }
+        .footer-copy.copied {
+            color: var(--parchment);
+            border-color: var(--parchment);
         }
 
         /* ── ANIMATIONS ── */
@@ -634,10 +672,45 @@
 <footer class="footer">
     <p class="footer-church">부산교회</p>
     <p class="footer-zone">2구역 · 신앙상담</p>
-    <p class="footer-phone"><a href="tel:01093627642">010-9362-7642</a></p>
+    <p class="footer-url"><a href="https://www.busanch.org" target="_blank" rel="noopener">www.busanch.org</a></p>
+    <div class="footer-contact">
+        <a href="tel:010-9362-7642" class="footer-phone">010-9362-7642</a>
+        <button type="button" class="footer-copy" onclick="copyPhoneNumber(this)">번호 복사</button>
+    </div>
 </footer>
 
 <script>
+    // 전화번호 복사 (카카오톡 등 인앱 브라우저에서 tel: 링크가
+    // "어느 앱을 사용하겠습니까" 팝업을 띄우는 경우를 위한 대체 수단)
+    function copyPhoneNumber(btn) {
+        const number = '010-9362-7642';
+        const done = () => {
+            const original = btn.textContent;
+            btn.textContent = '복사됨 ✓';
+            btn.classList.add('copied');
+            setTimeout(() => {
+                btn.textContent = original;
+                btn.classList.remove('copied');
+            }, 1500);
+        };
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(number).then(done).catch(() => fallbackCopy(number, done));
+        } else {
+            fallbackCopy(number, done);
+        }
+    }
+    function fallbackCopy(text, done) {
+        const t = document.createElement('textarea');
+        t.value = text;
+        t.style.position = 'fixed';
+        t.style.opacity = '0';
+        document.body.appendChild(t);
+        t.focus();
+        t.select();
+        try { document.execCommand('copy'); done(); } catch (e) {}
+        document.body.removeChild(t);
+    }
+
     // scroll-triggered reveal
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(e => {
