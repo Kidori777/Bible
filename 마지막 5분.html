@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>마지막 5분</title>
+<meta property="og:type" content="website">
+<meta property="og:title" content="마지막 5분">
+<meta property="og:description" content="사형 집행 직전, 한 사형수에게 주어진 마지막 5분의 이야기">
+<meta name="description" content="사형 집행 직전, 한 사형수에게 주어진 마지막 5분의 이야기">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Noto+Serif+KR:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -62,17 +66,27 @@
   .clockpage canvas{
     position:absolute; inset:0;
     width:100%; height:100%;
-    opacity:.35;
+    pointer-events:none;
+  }
+  .clock-icon-wrap{
+    position:relative;
+    width:clamp(150px, 34vw, 220px);
+    aspect-ratio:200 / 222;
+    margin:0 auto 2.4rem;
+  }
+  .clock-glow{
+    position:absolute;
+    inset:-18%;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(228,199,126,.35) 0%, rgba(228,199,126,0) 70%);
     pointer-events:none;
   }
   .clockface{
-    position:absolute;
-    top:50%; left:50%;
-    width:min(78vw, 520px);
-    height:min(78vw, 520px);
-    transform:translate(-50%,-50%);
-    opacity:.14;
-    pointer-events:none;
+    position:relative;
+    width:100%;
+    height:100%;
+    display:block;
+    filter:drop-shadow(0 0 10px rgba(228,199,126,.25));
   }
   .clockpage .inner{ position:relative; z-index:2; max-width:34em; }
   .clockpage h1{
@@ -185,20 +199,72 @@
 <!-- 1. 마지막 5분 -->
 <section class="page clockpage">
   <canvas id="dust"></canvas>
-  <svg class="clockface" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="100" cy="100" r="94" fill="none" stroke="#E4C77E" stroke-width="2"/>
-    <circle cx="100" cy="100" r="80" fill="none" stroke="#E4C77E" stroke-width="1"/>
-    <g stroke="#E4C77E" stroke-width="2">
-      <line x1="100" y1="10" x2="100" y2="22"/>
-      <line x1="100" y1="178" x2="100" y2="190"/>
-      <line x1="10" y1="100" x2="22" y2="100"/>
-      <line x1="178" y1="100" x2="190" y2="100"/>
-    </g>
-    <line x1="100" y1="100" x2="100" y2="46" stroke="#E4C77E" stroke-width="3" stroke-linecap="round"/>
-    <line x1="100" y1="100" x2="140" y2="100" stroke="#E4C77E" stroke-width="2" stroke-linecap="round"/>
-    <circle cx="100" cy="100" r="4" fill="#E4C77E"/>
-  </svg>
   <div class="inner">
+    <div class="clock-icon-wrap reveal">
+      <div class="clock-glow"></div>
+      <svg class="clockface" viewBox="0 -22 200 222" style="overflow:visible" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="faceGrad" cx="42%" cy="38%" r="75%">
+            <stop offset="0%" stop-color="#3B2A18"/>
+            <stop offset="100%" stop-color="#15100A"/>
+          </radialGradient>
+          <linearGradient id="bezelGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#F4DFA0"/>
+            <stop offset="50%" stop-color="#C9A05A"/>
+            <stop offset="100%" stop-color="#6B4423"/>
+          </linearGradient>
+        </defs>
+
+        <!-- 회중시계 고리 -->
+        <rect x="96" y="-20" width="8" height="14" rx="2" fill="url(#bezelGrad)"/>
+        <circle cx="100" cy="-24" r="7" fill="none" stroke="url(#bezelGrad)" stroke-width="3.5"/>
+
+        <!-- 앤틱 브라스 베젤 -->
+        <circle cx="100" cy="100" r="95" fill="url(#faceGrad)" stroke="url(#bezelGrad)" stroke-width="7"/>
+        <circle cx="100" cy="100" r="86" fill="none" stroke="#E4C77E" stroke-width="1" opacity=".5"/>
+        <circle cx="100" cy="100" r="80" fill="none" stroke="#8B6A38" stroke-width="1" opacity=".6"/>
+
+        <!-- 분 표시 비딩 -->
+        <g fill="#E4C77E" opacity=".65">
+          <circle cx="100" cy="15.5" r="1.4"/><circle cx="121.25" cy="21" r="1.4"/><circle cx="137.5" cy="35.75" r="1.4"/>
+          <circle cx="147.4" cy="56.5" r="1.4"/><circle cx="150.5" cy="79.5" r="1.4"/><circle cx="147.4" cy="102.5" r="1.4"/>
+          <circle cx="137.5" cy="123.25" r="1.4"/><circle cx="121.25" cy="138" r="1.4"/><circle cx="100" cy="143.5" r="1.4"/>
+          <circle cx="78.75" cy="138" r="1.4"/><circle cx="62.5" cy="123.25" r="1.4"/><circle cx="52.6" cy="102.5" r="1.4"/>
+          <circle cx="49.5" cy="79.5" r="1.4"/><circle cx="52.6" cy="56.5" r="1.4"/><circle cx="62.5" cy="35.75" r="1.4"/>
+          <circle cx="78.75" cy="21" r="1.4"/>
+        </g>
+
+        <g fill="#E4C77E" font-family="'Noto Serif KR', serif" font-weight="600" font-size="13" text-anchor="middle" dominant-baseline="central">
+          <text x="100" y="34">XII</text>
+          <text x="133" y="43">I</text>
+          <text x="157" y="67">II</text>
+          <text x="166" y="100">III</text>
+          <text x="157" y="133">IV</text>
+          <text x="133" y="157">V</text>
+          <text x="100" y="166">VI</text>
+          <text x="67" y="157">VII</text>
+          <text x="43" y="133">VIII</text>
+          <text x="34" y="100">IX</text>
+          <text x="43" y="67">X</text>
+          <text x="67" y="43">XI</text>
+        </g>
+
+        <!-- 11시 55분: 마지막 5분을 가리키는 시침·분침 (앤틱 랜스 모양) -->
+        <g transform="rotate(357.5 100 100)">
+          <path d="M100,100 L97,72 L100,58 L103,72 Z" fill="#EFE7D6" stroke="#8B6A38" stroke-width=".5"/>
+        </g>
+        <g transform="rotate(330 100 100)">
+          <path d="M100,100 L97.5,50 L100,36 L102.5,50 Z" fill="#EFE7D6" stroke="#8B6A38" stroke-width=".5"/>
+        </g>
+        <g id="secondHand">
+          <line x1="100" y1="118" x2="100" y2="26" stroke="#C9622C" stroke-width="1.3" stroke-linecap="round"/>
+          <circle cx="100" cy="118" r="3" fill="#C9622C"/>
+        </g>
+
+        <circle cx="100" cy="100" r="6" fill="url(#bezelGrad)" stroke="#4A3116" stroke-width="1"/>
+        <circle cx="100" cy="100" r="2.3" fill="#3B2A18"/>
+      </svg>
+    </div>
     <h1 class="reveal">마지막 5분</h1>
     <p class="reveal">
       한 젊은 사형수가 있었습니다. 사형이 집행되던 날, 형장에 도착한 그 사형수에게 마지막으로 5분의 시간이 주어졌습니다. 28년을 살아온 그 사형수에게 주어진 마지막 5분은 비록 짧았지만 참으로 소중한 시간이었습니다. '마지막 5분을 어떻게 쓸까?' 그 사형수는 고민 끝에 결정했습니다. 그를 알고 있는 모든 사람들에게 작별 인사와 기도를 하는데 2분, 그날까지 살게 해 주신 하나님께 감사드리고, 곁에 있는 다른 사형수들에게 한마디씩 작별 인사를 나누는데 2분, 나머지 1분은 눈에 보이는 자연의 아름다움에 감사하고 땅이 최후의 그 순간까지 서 있게 해 준 것에 감사하기로 마음먹었습니다. 흐르는 눈물을 삼키면서 가족들과 친구들을 잠깐 생각하며, 작별 인사와 기도를 하는 데 2분이 지나 버렸습니다. 그리고 자신에 대하여 돌이켜 보려는 순간 '아! 이제 3분 후면 내 인생도 끝이구나.'하는 생각이 들자 눈앞이 캄캄해졌습니다. 지나가 버린 28년이란 금쪽같은 시간을 아껴 쓰지 못한 것이 정말 후회스러웠습니다. '아! 다시 한번 인생을 더 살 수만 있다면…' 하고
@@ -243,10 +309,20 @@
   }, { threshold: 0.15 });
   els.forEach(el => io.observe(el));
 
-  // 은은한 먼지 입자 애니메이션 (1페이지 배경, 콘텐츠보다 뒤에서 낮은 불투명도로)
+  // 초침 연속 회전 (SVG 네이티브 transform 속성 사용 — 카카오톡 인앱 브라우저 등 구형 웹뷰 호환)
+  const secondHand = document.getElementById('secondHand');
+  function spin(ts){
+    const deg = (ts / 1000) * 6 % 360; // 60초에 한 바퀴
+    secondHand.setAttribute('transform', `rotate(${deg} 100 100)`);
+    requestAnimationFrame(spin);
+  }
+  requestAnimationFrame(spin);
+
+  // 은은한 먼지 입자 + 시계 좌우로 떨어지는 낙엽 (콘텐츠보다 뒤에서, 중앙 텍스트는 피해서)
   const canvas = document.getElementById('dust');
   const ctx = canvas.getContext('2d');
-  let W, H, particles;
+  let W, H, particles, leaves;
+  const leafColors = ['#B5722C', '#C9A05A', '#8B5E2E', '#D48A3E'];
 
   function resize(){
     W = canvas.width = canvas.parentElement.offsetWidth;
@@ -262,8 +338,53 @@
       a: Math.random() * .5 + .15
     }));
   }
+  function randomLeafX(){
+    // 화면 좌우 여백 쪽에만 떨어지도록 (가운데 글 영역은 비워둠)
+    const margin = Math.min(W * .26, 130);
+    const onLeft = Math.random() < .5;
+    return onLeft ? Math.random() * margin : W - Math.random() * margin;
+  }
+  function makeLeaf(spawnAtTop){
+    return {
+      x: randomLeafX(),
+      y: spawnAtTop ? -20 - Math.random() * 200 : Math.random() * H,
+      size: Math.random() * 5 + 6,
+      rot: Math.random() * Math.PI * 2,
+      rotSpeed: (Math.random() - .5) * .03,
+      vy: Math.random() * .35 + .35,
+      swayAmp: Math.random() * 18 + 10,
+      swayFreq: Math.random() * .012 + .006,
+      phase: Math.random() * 1000,
+      color: leafColors[Math.floor(Math.random() * leafColors.length)],
+      alpha: Math.random() * .35 + .5
+    };
+  }
+  function initLeaves(){
+    const count = W < 480 ? 8 : 14;
+    leaves = Array.from({length: count}, () => makeLeaf(false));
+  }
+  function drawLeaf(l){
+    ctx.save();
+    ctx.translate(l.x, l.y);
+    ctx.rotate(l.rot);
+    ctx.globalAlpha = l.alpha;
+    ctx.fillStyle = l.color;
+    ctx.beginPath();
+    ctx.moveTo(0, -l.size);
+    ctx.bezierCurveTo(l.size * .7, -l.size * .5, l.size * .7, l.size * .5, 0, l.size);
+    ctx.bezierCurveTo(-l.size * .7, l.size * .5, -l.size * .7, -l.size * .5, 0, -l.size);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(22,16,9,.25)';
+    ctx.lineWidth = .6;
+    ctx.beginPath();
+    ctx.moveTo(0, -l.size);
+    ctx.lineTo(0, l.size);
+    ctx.stroke();
+    ctx.restore();
+  }
   function tick(){
     ctx.clearRect(0,0,W,H);
+
     ctx.fillStyle = '#E4C77E';
     particles.forEach(p => {
       p.y += p.vy;
@@ -274,13 +395,23 @@
       ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
       ctx.fill();
     });
+
+    leaves.forEach(l => {
+      l.y += l.vy;
+      l.x += Math.sin((l.y + l.phase) * l.swayFreq) * .6;
+      l.rot += l.rotSpeed;
+      if (l.y - l.size > H) Object.assign(l, makeLeaf(true), { x: randomLeafX() });
+    });
+    leaves.forEach(drawLeaf);
+
     ctx.globalAlpha = 1;
     requestAnimationFrame(tick);
   }
   resize();
   initParticles();
+  initLeaves();
   tick();
-  window.addEventListener('resize', () => { resize(); initParticles(); });
+  window.addEventListener('resize', () => { resize(); initParticles(); initLeaves(); });
 </script>
 
 </body>
