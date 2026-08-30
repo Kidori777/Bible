@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>사람들의 참된 필요</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Noto+Serif+KR:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --yellow:#EFC93A;
+    --yellow-ink:#2E2117;
+    --yellow-accent:#B5561A;
+    --sage:#D8E8DA;
+    --sage-ink:#243B2B;
+    --sage-accent:#7C9A6B;
+    --sky:#7FC3DE;
+    --sky-ink:#153044;
+    --sky-quote:#5B3FA0;
+    --rose:#D6336C;
+    --rose-deep:#B3255A;
+    --cream:#FDF3E7;
+    --coral:#E8794A;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Noto Serif KR', serif;
+    line-height:1.9;
+    overflow-x:hidden;
+  }
+  h1,h2,.headline{
+    font-family:'Noto Sans KR', sans-serif;
+    font-weight:900;
+    letter-spacing:-0.01em;
+  }
+  section.page{
+    min-height:100svh;
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:8vh 7vw;
+    position:relative;
+    text-align:center;
+  }
+  .reveal{
+    opacity:0;
+    transform:translateY(22px);
+    transition:opacity .9s ease, transform .9s ease;
+  }
+  .reveal.visible{
+    opacity:1;
+    transform:translateY(0);
+  }
+
+  /* ---------- COVER ---------- */
+  .cover{
+    background:var(--yellow);
+    color:var(--yellow-ink);
+  }
+  .cover h1{
+    font-size:clamp(2.1rem, 7vw, 3.4rem);
+    color:var(--yellow-accent);
+    line-height:1.25;
+    margin-bottom:2.2rem;
+  }
+  .cover p{
+    font-size:clamp(1rem, 2.6vw, 1.25rem);
+    max-width:32em;
+    margin:0 auto .35em;
+  }
+  .bubble-wrap{
+    margin-top:3.2rem;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+  .qbubble{
+    width:78px; height:64px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .row-people{
+    display:flex;
+    gap:clamp(4px, 1.6vw, 14px);
+    margin-top:1.2rem;
+    max-width:520px;
+  }
+  .row-people svg{ width:100%; height:auto; }
+  .scrolldown{
+    position:absolute;
+    bottom:5vh;
+    font-family:'Noto Sans KR', sans-serif;
+    font-size:.85rem;
+    color:var(--yellow-ink);
+    opacity:.65;
+    display:flex; flex-direction:column; align-items:center; gap:6px;
+  }
+  .scrolldown span{
+    width:1px; height:26px; background:currentColor;
+    animation:down 1.6s ease-in-out infinite;
+  }
+  @keyframes down{
+    0%{transform:scaleY(0); transform-origin:top;}
+    50%{transform:scaleY(1); transform-origin:top;}
+    51%{transform-origin:bottom;}
+    100%{transform:scaleY(0); transform-origin:bottom;}
+  }
+
+  /* ---------- SAGE (특징) ---------- */
+  .sage{
+    background:var(--sage);
+    color:var(--sage-ink);
+  }
+  .sage p{
+    font-size:clamp(1rem, 2.4vw, 1.15rem);
+    max-width:30em;
+    margin:0 auto 1.6em;
+  }
+  .sage .question{
+    margin-top:1.4rem;
+    font-family:'Noto Sans KR', sans-serif;
+    font-weight:700;
+    font-size:clamp(1.05rem, 2.6vw, 1.25rem);
+  }
+  .jar{ width:110px; height:auto; margin:1.6rem auto 0; display:block; }
+
+  /* ---------- SKY (목적) ---------- */
+  .sky{
+    background:var(--sky);
+    color:var(--sky-ink);
+  }
+  .sky h2{
+    font-size:clamp(1.5rem, 4.2vw, 2rem);
+    margin-bottom:1.6rem;
+  }
+  .sky p{
+    font-size:clamp(1rem, 2.4vw, 1.15rem);
+    max-width:30em;
+    margin:0 auto 1.4em;
+  }
+  .verse{
+    font-family:'Noto Sans KR', sans-serif;
+    font-weight:700;
+    color:var(--sky-quote);
+    font-size:clamp(1.02rem, 2.5vw, 1.2rem);
+    max-width:26em;
+    margin:1.6rem auto;
+  }
+  .verse cite{
+    display:block;
+    font-style:normal;
+    font-family:'Noto Serif KR', serif;
+    font-weight:500;
+    font-size:.85em;
+    margin-top:.6em;
+    color:var(--sky-ink);
+  }
+  .hands{ width:150px; height:auto; margin:1.8rem auto 0; display:block; }
+
+  /* ---------- ROSE (받아들이는 길) ---------- */
+  .rose{
+    background:var(--rose);
+    color:#fff;
+  }
+  .rose h1{
+    font-size:clamp(1.7rem, 5vw, 2.3rem);
+    margin-bottom:1.8rem;
+  }
+  .rose p{
+    font-size:clamp(1rem, 2.4vw, 1.12rem);
+    max-width:30em;
+    margin:0 auto 1.3em;
+    color:#fff;
+  }
+  .rose .verse-line{
+    font-family:'Noto Sans KR', sans-serif;
+    font-weight:500;
+    font-size:clamp(.98rem, 2.3vw, 1.08rem);
+    max-width:28em;
+    margin:1.5rem auto;
+  }
+  .prayer-box{
+    margin-top:2rem;
+    background:var(--cream);
+    color:#3a2418;
+    max-width:30em;
+    padding:2rem 1.8rem;
+    border-radius:6px;
+    font-size:clamp(.98rem, 2.3vw, 1.1rem);
+    line-height:1.85;
+  }
+
+  .contact-note{
+    margin:3.2rem auto 0;
+    position:relative;
+    background:#fff;
+    color:var(--rose-deep);
+    width:min(320px, 82vw);
+    padding:1.7rem 1.4rem 1.5rem;
+    border-radius:4px;
+    box-shadow:0 10px 26px rgba(0,0,0,.18);
+    overflow:hidden;
+    text-align:center;
+  }
+  .contact-note::before{
+    content:"";
+    position:absolute;
+    top:0; right:0;
+    width:0; height:0;
+    border-style:solid;
+    border-width:0 30px 30px 0;
+    border-color:transparent var(--coral) transparent transparent;
+  }
+  .contact-note .church{
+    font-family:'Noto Sans KR', sans-serif;
+    font-weight:700;
+    font-size:1.15rem;
+    margin-bottom:.5rem;
+  }
+  .contact-note .phone{
+    font-family:'Noto Sans KR', sans-serif;
+    font-weight:500;
+    font-size:1.05rem;
+    letter-spacing:.02em;
+    color:#5a5a5a;
+  }
+
+  @media (max-width:520px){
+    section.page{ padding:9vh 6vw; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 1. 표지 -->
+<section class="page cover">
+  <h1 class="reveal">사람들의<br>참된 필요</h1>
+  <div class="reveal">
+    <p>여러분에게 가장 필요한 건 무엇인가요?</p>
+    <p>패션, 게임, 인터넷, 스마트폰..</p>
+    <p>좋은 대학, 좋은 직업....</p>
+    <p>이러한 것들이 우리가 정말 필요로 하는 것일까요?</p>
+  </div>
+  <div class="bubble-wrap reveal">
+    <div class="qbubble">
+      <svg viewBox="0 0 78 64" width="78" height="64">
+        <ellipse cx="39" cy="26" rx="37" ry="24" fill="#EE7CA6"/>
+        <path d="M20 46 L14 60 L32 48 Z" fill="#EE7CA6"/>
+        <text x="39" y="35" font-family="Noto Sans KR, sans-serif" font-weight="900" font-size="30" fill="#fff" text-anchor="middle">?</text>
+      </svg>
+    </div>
+    <div class="row-people">
+      <svg viewBox="0 0 460 170" xmlns="http://www.w3.org/2000/svg">
+        <g fill="none" stroke="#2E2117" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <!-- five simple seated figures, each looking down at a phone -->
+          <g transform="translate(10,20)">
+            <circle cx="35" cy="20" r="18" fill="#2E2117" stroke="none"/>
+            <path d="M10 90 Q10 45 35 45 Q60 45 60 90" fill="#8B8B8B" stroke="none"/>
+            <rect x="24" y="66" width="22" height="16" rx="2" fill="#5B5B5B" stroke="none"/>
+          </g>
+          <g transform="translate(90,14)">
+            <circle cx="35" cy="20" r="18" fill="#2E2117" stroke="none"/>
+            <path d="M10 96 Q10 45 35 45 Q60 45 60 96" fill="#7FC3DE" stroke="none"/>
+            <rect x="24" y="68" width="22" height="16" rx="2" fill="#4C4C4C" stroke="none"/>
+          </g>
+          <g transform="translate(170,26)">
+            <circle cx="35" cy="18" r="17" fill="#2E2117" stroke="none"/>
+            <path d="M11 84 Q11 42 35 42 Q59 42 59 84" fill="#EFC9DA" stroke="none"/>
+            <rect x="24" y="62" width="22" height="15" rx="2" fill="#4C4C4C" stroke="none"/>
+          </g>
+          <g transform="translate(250,14)">
+            <circle cx="35" cy="20" r="18" fill="#2E2117" stroke="none"/>
+            <path d="M10 96 Q10 45 35 45 Q60 45 60 96" fill="#8B8B8B" stroke="none"/>
+            <rect x="24" y="68" width="22" height="16" rx="2" fill="#4C4C4C" stroke="none"/>
+          </g>
+          <g transform="translate(330,20)">
+            <circle cx="35" cy="20" r="18" fill="#2E2117" stroke="none"/>
+            <path d="M10 90 Q10 45 35 45 Q60 45 60 90" fill="#7FC3DE" stroke="none"/>
+            <rect x="24" y="66" width="22" height="16" rx="2" fill="#5B5B5B" stroke="none"/>
+          </g>
+        </g>
+      </svg>
+    </div>
+  </div>
+  <div class="scrolldown"><span></span>SCROLL</div>
+</section>
+
+<!-- 2-1. 사람의 특징 -->
+<section class="page sage">
+  <div class="reveal">
+    <p>사람에게는 특징이 있습니다.<br>
+    사람이 다만 물질적인 것만으로는 만족할 수 없다는 것입니다.</p>
+
+    <p>원숭이는 영리하지만, 배가 부르고 누워서 쉰다면 만족합니다.<br>
+    사람은 다릅니다. 사람은 아무리 잘 먹고 잘 입더라도,<br>
+    여전히 공허할 수 있습니다.</p>
+
+    <svg class="jar" viewBox="0 0 120 130" xmlns="http://www.w3.org/2000/svg">
+      <path d="M40 20 Q30 20 30 30 L30 40 Q10 55 10 75 Q10 110 60 110 Q110 110 110 75 Q110 55 90 40 L90 30 Q90 20 80 20 Z" fill="#A9793F"/>
+      <path d="M30 45 Q10 60 15 78" fill="none" stroke="#8B5E2E" stroke-width="4" stroke-linecap="round"/>
+      <path d="M90 45 Q110 60 105 78" fill="none" stroke="#8B5E2E" stroke-width="4" stroke-linecap="round"/>
+      <rect x="42" y="26" width="36" height="8" rx="2" fill="#C99A54"/>
+      <circle cx="46" cy="72" r="4" fill="#5A3A1C"/>
+      <circle cx="74" cy="72" r="4" fill="#5A3A1C"/>
+      <path d="M44 92 Q60 84 76 92" fill="none" stroke="#5A3A1C" stroke-width="4" stroke-linecap="round"/>
+      <path d="M40 68 Q36 74 40 80" fill="none" stroke="#5A3A1C" stroke-width="3" stroke-linecap="round"/>
+      <path d="M80 68 Q84 74 80 80" fill="none" stroke="#5A3A1C" stroke-width="3" stroke-linecap="round"/>
+      <path d="M42 96 Q30 105 12 106 Q4 106 4 112 L4 116 Q4 120 12 120 L60 120 Q60 108 42 96Z" fill="#6FC6E0" opacity=".85"/>
+    </svg>
+
+    <p style="margin-top:1.6rem;">돈도, 학위도 사람을 만족시켜 주지 못합니다. 좋은 대학을 나와<br>
+    좋은 직장을 가졌다 하더라도 경쟁은 계속되고 끊임없이<br>
+    수고해야 합니다.</p>
+
+    <p>그러므로 사람은 인생을 살면서 적어도 한 번은<br>
+    '도대체 무엇을 위해 사는 것인가?' 라는 질문을 하게 됩니다.</p>
+
+    <p class="question">여러분은 무엇을 위해 사는지 생각해 본 적이 있습니까?</p>
+  </div>
+</section>
+
+<!-- 2-2. 사람의 목적 -->
+<section class="page sky">
+  <div class="reveal">
+    <h2>사람의 목적</h2>
+    <p>사람에게는 분명히 길고 참된 목적이 있습니다.<br>
+    우리의 마음은 작을지 모르지만,<br>
+    온 세상도 우리의 마음을 채울 수 없습니다.<br>
+    사람은 본래 하나님을 담도록<br>
+    하나님의 형상과 모양을 따라 창조되었기 때문입니다.</p>
+
+    <p class="verse">"하나님께서 말씀하셨다.<br>
+    '우리가 우리의 형상대로<br>
+    우리의 모양에 따라<br>
+    사람을 만듭시다.'"
+    <cite>(창세기 1:26)</cite></p>
+
+    <svg class="hands" viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
+      <g>
+        <path d="M60 140 L55 70 Q55 55 65 40 L72 20 Q74 12 80 14 Q85 16 84 24 L80 42 L88 24 Q91 16 97 18 Q102 20 100 28 L92 46 L99 30 Q102 22 108 25 Q113 28 110 35 L100 54 L105 40 Q108 33 113 36 Q118 39 115 46 L100 76 Q112 84 112 100 L112 140 Z" fill="#F2A65A"/>
+        <path d="M140 140 L146 70 Q146 55 136 40 L129 20 Q127 12 121 14 Q116 16 117 24 L121 42 L113 24 Q110 16 104 18 Q99 20 101 28 L109 46 L102 30 Q99 22 93 25 Q88 28 91 35 L101 54 L96 40 Q93 33 88 36 Q83 39 86 46 L101 76 Q89 84 89 100 L89 140 Z" fill="#FBD79A"/>
+      </g>
+    </svg>
+
+    <p style="margin-top:1.8rem;">장갑은 손의 모양대로 만드는데,<br>
+    그것은 손을 담기 위해 만들어졌기 때문입니다.<br>
+    사람도 마찬가지입니다.<br>
+    하나님의 모양을 따라 창조된 사람의 목적은<br>
+    하나님을 담는 것입니다.<br>
+    우리에게 필요한 것은 하나님 한 분이십니다.</p>
+  </div>
+</section>
+
+<!-- 3. 하나님을 받아들이는 길 -->
+<section class="page rose">
+  <div class="reveal">
+    <h1>하나님을 받아들이는 길</h1>
+    <p>어떻게 하나님을 담을 수 있을까요?<br>
+    하나님은 이 땅에 예수 그리스도라는 한 사람으로 오셨습니다.<br>
+    예수 그리스도는 사람들의 죄를 없애시기 위해<br>
+    십자가에서 죽으셨고, 부활하셔서 생명 주시는<br>
+    영이 되셨습니다.</p>
+
+    <p class="verse-line">"한 분 주님께서 … 그분을 부르는 모든 사람에게<br>
+    풍성하시기 때문입니다"(로마서 10:12)</p>
+
+    <p>우리의 가장 깊은 곳에서 "주 예수님"이라고 부를 때,<br>
+    그 분은 우리 안으로 들어오셔서 우리를 채우십니다.<br>
+    그러므로 우리 모두에게는 이러한 기도가 필요합니다.</p>
+
+    <div class="prayer-box">
+      "주 예수님, 저는 하나님을 담기 위한 그릇으로<br>
+      창조되었습니다. 어떤 것도 참되게 저를<br>
+      만족시킬 수 없습니다. 저는 하나님이 필요합니다.<br>
+      주 예수님, 제 안에 들어오셔서 저를 채워 주시기를<br>
+      바랍니다. 주님, 감사합니다."
+    </div>
+
+    <div class="contact-note">
+      <div class="church">부산교회 2구역</div>
+      <div class="phone">010-9362-7642</div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const els = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible');
+    });
+  }, { threshold: 0.2 });
+  els.forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
