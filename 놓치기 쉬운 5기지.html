@@ -461,6 +461,7 @@ rs();addEventListener('resize',rs);
 new IntersectionObserver(function(e){vis=e[0].isIntersecting}).observe(cv);
 function glow(x,y,r,a){var g=c.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,'rgba(201,154,59,'+a+')');g.addColorStop(1,'rgba(201,154,59,0)');c.fillStyle=g;c.beginPath();c.arc(x,y,r,0,7);c.fill()}
 function draw(t){
+t=t*(reduce?.3:1);
 if(vis){
 c.clearRect(0,0,W,H);
 var cx=W/2,cy=H/2,R=Math.min(W,H)*.36,k=getT(cv,t),pts=[];
@@ -474,9 +475,9 @@ glow(cx,cy,60+120*k,.22+.5*k);
 pts.forEach(function(p){glow(p[0],p[1],34,.5);c.fillStyle='rgba(138,90,10,.85)';c.beginPath();c.arc(p[0],p[1],3.2,0,7);c.fill()});
 c.fillStyle='rgba(138,90,10,'+(.5+.5*k)+')';c.beginPath();c.arc(cx,cy,4+5*k,0,7);c.fill();
 }
-if(!reduce)requestAnimationFrame(draw)
+requestAnimationFrame(draw)
 }
-draw(0);if(reduce){addEventListener('scroll',function(){draw(0)},{passive:true})}
+draw(0);
 }
 orb(document.getElementById('c1'),function(cv,t){return .12+.06*Math.sin(t*.0008)});
 orb(document.getElementById('c2'),function(cv){var r=cv.getBoundingClientRect(),p=(innerHeight-r.top)/(innerHeight*.9+r.height*.3);p=Math.max(0,Math.min(1,p));return p*p*(3-2*p)*.97});
