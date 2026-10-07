@@ -37,14 +37,40 @@ blockquote.scr cite{display:block;margin-top:8px;font-family:'Noto Sans KR',sans
 p.q{margin:0 0 .8em;padding:10px 16px;background:var(--card);border:1px solid var(--line);border-left:3px solid var(--teal2)}
 p.ref{margin:-.5em 0 1.2em;padding-left:16px;font-size:14.5px;font-weight:700;color:var(--teal)}
 p.note{color:var(--sub);font-size:15.5px;padding-left:16px}
+
+/* 하단 이전/다음 버튼 스타일 개선 */
 .pager{max-width:760px;margin:24px auto 0;padding:0 20px 90px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.pn{display:flex;flex-direction:column;gap:2px;padding:16px 18px;background:var(--card);border:1px solid var(--line);border-top:3px solid var(--teal);transition:border-top-color .2s,transform .2s}
+.pn{display:flex;flex-direction:column;gap:4px;padding:16px 18px;background:var(--card);border:1px solid var(--line);border-top:3px solid var(--teal);transition:border-top-color .2s,transform .2s}
 .pn:hover{border-top-color:var(--gold);transform:translateY(-2px)}.pn.r{text-align:right}
-.pn small{font-size:12.5px;letter-spacing:.14em;color:var(--gold);font-weight:700}.pn b{font-size:17px;color:var(--ink)}
-.rv{opacity:0;transform:translateY(14px);transition:opacity .6s,transform .6s}.rv.on{opacity:1;transform:none}
+.pn small{display:block;font-size:12.5px;letter-spacing:.14em;color:var(--gold);font-weight:700}
+.pn b{display:block;font-size:17px;color:var(--ink);line-height:1.4}
+.pn .desc{display:block;font-size:14px;color:var(--sub);line-height:1.5;margin-top:4px}
+
+/* 본문 숨김 문제 원인 수정: opacity: 1 로 바로 표출 */
+.rv{opacity:1;transform:none}
+
 @media(max-width:560px){body{font-size:16.5px}.dots a{width:24px;height:24px;font-size:12px}.dots{gap:4px}.pager{grid-template-columns:1fr}.pn.r{text-align:left}}
-</style></head><body><div id="bar"></div><nav class="top"><div class="top-in"><a class="home" href="%EB%A9%94%EC%9D%B8%20%ED%8E%98%EC%9D%B4%EC%A7%80.html">← 목록</a><div class="dots"><a href="1%20%ED%95%98%EB%82%98%EB%8B%98%EC%9D%B4%20%EC%97%86%EB%8B%A4.html" class="" title="하나님이 없다">1</a><a href="2%20%EC%9E%88%EB%8A%94%EC%A7%80%20%EC%97%86%EB%8A%94%EC%A7%80%20%EB%AA%A8%EB%A5%B4%EA%B2%A0%EB%8B%A4.html" class="" title="있는지 없는지 모르겠다">2</a><a href="3%20%EA%B4%80%EC%8B%AC%EC%97%86%EB%8B%A4.html" class="" title="관심없다">3</a><a href="4%20%EC%A2%85%EA%B5%90%EA%B0%80%20%EC%8B%AB%EB%8B%A4.html" class="" title="종교가 싫다">4</a><a href="5%20%EB%82%B4%20%EC%82%B6%EC%9D%B4%20%EB%8D%94%20%EC%A4%91%EC%9A%94.html" class="cur" title="내 삶이 더 중요">5</a><a href="6%20%EC%83%81%EC%B2%98%EB%B0%9B%EC%9D%80%20%EB%A7%88%EC%9D%8C.html" class="" title="상처받은 마음">6</a><a href="7%20%EC%9E%90%EB%9D%BC%EC%98%A8%20%ED%99%98%EA%B2%BD.html" class="" title="자라온 환경">7</a><a href="8%20%EB%B0%98%EC%8B%A0%EB%A1%A0%EC%9E%90.html" class="" title="반신론자">8</a><a href="9%20%EC%A7%80%EC%A0%81%20%ED%83%90%EA%B5%AC%ED%98%95.html" class="" title="지적 탐구형">9</a></div></div></nav>
+</style></head><body><div id="bar"></div>
+<nav class="top">
+  <div class="top-in">
+    <!-- 목록 이동 경로 수정 -->
+    <a class="home" href="믿지 않는 9가지 부류.html">← 목록</a>
+    <div class="dots">
+      <a href="1%20%ED%95%98%EB%82%98%EB%8B%98%EC%9D%B4%20%EC%97%86%EB%8B%A4.html" class="" title="하나님이 없다">1</a>
+      <a href="2%20%EC%9E%88%EB%8A%94%EC%A7%80%20%EC%97%86%EB%8B%A4%EB%8A%94%EC%A7%80%20%EB%AA%A8%EB%A5%B4%EA%B2%A0%EB%8B%A4.html" class="" title="있는지 없는지 모르겠다">2</a>
+      <a href="3%20%EA%B4%80%EC%8B%AC%EC%97%86%EB%8B%A4.html" class="" title="관심없다">3</a>
+      <a href="4%20%EC%A2%85%EA%B5%90%EA%B0%80%20%EC%8B%AB%EB%8B%A4.html" class="" title="종교가 싫다">4</a>
+      <a href="5%20%EB%82%B4%20%EC%82%B6%EC%9D%B4%20%EB%8D%94%20%EC%A4%91%EC%9A%94.html" class="cur" title="내 삶이 더 중요">5</a>
+      <a href="6%20%EC%83%81%EC%B2%98%EB%B0%9B%EC%9D%80%20%EB%A7%88%EC%9D%8C.html" class="" title="상처받은 마음">6</a>
+      <a href="7%20%EC%9E%90%EB%9D%9D%EC%98%A8%20%ED%99%98%EA%B2%BD.html" class="" title="자라온 환경">7</a>
+      <a href="8%20%EB%B0%98%EC%8B%A0%EB%A1%A0%EC%9E%90.html" class="" title="반신론자">8</a>
+      <a href="9%20%EC%A7%80%EC%A0%81%20%ED%83%90%EA%B5%AC%ED%98%95.html" class="" title="지적 탐구형">9</a>
+    </div>
+  </div>
+</nav>
+
 <header class="head"><span class="badge">V · 5 / 9</span><h1>“내 삶이 더 중요” — 욕망/자기중심형</h1></header>
+
 <article class="rv"><p>하나님을 믿고는 싶지만 “세상의 욕망 때문에 미루는 경우”입니다.</p>
 <h3>특징</h3>
 <ul><li>하나님을 알 가능성은 있지만 의도적으로 미룸</li><li>현재의 즐거움, 자유, 욕망을 더 우선</li><li>죄나 제한을 원하지 않음</li></ul>
@@ -241,15 +267,25 @@ p.note{color:var(--sub);font-size:15.5px;padding-left:16px}
 <p>그리고 우리는 그 사람에게 이렇게 말할 수 있습니다.</p>
 <p class="q">“하나님은 당신의 삶을 망가뜨리려고 찾아오신 것이 아닙니다. 당신의 삶 안으로 들어오셔서 당신이 지금까지 찾았던 것보다 훨씬 깊은 생명과 만족을 주시려고 찾아오신 것입니다.”</p>
 <p>그것이 바로 세상의 욕망을 붙잡고 하나님을 뒤로 미루고 있는 사람에게 전해야 할 복음의 중심이라고 생각합니다.</p></article>
-<div class="pager"><a class="pn" href="4%20%EC%A2%85%EA%B5%90%EA%B0%80%20%EC%8B%AB%EB%8B%A4.html"><small>이전</small><b class="serif">4 종교가 싫다</b></a><a class="pn r" href="6%20%EC%83%81%EC%B2%98%EB%B0%9B%EC%9D%80%20%EB%A7%88%EC%9D%8C.html"><small>다음</small><b class="serif">6 상처받은 마음</b></a></div><script>
+
+<!-- 하단 이전/다음 컨트롤: 제목 및 설명 내용 구조 추가 -->
+<div class="pager">
+  <a class="pn" href="4%20%EC%A2%85%EA%B5%90%EA%B0%80%20%EC%8B%AB%EB%8B%A4.html">
+    <small>이전</small>
+    <b class="serif">4 종교가 싫다</b>
+    <span class="desc">반감형 — "상처와 실망 중심"</span>
+  </a>
+  <a class="pn r" href="6%20%EC%83%81%EC%B2%98%EB%B0%9B%EC%9D%80%20%EB%A7%88%EC%9D%8C.html">
+    <small>다음</small>
+    <b class="serif">6 상처받은 마음</b>
+    <span class="desc">고통 경험형 — "왜 나에게 이런 일이"</span>
+  </a>
+</div>
+
+<script>
 (function(){
 var bar=document.getElementById('bar');
 function p(){var h=document.documentElement;var m=h.scrollHeight-h.clientHeight;bar.style.width=(m>0?h.scrollTop/m*100:0)+'%';}
 window.addEventListener('scroll',p,{passive:true});p();
-var els=document.querySelectorAll('.rv');
-if('IntersectionObserver' in window){
-var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target);}});},{threshold:0.08});
-els.forEach(function(el){io.observe(el);});
-}else{els.forEach(function(el){el.classList.add('on');});}
 })();
 </script></body></html>

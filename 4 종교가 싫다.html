@@ -37,14 +37,40 @@ blockquote.scr cite{display:block;margin-top:8px;font-family:'Noto Sans KR',sans
 p.q{margin:0 0 .8em;padding:10px 16px;background:var(--card);border:1px solid var(--line);border-left:3px solid var(--teal2)}
 p.ref{margin:-.5em 0 1.2em;padding-left:16px;font-size:14.5px;font-weight:700;color:var(--teal)}
 p.note{color:var(--sub);font-size:15.5px;padding-left:16px}
+
+/* 하단 이전/다음 버튼 스타일 */
 .pager{max-width:760px;margin:24px auto 0;padding:0 20px 90px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.pn{display:flex;flex-direction:column;gap:2px;padding:16px 18px;background:var(--card);border:1px solid var(--line);border-top:3px solid var(--teal);transition:border-top-color .2s,transform .2s}
-.pn:hover{border-top-color:var(--gold);transform:translateY(-2px)}.pn.r{text-align:right}
-.pn small{font-size:12.5px;letter-spacing:.14em;color:var(--gold);font-weight:700}.pn b{font-size:17px;color:var(--ink)}
-.rv{opacity:0;transform:translateY(14px);transition:opacity .6s,transform .6s}.rv.on{opacity:1;transform:none}
+.pn{display:flex;flex-direction:column;gap:4px;padding:16px 18px;background:var(--card);border:1px solid var(--line);border-top:3px solid var(--teal);transition:border-top-color .2s,transform .2s}
+.pn:hover{border-top-color:var(--gold);transform:translateY(-2px)}
+.pn.r{text-align:right}
+.pn small{display:block;font-size:12.5px;letter-spacing:.14em;color:var(--gold);font-weight:700}
+.pn b{display:block;font-size:17px;color:var(--ink);line-height:1.4}
+.pn .desc{display:block;font-size:14px;color:var(--sub);line-height:1.5;margin-top:4px}
+
+/* 본문 안 보이던 문제 해결: opacity: 1 로 설정 */
+.rv{opacity:1;transform:none}
+
 @media(max-width:560px){body{font-size:16.5px}.dots a{width:24px;height:24px;font-size:12px}.dots{gap:4px}.pager{grid-template-columns:1fr}.pn.r{text-align:left}}
-</style></head><body><div id="bar"></div><nav class="top"><div class="top-in"><a class="home" href="%EB%A9%94%EC%9D%B8%20%ED%8E%98%EC%9D%B4%EC%A7%80.html">← 목록</a><div class="dots"><a href="1%20%ED%95%98%EB%82%98%EB%8B%98%EC%9D%B4%20%EC%97%86%EB%8B%A4.html" class="" title="하나님이 없다">1</a><a href="2%20%EC%9E%88%EB%8A%94%EC%A7%80%20%EC%97%86%EB%8A%94%EC%A7%80%20%EB%AA%A8%EB%A5%B4%EA%B2%A0%EB%8B%A4.html" class="" title="있는지 없는지 모르겠다">2</a><a href="3%20%EA%B4%80%EC%8B%AC%EC%97%86%EB%8B%A4.html" class="" title="관심없다">3</a><a href="4%20%EC%A2%85%EA%B5%90%EA%B0%80%20%EC%8B%AB%EB%8B%A4.html" class="cur" title="종교가 싫다">4</a><a href="5%20%EB%82%B4%20%EC%82%B6%EC%9D%B4%20%EB%8D%94%20%EC%A4%91%EC%9A%94.html" class="" title="내 삶이 더 중요">5</a><a href="6%20%EC%83%81%EC%B2%98%EB%B0%9B%EC%9D%80%20%EB%A7%88%EC%9D%8C.html" class="" title="상처받은 마음">6</a><a href="7%20%EC%9E%90%EB%9D%BC%EC%98%A8%20%ED%99%98%EA%B2%BD.html" class="" title="자라온 환경">7</a><a href="8%20%EB%B0%98%EC%8B%A0%EB%A1%A0%EC%9E%90.html" class="" title="반신론자">8</a><a href="9%20%EC%A7%80%EC%A0%81%20%ED%83%90%EA%B5%AC%ED%98%95.html" class="" title="지적 탐구형">9</a></div></div></nav>
+</style></head><body><div id="bar"></div>
+<nav class="top">
+  <div class="top-in">
+    <a class="home" href="믿지 않는 9가지 부류.html">← 목록</a>
+    <div class="dots">
+      <a href="1%20%ED%95%98%EB%82%98%EB%8B%98%EC%9D%B4%20%EC%97%86%EB%8B%A4.html" class="" title="하나님이 없다">1</a>
+      <a href="2%20%EC%9E%88%EB%8A%94%EC%A7%80%20%EC%97%86%EB%8B%A4%EB%8A%94%EC%A7%80%20%EB%AA%A8%EB%A5%B4%EA%B2%A0%EB%8B%A4.html" class="" title="있는지 없는지 모르겠다">2</a>
+      <a href="3%20%EA%B4%80%EC%8B%AC%EC%97%86%EB%8B%A4.html" class="" title="관심없다">3</a>
+      <a href="4%20%EC%A2%85%EA%B5%90%EA%B0%80%20%EC%8B%AB%EB%8B%A4.html" class="cur" title="종교가 싫다">4</a>
+      <a href="5%20%EB%82%B4%20%EC%82%B6%EC%9D%B4%20%EB%8D%94%20%EC%A4%91%EC%9A%94.html" class="" title="내 삶이 더 중요">5</a>
+      <a href="6%20%EC%83%81%EC%B2%98%EB%B0%9B%EC%9D%80%20%EB%A7%88%EC%9D%8C.html" class="" title="상처받은 마음">6</a>
+      <a href="7%20%EC%9E%90%EB%9D%9D%EC%98%A8%20%ED%99%98%EA%B2%BD.html" class="" title="자라온 환경">7</a>
+      <a href="8%20%EB%B0%98%EC%8B%A0%EB%A1%A0%EC%9E%90.html" class="" title="반신론자">8</a>
+      <a href="9%20%EC%A7%80%EC%A0%81%20%ED%83%90%EA%B5%AC%ED%98%95.html" class="" title="지적 탐구형">9</a>
+    </div>
+  </div>
+</nav>
+
 <header class="head"><span class="badge">IV · 4 / 9</span><h1>“종교가 싫다” — 반감형 (상처/경험 중심)</h1></header>
+
 <article class="rv"><p>많은 사람들이  “뉴스 보고 실망한 경우”가 여기에 해당합니다.</p>
 <h3>특징</h3>
 <ul><li>교회, 목회자, 사건 등에 대한 불신</li><li>위선, 부패, 하나님을 빙자한 금전 갈취에 대한 환멸</li><li>하나님이 아니라 “종교”를 거부</li></ul>
@@ -230,15 +256,25 @@ p.note{color:var(--sub);font-size:15.5px;padding-left:16px}
 <p>그리고 어쩌면 그 사람에게 가장 강력한 전도는 아주 단순할 수 있습니다.</p>
 <p class="q">“교회에서 실망하신 것은 이해합니다. 저도 교회 안에서 잘못된 모습을 볼 때가 있습니다. 하지만 저는 사람 때문에 예수님을 포기할 수는 없었습니다. 예수님은 그 사람들과 다르셨기 때문입니다. 그래서 저는 한번 성경에서 예수님 자신을 직접 보셨으면 좋겠습니다.”</p>
 <p>그 한마디가 오랫동안 닫혀 있던 사람의 마음에 다시 그리스도를 향한 문 하나를 열어 줄 수도 있습니다.</p></article>
-<div class="pager"><a class="pn" href="3%20%EA%B4%80%EC%8B%AC%EC%97%86%EB%8B%A4.html"><small>이전</small><b class="serif">3 관심없다</b></a><a class="pn r" href="5%20%EB%82%B4%20%EC%82%B6%EC%9D%B4%20%EB%8D%94%20%EC%A4%91%EC%9A%94.html"><small>다음</small><b class="serif">5 내 삶이 더 중요</b></a></div><script>
+
+<!-- 하단 이전/다음 컨트롤 -->
+<div class="pager">
+  <a class="pn" href="3%20%EA%B4%80%EC%8B%AC%EC%97%86%EB%8B%A4.html">
+    <small>이전</small>
+    <b class="serif">3 관심없다</b>
+    <span class="desc">무관심형 — "생각해 본 적 없다"</span>
+  </a>
+  <a class="pn r" href="5%20%EB%82%B4%20%EC%82%B6%EC%9D%B4%20%EB%8D%94%20%EC%A4%91%EC%9A%94.html">
+    <small>다음</small>
+    <b class="serif">5 내 삶이 더 중요</b>
+    <span class="desc">현세 중심형 — "바쁘고 바쁜 내 일상"</span>
+  </a>
+</div>
+
+<script>
 (function(){
 var bar=document.getElementById('bar');
 function p(){var h=document.documentElement;var m=h.scrollHeight-h.clientHeight;bar.style.width=(m>0?h.scrollTop/m*100:0)+'%';}
 window.addEventListener('scroll',p,{passive:true});p();
-var els=document.querySelectorAll('.rv');
-if('IntersectionObserver' in window){
-var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target);}});},{threshold:0.08});
-els.forEach(function(el){io.observe(el);});
-}else{els.forEach(function(el){el.classList.add('on');});}
 })();
 </script></body></html>
