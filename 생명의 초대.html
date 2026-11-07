@@ -116,9 +116,10 @@
   [data-sky="0"] .sky0,[data-sky="1"] .sky1,[data-sky="2"] .sky2,
   [data-sky="3"] .sky3,[data-sky="4"] .sky4,[data-sky="5"] .sky5{opacity:1;}
 
-  #cam{transform-origin:200px 345px;transition:transform 3.4s ease;}
-  [data-s="2"] #cam,[data-s="3"] #cam,[data-s="4"] #cam{transform:scale(1.3);}
-  [data-s="5"] #cam,[data-s="6"] #cam,[data-s="7"] #cam{transform:scale(1.5);}
+  .stage svg#art{transform-origin:50% 69%;transition:transform 3.4s ease;}
+  .stage.zooming svg#art{will-change:transform;}
+  .stage[data-s="2"] svg#art,.stage[data-s="3"] svg#art,.stage[data-s="4"] svg#art{transform:scale(1.3);}
+  .stage[data-s="5"] svg#art,.stage[data-s="6"] svg#art,.stage[data-s="7"] svg#art{transform:scale(1.5);}
 
   .sun-g{transform:translate(270px,335px);opacity:0.9;transition:transform 5s ease, opacity 2.5s ease;}
   [data-s="0"] .sun-g,[data-s="1"] .sun-g{transform:translate(270px,205px);}
@@ -137,12 +138,12 @@
   [data-s="9"] .cross,[data-s="10"] .cross{opacity:1;}
   [data-s="11"] .cross,[data-s="12"] .cross,[data-s="13"] .cross,[data-s="14"] .cross{opacity:0.3;}
 
-  .sw{animation:sway 3.6s ease-in-out infinite alternate;}
+  .sw{animation:sway 3.6s ease-in-out infinite alternate;animation-play-state:paused;}
+  .ge8 .sw{animation-play-state:running;}
   @keyframes sway{from{transform:rotate(-1.6deg);}to{transform:rotate(2.2deg);}}
   .eb{fill:#d8c27c;}
 
-  .ff{opacity:0;transition:opacity 1.6s ease;}
-  [data-s="8"] .ff,[data-s="11"] .ff,[data-s="12"] .ff,[data-s="13"] .ff,[data-s="14"] .ff{opacity:1;}
+  .ff{opacity:1;}
   .fs{transform:scaleY(0);transition:transform 3s cubic-bezier(0.2,0.7,0.2,1) var(--d,0s);}
   .ge8 .fs{transform:scaleY(1);}
 
@@ -504,7 +505,16 @@
   var ctrl = document.querySelector('.ctrl');
   var SKY = [0, 0, 1, 1, 1, 1, 1, 1, 1, 2, 3, 4, 4, 5, 5];
 
+  var curZoom = 0, zoomTimer = null;
+  function zoomOf(n){ return (n >= 2 && n <= 4) ? 1 : ((n >= 5 && n <= 7) ? 2 : 0); }
   function applyState(n){
+    var z = zoomOf(n);
+    if(z !== curZoom){
+      curZoom = z;
+      stage.classList.add('zooming');
+      clearTimeout(zoomTimer);
+      zoomTimer = setTimeout(function(){ stage.classList.remove('zooming'); }, 3800);
+    }
     stage.setAttribute('data-s', n);
     stage.setAttribute('data-sky', SKY[n]);
     for(var k = 1; k <= 14; k++){ stage.classList.toggle('ge' + k, k <= n); }
@@ -606,6 +616,7 @@
     clearTimeout(subTimer);
     ended = false; paused = false; autoPaused = false;
     idx = -1; done = 0; base = 0;
+    curZoom = 0; clearTimeout(zoomTimer); stage.classList.remove('zooming');
     stage.classList.add('noanim');
     stage.classList.remove('paused');
     stage.setAttribute('data-s', 'pre');
