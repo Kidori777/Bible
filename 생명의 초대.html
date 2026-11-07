@@ -239,8 +239,7 @@
   .rv.in{opacity:1;transform:none;}
 
   @media (prefers-reduced-motion: reduce){
-    *{animation:none !important;transition:none !important;}
-    .rv{opacity:1;transform:none;}
+    .rays, .sw, .motes circle, .wind path{animation:none !important;}
   }
 </style>
 <noscript><style>.invitation{display:block;}.rv{opacity:1;transform:none;}</style></noscript>
@@ -648,17 +647,8 @@
   }
 
   /* ---------- 시작 ---------- */
-  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(reduce){
-    applyState(14);
-    subEl.style.display = 'none';
-    ctrl.style.display = 'none';
-    inv.classList.add('show');
-    rv.forEach(function(el){ el.classList.add('in'); });
-  } else {
-    requestAnimationFrame(tickBar);
-    start();
-  }
+  requestAnimationFrame(tickBar);
+  start();
 })();
 </script>
 
