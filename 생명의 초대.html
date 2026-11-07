@@ -207,6 +207,16 @@
     100%{transform:translate(var(--dx,0px),-280px);opacity:0;}
   }
 
+
+  /* 보이지 않을 때는 반복 애니메이션 정지 (모바일 성능) */
+  .rays,.motes circle,.wind path,.crumbs circle,.burst circle{animation-play-state:paused;}
+  [data-s="10"] .rays,[data-s="13"] .rays,[data-s="14"] .rays{animation-play-state:running;}
+  [data-s="10"] .motes circle,[data-s="13"] .motes circle,[data-s="14"] .motes circle{animation-play-state:running;}
+  [data-s="4"] .wind path{animation-play-state:running;}
+  [data-s="5"] .crumbs circle,[data-s="6"] .crumbs circle{animation-play-state:running;}
+  [data-s="6"] .burst circle{animation-play-state:running;}
+  .paused *{animation-play-state:paused !important;}
+
   /* ---------- 정식 초대장 ---------- */
   .invitation{display:none;background:var(--paper);border-top:1px solid var(--line);}
   .invitation.show{display:block;animation:fadeUp 1.2s ease both;}
@@ -260,10 +270,6 @@
         <radialGradient id="seedG"><stop offset="0" stop-color="#fff0b0" stop-opacity="0.95"/><stop offset="1" stop-color="#ffd36a" stop-opacity="0"/></radialGradient>
         <linearGradient id="soilG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9a7745"/><stop offset="1" stop-color="#5a4025"/></linearGradient>
         <radialGradient id="vig" cx="0.5" cy="0.5" r="0.78"><stop offset="0.62" stop-color="#5a3b1c" stop-opacity="0"/><stop offset="1" stop-color="#5a3b1c" stop-opacity="0.26"/></radialGradient>
-        <filter id="paper" x="0" y="0" width="100%" height="100%">
-          <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="4"/>
-          <feColorMatrix type="matrix" values="0 0 0 0 0.3  0 0 0 0 0.22  0 0 0 0 0.12  0 0 0 0.9 -0.25"/>
-        </filter>
       </defs>
 
       <g id="cam">
@@ -365,7 +371,6 @@
       </g>
 
       <rect x="0" y="0" width="400" height="500" fill="url(#vig)"/>
-      <rect x="0" y="0" width="400" height="500" filter="url(#paper)" opacity="0.13"/>
     </svg>
 
     <div class="title-card">
@@ -448,7 +453,7 @@
   var back = '';
   for(i = 0; i < 38; i++){
     x = 4 + i * 10.6 + rr(-3, 3); b = 336; h = rr(24, 40);
-    back += '<g class="sw" style="transform-origin:' + f(x) + 'px ' + b + 'px;animation-delay:-' + f(rr(0, 3.6)) + 's">' +
+    back += '<g>' +
       '<path d="M' + f(x) + ' ' + b + ' Q' + f(x + 2) + ' ' + f(b - h / 2) + ' ' + f(x) + ' ' + f(b - h) + '" stroke="#d3bc72" stroke-width="1.1" fill="none"/>' +
       '<g class="eb">' + ear(x, b - h + 3, 0.42) + '</g></g>';
   }
