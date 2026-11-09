@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>당신은 인생의 마지막을 생각해 보신 적이 있습니까?</title>
+<meta name="description" content="누가복음 16장, 부자와 나사로의 이야기로 전하는 복음. 오늘, 당신의 마음을 열어 보시겠습니까?">
+<meta property="og:type" content="website">
+<meta property="og:title" content="당신은 인생의 마지막을 생각해 보신 적이 있습니까?">
+<meta property="og:description" content="누가복음 16장, 부자와 나사로의 이야기로 전하는 복음. 오늘, 당신의 마음을 열어 보시겠습니까?">
+<meta property="og:image" content="당신은%20인생의%20마지막을%20생각해%20보신%20적이%20있습니까.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#FAFBFC;--ink:#0a0a0a;--sky:#EAF1F7;--blue:#1D3F66;--gold:#E3A21A;--pale-gold:#FFF3CF;--serif:'Noto Serif KR',serif;--sans:'Noto Sans KR',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--serif);font-style:normal;word-break:keep-all;-webkit-text-size-adjust:100%}
+em,i{font-style:normal}
+button{font-family:var(--sans)}
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+
+/* 첫 화면 */
+.hero{position:relative;height:92vh;height:92svh;min-height:560px;overflow:hidden;background:var(--sky)}
+#cv{position:absolute;inset:0;width:100%;height:100%;display:block}
+.stage-text{position:absolute;left:0;right:0;top:9%;padding:0 6%;display:grid;justify-items:center;pointer-events:none}
+.cap{grid-area:1/1;opacity:0;text-align:center;max-width:44rem;color:var(--ink)}
+.cap p{font-weight:600;font-size:clamp(1.35rem,4.4vw,2.3rem);line-height:1.55}
+.cap.long p{font-size:clamp(1.1rem,3.4vw,1.75rem);font-weight:600}
+.cap h1{font-weight:700;font-size:clamp(1.7rem,6vw,3.2rem);line-height:1.4}
+.cap .cite{margin-top:.7rem;font-family:var(--sans);font-weight:500;font-size:clamp(.85rem,2.4vw,1.05rem);color:var(--blue)}
+.controls{position:absolute;left:0;right:0;bottom:max(20px,env(safe-area-inset-bottom));display:flex;justify-content:center;gap:10px;flex-wrap:wrap;padding:0 14px}
+.btn{font-size:1rem;font-weight:500;min-height:46px;padding:0 20px;border-radius:999px;border:1.5px solid var(--blue);background:#fff;color:var(--ink);cursor:pointer;transition:background .2s,color .2s}
+.btn:hover{background:#EEF3F8}
+.btn:disabled{opacity:.45;cursor:default}
+.btn.primary{background:var(--blue);color:#fff;font-weight:700}
+.btn.primary:hover{background:#163253}
+.hero.done .btn.primary{animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(227,162,26,.0)}50%{box-shadow:0 0 0 9px rgba(227,162,26,.35)}}
+
+/* 본문 */
+.doc{max-width:40rem;margin:0 auto;padding:72px 22px 40px}
+.doc-title{font-size:clamp(1.6rem,5vw,2.3rem);line-height:1.45;font-weight:700;margin-bottom:2.2rem}
+.doc h2{font-size:clamp(1.3rem,4vw,1.7rem);line-height:1.5;font-weight:700;margin:3.6rem 0 1.4rem;padding-top:1.4rem;border-top:3px solid var(--gold)}
+.doc p{font-size:1.1rem;line-height:2;margin-bottom:1.25rem}
+.doc strong{font-weight:700;background:linear-gradient(transparent 62%,var(--pale-gold) 62%)}
+.doc blockquote{margin:1.6rem 0;padding:1.1rem 1.3rem;background:#EEF3F8;border-left:4px solid var(--blue)}
+.doc blockquote p{margin-bottom:.5rem}
+.doc blockquote p:last-child{margin-bottom:0}
+.doc .cite{font-family:var(--sans);font-size:.95rem;color:var(--blue);font-weight:500}
+
+/* 초대장 */
+.invite{background:var(--pale-gold);padding:72px 22px 96px}
+.card{max-width:34rem;margin:0 auto;background:#fff;border:1.5px solid var(--blue);border-top:8px solid var(--gold);padding:2.6rem 1.6rem;text-align:center}
+.card .host{font-family:var(--sans);font-weight:500;color:var(--blue);font-size:1rem}
+.card h2{font-size:clamp(1.7rem,6vw,2.3rem);font-weight:700;margin:.8rem 0 1.4rem}
+.card .msg{font-size:1.08rem;line-height:2;margin-bottom:.8rem}
+.card dl{margin:2rem 0 1.6rem;text-align:left;border-top:1px solid #C9D3DF}
+.card dl div{display:grid;grid-template-columns:4.5rem 1fr;gap:.8rem;padding:.95rem .2rem;border-bottom:1px solid #C9D3DF}
+.card dt{font-family:var(--sans);font-weight:700;color:var(--blue)}
+.card dd{font-size:1.05rem;line-height:1.7}
+.actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.actions a{text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+footer{text-align:center;padding:26px 0;font-family:var(--sans);font-size:.9rem;color:var(--ink);background:var(--paper)}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.hero.done .btn.primary{animation:none}}
+</style>
+</head>
+<body>
+
+<section class="hero" id="hero" aria-label="오프닝 영상">
+  <canvas id="cv" role="img" aria-label="길을 걷는 한 사람과 부자와 나사로의 이야기를 담은 그림 영상"></canvas>
+  <div class="stage-text" id="stage"></div>
+  <div class="controls">
+    <button class="btn" id="bPause" type="button" aria-pressed="false">일시정지</button>
+    <button class="btn" id="bReplay" type="button">다시보기</button>
+    <button class="btn primary" id="bGo" type="button">초대장 바로가기</button>
+  </div>
+</section>
+
+<main>
+<article class="doc">
+<h2 class="doc-title" style="border-top:0;padding-top:0;margin-top:0">당신은 인생의 마지막을 생각해 보신 적이 있습니까?</h2>
+
+<p>우리는 모두 내일을 생각하며 살아갑니다.</p>
+<p>내일은 무엇을 할까, 앞으로 어떻게 살아갈까, 조금 더 나은 집에서 살 수는 없을까, 어떻게 하면 경제적으로 여유롭고 행복한 인생을 살아갈 수 있을까?</p>
+<p>사람들은 저마다의 꿈을 가지고 하루하루를 살아갑니다. 어떤 사람은 성공을 위해 달려가고, 어떤 사람은 가족을 위해 자신을 희생하며, 어떤 사람은 지금보다 조금 더 나은 삶을 얻기 위해 평생을 노력합니다.</p>
+<p>그런데 문득 이런 질문을 해 보신 적이 있으십니까?</p>
+<p><strong>내가 지금까지 살아온 인생이 어느 날 끝난다면, 그다음에는 무엇이 기다리고 있을까요?</strong></p>
+<p>죽음은 누구에게나 찾아오지만, 우리는 이상하게도 죽음에 관해서는 생각하고 싶어 하지 않습니다. 아직은 시간이 많이 남아 있다고 생각하고, 지금 해야 할 일이 더 중요하다고 여기기 때문입니다.</p>
+<p>그러나 성경에는 우리가 한 번쯤 멈추어 생각해 보아야 할 이야기가 하나 있습니다.</p>
+
+<h2>두 사람의 인생, 그리고 죽음 이후</h2>
+<p>누가복음 16장에는 두 사람이 등장합니다.</p>
+<p>한 사람은 부자였습니다. 그는 자주색 옷과 세마포 옷을 입고 날마다 호화롭게 잔치를 즐겼습니다. 부족한 것이 없어 보이는 사람이었습니다. 원하는 것을 누릴 수 있었고, 사람들의 부러움을 받으며 살았을 것입니다.</p>
+<p>반면 그의 집 문간에는 나사로라는 거지가 있었습니다. 온몸에는 종기가 가득했고, 부자의 식탁에서 떨어지는 음식으로 겨우 배를 채우려 했습니다. 심지어 개들까지 와서 그의 종기를 핥았습니다.</p>
+<p>한 사람은 풍족했고, 다른 한 사람은 가난했습니다.</p>
+<p>한 사람은 좋은 옷을 입고 잔치를 즐겼으며, 다른 한 사람은 문간에서 음식 부스러기를 기다렸습니다.</p>
+<p>두 사람의 삶은 너무나 달랐습니다.</p>
+<p>그런데 성경은 이 두 사람의 인생을 아주 짧은 한 문장으로 바꾸어 놓습니다.</p>
+<blockquote><p>“그러다가 그 거지가 죽자, 천사들이 그를 아브라함의 품으로 데려갔으며, 부자도 죽어 장사되었습니다.” <span class="cite">(누가복음 16장 22절, 회복역)</span></p></blockquote>
+<p>두 사람 모두 죽었습니다.</p>
+<p>부자도 죽었고, 나사로도 죽었습니다. 부자가 가진 재산도, 그가 입었던 화려한 옷도, 날마다 즐기던 잔치도 죽음 앞에서는 아무런 의미가 없었습니다.</p>
+<p>살아 있을 때는 서로 다른 세상에 살았던 두 사람이었지만, 이제 그들의 인생은 전혀 다른 결과 앞에 놓이게 되었습니다.</p>
+<p>나사로는 아브라함의 품에서 위로를 받았고, 부자는 음부에서 고통을 받았습니다.</p>
+<p>여기서 우리는 한 가지 중요한 사실을 생각하게 됩니다.</p>
+<p><strong>사람의 인생은 이 땅에서 보이는 모습만으로 판단할 수 없다는 것입니다.</strong></p>
+<p>우리는 누군가의 좋은 집과 재산과 성공을 부러워합니다. 반대로 가난하고 병들고 어려운 환경에 있는 사람을 불쌍하게 여기기도 합니다.</p>
+<p>그러나 하나님께서 보시는 것은 우리가 사람들에게 보여 주는 외적인 모습만이 아닙니다. 우리의 인생에는 이 땅에서의 삶만이 아니라 하나님 앞에 서게 될 시간이 있다는 것을 성경은 엄숙하게 일깨워 줍니다.</p>
+
+<h2>죽음 이후에야 깨닫게 된 것</h2>
+<p>음부에서 고통받던 부자는 아브라함을 바라보며 간청했습니다.</p>
+<blockquote><p>“아브라함 조상님, 나에게 긍휼을 베푸셔서 나사로를 보내어, 그 손가락 끝에 물을 적셔다가 내 혀를 시원하게 해 주십시오. 내가 이 불꽃 가운데서 몹시 고통을 받고 있습니다.” <span class="cite">(누가복음 16장 24절, 회복역)</span></p></blockquote>
+<p>그는 이제야 자신의 상황을 깨달았습니다.</p>
+<p>살아 있을 때는 아무것도 부족하지 않았지만, 이제는 물 한 방울조차 간절히 원하게 되었습니다.</p>
+<p>그리고 한 가지 더 간절한 소원이 생겼습니다.</p>
+<p>자신에게는 다섯 형제가 있었습니다. 그 형제들만큼은 자신과 같은 고통을 당하지 않기를 원했습니다. 그래서 나사로를 자기 아버지 집으로 보내어 형제들에게 경고해 달라고 부탁했습니다.</p>
+<p>그런데 아브라함의 대답은 매우 의미심장했습니다.</p>
+<blockquote><p>“그들에게 모세와 신언자들이 있으니, 그들의 말을 듣게 하여라.” <span class="cite">(누가복음 16장 29절, 회복역)</span></p></blockquote>
+<p>부자는 다시 말했습니다.</p>
+<p>죽은 사람들 가운데서 살아난 사람이 찾아간다면 형제들이 회개할 것이라고 생각했습니다.</p>
+<p>그러나 아브라함은 이렇게 대답했습니다.</p>
+<blockquote><p>“그들이 모세와 신언자들의 말을 듣지 않는다면, 비록 죽은 사람들 가운데서 어떤 사람이 살아난다고 하여도 그들을 설득할 수 없을 것이다.” <span class="cite">(누가복음 16장 31절, 회복역)</span></p></blockquote>
+<p>이 말씀은 우리에게 매우 중요한 질문을 던집니다.</p>
+<p>사람은 정말 기적을 보면 하나님을 믿게 될까요? 죽음 이후의 세계를 직접 보게 된다면 그제야 하나님을 찾게 될까요?</p>
+<p>어쩌면 우리는 하나님께서 자신을 보여 주시기만 하면 믿겠다고 생각할지 모릅니다. 특별한 기적을 경험하거나, 놀라운 사건이 일어나거나, 죽은 사람이 다시 살아나서 증언해 준다면 그때는 믿겠다고 말할 수도 있습니다.</p>
+<p>그러나 성경은 사람이 믿지 않는 더 깊은 이유가 단순히 증거가 부족하기 때문만은 아니라고 말씀합니다.</p>
+<p>하나님께서 이미 말씀하셨는데도 그 말씀을 들으려 하지 않는 마음이 있기 때문입니다.</p>
+
+<h2>혹시 우리에게도 아직 기회가 남아 있지 않을까요?</h2>
+<p>사랑하는 독자 여러분,</p>
+<p>이 이야기는 단순히 옛날에 살았던 부자와 거지에 관한 이야기가 아닙니다.</p>
+<p>오늘을 살아가는 우리에게도 해당하는 이야기입니다.</p>
+<p>우리는 건강할 때 건강이 영원할 것처럼 생각하고, 돈이 있을 때는 돈이 우리를 지켜 줄 것처럼 생각하며, 아직 시간이 남아 있을 때는 하나님을 찾는 일을 나중으로 미루곤 합니다.</p>
+<p>“조금 더 여유가 생기면 그때 생각하지요.”</p>
+<p>“나중에 나이가 들면 교회에도 나가 보겠습니다.”</p>
+<p>“지금은 바쁘니까 조금 더 있다가 하나님을 찾아보겠습니다.”</p>
+<p>하지만 인생의 마지막 시간이 언제 찾아올지는 아무도 알지 못합니다.</p>
+<p>그렇다고 두려움 때문에 하나님을 찾아야 한다는 뜻은 아닙니다.</p>
+<p>하나님께서 우리를 찾으시는 것은 우리를 심판하시기 위해서만이 아니라, 우리에게 생명을 주시고 그분의 사랑 안으로 이끌기 원하시기 때문입니다.</p>
+<p>성경은 하나님께서 사람을 얼마나 사랑하시는지 보여 줍니다.</p>
+<p>하나님은 우리를 만드셨을 뿐 아니라, 우리가 죄와 죽음 가운데 머물러 있는 것을 원하지 않으셨습니다. 그래서 예수 그리스도께서 이 땅에 오셨습니다.</p>
+<p>그분은 우리의 죄를 짊어지시고 십자가에서 죽으셨으며, 죽음을 이기고 부활하셨습니다.</p>
+<p>이것은 단순히 종교를 하나 선택하라는 이야기가 아닙니다. 인생의 마지막을 준비하라는 경고에만 머무는 이야기도 아닙니다.</p>
+<p><strong>우리를 창조하신 하나님께서 우리에게 영원한 생명을 주시기 위해 예수 그리스도를 보내셨다는 복된 소식입니다.</strong></p>
+<p>요한복음 3장 16절은 이렇게 말씀합니다.</p>
+<blockquote><p>“하나님께서 세상을 이처럼 사랑하시어 독생자를 주셨습니다. 이것은 그분을 믿는 사람마다 멸망하지 않고 영원한 생명을 얻도록 하려는 것입니다.”</p></blockquote>
+<p>하나님께서 주시려는 것은 단지 죽음 이후의 안전만이 아닙니다. 오늘 우리의 삶 가운데 하나님을 알고, 그분의 생명을 받아들이며, 그분과 함께 살아가는 것입니다.</p>
+
+<h2>오늘, 당신의 마음을 열어 보시겠습니까?</h2>
+<p>혹시 지금까지 하나님을 생각하지 않고 살아오셨습니까?</p>
+<p>그렇다면 오늘 잠시 멈추어 자신의 인생을 돌아보셨으면 합니다.</p>
+<p>내가 얼마나 많이 소유했는지, 얼마나 성공했는지, 다른 사람에게 어떤 평가를 받는지보다 더 중요한 것이 있습니다.</p>
+<p>나는 하나님을 알고 있는가?</p>
+<p>나를 위해 죽으시고 부활하신 예수 그리스도를 받아들였는가?</p>
+<p>나의 영원한 생명에 관하여 진지하게 생각해 본 적이 있는가?</p>
+<p>부자는 죽음 이후에야 자신의 형제들을 염려했습니다. 그러나 우리에게는 아직 하나님의 말씀을 들을 수 있는 오늘이 있습니다.</p>
+<p>하나님은 지금도 우리를 부르고 계십니다.</p>
+<p>예수님은 우리에게 영원한 생명을 주시기 원하십니다.</p>
+<p>어쩌면 당신이 이 글을 읽고 있는 바로 지금이 하나님을 향해 마음을 여는 시간이 될 수 있습니다.</p>
+<p><strong>인생은 언젠가 끝나지만, 하나님께서 주시는 생명은 영원합니다.</strong></p>
+<p>오늘 그분을 찾아보십시오. 예수 그리스도를 만나 보십시오. 그리고 그분께서 당신을 위해 준비하신 생명이 무엇인지 알아보십시오.</p>
+<p>당신의 인생이 단지 이 땅에서 살다가 끝나는 이야기가 아니라, 하나님을 알고 그분의 생명 안에서 영원히 살아가는 이야기가 되기를 바랍니다.</p>
+</article>
+
+<!-- 초대장: 아래 INVITE 값(스크립트 상단)을 채우면 자동 반영됩니다 -->
+<section class="invite" id="invitation" aria-label="초대장">
+  <div class="card">
+    <p class="host">부산교회 2구역</p>
+    <h2>당신을 초대합니다</h2>
+    <p class="msg">인생의 마지막을 생각해 보는 일은 두려운 일이 아니라, 오늘을 더 귀하게 살아가는 시작이 될 수 있습니다.</p>
+    <p class="msg">하나님은 지금도 우리를 부르고 계십니다. 부담 없이 오셔서 함께 말씀을 들어 보십시오.</p>
+    <dl id="inviteInfo"></dl>
+    <div class="actions" id="inviteActions"></div>
+  </div>
+</section>
+</main>
+<footer>부산교회 2구역</footer>
+
+<script>
+/* 초대장 내용: 확정되면 여기만 채우면 됩니다 */
+const INVITE={date:'주일 오전 11시',place:'사하구 하신번영로 201번길 10, 2층',contact:'HP 010-9362-7642',phone:'010-9362-7642'};
+
+(function(){
+const $=s=>document.querySelector(s);
+const cl=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));
+const sm=v=>{v=cl(v);return v*v*(3-2*v)};
+const lerp=(a,b,t)=>a+(b-a)*t;
+const hex=c=>[1,3,5].map(i=>parseInt(c.slice(i,i+2),16));
+const mix=(a,b,t)=>{const A=hex(a),B=hex(b);return 'rgb('+A.map((v,i)=>Math.round(lerp(v,B[i],t))).join(',')+')'};
+function seg(f,t){if(t<=f[0][0])return[0,0,0];for(let i=1;i<f.length;i++){if(t<=f[i][0]){return[i-1,i,(t-f[i-1][0])/(f[i][0]-f[i-1][0])]}}return[f.length-1,f.length-1,0]}
+const kc=(f,t)=>{const[a,b,u]=seg(f,t);return mix(f[a][1],f[b][1],u)};
+const kn=(f,t)=>{const[a,b,u]=seg(f,t);return lerp(f[a][1],f[b][1],u)};
+
+/* 초대장 렌더 */
+const rows=[['일시',INVITE.date],['장소',INVITE.place],['문의',INVITE.contact]];
+$('#inviteInfo').innerHTML=rows.map(r=>'<div><dt>'+r[0]+'</dt><dd>'+(r[1]||'곧 안내해 드리겠습니다.')+'</dd></div>').join('');
+if(INVITE.phone){const p=INVITE.phone.replace(/[^0-9+]/g,'');$('#inviteActions').innerHTML='<a class="btn primary" href="tel:'+p+'">전화 연결</a><a class="btn" href="sms:'+p+'">문자 보내기</a>'}
+
+/* 자막 */
+const CAPS=[
+[0.8,5.6,'title','당신은 인생의 마지막을 생각해 보신 적이 있습니까?'],
+[6.2,10.8,'','우리는 모두 내일을 생각하며 살아갑니다.'],
+[11.2,16.6,'','사람들은 저마다의 꿈을 가지고 하루하루를 살아갑니다.'],
+[17.0,24.6,'long','내가 지금까지 살아온 인생이 어느 날 끝난다면, 그다음에는 무엇이 기다리고 있을까요?'],
+[26.2,30.6,'','누가복음 16장에는 두 사람이 등장합니다.'],
+[31.2,35.6,'','한 사람은 풍족했고, 다른 한 사람은 가난했습니다.'],
+[36.2,40.6,'','두 사람 모두 죽었습니다.'],
+[41.2,49.6,'long','“그러다가 그 거지가 죽자, 천사들이 그를 아브라함의 품으로 데려갔으며, 부자도 죽어 장사되었습니다.”','(누가복음 16장 22절, 회복역)'],
+[50.4,60.0,'long','“하나님께서 세상을 이처럼 사랑하시어 독생자를 주셨습니다. 이것은 그분을 믿는 사람마다 멸망하지 않고 영원한 생명을 얻도록 하려는 것입니다.”','(요한복음 3장 16절)'],
+[61.0,67.6,'','인생은 언젠가 끝나지만, 하나님께서 주시는 생명은 영원합니다.'],
+[69.0,76,'last','그러나 하나님의 생명을 받지 않은 부자는 과연 어떻게 되었을까요?']
+];
+const DUR=76,stage=$('#stage');
+CAPS.forEach(c=>{const d=document.createElement('div');d.className='cap '+(c[2]==='long'?'long':'');
+ const t=c[2]==='title'?'h1':'p';d.innerHTML='<'+t+'>'+c[3]+'</'+t+'>'+(c[4]?'<p class="cite">'+c[4]+'</p>':'');
+ stage.appendChild(d);c.el=d});
+
+/* 캔버스 */
+const cv=$('#cv'),cx=cv.getContext('2d');let W,H;
+function resize(){const r=cv.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);W=r.width;H=r.height;cv.width=W*d;cv.height=H*d;cx.setTransform(d,0,0,d,0,0)}
+addEventListener('resize',resize);resize();
+
+const SKYT=[[0,'#CFE3F3'],[10,'#BFDDF5'],[17,'#C9D9EE'],[23,'#D6CFE6'],[36,'#CBD3E0'],[41,'#C5CCD8'],[47,'#D9E3EE'],[52,'#BFE0F7'],[68,'#A9D4F2']];
+const SKYB=[[0,'#FBE3CF'],[10,'#E9F3FB'],[17,'#F7DCC4'],[23,'#F9D2B8'],[36,'#E6E3EA'],[41,'#DADCE3'],[47,'#F3EBDD'],[52,'#FFF1C9'],[68,'#FFF6D6']];
+const SUNC=[[0,'#FFC9A0'],[8,'#FFE9A8'],[17,'#FFD79A'],[23,'#FF9F7A']];
+const INK='#1b2430';
+
+function person(x,y,h,col,ph){
+ cx.strokeStyle=col;cx.fillStyle=col;cx.lineCap='round';
+ const w=h*.17,sw=Math.sin(ph)*h*.12;
+ cx.lineWidth=w;cx.beginPath();cx.moveTo(x,y-h*.78);cx.lineTo(x,y-h*.42);cx.stroke();
+ cx.beginPath();cx.arc(x,y-h*.9,h*.1,0,7);cx.fill();
+ cx.lineWidth=h*.08;cx.beginPath();
+ cx.moveTo(x-w*.2,y-h*.42);cx.lineTo(x-w*.2+sw,y);cx.moveTo(x+w*.2,y-h*.42);cx.lineTo(x+w*.2-sw,y);
+ cx.moveTo(x-w*.5,y-h*.74);cx.lineTo(x-w*.7-sw*.5,y-h*.48);cx.moveTo(x+w*.5,y-h*.74);cx.lineTo(x+w*.7+sw*.5,y-h*.48);cx.stroke();
+}
+function sitter(x,y,h,col){
+ cx.fillStyle=col;cx.beginPath();cx.arc(x,y-h*.8,h*.12,0,7);cx.fill();
+ cx.beginPath();cx.ellipse(x,y-h*.36,h*.3,h*.4,0,0,7);cx.fill();
+ cx.beginPath();cx.ellipse(x-h*.18,y-h*.1,h*.2,h*.1,0,0,7);cx.fill();
+}
+function hill(hy,y0,amp,fr,ph,col){cx.fillStyle=col;cx.beginPath();cx.moveTo(0,hy+2);
+ for(let x=0;x<=W+8;x+=8)cx.lineTo(x,hy-y0-amp*Math.sin(x*fr+ph));cx.lineTo(W,hy+2);cx.closePath();cx.fill()}
+
+function sceneA(t){
+ const hy=H*.6,p=cl(t/24);
+ const sx=lerp(.12,.88,p)*W,sy=hy-Math.sin(Math.PI*p)*(hy-.42*H),R=Math.min(W,H)*.06,sc=kc(SUNC,t);
+ const g=cx.createRadialGradient(sx,sy,R*.4,sx,sy,R*3.2);g.addColorStop(0,'rgba(255,240,200,.8)');g.addColorStop(1,'rgba(255,240,200,0)');
+ cx.fillStyle=g;cx.beginPath();cx.arc(sx,sy,R*3.2,0,7);cx.fill();
+ cx.fillStyle=sc;cx.beginPath();cx.arc(sx,sy,R,0,7);cx.fill();
+ hill(hy,H*.05,H*.03,.006,1,'#C4D6E0');hill(hy,H*.01,H*.025,.011,3,'#AEC7CF');
+ const gr=cx.createLinearGradient(0,hy,0,H);gr.addColorStop(0,'#D3E3CC');gr.addColorStop(1,'#B6D0B0');
+ cx.fillStyle=gr;cx.fillRect(0,hy,W,H-hy);
+ const cr=s=>W*.5+Math.sin(s*3.4)*W*.07*s,hw=s=>lerp(3,W*.26,Math.pow(s,1.2));
+ cx.fillStyle='#F3EEE4';cx.beginPath();
+ for(let i=0;i<=30;i++){const s=i/30;cx.lineTo(cr(s)-hw(s),hy+s*(H-hy))}
+ for(let i=30;i>=0;i--){const s=i/30;cx.lineTo(cr(s)+hw(s),hy+s*(H-hy))}cx.closePath();cx.fill();
+ const u=sm(t/24),s=lerp(.5,.035,u),wy=hy+s*(H-hy),wh=H*.24*s;
+ person(cr(s),wy,wh,INK,t*5);
+ const fg=cl((t-14)/10),fr=cx.createRadialGradient(W*.5,hy,0,W*.5,hy,W*.55*fg+1);
+ fr.addColorStop(0,'rgba(255,255,255,.95)');fr.addColorStop(1,'rgba(255,255,255,0)');
+ cx.fillStyle=fr;cx.fillRect(0,hy-H*.3,W,H*.4);
+}
+const MOTES=Array.from({length:70},(_,i)=>[Math.random(),Math.random(),Math.random()]);
+function sceneB(t){
+ const hb=H*.66,mw=Math.min(W*.56,520),mx=W*.06,mh=mw*.55,lx=mx+mw+(W-mx-mw)*.5;
+ const gr=cx.createLinearGradient(0,hb,0,H);gr.addColorStop(0,'#E1DAD2');gr.addColorStop(1,'#D0C8BF');
+ cx.fillStyle=gr;cx.fillRect(0,hb,W,H-hb);
+ const lit=kn([[0,1],[36.5,1],[39,0]],t);
+ cx.fillStyle='#CAD3E0';cx.fillRect(mx,hb-mh,mw,mh);
+ cx.fillStyle='#98A6BC';cx.beginPath();cx.moveTo(mx-8,hb-mh);cx.lineTo(mx+mw/2,hb-mh-mw*.14);cx.lineTo(mx+mw+8,hb-mh);cx.closePath();cx.fill();
+ cx.fillStyle='#E8EDF4';for(let i=0;i<5;i++)cx.fillRect(mx+mw*(.1+i*.19),hb-mh*.92,mw*.04,mh*.92);
+ for(let i=0;i<4;i++){const wx=mx+mw*(i<2?.18+i*.14:.62+(i-2)*.14);
+  if(lit>.05){cx.shadowColor='rgba(255,200,90,'+lit+')';cx.shadowBlur=18*lit}
+  cx.fillStyle=mix('#B7C2D3','#FFD27A',lit);cx.fillRect(wx,hb-mh*.7,mw*.08,mh*.3);cx.shadowBlur=0}
+ cx.fillStyle=mix('#9AA7BB','#F5C466',lit*.8);cx.fillRect(mx+mw*.44,hb-mh*.5,mw*.12,mh*.5);
+ const ra=1-sm((t-37)/3);
+ if(ra>0){cx.globalAlpha*=ra;person(mx+mw*.5,hb,mh*.3,'#5B4A6B',0);cx.globalAlpha/=ra}
+ cx.fillStyle='#C4BCB5';cx.fillRect(mx+mw+14,hb-mh*.16,W,mh*.16);
+ const rise=sm((t-40)/10);
+ if(rise<1){const a=cl(1-rise*1.2);cx.globalAlpha*=a;sitter(lx,hb-mh*.14*0+0-rise*H*.45,mh*.3,mix('#8A7461','#FFE9A8',rise));cx.globalAlpha/=a||1}
+ const bm=kn([[39,0],[43,.6],[68,.6]],t);
+ if(bm>0){const bg=cx.createLinearGradient(0,0,0,hb);bg.addColorStop(0,'rgba(255,236,170,'+bm+')');bg.addColorStop(1,'rgba(255,236,170,'+bm*.15+')');
+  cx.fillStyle=bg;cx.beginPath();cx.moveTo(lx-10,0);cx.lineTo(lx+10,0);cx.lineTo(lx+W*.15,hb);cx.lineTo(lx-W*.15,hb);cx.closePath();cx.fill()}
+ const mo=kn([[40,0],[43,1]],t);
+ if(mo>0)MOTES.forEach(m=>{const ph=((t-40)*.06+m[1])%1,x=lx+(m[0]-.5)*W*.16+Math.sin(t*1.2+m[0]*9)*8,y=hb-ph*H*.6;
+  cx.fillStyle='rgba(255,205,90,'+(Math.sin(Math.PI*ph)*mo)+')';cx.beginPath();cx.arc(x,y,1.5+m[2]*2.5,0,7);cx.fill()});
+ const bi=sm((t-50)/10);
+ if(bi>0){const rg=cx.createRadialGradient(lx,hb,0,lx,hb,W);rg.addColorStop(0,'rgba(255,230,150,'+.55*bi+')');rg.addColorStop(1,'rgba(255,230,150,0)');
+  cx.fillStyle=rg;cx.fillRect(0,0,W,H);
+  cx.fillStyle='rgba(255,226,140,'+.12*bi+')';
+  for(let i=0;i<12;i++){const an=-Math.PI+(i+.5)*Math.PI/12+Math.sin(t*.2)*.03,L=W*1.2;
+   cx.beginPath();cx.moveTo(lx,hb);cx.lineTo(lx+Math.cos(an-.025)*L,hb+Math.sin(an-.025)*L);cx.lineTo(lx+Math.cos(an+.025)*L,hb+Math.sin(an+.025)*L);cx.closePath();cx.fill()}
+  cx.fillStyle='rgba(255,230,160,'+.25*bi+')';cx.fillRect(0,hb,W,H-hb)}
+}
+function draw(t){
+ const g=cx.createLinearGradient(0,0,0,H*.62);g.addColorStop(0,kc(SKYT,t));g.addColorStop(1,kc(SKYB,t));
+ cx.fillStyle=g;cx.fillRect(0,0,W,H);
+ const b=sm((t-23)/3);
+ if(b<1){cx.globalAlpha=1-b;sceneA(t);cx.globalAlpha=1}
+ if(b>0){cx.globalAlpha=b;sceneB(t);cx.globalAlpha=1}
+}
+function caps(t){CAPS.forEach(c=>{let o=Math.min((t-c[0])/.9,c[2]==='last'?9:(c[1]-t)/.9);c.el.style.opacity=cl(o)})}
+
+/* 재생 제어 */
+const hero=$('#hero'),bP=$('#bPause'),bR=$('#bReplay'),bG=$('#bGo');
+const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+let T=0,paused=reduce,ended=false,last=null;
+function ui(){bP.textContent=paused&&!ended?'재생':'일시정지';bP.setAttribute('aria-pressed',paused&&!ended);bP.disabled=ended;hero.classList.toggle('done',ended)}
+function loop(ts){const dt=last===null?0:Math.min(ts-last,100);last=ts;
+ if(!paused&&!ended){T+=dt/1000;if(T>=DUR){T=DUR;ended=true;ui()}}
+ draw(T);caps(T);requestAnimationFrame(loop)}
+bP.onclick=()=>{if(ended)return;paused=!paused;ui()};
+bR.onclick=()=>{T=0;ended=false;paused=false;ui()};
+bG.onclick=()=>$('#invitation').scrollIntoView({behavior:reduce?'auto':'smooth'});
+ui();requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
