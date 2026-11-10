@@ -79,7 +79,7 @@ function ca(t){return mix(SL,GO,t)}function cb(t){return mix(RO,GO,t)}
 /* 목록 */
 var L=document.getElementById("list"),h="";
 D.forEach(function(d,i){
- var n=i+1,t0=i/9,t1=n/9,file=n==1?"그리스도인의 결혼1.html":"그리스도인의 결혼 "+n+".html";
+ var n=i+1,t0=i/9,t1=n/9,file="그리스도인의 결혼"+n+".html";
  var c=mix(SL,GO,(t0+t1)/2),id="g"+n;
  h+='<li style="--c:'+c+'"><a href="'+BASE+encodeURIComponent(file)+'">'
  +'<svg class="gut" viewBox="0 0 72 100" preserveAspectRatio="none" style="'+(i%2?'transform:scaleX(-1)':'')+'">'
