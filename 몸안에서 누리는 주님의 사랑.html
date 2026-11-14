@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>그리스도의 몸 안에서 누리는 주님의 사랑</title>
+<meta name="description" content="익숙한 신앙생활의 경계를 넘어, 그리스도의 몸의 한 지체로서 나를 먼저 사랑하시고 얻기 원하시는 주님의 사랑을 누리는 여덟 걸음">
+<meta property="og:type" content="website">
+<meta property="og:title" content="그리스도의 몸 안에서 누리는 주님의 사랑">
+<meta property="og:description" content="익숙한 신앙생활의 경계를 넘어, 그리스도의 몸의 한 지체로서 나를 먼저 사랑하시고 얻기 원하시는 주님의 사랑을 누리는 여덟 걸음">
+<meta property="og:image" content="그리스도의 몸 안에서 누리는 주님의 사랑.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<script>document.documentElement.className+=' js';</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;font-style:normal !important}
+:root{
+  --bg:#fbf6ec; --paper:#fffdf8; --ink:#17120d; --ink2:#2a2118;
+  --gold:#b2761a; --gold-d:#7d500c; --gold-l:#f3c764; --rose:#a63a4c;
+  --sand:#f3e8d1; --line:#e0d0b0;
+  --serif:'Noto Serif KR','Noto Serif CJK KR',serif;
+  --sans:'Noto Sans KR','Noto Sans CJK KR',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--serif);font-size:18px;line-height:1.95;word-break:keep-all;-webkit-font-smoothing:antialiased}
+cite,em,i{font-style:normal}
+#bar{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,var(--gold),var(--rose));z-index:50}
+.wrap{max-width:760px;margin:0 auto;padding:0 22px}
+
+/* hero */
+.hero{padding:64px 0 0;text-align:center}
+.kicker{font-family:var(--sans);font-weight:700;font-size:14px;letter-spacing:.14em;color:var(--gold-d)}
+.hero h1{font-size:clamp(30px,6.4vw,52px);line-height:1.35;margin:14px 0 18px;font-weight:700;color:var(--ink)}
+.hero .sub{font-size:clamp(16px,2.6vw,20px);color:var(--ink2);max-width:560px;margin:0 auto 34px}
+.scene{width:100%;max-width:960px;margin:0 auto;height:clamp(240px,46vw,440px);border-radius:0;overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.scene svg{display:block;width:100%;height:100%}
+.thesis{padding:56px 0 24px;text-align:center}
+.thesis p{margin:0 0 18px;font-size:clamp(18px,3vw,22px);font-weight:600}
+.thesis .small{font-weight:400;font-size:17px;color:var(--ink2)}
+.cue{display:inline-block;margin-top:14px;font-family:var(--sans);font-size:14px;color:var(--gold-d);font-weight:500}
+
+/* steps */
+.step{padding:72px 0 28px;border-top:1px solid var(--line);position:relative}
+.num{font-family:var(--sans);font-weight:700;font-size:15px;color:var(--gold-d);letter-spacing:.12em}
+.step h2{font-size:clamp(25px,4.6vw,34px);line-height:1.4;margin:6px 0 22px;font-weight:700}
+.key{background:var(--sand);border-left:5px solid var(--gold);padding:14px 20px;margin:0 0 26px;font-weight:700;font-size:18px;line-height:1.7;color:var(--ink)}
+.key span{display:block;font-family:var(--sans);font-size:12px;letter-spacing:.14em;color:var(--gold-d);font-weight:700;margin-bottom:2px}
+.step p{margin:0 0 18px}
+.step p.em{font-weight:700;font-size:20px;color:var(--ink)}
+.verse{background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--rose);padding:20px 22px 16px;margin:26px 0;box-shadow:0 6px 18px rgba(120,80,20,.07)}
+.verse p{margin:0 0 6px;font-size:18px;color:var(--ink)}
+.verse cite{display:block;text-align:right;font-family:var(--sans);font-size:14px;font-weight:700;color:var(--rose)}
+.quote{background:var(--paper);border:1px dashed #c9ad78;padding:18px 22px;margin:24px 0;color:var(--ink)}
+.quote .lab{display:block;font-family:var(--sans);font-size:12px;font-weight:700;letter-spacing:.14em;color:var(--gold-d);margin-bottom:4px}
+
+/* response */
+.respond{margin:30px 0 8px;display:flex;flex-direction:column;gap:12px;align-items:flex-start}
+.amen{font-family:var(--sans);font-weight:700;font-size:16px;color:var(--ink);background:var(--paper);border:2px solid var(--gold);padding:12px 22px;cursor:pointer;border-radius:4px;transition:background .3s,transform .15s}
+.amen:hover{background:var(--sand)}
+.amen:active{transform:scale(.98)}
+.amen:focus-visible,.chip:focus-visible,.ask:focus-visible,.stone:focus-visible{outline:3px solid var(--rose);outline-offset:3px}
+.amen.on{background:var(--gold-l);border-color:var(--gold-d)}
+.prayer{margin:0;padding:12px 18px;border-left:4px solid var(--rose);background:#fbece9;color:var(--ink);font-weight:600;display:none}
+.prayer.show{display:block;animation:fade .6s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* chips / questions */
+.chips{display:grid;gap:10px;margin:20px 0 10px}
+.chip,.ask{font-family:var(--serif);font-size:17px;text-align:left;color:var(--ink);background:var(--paper);border:1.5px solid var(--line);padding:14px 18px 14px 50px;cursor:pointer;position:relative;line-height:1.7;border-radius:4px;transition:background .3s,border-color .3s}
+.chip::before,.ask::before{content:"";position:absolute;left:16px;top:50%;width:20px;height:20px;margin-top:-10px;border:2px solid var(--gold);border-radius:4px;background:#fff}
+.chip.on,.ask.on{background:#fbefc9;border-color:var(--gold)}
+.chip.on::before,.ask.on::before{background:var(--gold);box-shadow:inset 0 0 0 3px #fbefc9}
+
+/* finale */
+.finale{padding:80px 0 110px;border-top:1px solid var(--line);text-align:center}
+.finale h2{font-size:clamp(25px,4.6vw,34px);margin:6px 0 10px;font-weight:700}
+.stones{max-width:600px;margin:20px auto 6px}
+.stones svg{width:100%;height:auto;display:block}
+.stone{cursor:pointer}
+.stone rect{fill:#f1e7d1;stroke:#b79c68;stroke-width:2;stroke-dasharray:6 5;transition:fill .7s,stroke .7s}
+.stone text{font-family:var(--sans);fill:var(--ink)}
+.stone .n{font-size:13px;font-weight:700;fill:var(--gold-d)}
+.stone .t{font-size:21px;font-weight:700}
+.stone.lit rect{fill:#f3c764;stroke:#7d500c;stroke-dasharray:none}
+.count{font-family:var(--sans);font-weight:700;color:var(--gold-d);margin:4px 0 22px}
+.done{display:none;margin:12px auto 30px;max-width:560px;background:var(--paper);border:1px solid var(--gold);padding:18px 22px}
+.done.show{display:block;animation:fade .8s ease}
+.done p{margin:0 0 6px;font-weight:600}
+.done cite{font-family:var(--sans);font-size:14px;font-weight:700;color:var(--rose)}
+.closing{max-width:620px;margin:26px auto 0;text-align:left}
+.closing p{margin:0 0 16px}
+.closing .em{font-weight:700;font-size:20px}
+
+.intro{padding:56px 0 8px}
+.intro h2.doc{font-size:clamp(24px,4.4vw,32px);line-height:1.45;margin:0 0 26px;font-weight:700;text-align:center}
+.intro p,.step p,.sum p{margin:0 0 18px}
+.step h2{margin-bottom:24px}
+.say{background:var(--paper);border-left:4px solid var(--gold);padding:12px 20px;margin:18px 0;line-height:1.9;color:var(--ink)}
+.verse.alone{border-left-color:var(--gold)}
+.verse cite{display:block;text-align:left;margin-bottom:6px}
+.doc2{font-size:clamp(22px,4vw,28px);line-height:1.45;margin:30px 0;text-align:center;font-weight:700;padding:22px 0;border-top:2px solid var(--gold);border-bottom:2px solid var(--gold)}
+.pts{margin:0 0 22px;padding:0;list-style:none}
+.pts li{background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--rose);padding:12px 18px;margin:0 0 10px;font-weight:600}
+.sum{background:#fff8e8}
+.step p.hl{font-size:20px;color:var(--ink);margin:26px 0 18px}
+.step p.hl strong{font-weight:900}
+.step p.sub{margin:32px 0 10px;font-size:20px;color:var(--ink)}
+.step p.sub strong{font-weight:900}
+/* nav */
+.nav{position:fixed;right:18px;top:50%;transform:translateY(-50%);display:none;flex-direction:column;gap:10px;z-index:40}
+.nav a{display:block;width:14px;height:14px;border:2px solid var(--gold);background:var(--paper);border-radius:3px;transition:background .4s}
+.nav a.lit{background:var(--gold)}
+.nav a.cur{box-shadow:0 0 0 3px rgba(166,58,76,.35)}
+@media(min-width:1100px){.nav{display:flex}}
+
+.js .rv{opacity:0;transform:translateY(20px);transition:opacity .9s ease,transform .9s ease}
+.js .rv.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.js .rv{opacity:1;transform:none;transition:none}.prayer.show,.done.show{animation:none}}
+@media(max-width:560px){body{font-size:17px}.step{padding-top:56px}}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<nav class="nav" id="nav" aria-label="여덟 걸음"></nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">그리스도 안에서 한 몸 된 지체들에게</div>
+    <h1>그리스도의 몸 안에서 누리는 주님의 사랑</h1>
+    <p class="sub">익숙한 신앙생활의 경계를 넘어 그리스도의 몸을 위해 자신을 드리는 생활</p>
+  </div>
+  <div class="scene"><svg viewBox="0 0 800 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="낮아진 담과 활짝 열린 문, 그 문 안에서 쏟아지는 빛" preserveAspectRatio="xMidYMax slice"><defs><linearGradient id="hSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fdf4e0"/><stop offset="1" stop-color="#f7d9b4"/></linearGradient><linearGradient id="hRay" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#f6c85f" stop-opacity=".30"/><stop offset="1" stop-color="#f6c85f" stop-opacity="0"/></linearGradient><linearGradient id="hGlow" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff3c9"/><stop offset="1" stop-color="#f4c764"/></linearGradient><linearGradient id="hPath" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f9dd93"/><stop offset="1" stop-color="#f3e6c6"/></linearGradient></defs><rect width="800" height="440" fill="url(#hSky)"/><polygon points="400,215 60,-20 130,-20" fill="url(#hRay)"/><polygon points="400,215 190,-20 260,-20" fill="url(#hRay)"/><polygon points="400,215 320,-20 390,-20" fill="url(#hRay)"/><polygon points="400,215 440,-20 510,-20" fill="url(#hRay)"/><polygon points="400,215 570,-20 640,-20" fill="url(#hRay)"/><path d="M0 300 Q120 255 240 292 T480 285 T800 292 V360 H0Z" fill="#efdcb8"/><rect y="360" width="800" height="80" fill="#efe0c2"/><polygon points="350,360 450,360 640,440 160,440" fill="url(#hPath)"/><rect x="0.0" y="342" width="46.0" height="18" rx="2" fill="#dcc6a1" stroke="#a98a5c" stroke-width="1.2"/><rect x="46.0" y="342" width="46.0" height="18" rx="2" fill="#d2b98f" stroke="#a98a5c" stroke-width="1.2"/><rect x="92.0" y="342" width="46.0" height="18" rx="2" fill="#e3d0ae" stroke="#a98a5c" stroke-width="1.2"/><rect x="138.0" y="342" width="46.0" height="18" rx="2" fill="#c9ae82" stroke="#a98a5c" stroke-width="1.2"/><rect x="184.0" y="342" width="46.0" height="18" rx="2" fill="#dcc6a1" stroke="#a98a5c" stroke-width="1.2"/><rect x="230.0" y="342" width="46.0" height="18" rx="2" fill="#d2b98f" stroke="#a98a5c" stroke-width="1.2"/><rect x="276.0" y="342" width="24.0" height="18" rx="2" fill="#e3d0ae" stroke="#a98a5c" stroke-width="1.2"/><rect x="0.0" y="324" width="23.0" height="18" rx="2" fill="#c9ae82" stroke="#a98a5c" stroke-width="1.2"/><rect x="23.0" y="324" width="46.0" height="18" rx="2" fill="#dcc6a1" stroke="#a98a5c" stroke-width="1.2"/><rect x="69.0" y="324" width="46.0" height="18" rx="2" fill="#d2b98f" stroke="#a98a5c" stroke-width="1.2"/><rect x="115.0" y="324" width="46.0" height="18" rx="2" fill="#e3d0ae" stroke="#a98a5c" stroke-width="1.2"/><rect x="161.0" y="324" width="46.0" height="18" rx="2" fill="#c9ae82" stroke="#a98a5c" stroke-width="1.2"/><rect x="207.0" y="324" width="46.0" height="18" rx="2" fill="#dcc6a1" stroke="#a98a5c" stroke-width="1.2"/><rect x="0.0" y="306" width="46.0" height="18" rx="2" fill="#e3d0ae" stroke="#a98a5c" stroke-width="1.2"/><rect x="46.0" y="306" width="46.0" height="18" rx="2" fill="#c9ae82" stroke="#a98a5c" stroke-width="1.2"/><rect x="92.0" y="306" width="46.0" height="18" rx="2" fill="#dcc6a1" stroke="#a98a5c" stroke-width="1.2"/><rect x="138.0" y="306" width="46.0" height="18" rx="2" fill="#d2b98f" stroke="#a98a5c" stroke-width="1.2"/><rect x="184.0" y="306" width="24.0" height="18" rx="2" fill="#e3d0ae" stroke="#a98a5c" stroke-width="1.2"/><rect x="0.0" y="288" width="23.0" height="18" rx="2" fill="#d2b98f" stroke="#a98a5c" stroke-width="1.2"/><rect x="23.0" y="288" width="46.0" height="18" rx="2" fill="#e3d0ae" stroke="#a98a5c" stroke-width="1.2"/><rect x="69.0" y="288" width="46.0" height="18" rx="2" fill="#c9ae82" stroke="#a98a5c" stroke-width="1.2"/><rect x="115.0" y="288" width="46.0" height="18" rx="2" fill="#dcc6a1" stroke="#a98a5c" stroke-width="1.2"/><rect x="0.0" y="270" width="46.0" height="18" rx="2" fill="#dcc6a1" stroke="#a98a5c" stroke-width="1.2"/><rect x="46.0" y="270" width="46.0" height="18" rx="2" fill="#d2b98f" stroke="#a98a5c" stroke-width="1.2"/><rect x="92.0" y="270" width="24.0" height="18" rx="2" fill="#e3d0ae" stroke="#a98a5c" stroke-width="1.2"/><rect x="754.0" y="342" width="46.0" height="18" rx="2" fill="#dcc6a1" stroke="#a98a5c" stroke-width="1.2"/><rect x="708.0" y="342" width="46.0" height="18" rx="2" fill="#d2b98f" stroke="#a98a5c" stroke-width="1.2"/><rect x="662.0" y="342" width="46.0" height="18" rx="2" fill="#e3d0ae" stroke="#a98a5c" stroke-width="1.2"/><rect x="616.0" y="342" width="46.0" height="18" rx="2" fill="#c9ae82" stroke="#a98a5c" stroke-width="1.2"/><rect x="570.0" y="342" width="46.0" height="18" rx="2" fill="#dcc6a1" stroke="#a98a5c" stroke-width="1.2"/><rect x="524.0" y="342" width="46.0" height="18" rx="2" fill="#d2b98f" stroke="#a98a5c" stroke-width="1.2"/><rect x="500.0" y="342" width="24.0" height="18" rx="2" fill="#e3d0ae" stroke="#a98a5c" stroke-width="1.2"/><rect x="777.0" y="324" width="23.0" height="18" rx="2" fill="#c9ae82" stroke="#a98a5c" stroke-width="1.2"/><rect x="731.0" y="324" width="46.0" height="18" rx="2" fill="#dcc6a1" stroke="#a98a5c" stroke-width="1.2"/><rect x="685.0" y="324" width="46.0" height="18" rx="2" fill="#d2b98f" stroke="#a98a5c" stroke-width="1.2"/><rect x="639.0" y="324" width="46.0" height="18" rx="2" fill="#e3d0ae" stroke="#a98a5c" stroke-width="1.2"/><rect x="593.0" y="324" width="46.0" height="18" rx="2" fill="#c9ae82" stroke="#a98a5c" stroke-width="1.2"/><rect x="547.0" y="324" width="46.0" height="18" rx="2" fill="#dcc6a1" stroke="#a98a5c" stroke-width="1.2"/><rect x="754.0" y="306" width="46.0" height="18" rx="2" fill="#e3d0ae" stroke="#a98a5c" stroke-width="1.2"/><rect x="708.0" y="306" width="46.0" height="18" rx="2" fill="#c9ae82" stroke="#a98a5c" stroke-width="1.2"/><rect x="662.0" y="306" width="46.0" height="18" rx="2" fill="#dcc6a1" stroke="#a98a5c" stroke-width="1.2"/><rect x="616.0" y="306" width="46.0" height="18" rx="2" fill="#d2b98f" stroke="#a98a5c" stroke-width="1.2"/><rect x="592.0" y="306" width="24.0" height="18" rx="2" fill="#e3d0ae" stroke="#a98a5c" stroke-width="1.2"/><rect x="777.0" y="288" width="23.0" height="18" rx="2" fill="#d2b98f" stroke="#a98a5c" stroke-width="1.2"/><rect x="731.0" y="288" width="46.0" height="18" rx="2" fill="#e3d0ae" stroke="#a98a5c" stroke-width="1.2"/><rect x="685.0" y="288" width="46.0" height="18" rx="2" fill="#c9ae82" stroke="#a98a5c" stroke-width="1.2"/><rect x="639.0" y="288" width="46.0" height="18" rx="2" fill="#dcc6a1" stroke="#a98a5c" stroke-width="1.2"/><rect x="754.0" y="270" width="46.0" height="18" rx="2" fill="#dcc6a1" stroke="#a98a5c" stroke-width="1.2"/><rect x="708.0" y="270" width="46.0" height="18" rx="2" fill="#d2b98f" stroke="#a98a5c" stroke-width="1.2"/><rect x="684.0" y="270" width="24.0" height="18" rx="2" fill="#e3d0ae" stroke="#a98a5c" stroke-width="1.2"/><rect x="300" y="190" width="50" height="170" fill="#cdb084" stroke="#a98a5c" stroke-width="1.5"/><rect x="450" y="190" width="50" height="170" fill="#cdb084" stroke="#a98a5c" stroke-width="1.5"/><rect x="294" y="176" width="62" height="16" rx="3" fill="#b99a69" stroke="#a98a5c" stroke-width="1.5"/><rect x="444" y="176" width="62" height="16" rx="3" fill="#b99a69" stroke="#a98a5c" stroke-width="1.5"/><path d="M350 360 V232 Q400 160 450 232 V360 Z" fill="url(#hGlow)"/><path d="M344 232 Q400 150 456 232" fill="none" stroke="#a98a5c" stroke-width="6" stroke-linecap="round"/><g stroke="#a98a5c" stroke-width="1.2"><rect x="262" y="344" width="38" height="16" rx="2" fill="#d2b98f" transform="rotate(-6 281 352)"/><rect x="214" y="350" width="30" height="12" rx="2" fill="#dcc6a1" transform="rotate(5 229 356)"/><rect x="506" y="346" width="36" height="14" rx="2" fill="#c9ae82" transform="rotate(7 524 353)"/><rect x="556" y="351" width="28" height="11" rx="2" fill="#e3d0ae" transform="rotate(-4 570 356)"/></g></svg></div>
+</header>
+
+<main><section class="intro"><div class="wrap rv"><h2 class="doc">주님을 믿으면서도 자신을 드리지 않는 신앙</h2>
+<p>처음 주님을 영접했을 때는 모든 것이 새롭습니다. 주님을 사랑하는 마음도 있고, 말씀을 들으면 감동도 있고, 교회생활에 참여하는 것도 기쁨입니다. 그런데 시간이 흐르면서 신앙생활이 점점 익숙해집니다. 익숙해지는 것은 나쁜 일이 아닙니다. 문제는 그 익숙함 속에서 자신도 모르게 주님께 드리는 생활의 범위를 스스로 정해 버린다는 것입니다.</p>
+<p>예배에는 참석하지만 그 이상의 요구는 부담스럽습니다. 말씀은 듣지만 말씀에 따라 자신의 생활을 조정하는 것은 어렵습니다. 형제자매들과 교통은 하지만 자신의 내면까지 열어 놓지는 않습니다. 주님의 은혜는 구하지만 주님께서 자신을 사용하시려는 상황이 오면 한 걸음 물러섭니다.</p>
+<p>그러다 보면 신앙생활은 계속하지만 주님께 드려지는 부분은 더 이상 넓어지지 않습니다.</p>
+<p>저는 이것을 주님을 믿지 않는 신앙이 아니라, 주님을 믿으면서도 자기 자신을 내어 드리지 않는 신앙이라고 표현하고 싶습니다.</p>
+<p>그런데 더 안타까운 것은 이런 생활방식이 오랜 세월 반복되면 본인에게도 그것이 문제로 느껴지지 않는다는 것입니다. 그것이 자신의 성격이고, 형편이고, 나이이고, 신앙의 방식이라고 생각하게 됩니다.</p>
+<p>그렇다면 과연 이러한 사람의 마음을 움직일 수 있을까요?</p>
+<p>저는 움직일 수 있다고 믿습니다. 다만 사람의 마음을 움직이는 방법이 단순히 더 열심히 하라고 권면하거나, 책임을 다하라고 요구하는 데 있지는 않다고 생각합니다.</p>
+<p>성경에서 그 원리를 찾아보겠습니다.</p>
+</div></section>
+<section class="step" id="s1"><div class="wrap rv"><h2>1. 신앙생활이 익숙해지면서 자신을 보호하는 경계선을 만들게 됩니다</h2>
+<p>이 문제를 이해하는 데 도움이 되는 말씀이 있습니다.</p>
+<div class="verse"><cite>히브리서 3장 13절</cite><p>“‘오늘’이라고 일컬어지는 동안에, 여러분은 매일 서로 권유하여, 여러분 중에 아무도 죄의 속임수에 빠져 마음이 굳어지지 않도록 하십시오.”</p></div>
+<p>여기에서 우리가 주의 깊게 볼 표현은 마음이 굳어지는 것입니다.</p>
+<p>사람의 마음은 어느 날 갑자기 굳어지는 것이 아닙니다. 작은 선택들이 반복되면서 굳어집니다.</p>
+<p>처음에는 어떤 봉사를 부탁받았을 때 사정이 있어서 거절합니다. 다음에는 다른 일이 생겨서 거절합니다. 그다음에는 자신이 그 일을 할 만한 사람이 아니라고 생각합니다. 그러다 보면 어느 순간부터는 누군가 자신에게 어떤 일을 부탁하는 것 자체가 부담스러워집니다.</p>
+<p>더 나아가 자신이 참여하지 않는 것에 대한 이유를 스스로 만들어 냅니다.</p>
+<div class="say">'나는 나이가 많으니까.'<br>'나는 성격이 내성적이니까.'<br>'나는 건강이 좋지 않으니까.'<br>'나는 지금 가정에 신경 쓸 일이 많으니까.'<br>'나는 다른 형제자매들처럼 은사가 없으니까.'</div>
+<p>물론 이런 사정들이 실제로 존재할 수 있습니다. 그러므로 우리는 그것을 가볍게 판단해서는 안 됩니다.</p>
+<p>그러나 여기에서 구분해야 할 것이 있습니다.</p>
+<p>주님께서 나에게 맡기신 기능의 범위가 달라지는 것과 주님께 나 자신을 드리는 마음이 닫히는 것은 전혀 다른 문제입니다.</p>
+<p>젊은 사람과 나이 든 사람의 봉사 방식은 다를 수 있습니다. 건강한 사람과 몸이 약한 사람의 기능도 다를 수 있습니다. 가정의 책임이 많은 사람과 그렇지 않은 사람의 시간도 다를 수 있습니다.</p>
+<p>그러나 주님을 사랑하고 주님께 자신을 드리는 마음에는 나이와 환경이 제한 조건이 되어서는 안 됩니다.</p>
+<p>우리가 나이가 들었다고 주님의 몸에서 은퇴하는 것은 아닙니다. 활동하는 방식은 달라질 수 있지만, 생명의 공급은 계속될 수 있습니다.</p>
+<p>이것을 깨닫게 해 주어야 합니다.</p>
+<div class="respond"><button class="amen" data-step="1" aria-pressed="false">아멘</button></div></div></section>
+<section class="step" id="s2"><div class="wrap rv"><h2>2. 사람을 움직이는 것은 책임감보다 주님을 향한 사랑입니다</h2>
+<p>여기에서 우리는 베드로의 회복을 살펴볼 필요가 있습니다.</p>
+<p>베드로는 주님을 사랑한다고 고백했지만, 정작 주님께서 붙잡히시던 밤에는 세 번이나 주님을 부인했습니다.</p>
+<p>그는 주님을 사랑하지 않았던 사람이 아닙니다. 오히려 주님을 사랑했지만 자신의 목숨을 보존하려는 마음이 주님을 향한 사랑보다 앞섰던 것입니다.</p>
+<p>그런 베드로를 부활하신 주님께서 찾아오셨습니다.</p>
+<p>요한복음 21장 15절에서 주님은 베드로에게 물으셨습니다.</p>
+<div class="verse alone"><p>“요한의 아들 시몬이여, 이 사람들보다 그대가 나를 더 사랑하십니까?”</p></div>
+<p>주님은 베드로에게 왜 나를 부인했느냐고 먼저 추궁하지 않으셨습니다. 왜 그토록 연약했느냐고 책망하는 것으로 시작하지도 않으셨습니다.</p>
+<p>주님은 그의 사랑을 물으셨습니다.</p>
+<p>그리고 베드로가 주님을 사랑한다고 대답했을 때 주님은 말씀하셨습니다.</p>
+<div class="verse alone"><p>“내 어린양들을 먹이십시오.”</p></div>
+<p>여기에는 매우 중요한 원리가 있습니다.</p>
+<p>주님을 사랑하는 마음과 주님의 양들을 돌보는 생활은 분리될 수 없습니다.</p>
+<p>우리는 흔히 교회 안에서 사람들에게 이렇게 말할 수 있습니다.</p>
+<div class="say">'좀 더 적극적으로 참여하십시오.'<br>'봉사할 사람이 필요합니다.'<br>'형제자매들에게 관심을 가지십시오.'<br>'주님의 일을 위해 시간을 내십시오.'</div>
+<p>이런 권면도 필요합니다. 그러나 그것만으로는 사람의 내면이 바뀌지 않을 수 있습니다.</p>
+<p>왜냐하면 사람은 자신에게 주어진 책임 때문에 잠시 움직일 수는 있어도, 사랑이 회복되지 않으면 다시 자기 생활의 경계선 안으로 돌아가기 때문입니다.</p>
+<p>베드로가 변화된 것은 단순히 책임을 부여받았기 때문이 아닙니다. 부활하신 주님과 다시 사랑의 관계 안으로 들어갔기 때문입니다.</p>
+<p>따라서 우리가 사람들에게 일차적으로 회복시켜 주어야 할 것은 봉사에 대한 의무감이 아니라 주님 자신을 향한 사랑입니다.</p>
+<p>어떤 형제님이 오랫동안 교회 안에서 소극적으로 생활하고 있다고 가정해 보겠습니다.</p>
+<p>그분에게 당장 무슨 일을 맡기려고 하기보다는 이렇게 물어볼 수 있습니다.</p>
+<div class="quote">'형제님, 요즘 주님과의 교통은 어떠십니까? 주님을 처음 사랑했을 때의 그 기쁨을 지금도 누리고 계십니까? 주님께서 형제님 안에서 무엇을 얻기 원하시는지 생각해 보신 적이 있으십니까?'</div>
+<p>이런 질문은 단순히 일을 맡기는 것과 다릅니다. 그 사람의 마음을 주님께로 돌이키게 하는 질문입니다.</p>
+<div class="respond"><button class="amen" data-step="2" aria-pressed="false">아멘</button></div></div></section>
+<section class="step" id="s3"><div class="wrap rv"><h2>3. 주님은 우리에게 일정한 참여가 아니라 우리 자신을 원하십니다</h2>
+<p>로마서 12장 1절은 이렇게 말씀합니다.</p>
+<div class="verse alone"><p>“그러므로 형제님들, 내가 하나님의 자비로 말미암아 여러분에게 권유합니다. 여러분의 몸을 하나님께서 기뻐하시도록 거룩하고 살아 있는 희생 제물로 드리십시오. 이것이 여러분의 합리적인 봉사입니다.”</p></div>
+<p>이 말씀을 자세히 살펴보면 바울은 단순히 무엇을 하라고 말하지 않습니다.</p>
+<p>여러분의 몸을 드리라고 말합니다.</p>
+<p>왜 몸을 드리라고 했을까요?</p>
+<p>몸은 우리의 생활이 실제로 표현되는 곳이기 때문입니다.</p>
+<p>우리의 마음속에는 주님을 사랑한다는 생각이 있을 수 있습니다. 말씀을 들을 때 감동도 받을 수 있습니다. 기도할 때 주님께 헌신하겠다고 결심할 수도 있습니다.</p>
+<p>그러나 우리의 몸이 실제 생활에서 주님께 드려지지 않는다면 그 사랑은 어떻게 표현되겠습니까?</p>
+<p>예를 들어 어떤 사람이 자신은 가족을 사랑한다고 말하면서도 가족과 함께하는 시간을 전혀 내어 주지 않는다면, 그 사랑은 실제 생활에서 표현되지 못하고 있는 것입니다.</p>
+<p>주님과의 관계도 마찬가지입니다.</p>
+<p>주님을 사랑한다고 하면서 주님께서 필요로 하시는 곳에 자신의 시간과 몸과 기능을 전혀 드리지 않는다면, 우리는 사랑을 말하고 있지만 그 사랑이 생활로 표현되는 데에는 한계가 있는 것입니다.</p>
+<p>여기에서 중요한 것은 모든 사람이 똑같은 일을 해야 한다는 뜻이 아니라는 것입니다.</p>
+<p>어떤 사람은 어린아이들을 양육할 수 있고, 어떤 사람은 연약한 성도들을 방문할 수 있습니다. 어떤 사람은 집회에서 말씀을 공급할 수 있고, 어떤 사람은 기도와 중보로 교회를 섬길 수 있습니다. 어떤 사람은 자신의 가정을 열어 성도들을 접대할 수도 있습니다.</p>
+<p>중요한 것은 무슨 일을 하느냐보다 내가 주님께 드려진 사람인가 하는 것입니다.</p>
+<p>라이프 스타디 로마서 25-28장의 흐름도 바로 이 지점을 다룹니다. 로마서 12장부터는 몸을 드리는 것, 생각이 새로워지는 것, 영 안에서 불타는 것, 그리고 각 지체가 자신의 기능을 발휘하는 것을 통해 몸의 생활을 실제로 실행하는 길을 보여 줍니다.</p>
+<div class="respond"><button class="amen" data-step="3" aria-pressed="false">아멘</button></div></div></section>
+<section class="step" id="s4"><div class="wrap rv"><h2>4. 사람의 습관을 변화시키려면 그 사람 안에서 하나님의 운행이 회복되어야 합니다</h2>
+<p>여기에서 저는 빌립보서 2장 13절을 매우 중요하게 생각합니다.</p>
+<div class="verse alone"><p>“왜냐하면 하나님은 자신의 선한 기쁨을 위하여 여러분 안에서 운행하시어, 여러분이 뜻을 세우도록 하실 뿐만 아니라 행하도록 하시기 때문입니다.”</p></div>
+<p>이 말씀은 우리에게 소망을 줍니다.</p>
+<p>사람의 성격은 쉽게 바뀌지 않습니다. 오랜 세월 형성된 생활방식도 쉽게 바뀌지 않습니다. 자기 보호적인 태도와 소극적인 습관도 마찬가지입니다.</p>
+<p>그렇다면 무엇이 그 사람을 변화시킬 수 있습니까?</p>
+<p>사람 안에서 운행하시는 하나님 자신입니다.</p>
+<p>우리가 누군가에게 아무리 좋은 말을 해 주어도 그 사람 안에서 하나님께서 운행하시지 않는다면 진정한 변화는 일어나기 어렵습니다.</p>
+<p>반대로 오랫동안 닫혀 있던 사람도 주님께서 그 마음을 만지시고, 주님을 향한 사랑을 새롭게 하시며, 자신의 생활을 다시 보게 하실 때 변화가 시작됩니다.</p>
+<p>그러므로 우리는 두 가지를 함께 해야 합니다.</p>
+<p>첫째, 그 사람에게 생명을 공급해야 합니다.</p>
+<p>단순히 성경 지식을 전달하는 것이 아니라 주님을 누리고 사랑하도록 도와야 합니다. 말씀을 통해 주님 자신을 보게 하고, 그분의 마음과 갈망을 알게 해야 합니다.</p>
+<p>둘째, 그 사람이 작은 순종을 실제로 실행하도록 도와야 합니다.</p>
+<p>가령 오랫동안 교회생활에서 뒤로 물러나 있던 형제자매가 있다면 처음부터 큰 책임을 맡기려고 하지 말아야 합니다.</p>
+<p>한 사람을 위해 기도하게 할 수도 있고, 연약한 형제자매에게 안부를 묻게 할 수도 있으며, 집회에서 짧게 자신의 영적인 체험을 나누도록 격려할 수도 있습니다.</p>
+<p>작은 순종이지만 그것은 자기 자신만을 중심으로 살아가던 생활에서 벗어나 다른 지체를 향해 마음을 여는 시작이 될 수 있습니다.</p>
+<p>하나님은 우리 안에서 뜻을 세우게 하시고 행하게 하십니다. 그러므로 우리는 그분의 내적인 운행에 협력해야 합니다. 라이프 스타디 빌립보서 43장의 설명도 하나님의 내적인 운행과 믿는 이들의 실제적인 순종을 연결하여 보여 줍니다.</p>
+<div class="respond"><button class="amen" data-step="4" aria-pressed="false">아멘</button></div></div></section>
+<section class="step" id="s5"><div class="wrap rv"><h2>5. 교회 안에서 숨어 있는 사람을 깨우려면 몸의 지체라는 사실을 다시 보게 해야 합니다</h2>
+<p>저는 이 부분이 질문하신 문제의 핵심이라고 생각합니다.</p>
+<div class="verse"><cite>고린도전서 12장 18절</cite><p>그러나 이제 하나님은 그분께서 뜻하시는 대로 지체들을 각각 몸 안에 두셨습니다.</p></div>
+<p>하나님께서 그분께서 뜻하시는 대로 지체들을 각각 몸 안에 두셨다고 말씀합니다.</p>
+<p>그리고 12장 26절은 이렇게 말씀합니다.</p>
+<div class="verse alone"><p>“한 지체가 고통을 당하면 모든 지체가 함께 고통을 당하고, 한 지체가 영광을 받으면 모든 지체가 함께 기뻐합니다.”</p></div>
+<p>이것은 교회가 단순히 같은 장소에 모이는 사람들의 집단이 아니라는 것을 보여 줍니다.</p>
+<p>교회는 그리스도의 몸입니다.</p>
+<p>그렇다면 몸의 지체가 된다는 것은 무엇입니까?</p>
+<p>몸의 지체는 자기 혼자 살아가는 독립적인 존재가 아닙니다. 서로 연결되어 있고, 서로에게 공급하며, 서로의 필요를 돌보는 존재입니다.</p>
+<p>그런데 교회 안에서 오랫동안 신앙생활을 하면서도 자신을 다른 지체들과 관계없는 독립적인 사람처럼 생각하는 경우가 있습니다.</p>
+<p>집회에 참석할 때는 한 지체이지만 집회를 마치고 돌아가면 자신의 생활로 완전히 돌아갑니다. 다른 지체가 어려움을 겪어도 그것이 자신의 문제로 느껴지지 않습니다. 교회에 어떤 필요가 발생해도 자신과는 별개의 일이라고 생각합니다.</p>
+<p>이것은 단순히 봉사하지 않는 문제보다 더 깊은 문제입니다.</p>
+<p>몸의 지체라는 생명의 의식이 약해진 것입니다.</p>
+<p>위트니스 리의 라이프 스타디 로마서 59장에서는 몸의 생활이 단순히 몸에 관해 이야기하는 것이 아니라 실제로 지체들과 관계를 맺고 몸의 생활을 실행하는 것임을 강조합니다.</p>
+<p>생각해 보십시오.</p>
+<p>우리 몸의 손이 아프면 발은 나와 상관없는 일이라고 말하지 않습니다. 눈이 피곤하면 손은 자신에게 주어진 일만 하겠다고 말하지 않습니다.</p>
+<p>몸은 서로 연결되어 있기 때문입니다.</p>
+<p>그리스도의 몸도 마찬가지입니다.</p>
+<p>그러므로 우리가 사람들에게 깨닫게 해야 할 것은 단순히 교회에서 더 많은 일을 해야 한다는 것이 아닙니다.</p>
+<p>주님께서 나를 몸의 한 지체로 두셨으며, 나를 통해 다른 지체들에게 공급하시기를 원하신다는 사실입니다.</p>
+<p>자신이 교회 안에서 아무것도 하지 않아도 괜찮은 사람이 아니라, 주님의 생명을 다른 지체들에게 공급할 수 있는 사람이라는 것을 보게 해야 합니다.</p>
+<div class="respond"><button class="amen" data-step="5" aria-pressed="false">아멘</button></div></div></section>
+<section class="step" id="s6"><div class="wrap rv"><h2>6. 나이와 환경을 이유로 물러서는 사람들에게는 다른 관점이 필요합니다</h2>
+<p>이 문제는 특별히 나이가 들면서 더 많이 나타날 수 있습니다.</p>
+<p>젊었을 때는 주님을 위해 무언가 할 수 있다는 생각이 있었지만, 나이가 들면서 자신의 역할이 끝났다고 생각하는 것입니다.</p>
+<p>그러나 성경은 그렇게 말하지 않습니다.</p>
+<p>시편 92편 14절은 이렇게 말씀합니다.</p>
+<div class="verse alone"><p>“늙어서도 여전히 열매 맺고 진액이 가득하며 항상 푸르니”</p></div>
+<p>이 말씀은 참으로 귀합니다.</p>
+<p>나무가 늙었다고 해서 반드시 열매 맺는 기능을 잃는 것은 아닙니다. 오히려 오랜 세월 뿌리를 내리고 자란 나무가 풍성한 열매를 맺기도 합니다.</p>
+<p>우리의 신앙도 마찬가지입니다.</p>
+<p>젊은 시절에는 몸으로 직접 뛰어다니며 봉사할 수 있습니다. 그러나 나이가 들면 기도로 섬길 수 있고, 말씀을 공급할 수 있으며, 젊은 지체들을 양육할 수 있습니다. 자신의 오랜 체험을 통해 다른 사람을 격려할 수도 있습니다.</p>
+<p>주님께서 원하시는 것은 젊은 시절과 똑같은 활동량이 아닙니다.</p>
+<p>나의 전 생애가 주님께 속해 있다는 사실입니다.</p>
+<p>따라서 나이가 많다는 이유로 자신을 주님의 일에서 제외하는 사람에게는 이렇게 말해 주고 싶습니다.</p>
+<div class="quote">'형제님, 주님께서 형제님에게 젊은 사람과 똑같은 일을 요구하시는 것은 아닙니다. 그러나 형제님의 생애가 주님께 여전히 귀하다는 사실은 변하지 않습니다. 주님께서 형제님 안에서 얻기 원하시는 것이 아직 남아 있습니다.'</div>
+<p>이것은 사람에게 부담을 주는 말이 아니라 다시 소망을 갖게 하는 말이어야 합니다.</p>
+<div class="respond"><button class="amen" data-step="6" aria-pressed="false">아멘</button></div></div></section>
+<section class="step" id="s7"><div class="wrap rv"><h2>7. 그렇다면 실제로 어떻게 사람들의 마음을 움직일 수 있을까요?</h2>
+<p>여기에서는 조금 더 실제적인 접근이 필요하다고 생각합니다.</p>
+<p>제가 권하고 싶은 방향은 다음과 같습니다.</p>
+<p class="sub"><strong>첫째, 그 사람을 먼저 이해해야 합니다.</strong></p>
+<p>소극적인 사람이라고 해서 모두 같은 이유를 가지고 있지는 않습니다.</p>
+<p>어떤 사람은 실패할까 봐 두려워합니다. 어떤 사람은 과거에 상처를 받았습니다. 어떤 사람은 자신의 능력이 부족하다고 생각합니다. 어떤 사람은 오랜 신앙생활 속에서 주님을 향한 첫사랑을 잃어버렸습니다.</p>
+<p>어떤 사람은 자신이 아무것도 하지 않아도 교회는 잘 돌아간다고 생각합니다.</p>
+<p>그러므로 먼저 그 사람의 마음을 들어야 합니다. 마음을 열지 않은 사람에게 책임부터 요구하면 오히려 더 깊이 숨어 버릴 수 있습니다.</p>
+<p class="sub"><strong>둘째, 그 사람에게 주님께서 무엇을 원하시는지 보게 해야 합니다.</strong></p>
+<p>사람의 필요를 채우기 위해 봉사하는 것과 주님의 마음을 만족시켜 드리기 위해 자신을 드리는 것은 다릅니다.</p>
+<p>우리는 교회에 일손이 필요하기 때문에 사람을 움직이려 해서는 안 됩니다.</p>
+<p>주님께서 그 사람을 사랑하시고, 그 사람을 통해 그리스도의 몸을 건축하기 원하신다는 것을 보게 해야 합니다.</p>
+<p class="sub"><strong>셋째, 작은 순종을 시작하게 해야 합니다.</strong></p>
+<p>처음부터 많은 것을 요구하지 마십시오.</p>
+<p>한 사람에게 관심을 갖고 기도하는 것, 연약한 지체에게 전화하는 것, 집회에서 자신의 체험을 나누는 것, 누군가의 필요를 보고 먼저 손을 내미는 것부터 시작할 수 있습니다.</p>
+<p>작은 순종이 반복되면 생활의 방향이 달라질 수 있습니다.</p>
+<p class="sub"><strong>넷째, 우리가 먼저 그러한 생활의 본이 되어야 합니다.</strong></p>
+<p>이것이 중요합니다.</p>
+<p>다른 사람에게 헌신하라고 말하면서 정작 우리 자신은 자신을 보호하고 있다면 그 말은 생명의 공급이 되기 어렵습니다.</p>
+<p>우리가 먼저 주님께 열려 있고, 다른 지체들에게 열려 있으며, 주님의 필요를 자신의 필요처럼 여기는 생활을 해야 합니다.</p>
+<p>사람들은 우리의 말보다 우리의 생활에서 더 많은 것을 느낍니다.</p>
+<div class="respond"><button class="amen" data-step="7" aria-pressed="false">아멘</button></div></div></section>
+<section class="step" id="s8"><div class="wrap rv"><h2>8. 마지막으로, 우리가 정말 깨닫게 해야 할 한 가지</h2>
+<p>저는 이 문제를 생각할 때 요한계시록 2장의 에베소 교회가 떠오릅니다.</p>
+<p>에베소 교회는 수고했고, 인내했고, 악한 사람들을 용납하지 않았으며, 주님의 이름을 위해 견뎠습니다.</p>
+<p>그런데 주님은 그 교회에 한 가지 중요한 말씀을 하셨습니다.</p>
+<p>요한계시록 2장 4절입니다.</p>
+<div class="verse alone"><p>“그러나 너에게 책망할 것이 한 가지 있다. 그것은 네가 첫째가는 사랑을 버린 것이다.”</p></div>
+<p>참으로 두려운 말씀입니다.</p>
+<p>교회 안에서 많은 일을 할 수도 있습니다. 진리를 알고 있을 수도 있습니다. 집회에 빠지지 않을 수도 있습니다. 심지어 다른 사람에게 신앙생활의 본이 되는 사람일 수도 있습니다.</p>
+<p>그런데 주님께서 보실 때 첫째가는 사랑을 잃어버릴 수 있다는 것입니다.</p>
+<p>그렇다면 우리가 지금 살펴보는 문제도 단순히 활동하지 않는 사람들의 문제가 아닙니다.</p>
+<p>오히려 이런 질문을 해야 합니다.</p>
+<p>나는 여전히 주님을 사랑하고 있는가?</p>
+<p>주님께서 기뻐하시는 일을 나의 기쁨으로 여기고 있는가?</p>
+<p>주님께서 사랑하시는 지체들을 나도 사랑하고 있는가?</p>
+<p>주님께서 나를 통해 무엇인가 얻기 원하실 때, 나는 기꺼이 자신을 내어 드릴 수 있는가?</p>
+<p>이 질문들은 사람을 정죄하기 위한 질문이 아닙니다. 우리 모두가 주님 앞에서 자신을 돌아보도록 하는 질문입니다.</p>
+<p>저는 우리가 사람들을 움직이려고 애쓰기 전에, 먼저 주님께서 그 사람 안에서 무엇을 얻기 원하시는지를 보아야 한다고 생각합니다.</p>
+<p>하나님은 단순히 많은 봉사자가 필요한 분이 아닙니다. 하나님께서는 그분 자신을 사랑하고, 그분의 생명으로 충만하며, 그리스도의 몸을 위해 자신을 드리는 사람들을 얻기 원하십니다.</p>
+<p>하나님의 경륜은 몇몇 열심 있는 사람들만으로 성취되는 것이 아닙니다. 모든 지체가 생명 안에서 자라고 각자의 기능을 발휘하여 그리스도의 몸이 건축되는 것입니다.</p>
+<p>에베소서 4장 16절은 그분으로부터 온몸은 그 풍성한 공급을 해 주는 각 마디를 통하여, 그리고 각 지체가 분량에 따라 기능을 발휘하는 것을 통하여 함께 결합되고 함께 짜입니다. 그래서 몸이 자람으로써 사랑 안에서 스스로 건축되는 것입니다. 라고 말씀합니다.</p>
+<p>이것이 주님의 갈망입니다.</p>
+<div class="respond"><button class="amen" data-step="8" aria-pressed="false">아멘</button></div></div></section>
+<section class="step sum" id="sum"><div class="wrap rv"><h2>제가 이 문제를 한 문장으로 정리한다면</h2>
+<p>교회 안에서 숨어 있는 신앙생활을 변화시키는 길은 사람을 더 많이 움직이게 하는 것이 아니라, 그 사람 안에 주님을 향한 사랑을 다시 회복시켜 주는 것입니다.</p>
+<p>그리고 그 사랑은 반드시 실제적인 생활로 표현되어야 합니다.</p>
+<p>저는 이 문제를 다루면서 한 가지 제목을 제안하고 싶습니다.</p>
+<h3 class="doc2">주님을 믿으면서도 자신을 드리지 않는 신앙</h3>
+<p>부제: 익숙한 신앙생활의 경계를 넘어 그리스도의 몸을 위해 자신을 드리는 생활</p>
+<p>이 제목 안에는 우리가 살펴본 문제들이 모두 들어 있습니다.</p>
+<ul class="pts">
+<li>주님을 믿지만 자신을 보호하는 신앙</li>
+<li>주님의 은혜는 바라지만 주님의 필요에는 응답하지 않는 신앙</li>
+<li>나이와 환경을 이유로 자신을 주님의 일에서 제외하는 신앙</li>
+<li>교회 안에 있지만 몸의 지체로서 기능을 발휘하지 않는 신앙</li>
+<li>첫째가는 사랑을 회복하여 자신을 주님께 드리는 신앙</li>
+</ul>
+<p>마지막으로 한 가지를 더 말씀드리고 싶습니다.</p>
+<p>우리가 사람들에게 심어 주어야 할 것은 '교회를 위해 무엇인가 해야 한다'는 부담이 아니라, '주님께서 나를 얻으시기를 원하신다'는 거룩한 감동입니다.</p>
+<p>사람이 주님께 얻어지면 생활이 달라집니다. 자신을 보호하던 경계선이 낮아지고, 다른 지체들의 필요가 보이기 시작하며, 주님의 일이 더 이상 다른 사람의 일이 아니라 자신의 일이 됩니다.</p>
+<p class="hl"><strong>그때 비로소 교회 안에 모이는 생활에서 한 걸음 더 나아가, 그리스도의 몸을 위해 살아가는 생활이 시작되는 것입니다.</strong></p>
+<p>그리고 이 변화는 다른 사람에게만 필요한 것이 아니라 우리 모두에게 필요한 변화입니다. 저 역시 이 말씀을 전한다면 먼저 제 자신에게 적용해야 한다고 생각합니다.</p>
+</div></section>
+<section class="finale" id="finale"><div class="wrap rv">
+  <div class="num">아멘으로 응답한 걸음</div>
+  <div class="stones" id="stones"></div>
+  <div class="count" id="count">여덟 개 중 0개</div>
+</div></section></main>
+
+<script>
+(function(){
+  var LABELS=['경계','사랑','드림','운행','지체','생애','순종','첫사랑'];
+  var done={};
+  var steps=[].slice.call(document.querySelectorAll('.step'));
+
+  // stones
+  var W=136,H=70,G=10,X0=33;
+  var pos=[];
+  for(var i=0;i<4;i++)pos.push([X0+i*(W+G),230]);
+  for(i=0;i<3;i++)pos.push([X0+(W+G)/2+i*(W+G),150]);
+  pos.push([X0+(4*W+3*G-W)/2,70]);
+  var svg='<svg viewBox="0 0 640 320" xmlns="http://www.w3.org/2000/svg" role="group" aria-label="여덟 개의 돌로 세워지는 몸">';
+  for(i=0;i<8;i++){
+    svg+='<g class="stone" id="st'+(i+1)+'" tabindex="0" role="link" aria-label="'+(i+1)+'번째 걸음 '+LABELS[i]+'">'
+      +'<rect x="'+pos[i][0]+'" y="'+pos[i][1]+'" width="'+W+'" height="'+H+'" rx="10"/>'
+      +'<text class="n" x="'+(pos[i][0]+14)+'" y="'+(pos[i][1]+22)+'">'+(i+1)+'</text>'
+      +'<text class="t" x="'+(pos[i][0]+W/2)+'" y="'+(pos[i][1]+H/2+12)+'" text-anchor="middle">'+LABELS[i]+'</text></g>';
+  }
+  svg+='</svg>';
+  document.getElementById('stones').innerHTML=svg;
+
+  // side nav
+  var nav=document.getElementById('nav'),nh='';
+  for(i=1;i<=8;i++)nh+='<a href="#s'+i+'" id="nv'+i+'" title="'+i+'. '+LABELS[i-1]+'" aria-label="'+i+'번째 걸음 '+LABELS[i-1]+'"></a>';
+  nav.innerHTML=nh;
+
+  function go(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
+  for(i=1;i<=8;i++)(function(n){
+    var g=document.getElementById('st'+n);
+    g.addEventListener('click',function(){go('s'+n);});
+    g.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();go('s'+n);}});
+  })(i);
+
+  function refresh(){
+    var c=0;
+    for(var n=1;n<=8;n++){
+      var on=!!done[n];if(on)c++;
+      document.getElementById('st'+n).classList.toggle('lit',on);
+      document.getElementById('nv'+n).classList.toggle('lit',on);
+    }
+    document.getElementById('count').textContent='여덟 개 중 '+c+'개';
+  
+  }
+
+  [].forEach.call(document.querySelectorAll('.amen'),function(b){
+    b.addEventListener('click',function(){
+      var n=+b.getAttribute('data-step');
+      done[n]=!done[n];
+      b.classList.toggle('on',done[n]);
+      b.setAttribute('aria-pressed',done[n]?'true':'false');
+      
+      refresh();
+    });
+  });
+  [].forEach.call(document.querySelectorAll('.chip,.ask'),function(b){
+    b.addEventListener('click',function(){
+      var on=!b.classList.contains('on');
+      b.classList.toggle('on',on);
+      b.setAttribute('aria-pressed',on?'true':'false');
+    });
+  });
+
+  // progress + current step + reveal
+  var bar=document.getElementById('bar');
+  function onScroll(){
+    var h=document.documentElement;
+    var p=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+    bar.style.width=(Math.min(1,Math.max(0,p))*100)+'%';
+    var cur=0,mid=window.innerHeight*0.4;
+    steps.forEach(function(s,k){if(s.getBoundingClientRect().top<mid)cur=k+1;});
+    for(var n=1;n<=8;n++)document.getElementById('nv'+n).classList.toggle('cur',n===cur);
+  }
+  window.addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+  var rv=[].slice.call(document.querySelectorAll('.rv'));
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:0.08});
+    rv.forEach(function(el){io.observe(el);});
+  }else{rv.forEach(function(el){el.classList.add('in');});}
+})();
+</script>
+</body>
+</html>
