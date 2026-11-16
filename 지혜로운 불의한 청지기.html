@@ -16,7 +16,7 @@
 <style>
 :root{--bg:#fafaf6;--paper:#ffffff;--ink:#111111;--navy:#1d3347;--gold:#a97a22;--goldsoft:#f3ead3;--line:#dcd8cb;--red:#a8352a}
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:64px}
+html{scroll-padding-top:56px}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:'Noto Serif KR',serif;font-size:18px;line-height:1.95;font-style:normal;word-break:keep-all;overflow-wrap:break-word;-webkit-text-size-adjust:100%}
 em,i{font-style:normal}
 .hero{background:var(--paper);border-bottom:4px solid var(--navy)}
@@ -542,7 +542,7 @@ var links=[].slice.call(document.querySelectorAll('nav.toc a'));
 var map={};links.forEach(function(a){map[a.getAttribute('href').slice(1)]=a});
 if(!('IntersectionObserver' in window))return;
 var io=new IntersectionObserver(function(es){es.forEach(function(en){
- if(en.isIntersecting){links.forEach(function(a){a.classList.remove('on')});var a=map[en.target.id];if(a){a.classList.add('on');a.scrollIntoView({block:'nearest',inline:'center'})}}
+ if(en.isIntersecting){links.forEach(function(a){a.classList.remove('on')});var a=map[en.target.id];if(a){a.classList.add('on');var bar=a.parentNode;bar.scrollLeft=a.offsetLeft-(bar.clientWidth-a.offsetWidth)/2}}
 })},{rootMargin:'-20% 0px -70% 0px'});
 document.querySelectorAll('main section[id]').forEach(function(s){io.observe(s)});
 })();
